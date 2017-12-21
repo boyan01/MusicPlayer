@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="common_color_primary">#465a64</color>
+    <color name="common_colorPrimaryLight">#62727b</color>
+    <color name="common_colorPrimaryDark">#102027</color>
+
+    <color name="common_colorAccent">#aeaeae</color>
+
+    <color name="common_colorLightRed">#ff3d44</color>
+
+
+    <color name="common_text_primary">#ffffffff</color>
+    <color name="common_textSecondary">#B2ffffff</color>
+    <color name="common_textDisable">#80ffffff</color>
+
+    <color name="common_textHint">@color/common_textDisable</color>
+
+    <color name="common_colorDivider">#1effffff</color>
+
+    <color name="common_background">#303030</color>
+    <color name="common_backgroundDark">#212121</color>
+    <color name="common_backgroundLight">#424242</color>
+
+
+    <color name="common_colorRipple">#bf819ca9</color>
+
+    <!--决定采用30%透明度的遮罩 -->
+    <color name="common_colorImageMask">#4c000000</color>
+
+    <color name="common_colorIconActive">#ffffff</color>
+    <color name="common_colorIconInactive">#808080</color>
+
+    <color name="common_transparentSecondary">#4e000000</color>
+
+    <color name="common_color_indicator">@color/common_textSecondary</color>
+
+
+</resources>

@@ -1,0 +1,101 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlinx-serialization'
+
+apply plugin: 'kotlin-kapt'
+
+android {
+
+    compileSdkVersion compile_sdk.toInteger()
+
+    defaultConfig {
+        minSdkVersion min_sdk.toInteger()
+        targetSdkVersion target_sdk.toInteger()
+        versionCode app_version_code.toInteger()
+        versionName app_version_name
+        resourcePrefix "common"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+androidExtensions {
+    experimental = true
+}
+
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    //android support
+    api "com.android.support:appcompat-v7:$android_support_version"
+    api "com.android.support:design:$android_support_version"
+    api "com.android.support:support-v4:$android_support_version"
+    api "com.android.support:palette-v7:$android_support_version"
+    api "com.android.support:recyclerview-v7:$android_support_version"
+    api 'me.drakeet.multitype:multitype:3.4.0'
+    api 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    //Architecture Components
+    api "android.arch.lifecycle:extensions:$architecture_version"
+    testApi "android.arch.core:core-testing:$architecture_version"
+    api "android.arch.persistence.room:runtime:$architecture_version"
+    kapt "android.arch.persistence.room:compiler:$architecture_version"
+    testApi "android.arch.persistence.room:testing:$architecture_version"
+    //animation
+    api 'com.andkulikov:transitionseverywhere:1.7.5'
+
+    //anko
+    api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    api "org.jetbrains.anko:anko-commons:$anko_version"
+    api "org.jetbrains.anko:anko-appcompat-v7-commons:$anko_version"
+    api "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
+
+    //serialization
+    api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+
+    //co-routines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.20"
+    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.20'
+    api "org.jetbrains.anko:anko-coroutines:$anko_version"
+
+    //video player
+    api 'tv.danmaku.ijk.media:ijkplayer-java:0.8.4'
+    api 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
+    api 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.4'
+    api 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.4'
+
+    //recycler view ext
+    api 'me.drakeet.multitype:multitype:3.4.0'
+
+    //image
+    api 'com.github.bumptech.glide:glide:4.4.0'
+    kapt 'com.github.bumptech.glide:compiler:4.4.0'
+
+    //net
+    api 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.okhttp3:logging-interceptor:3.9.1'
+    api 'com.squareup.okhttp3:okhttp:3.9.1'
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+}

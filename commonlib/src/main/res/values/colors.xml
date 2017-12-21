@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="common_color_primary">#4CAF50</color>
+    <color name="common_colorPrimaryLight">#81C784</color>
+    <color name="common_colorPrimaryDark">#388E3C</color>
+
+    <color name="common_colorAccent">#DD2C00</color>
+
+    <color name="common_colorLightRed">#ff3d44</color>
+
+    <color name="common_ic_launcher_background">#3CC747</color>
+
+
+    <color name="common_text_primary">#dd000000</color>
+    <color name="common_textSecondary">#8a000000</color>
+    <color name="common_textDisable">#60000000</color>
+
+    <color name="common_textHint">@color/common_textDisable</color>
+
+    <color name="common_colorDivider">#1e000000</color>
+
+    <color name="common_colorRipple">#bf797979</color>
+
+    <color name="common_background">#FAFAFA</color>
+    <color name="common_backgroundDark">#EEEEEE</color>
+    <color name="common_backgroundLight">#ffffff</color>
+
+    <color name="common_transparent">#00000000</color>
+    <color name="common_transparentSecondary">#4effffff</color>
+    <color name="common_transparentSecondaryDark">#4e000000</color>
+
+    <!-- colorImageMask用来作为image的遮罩，让夜间模式下的imageView不会太过刺眼-->
+    <color name="common_colorImageMask">@android:color/transparent</color>
+    <color name="common_colorWarning">#ff0000</color>
+
+    <color name="common_colorIconActive">#565656</color>
+    <color name="common_colorIconInactive">#9e9e9e</color>
+    <color name="common_textPrimaryDarkBackground">#ffffff</color>
+    <color name="common_textSecondaryDarkBackground">#B2ffffff</color>
+
+    <color name="common_color_indicator">#4CAF50</color>
+
+</resources>
