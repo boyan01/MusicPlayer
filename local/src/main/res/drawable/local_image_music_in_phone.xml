@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="485dp"
+    android:height="853dp"
+    android:viewportHeight="853"
+    android:viewportWidth="485">
+
+    <path
+        android:fillColor="@color/common_backgroundDark"
+        android:pathData="M459.68,852.5H25.32A24.9,24.9,0,0,1,.5,827.68V25.32A24.9,24.9,0,0,1,25.32 .5
+H459.68A24.9,24.9,0,0,1,484.5,25.32V827.68A24.9,24.9,0,0,1,459.68,852.5Z"
+        android:strokeColor="#000"
+        android:strokeMiterLimit="10"
+        android:strokeWidth="1" />
+    <path
+        android:name="camera"
+        android:fillColor="@color/common_textSecondary"
+        android:pathData="M465.5,826A12.5,12.5,0,1,1,453,813.5,12.5,12.5,0,0,1,465.5,826Z"
+        android:strokeColor="#000"
+        android:strokeMiterLimit="10"
+        android:strokeWidth="1" />
+    <path
+        android:name="screen"
+        android:fillColor="@color/common_background"
+        android:pathData="M450.75,804H33.25A19.25,19.25,0,0,1,14,784.75V32.25A19.25,19.25,0,0,1,33.25,13h417.5A19.25,19.25,0,0,1,470,32.25v752.5A19.25,19.25,0,0,1,450.75,804Z" />
+
+    <path
+        android:name="musicEvent"
+        android:fillColor="@color/common_colorAccent"
+        android:pathData="M347,211.29V161.2H242.67v7.9h0V294.31a66.71,66.71,0,0,0-39.12-12.52c-36,0-65.21,28-65.21,62.6S167.53,407,203.54,407s65.21-28,65.21-62.6V211.29Z" />
+
+</vector>

@@ -51,7 +51,7 @@ dependencies {
     api "com.android.support:palette-v7:$android_support_version"
     api "com.android.support:recyclerview-v7:$android_support_version"
     api 'me.drakeet.multitype:multitype:3.4.0'
-    api 'com.android.support.constraint:constraint-layout:1.0.2'
+    api 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
 
     //Architecture Components
     api "android.arch.lifecycle:extensions:$architecture_version"
@@ -94,6 +94,9 @@ dependencies {
     api 'com.squareup.retrofit2:retrofit:2.3.0'
     api 'com.squareup.okhttp3:logging-interceptor:3.9.1'
     api 'com.squareup.okhttp3:okhttp:3.9.1'
+
+    //mp3
+    api 'com.mpatric:mp3agic:0.9.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
