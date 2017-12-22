@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scannerContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context=".LocalMusicScannerActivity">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageSearchProfile"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.68"
+        app:srcCompat="@drawable/local_animation_music_in_phone" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:translationZ="4dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/imageSearchProfile"
+        app:layout_constraintEnd_toEndOf="@+id/imageSearchProfile"
+        app:layout_constraintStart_toStartOf="@+id/imageSearchProfile"
+        app:layout_constraintTop_toTopOf="@+id/imageSearchProfile"
+        app:layout_constraintVertical_bias="0.25" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/buttonStartScanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/local_action_scanner_start"
+        android:textColor="@color/common_textPrimaryDarkBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageSearchProfile" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/buttonStopScanner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="@string/local_action_scanner_stop"
+        android:textColor="@color/common_textPrimaryDarkBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageSearchProfile" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textSearchSetting"
+        style="@style/CommonAppTheme.FlatButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="?android:selectableItemBackground"
+        android:drawablePadding="8dp"
+        android:drawableStart="@drawable/local_ic_settings_applications_24dp"
+        android:gravity="center"
+        android:padding="8dp"
+        android:text="@string/local_music_scanner_setting"
+        android:textColor="@color/common_text_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listMusicInfo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="64dp"
+        android:overScrollMode="never"
+        app:layoutManager="LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="@+id/imageSearchProfile"
+        app:layout_constraintEnd_toEndOf="@+id/imageSearchProfile"
+        app:layout_constraintHeight_default="wrap"
+        app:layout_constraintStart_toStartOf="@+id/imageSearchProfile"
+        app:layout_constraintTop_toBottomOf="@+id/progressBar"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintWidth_default="spread"
+        tools:listitem="@android:layout/test_list_item"
+        tools:visibility="visible" />
+
+
+</android.support.constraint.ConstraintLayout>

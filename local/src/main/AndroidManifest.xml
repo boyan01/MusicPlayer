@@ -1,2 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tech.summerly.quiet.local" />
+    package="tech.summerly.quiet.local" >
+    <application>
+        <activity android:name=".LocalMusicScannerActivity"/>
+    </application>
+</manifest>
