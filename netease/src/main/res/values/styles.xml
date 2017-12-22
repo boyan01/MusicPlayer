@@ -1,0 +1,32 @@
+<resources>
+
+    <style name="NeteaseAppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/common_color_primary</item>
+        <item name="colorPrimaryDark">@color/common_colorPrimaryDark</item>
+        <item name="colorAccent">@color/common_colorAccent</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">false</item>
+        <item name="android:windowAllowReturnTransitionOverlap">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="NeteaseLoginTextLayout" parent="TextAppearance.AppCompat">
+        <!-- Hint color and label color in FALSE state -->
+        <item name="android:textColorHint">@color/common_textSecondaryDarkBackground</item>
+        <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+        <item name="colorAccent">@color/common_textSecondaryDarkBackground</item>
+        <item name="colorControlNormal">@color/common_textPrimaryDarkBackground</item>
+        <item name="colorControlActivated">@color/common_textSecondaryDarkBackground</item>
+    </style>
+
+    <style name="NeteaseAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <!-- Support library compatibility -->
+        <item name="windowActionBarOverlay">true</item>
+        <item name="actionMenuTextColor">@color/common_textPrimaryDarkBackground</item>
+    </style>
+
+    <style name="NeteaseAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

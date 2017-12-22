@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fmPlayerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.NeteaseFmActivity">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="@drawable/netease_gradient_fm_mask"
+        android:scaleType="centerCrop"
+        tools:srcCompat="@color/common_colorPrimaryDark" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?android:actionBarSize"
+            android:layout_marginTop="@dimen/netease_status_bar_height"
+            android:background="#4e000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/netease_ic_arrow_back_white_24dp"
+            app:popupTheme="@style/NeteaseAppTheme.PopupOverlay"
+            app:titleTextColor="#ffffff"
+            tools:title="私人FM" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/playerInfo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/imageArtwork"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="16dp"
+                android:layout_weight="1"
+                android:scaleType="centerCrop"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent=".8" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textMusicName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:lines="1"
+                android:textColor="@color/common_textPrimaryDarkBackground"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageArtwork"
+                tools:text="少年他的奇幻漂流" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textArtist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:lines="1"
+                android:textColor="@color/common_textSecondaryDarkBackground"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textMusicName"
+                tools:text="五月天" />
+
+            <io.summer.lyricview.LyricView
+                android:id="@+id/lyricView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lyricEmptyText="@string/player_no_lyric"
+                app:lyricLineSpacing="4dp"
+                app:lyricPlayIndicatorColor="@color/colorPrimaryDark"
+                app:lyricTextSize="15sp"
+                tools:visibility="visible" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/progressLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/textCurrentPosition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="@color/common_textPrimaryDarkBackground"
+                android:textSize="12sp"
+                tools:ignore="HardcodedText"
+                tools:text="01:53" />
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:thumbTint="@color/common_textPrimaryDarkBackground"
+                tools:progress="54" />
+
+            <TextView
+                android:id="@+id/textDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="@color/common_textPrimaryDarkBackground"
+                android:textSize="12sp"
+                tools:ignore="HardcodedText"
+                tools:text="01:53" />
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/buttonDelete"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                android:tint="#ffffff"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonLike"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/netease_ic_delete_black_24dp" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/buttonLike"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                android:tint="#ffffff"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonPlay"
+                app:layout_constraintStart_toEndOf="@+id/buttonDelete"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/common_ic_favorite_red_24dp" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/buttonPlay"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="4dp"
+                android:scaleType="centerCrop"
+                android:tint="#ffffff"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonNext"
+                app:layout_constraintStart_toEndOf="@+id/buttonLike"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/common_ic_play_circle_outline_black_24dp" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/buttonNext"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:padding="2dp"
+                android:scaleType="centerCrop"
+                android:tint="#ffffff"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/buttonComment"
+                app:layout_constraintStart_toEndOf="@+id/buttonPlay"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/common_ic_skip_next_black_24dp" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/buttonComment"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?android:selectableItemBackgroundBorderless"
+                android:padding="3dp"
+                android:scaleType="center"
+                android:tint="#ffffff"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/buttonNext"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/netease_ic_comment_black_24dp" />
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+</FrameLayout>

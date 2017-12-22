@@ -1,4 +1,4 @@
-package tech.summerly.quiet.commonlib.cookie.helper;
+package tech.summerly.quiet.commonlib.cookie;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
