@@ -4,7 +4,7 @@ import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
-import tech.summerly.quiet.commonlib.cookie.helper.CookieStore
+import tech.summerly.quiet.commonlib.cookie.CookieStore
 import tech.summerly.quiet.commonlib.utils.randomUserAgent
 import java.lang.reflect.Type
 
@@ -20,6 +20,7 @@ internal class CloudMusicServiceProvider {
 
     /**
      * @param cookieStore 保存和取得 cookie 的载体
+     * @param cache 缓存
      */
     fun provideCloudMusicService(cookieStore: CookieStore? = null,
                                  cache: Cache): CloudMusicService {

@@ -1,4 +1,4 @@
-package tech.summerly.quiet.data.netease.result
+package tech.summerly.quiet.netease.api.result
 
 /**
  * author : SUMMERLY

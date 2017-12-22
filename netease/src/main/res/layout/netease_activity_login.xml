@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/netease_primary_color">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="56dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/netease_logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:padding="32dp"
+            android:scaleType="centerInside"
+            app:srcCompat="@drawable/netease_logo_with_title"
+            app:tint="@color/common_textPrimaryDarkBackground" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:hint="@string/netease_hint_phone_number"
+            android:theme="@style/NeteaseLoginTextLayout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableBottom="@color/common_textSecondaryDarkBackground"
+                android:inputType="phone"
+                android:textColor="@color/common_textPrimaryDarkBackground"
+                android:typeface="monospace"
+                tools:text="yangbinyhbn@gmail.com" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/tilPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/netease_hint_password"
+            android:theme="@style/NeteaseLoginTextLayout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/inputPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="@color/common_textPrimaryDarkBackground"
+                android:typeface="monospace"
+                tools:text="hello" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/buttonLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="36dp"
+            android:backgroundTint="@color/netease_primary_dark_color"
+            android:text="@string/netease_action_login"
+            android:textColor="@color/common_textPrimaryDarkBackground" />
+    </LinearLayout>
+</ScrollView>
