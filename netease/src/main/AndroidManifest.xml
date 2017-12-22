@@ -1,2 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tech.summerly.quiet.netease" />
+    package="tech.summerly.quiet.netease">
+
+    <application android:theme="@style/NeteaseAppTheme">
+        <activity
+            android:name=".ui.LoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.NeteaseFmActivity"
+            android:exported="true" />
+
+    </application>
+
+</manifest>
