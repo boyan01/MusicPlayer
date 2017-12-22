@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.SharedPreferences
+import kotlinx.coroutines.experimental.launch
 import kotlinx.serialization.json.JSON
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
@@ -33,7 +34,7 @@ abstract class BaseMusicPlayer(context: Context) {
     /**
      * to control the player's play order
      */
-    val playMode = MutableLiveData<PlayMode>()
+    open val playMode = MutableLiveData<PlayMode>()
 
 
     /**
@@ -68,34 +69,36 @@ abstract class BaseMusicPlayer(context: Context) {
         corePlayer.play(music)
     }
 
-    fun playNext() {
-        val next = getNext() ?: return
+    fun playNext() = launch {
+        val next = getNext() ?: return@launch
         performPlay(next)
     }
 
-    fun playPrevious() {
-        val previous = getPrevious() ?: return
+    fun playPrevious() = launch {
+        val previous = getPrevious() ?: return@launch
         performPlay(previous)
     }
 
-    fun getNext() = getNextMusic(playingMusic.value)
+    suspend fun getNext() = getNextMusic(playingMusic.value)
 
-    fun getPrevious() = getPreviousMusic(playingMusic.value)
+    suspend fun getPrevious() = getPreviousMusic(playingMusic.value)
 
-    protected abstract fun getNextMusic(current: Music?): Music?
+    protected abstract suspend fun getNextMusic(current: Music?): Music?
 
-    protected abstract fun getPreviousMusic(current: Music?): Music?
+    protected abstract suspend fun getPreviousMusic(current: Music?): Music?
 
 
-    fun playPause(): Unit = when (corePlayer.getPlayerState().value) {
-        PlayerState.Pausing -> corePlayer.start()
-        PlayerState.Playing -> corePlayer.pause()
-        PlayerState.Loading -> Unit
-        else -> {
-            val shouldBePlay = playingMusic.value
-                    ?: getNextMusic(null)
-            shouldBePlay?.let(this::performPlay)
-            Unit
+    fun playPause() = launch {
+        when (corePlayer.getPlayerState().value) {
+            PlayerState.Pausing -> corePlayer.start()
+            PlayerState.Playing -> corePlayer.pause()
+            PlayerState.Loading -> Unit
+            else -> {
+                val shouldBePlay = playingMusic.value
+                        ?: getNextMusic(null)
+                shouldBePlay?.let(this@BaseMusicPlayer::performPlay)
+                Unit
+            }
         }
     }
 

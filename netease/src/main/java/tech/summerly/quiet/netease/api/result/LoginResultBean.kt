@@ -9,7 +9,7 @@ package tech.summerly.quiet.netease.api.result
 data class LoginResultBean(
         val loginType: Long? = null,
 
-        val code: Long,
+        val code: Int, //200表示登陆成功
 
 
         val profile: Profile? = null

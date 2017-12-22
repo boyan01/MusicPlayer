@@ -15,8 +15,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import okhttp3.Cookie;
 import okhttp3.HttpUrl;
-import tech.summerly.quiet.commonlib.cookie.helper.CookieStore;
-import tech.summerly.quiet.commonlib.cookie.helper.SerializableOkHttpCookies;
 
 /**
  * author : SUMMERLY
