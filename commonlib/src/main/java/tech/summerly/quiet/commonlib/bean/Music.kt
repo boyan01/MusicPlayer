@@ -26,6 +26,7 @@ data class Music(
         val playUri: List<MusicUri>
         ) : Parcelable {
 
+    @Transient
     var isFavorite: Boolean = false
 
     fun toShortString(): String = "$id : $title"

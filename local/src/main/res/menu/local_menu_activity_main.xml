@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="tech.summerly.quiet.module.local.LocalMusicActivity">
+    <item
+        android:id="@+id/local_music_action_scan"
+        android:orderInCategory="100"
+        android:title="@string/local_title_scanner_music"
+        app:showAsAction="never" />
+</menu>

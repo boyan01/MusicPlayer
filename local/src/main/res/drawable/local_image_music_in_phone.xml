@@ -7,14 +7,14 @@
 
     <path
         android:fillColor="@color/common_backgroundDark"
-        android:pathData="M459.68,852.5H25.32A24.9,24.9,0,0,1,.5,827.68V25.32A24.9,24.9,0,0,1,25.32 .5
+        android:pathData="M459.68,85200.5H25.32A24.9,24.9,0,0,1,0.5,827.68V25.32A24.9,24.9,0,0,1,25.32 0.5
 H459.68A24.9,24.9,0,0,1,484.5,25.32V827.68A24.9,24.9,0,0,1,459.68,852.5Z"
         android:strokeColor="#000"
         android:strokeMiterLimit="10"
         android:strokeWidth="1" />
     <path
         android:name="camera"
-        android:fillColor="@color/common_textSecondary"
+        android:fillColor="@color/common_text_secondary"
         android:pathData="M465.5,826A12.5,12.5,0,1,1,453,813.5,12.5,12.5,0,0,1,465.5,826Z"
         android:strokeColor="#000"
         android:strokeMiterLimit="10"

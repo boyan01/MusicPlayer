@@ -14,11 +14,8 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.state.PlayerState
+import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.commonlib.utils.glide.GlideApp
-import tech.summerly.quiet.commonlib.utils.gone
-import tech.summerly.quiet.commonlib.utils.observe
-import tech.summerly.quiet.commonlib.utils.observeFilterNull
-import tech.summerly.quiet.commonlib.utils.visible
 
 /**
  * Created by summer on 17-12-17
@@ -26,23 +23,24 @@ import tech.summerly.quiet.commonlib.utils.visible
 class BottomControllerFragment : BaseFragment() {
 
     private val musicPlayer: BaseMusicPlayer
-        get() = MusicPlayerManager.getMusicPlayer()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        musicPlayer.playerState.observeFilterNull(this) {
-            setControllerState(it)
-        }
-        musicPlayer.getPlayingMusic().observe(this) {
-            updateMusicInfo(it)
-        }
-    }
+        get() = MusicPlayerManager.INSTANCE.getMusicPlayer()
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.common_fragment_controller_bottom, container, false)
         listenEvent(root)
         return root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        musicPlayer.playerState.observeFilterNull(this) {
+            setControllerState(it)
+        }
+        musicPlayer.getPlayingMusic().observe(this) {
+            log { "更新底部控制栏: $it" }
+            updateMusicInfo(it)
+        }
     }
 
     private fun listenEvent(root: View) = with(root) {

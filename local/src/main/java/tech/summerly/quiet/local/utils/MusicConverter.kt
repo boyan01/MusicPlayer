@@ -3,6 +3,7 @@ package tech.summerly.quiet.local.utils
 import com.mpatric.mp3agic.Mp3File
 import org.jetbrains.anko.attempt
 import tech.summerly.quiet.commonlib.bean.*
+import tech.summerly.quiet.commonlib.utils.md5
 import java.io.File
 
 /**
@@ -10,8 +11,8 @@ import java.io.File
  */
 object MusicConverter {
 
-    private const val DEFAULT_ARTIST = ""
-    private const val DEFAULT_ALBUM = ""
+    private const val DEFAULT_ARTIST = "未知歌手"
+    private const val DEFAULT_ALBUM = "未知专辑"
     private const val DEFAULT_DURATION = 0L
     private const val DEFAULT_BITRATE = 0
 
@@ -23,9 +24,7 @@ object MusicConverter {
         val title = mp3File.title(file)
         val artist = mp3File.artist()
         val picPath = mp3File.artWork()?.let {
-            //generate am unique uuid to identify picture
-//            MusicArtworkUtils.saveEmbeddedPicture((title + artist).md5(), it, replaceIfExist = true)
-            File("")
+            LocalMusicPictureUtils.saveEmbeddedPicture((title + artist).md5(), it, replaceIfExist = true)?.let { File(it) }
         }?.toURI()?.toString()
         val musicUri = MusicUri(bitrate = mp3File.bitrate(), uri = file.toURI().toString(), dateValid = Long.MAX_VALUE)
         return Music(

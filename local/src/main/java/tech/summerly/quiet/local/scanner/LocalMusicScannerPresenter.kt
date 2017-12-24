@@ -2,7 +2,7 @@ package tech.summerly.quiet.local.scanner
 
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.newSingleThreadContext
+import kotlinx.coroutines.experimental.yield
 import org.jetbrains.anko.coroutines.experimental.asReference
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.local.scanner.persistence.ILocalMusicScannerSetting
@@ -24,43 +24,29 @@ class LocalMusicScannerPresenter(
         //解析音乐文件的接口
         private val actionConvertFile: (File) -> Music? = MusicConverter::scanFileToMusic,
         //保存音乐文件的操作
-        private val actionSaveMusic: (Music) -> Long = TODO(),
+        private val actionSaveMusic: (Music) -> Unit,
         /**
          * 获取音乐配置
          */
-        private val preference: ILocalMusicScannerSetting = TODO()
+        private val preference: ILocalMusicScannerSetting
 ) : LocalMusicScannerContract.Presenter {
 
     private val viewRef = view.asReference()
 
     private var scannerJob: Job? = null
 
-    override fun scanMusics() {
-        scannerJob?.let {
-            stopScanMusics()
-        }
-        view.onScannerStart()
-        //从指定根目录开始扫描音乐
-        scannerJob = launch(newSingleThreadContext("scanner")) {
+    override fun startScannerJob() {
+        scannerJob?.cancel()
+        scannerJob = launch {
             paths.forEach { path ->
-                File(path).traversalDirectory {
-                    musicFileProcessor(it)
-                }
+                traversalDirectory(File(path)) { musicFileProcessor(it) }
             }
-            launch(viewRef().UI) {
-                viewRef().onScannerComplete()
-            }
+            launch(viewRef().UI) { viewRef().onScannerComplete() }
         }
     }
 
     override fun stopScanMusics() {
-        val scannerJob = scannerJob ?: return
-        if (scannerJob.isCompleted) {
-            return
-        }
-        if (scannerJob.cancel()) {
-            view.onScannerComplete()
-        }
+        scannerJob?.cancel()
     }
 
     /**
@@ -77,9 +63,13 @@ class LocalMusicScannerPresenter(
     }
 
     /**
-     * 遍历当前目录及其子目录 , 对符合[fileFilter]的文件执行[action]
+     * 遍历[file]目录及其子目录 , 对符合[fileFilter]的文件执行[action]
      */
-    private suspend fun File.traversalDirectory(fileFilter: FileFilter = audioFileFilter, action: suspend (File) -> Unit) {
+    private suspend fun traversalDirectory(
+            file: File,
+            fileFilter: FileFilter = audioFileFilter,
+            action: suspend (File) -> Unit): Unit = with(file) {
+        yield()
         if (!exists()
                 || !isDirectory) {
             return
@@ -95,7 +85,7 @@ class LocalMusicScannerPresenter(
         val files = listFiles(fileFilter) ?: return
         files.forEach {
             if (it.isDirectory) {
-                it.traversalDirectory(fileFilter, action)
+                traversalDirectory(it, fileFilter, action)
             } else if (it.isFile && it.exists()) {
                 action(it)
             }
@@ -104,13 +94,14 @@ class LocalMusicScannerPresenter(
 
 
     private suspend fun musicFileProcessor(file: File) {
+        yield()
         val music = actionConvertFile(file) ?: return
         if (!isValidMusic(music)) {
             return
         }
         actionSaveMusic(music)
         launch(viewRef().UI) {
-            viewRef().onMusicScanned(music)
+            viewRef().onAMusicScan(music)
         }
     }
 
@@ -119,7 +110,7 @@ class LocalMusicScannerPresenter(
      */
     private fun isValidMusic(music: Music): Boolean {
         if (preference.isFilterByDuration() && music.duration < preference.getLimitDuration()) {
-            return false
+            return true
         }
         return true
     }

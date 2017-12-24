@@ -17,7 +17,7 @@ import tech.summerly.quiet.local.database.entity.*
             AlbumEntity::class,
             PlaylistEntity::class, MusicPlaylistRelation::class
         ],
-        version = 1,
+        version = 2,
         exportSchema = false
 )
 internal abstract class LocalMusicDatabase : RoomDatabase() {
@@ -32,6 +32,8 @@ internal abstract class LocalMusicDatabase : RoomDatabase() {
 
         fun getInstance(context: Context) = instance ?:
                 Room.databaseBuilder(context, LocalMusicDatabase::class.java, DB_NAME)
+                        .allowMainThreadQueries()
+                        .fallbackToDestructiveMigration()
                         .build()
                         .also {
                             instance = it

@@ -1,6 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tech.summerly.quiet.local" >
+    package="tech.summerly.quiet.local">
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application>
-        <activity android:name=".LocalMusicScannerActivity"/>
+        <activity
+            android:name=".LocalMusicScannerActivity"
+            android:exported="true"
+            android:theme="@style/LocalAppTheme" />
+        <activity
+            android:name=".LocalMusicActivity"
+            android:exported="true"
+            android:label=""
+            android:theme="@style/LocalAppTheme" />
     </application>
 </manifest>

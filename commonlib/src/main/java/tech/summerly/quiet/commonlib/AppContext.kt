@@ -1,6 +1,8 @@
-package tech.summerly.quiet
+package tech.summerly.quiet.commonlib
 
 import android.app.Application
+import com.facebook.stetho.Stetho
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 
 /**
  * Created by summer on 17-12-17.
@@ -18,5 +20,7 @@ class AppContext : Application() {
     override fun onCreate() {
         super.onCreate()
         context = this
+        MusicPlayerManager.init(this)
+        Stetho.initializeWithDefaults(this)
     }
 }

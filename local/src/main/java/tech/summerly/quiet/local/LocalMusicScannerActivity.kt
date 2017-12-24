@@ -1,6 +1,5 @@
 package tech.summerly.quiet.local
 
-import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.AnimatedVectorDrawable
@@ -9,20 +8,17 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.storage.StorageManager
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
-import android.text.TextUtils
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import kotlinx.android.synthetic.main.local_activity_music_scanner.*
 import kotlinx.android.synthetic.main.local_activity_music_scanner.view.*
-import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.commonlib.utils.LoggerLevel
+import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.local.scanner.LocalMusicScannerContract
 import tech.summerly.quiet.local.scanner.LocalMusicScannerPresenter
 import tech.summerly.quiet.local.scanner.LocalScannerSettingDialog
+import tech.summerly.quiet.local.scanner.persistence.LocalMusicScannerSetting
 import java.lang.reflect.Array
 import java.lang.reflect.InvocationTargetException
 
@@ -39,7 +35,9 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
     override val presenter: LocalMusicScannerPresenter by lazy {
         LocalMusicScannerPresenter(
                 view = this,
-                paths = listOfNotNull(PATH_INTERNAL_STORAGE, getStoragePath(this, true)).toTypedArray()
+                paths = listOfNotNull(PATH_INTERNAL_STORAGE, getStoragePath(this, true)).toTypedArray(),
+                actionSaveMusic = LocalMusicApi.getLocalMusicApi(this)::insertMusic,
+                preference = LocalMusicScannerSetting(this)
         )
     }
 
@@ -52,54 +50,40 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        }
         setContentView(R.layout.local_activity_music_scanner)
         scannerInfoView = ScannerInfoView(scannerContainer)
         buttonStartScanner.setOnClickListener {
-
+            startAnimation()
+            presenter.startScannerJob()
         }
 
-        buttonStopScanner.setOnClickListener {
-            presenter.stopScanMusics()
-        }
         textSearchSetting.setOnClickListener {
             LocalScannerSettingDialog().show(supportFragmentManager, "LocalScannerSetting")
         }
-        listMusicInfo.adapter = MultiTypeAdapter(musicList)
-                .also {
-                    it.register(Music::class.java, MusicInfoViewBinder())
-                }
         scannerInfoView.setNotScanning()
     }
 
-    override fun onScannerStart() {
+    private fun startAnimation() {
         scannerInfoView.setScanning()
         musicList.clear()
-        listMusicInfo.multiTypeAdapter.notifyDataSetChanged()
     }
 
     override fun onScannerComplete() {
         //动画结束之后,需要显示或者更新一些视图
         scannerInfoView.setNotScanning()
-        //TODO 添加一个TextView显示添加了多少歌曲和总歌曲数
     }
 
     override fun onBackPressed() {
-        if (scannerInfoView.isScanning()) {
-            presenter.stopScanMusics()
-            return
-        }
-        setResult(Activity.RESULT_OK)
-        finish()
+        presenter.stopScanMusics()
+        super.onBackPressed()
     }
 
-    override fun onMusicScanned(music: Music) {
+    override fun onAMusicScan(music: Music) {
         log { "扫描到音乐 : ${music.toShortString()}" }
         musicList.add(music)
-        listMusicInfo.apply {
-            val last = musicList.size - 1
-            multiTypeAdapter.notifyItemInserted(last)
-            smoothScrollToPosition(last)
-        }
     }
 
     override fun onScannerError(msg: String?) {
@@ -112,7 +96,6 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
         fun setScanning() {
             view.buttonStartScanner.visibility = View.GONE
             view.textSearchSetting.visibility = View.GONE
-            view.buttonStopScanner.visibility = View.VISIBLE
             view.progressBar.visibility = View.VISIBLE
             (view.imageSearchProfile.drawable as Animatable).start()
         }
@@ -120,7 +103,6 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
         fun setNotScanning() {
             view.buttonStartScanner.visibility = View.VISIBLE
             view.textSearchSetting.visibility = View.VISIBLE
-            view.buttonStopScanner.visibility = View.GONE
             view.progressBar.visibility = View.INVISIBLE
             with(view.imageSearchProfile.drawable) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -131,31 +113,6 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
                 }
 
             }
-        }
-
-        fun isScanning(): Boolean {
-            return view.buttonStartScanner.visibility != View.VISIBLE
-        }
-    }
-
-    private class MusicInfoViewBinder : ItemViewBinder<Music>() {
-        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
-            return InfoViewHolder(inflater.inflate(android.R.layout.test_list_item, parent, false))
-        }
-
-        override fun onBindViewHolder(holder: ViewHolder, item: Music) {
-            holder as InfoViewHolder
-            holder.info.text = item.toShortString()
-        }
-
-        private class InfoViewHolder(view: View) : ViewHolder(view) {
-            val info: TextView = (view as TextView)
-                    .also {
-                        view.ellipsize = TextUtils.TruncateAt.END
-                        view.setTextColor(it.context.color(R.color.common_textSecondary))
-                        view.setSingleLine(true)
-                        view.textSize = 12f
-                    }
         }
     }
 

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?><!--notice--><!--参考自https://github.com/hefuyicoder/ListenerMusicPlayer/blob/master/app/src/main/res/layout/item_list_linear_layout_item.xml-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    android:background="?selectableItemBackground"
+    android:fitsSystemWindows="true">
+
+    <View
+        android:id="@+id/now_playing_indicator"
+        android:layout_width="5.0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="12dp"
+        android:background="@color/common_color_primary"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:scaleType="centerCrop" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/popup_menu"
+        style="@style/Widget.AppCompat.ActionButton.Overflow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="?actionBarItemBackground"
+        android:tint="@color/common_color_icon_active" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/image"
+        android:layout_toStartOf="@id/popup_menu"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_item_title"
+            style="@style/LocalMusicItemTitleStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="缘分一道桥" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/text_item_subtitle"
+                style="@style/LocalMusicItemSubTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="80dp"
+                tools:text="王力宏/谭维维" />
+
+            <View
+                android:id="@+id/divider_subtitle"
+                android:layout_width="1.0dp"
+                android:layout_height="8dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toEndOf="@id/text_item_subtitle"
+                android:background="@color/common_color_primary" />
+
+            <TextView
+                android:id="@+id/text_item_subtitle_2"
+                style="@style/LocalMusicItemSubTitleStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/divider_subtitle"
+                android:maxWidth="80dp"
+                tools:text="主题曲" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_color_divider" />
+
+</RelativeLayout>

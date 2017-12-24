@@ -2,6 +2,7 @@ package tech.summerly.quiet.commonlib.utils
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 
 /**
@@ -26,4 +27,24 @@ fun <T : Any> LiveData<T>.observe(lifecycleOwner: LifecycleOwner, observer: (T?)
     observe(lifecycleOwner, Observer<T> {
         observer(it)
     })
+}
+
+class WithDefaultLiveData<T>(initial: T) : MutableLiveData<T>() {
+
+    private var cache: T = initial
+
+    override fun getValue(): T {
+        return super.getValue() ?: cache
+    }
+
+    override fun setValue(value: T) {
+        cache = value
+        super.setValue(value)
+    }
+
+    override fun postValue(value: T) {
+        cache = value
+        super.postValue(value)
+    }
+
 }

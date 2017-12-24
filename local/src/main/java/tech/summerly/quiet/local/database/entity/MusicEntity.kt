@@ -22,5 +22,6 @@ data class MusicEntity(
         val type: MusicType,
         val mvId: Long,
         val duration: Long,
-        val playUri: String
+        val playUri: String,
+        val bitrate: Int
 )

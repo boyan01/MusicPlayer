@@ -1,2 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tech.summerly.quiet.commonlib" />
+    package="tech.summerly.quiet.commonlib">
+
+    <application android:name=".AppContext" />
+</manifest>

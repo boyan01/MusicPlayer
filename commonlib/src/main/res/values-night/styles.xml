@@ -41,7 +41,7 @@
         <item name="android:windowActionBarOverlay">true</item>
         <!-- Support library compatibility -->
         <item name="windowActionBarOverlay">true</item>
-        <item name="actionMenuTextColor">@color/common_textPrimaryDarkBackground</item>
+        <item name="actionMenuTextColor">@color/common_text_primary_dark_background</item>
     </style>
 
     <!-- TODO：解决切换夜间主题时，toolbar的popupMenu不切换的问题 -->
