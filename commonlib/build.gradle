@@ -44,6 +44,8 @@ kotlin {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    implementation 'com.facebook.stetho:stetho:1.5.0'
+
     //android support
     api "com.android.support:appcompat-v7:$android_support_version"
     api "com.android.support:design:$android_support_version"
@@ -96,7 +98,7 @@ dependencies {
     api 'com.squareup.okhttp3:okhttp:3.9.1'
 
     //mp3
-    api 'com.mpatric:mp3agic:0.9.1'
+    api 'com.mpatric:mp3agic:0.9.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

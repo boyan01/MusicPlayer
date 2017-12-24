@@ -1,9 +1,13 @@
 package tech.summerly.quiet.commonlib.utils
 
+import android.support.annotation.LayoutRes
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.ItemViewBinder as JItemViewBinder
 import me.drakeet.multitype.MultiTypeAdapter
 
@@ -24,5 +28,35 @@ abstract class ItemViewBinder<T> : me.drakeet.multitype.ItemViewBinder<T, ItemVi
 
     abstract override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder
 
-    open class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    open class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        companion object {
+            operator fun invoke(@LayoutRes layoutId: Int, inflater: LayoutInflater): ViewHolder {
+                return ViewHolder(inflater.inflate(layoutId,null))
+            }
+        }
+    }
+}
+
+
+fun MultiTypeAdapter.setItemsByDiff(items: List<Any>, detectMove: Boolean = false) {
+    val old = this.items
+    launch {
+        val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return old[oldItemPosition] == items[newItemPosition]
+            }
+
+            override fun getOldListSize(): Int = old.size
+
+            override fun getNewListSize(): Int = items.size
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return old[oldItemPosition] == items[newItemPosition]
+            }
+        }, detectMove)
+        launch(UI) {
+            setItems(items)
+            result.dispatchUpdatesTo(this@setItemsByDiff)
+        }
+    }
 }

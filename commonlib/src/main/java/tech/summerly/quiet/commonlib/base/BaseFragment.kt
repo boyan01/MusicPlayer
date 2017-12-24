@@ -12,16 +12,21 @@ import android.view.ViewGroup
  */
 open class BaseFragment : Fragment() {
 
+    private var rootView: View? = null
+
     @Suppress("RedundantOverride")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        rootView = view
     }
 
     /**
      * run if root view is not null
      */
     protected fun runWithRoot(run: View.() -> Unit) {
-        view?.run()
+        rootView?.run()
     }
-
 }

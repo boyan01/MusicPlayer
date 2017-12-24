@@ -15,6 +15,7 @@ android {
         versionCode app_version_code.toInteger()
         versionName app_version_name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {

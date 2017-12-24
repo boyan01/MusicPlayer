@@ -10,12 +10,12 @@
 
 
     <color name="common_text_primary">#ffffffff</color>
-    <color name="common_textSecondary">#B2ffffff</color>
+    <color name="common_text_secondary">#B2ffffff</color>
     <color name="common_textDisable">#80ffffff</color>
 
     <color name="common_textHint">@color/common_textDisable</color>
 
-    <color name="common_colorDivider">#1effffff</color>
+    <color name="common_color_divider">#1effffff</color>
 
     <color name="common_background">#303030</color>
     <color name="common_backgroundDark">#212121</color>
@@ -27,12 +27,12 @@
     <!--决定采用30%透明度的遮罩 -->
     <color name="common_colorImageMask">#4c000000</color>
 
-    <color name="common_colorIconActive">#ffffff</color>
+    <color name="common_color_icon_active">#ffffff</color>
     <color name="common_colorIconInactive">#808080</color>
 
     <color name="common_transparentSecondary">#4e000000</color>
 
-    <color name="common_color_indicator">@color/common_textSecondary</color>
+    <color name="common_color_indicator">@color/common_text_secondary</color>
 
 
 </resources>

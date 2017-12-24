@@ -66,7 +66,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:lines="1"
-                android:textColor="@color/common_textPrimaryDarkBackground"
+                android:textColor="@color/common_text_primary_dark_background"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -81,30 +81,30 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:lines="1"
-                android:textColor="@color/common_textSecondaryDarkBackground"
+                android:textColor="@color/common_text_primary_dark_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textMusicName"
                 tools:text="五月天" />
 
-            <io.summer.lyricview.LyricView
-                android:id="@+id/lyricView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:lyricEmptyText="@string/player_no_lyric"
-                app:lyricLineSpacing="4dp"
-                app:lyricPlayIndicatorColor="@color/colorPrimaryDark"
-                app:lyricTextSize="15sp"
-                tools:visibility="visible" />
+            <!--<io.summer.lyricview.LyricView-->
+                <!--android:id="@+id/lyricView"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_marginBottom="16dp"-->
+                <!--android:layout_marginEnd="8dp"-->
+                <!--android:layout_marginStart="8dp"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:visibility="invisible"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toTopOf="parent"-->
+                <!--app:lyricEmptyText="@string/player_no_lyric"-->
+                <!--app:lyricLineSpacing="4dp"-->
+                <!--app:lyricPlayIndicatorColor="@color/colorPrimaryDark"-->
+                <!--app:lyricTextSize="15sp"-->
+                <!--tools:visibility="visible" />-->
 
         </android.support.constraint.ConstraintLayout>
 
@@ -127,7 +127,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
-                android:textColor="@color/common_textPrimaryDarkBackground"
+                android:textColor="@color/common_text_primary_dark_background"
                 android:textSize="12sp"
                 tools:ignore="HardcodedText"
                 tools:text="01:53" />
@@ -137,7 +137,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:thumbTint="@color/common_textPrimaryDarkBackground"
+                android:thumbTint="@color/common_text_primary_dark_background"
                 tools:progress="54" />
 
             <TextView
@@ -145,7 +145,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
-                android:textColor="@color/common_textPrimaryDarkBackground"
+                android:textColor="@color/common_text_primary_dark_background"
                 android:textSize="12sp"
                 tools:ignore="HardcodedText"
                 tools:text="01:53" />

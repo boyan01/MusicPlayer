@@ -9,7 +9,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:navigationContentDescription="@string/description_close_scanner_setting"
+        app:navigationContentDescription="@string/local_description_close_scanner_setting"
         app:navigationIcon="@drawable/local_ic_close_24dp"
         app:title="@string/local_title_scanner_setting" />
 

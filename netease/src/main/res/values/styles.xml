@@ -14,18 +14,18 @@
 
     <style name="NeteaseLoginTextLayout" parent="TextAppearance.AppCompat">
         <!-- Hint color and label color in FALSE state -->
-        <item name="android:textColorHint">@color/common_textSecondaryDarkBackground</item>
+        <item name="android:textColorHint">@color/common_text_primary_dark_background</item>
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
-        <item name="colorAccent">@color/common_textSecondaryDarkBackground</item>
-        <item name="colorControlNormal">@color/common_textPrimaryDarkBackground</item>
-        <item name="colorControlActivated">@color/common_textSecondaryDarkBackground</item>
+        <item name="colorAccent">@color/common_text_primary_dark_background</item>
+        <item name="colorControlNormal">@color/common_text_primary_dark_background</item>
+        <item name="colorControlActivated">@color/common_text_primary_dark_background</item>
     </style>
 
     <style name="NeteaseAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:windowActionBarOverlay">true</item>
         <!-- Support library compatibility -->
         <item name="windowActionBarOverlay">true</item>
-        <item name="actionMenuTextColor">@color/common_textPrimaryDarkBackground</item>
+        <item name="actionMenuTextColor">@color/common_text_primary_dark_background</item>
     </style>
 
     <style name="NeteaseAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

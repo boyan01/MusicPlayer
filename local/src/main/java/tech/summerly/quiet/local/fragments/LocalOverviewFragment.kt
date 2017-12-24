@@ -1,9 +1,11 @@
-package tech.summerly.quiet.local
+package tech.summerly.quiet.local.fragments
 
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import tech.summerly.quiet.commonlib.base.BaseFragment
 
 /**
@@ -13,7 +15,10 @@ import tech.summerly.quiet.commonlib.base.BaseFragment
 class LocalOverviewFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return TextView(context).apply {
+            text = "OverView"
+            gravity = Gravity.CENTER
+        }
     }
 
 }

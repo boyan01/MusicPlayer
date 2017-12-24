@@ -1,13 +1,7 @@
 package tech.summerly.quiet.local.database.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
-import tech.summerly.quiet.local.database.entity.AlbumEntity
-import tech.summerly.quiet.local.database.entity.ArtistEntity
-import tech.summerly.quiet.local.database.entity.MusicEntity
-import tech.summerly.quiet.local.database.entity.PlaylistEntity
+import android.arch.persistence.room.*
+import tech.summerly.quiet.local.database.entity.*
 
 /**
  * Created by summer on 17-12-21
@@ -15,11 +9,24 @@ import tech.summerly.quiet.local.database.entity.PlaylistEntity
 @Dao
 internal interface MusicDao {
 
+    @Query("select * from entity_music")
+    fun getTotalMusics(): List<MusicEntity>
+
+
+    @Query(value = "select entity_artist.* from relation_music_artist " +
+            "left join entity_music on entity_music.id = relation_music_artist.music_id " +
+            "left join entity_artist on entity_artist.id = relation_music_artist.artist_id " +
+            "where entity_music.id = :musicId")
+    fun getArtistByMusic(musicId: Long): List<ArtistEntity>
+
     @Query(value = "select entity_music.* from relation_music_artist " +
             "left join entity_music on entity_music.id = relation_music_artist.music_id " +
             "left join entity_artist on entity_artist.id = relation_music_artist.artist_id " +
             "where entity_artist.id = :artistId")
     fun getMusicByArtist(artistId: Long): List<MusicEntity>
+
+    @Query(value = "select * from entity_album where id = :id")
+    fun getAlbum(id: Long): AlbumEntity
 
     @Query(value = "select * from entity_music where album_id = :albumId")
     fun getMusicByAlbum(albumId: Long): List<MusicEntity>
@@ -34,13 +41,13 @@ internal interface MusicDao {
     fun getMusicByPlaylist(playlistId: Long): List<MusicEntity>
 
     @Insert
-    fun insertMusic(musics: List<MusicEntity>): List<Long>
+    fun insertMusic(music: MusicEntity): Long
 
-    @Insert
-    fun insertAlbum(albums: List<AlbumEntity>): List<Long>
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertAlbum(album: AlbumEntity): Long
 
-    @Insert
-    fun insertArtist(artists: List<ArtistEntity>): List<Long>
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertArtist(artists: ArtistEntity): Long
 
     @Delete
     fun removeMusic(musics: List<MusicEntity>): Int
@@ -53,4 +60,17 @@ internal interface MusicDao {
 
     @Delete
     fun removePlaylist(playlist: PlaylistEntity): Int
+
+    @Insert
+    fun insertMusicArtist(relations: List<MusicArtistRelation>)
+
+    @Query("select * from entity_artist")
+    fun getArtists(): List<ArtistEntity>
+
+    @Query("select * from entity_artist where name = :name")
+    fun getArtistByName(name: String): ArtistEntity
+
+    @Query("select * from entity_album where name = :name")
+    fun getAlbumByName(name: String): AlbumEntity
+
 }

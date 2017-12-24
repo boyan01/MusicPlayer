@@ -3,6 +3,7 @@ package tech.summerly.quiet.netease.ui
 import android.os.Bundle
 import kotlinx.android.synthetic.main.netease_activity_fm.*
 import tech.summerly.quiet.commonlib.base.BaseActivity
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.netease.R
 
 /**
@@ -36,7 +37,8 @@ class NeteaseFmActivity : BaseActivity() {
         }
     }
 
+    //init fm player and start to play
     private fun initPlayer() {
-
+        //TODO
     }
 }

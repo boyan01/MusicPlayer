@@ -10,6 +10,7 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.player.state.PlayerState
+import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.edit
 import tech.summerly.quiet.commonlib.utils.log
 
@@ -34,8 +35,7 @@ abstract class BaseMusicPlayer(context: Context) {
     /**
      * to control the player's play order
      */
-    open val playMode = MutableLiveData<PlayMode>()
-
+    val playMode = WithDefaultLiveData(PlayMode.Sequence)
 
     /**
      * get the position of current playing music has been play.

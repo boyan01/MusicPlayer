@@ -32,6 +32,7 @@ class NeteaseFmMusicPlayer(context: Context) : BaseMusicPlayer(context) {
         musicList.addAll(musics)
     }
 
+    //do not support back to previous music for FM player
     override suspend fun getPreviousMusic(current: Music?): Music? = null
 
 }
