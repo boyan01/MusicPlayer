@@ -1,7 +1,6 @@
 package tech.summerly.quiet
 
 import android.os.Bundle
-import kotlinx.serialization.json.JSON
 import tech.summerly.quiet.commonlib.base.BaseActivity
 
 /**

@@ -1,5 +1,6 @@
 package tech.summerly.quiet.local
 
+import android.Manifest
 import android.content.Context
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.AnimatedVectorDrawable
@@ -11,10 +12,12 @@ import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.view.View
 import kotlinx.android.synthetic.main.local_activity_music_scanner.*
 import kotlinx.android.synthetic.main.local_activity_music_scanner.view.*
+import kotlinx.coroutines.experimental.launch
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.commonlib.utils.requestPermission
 import tech.summerly.quiet.local.scanner.LocalMusicScannerContract
 import tech.summerly.quiet.local.scanner.LocalMusicScannerPresenter
 import tech.summerly.quiet.local.scanner.LocalScannerSettingDialog
@@ -56,8 +59,16 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
         setContentView(R.layout.local_activity_music_scanner)
         scannerInfoView = ScannerInfoView(scannerContainer)
         buttonStartScanner.setOnClickListener {
-            startAnimation()
-            presenter.startScannerJob()
+            scannerInfoView.setScanning()
+            musicList.clear()
+            launch {
+                val isGranted = requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                if (isGranted) {
+                    presenter.startScannerJob()
+                } else {
+                    launch(UI) { scannerInfoView.setNotScanning() }
+                }
+            }
         }
 
         textSearchSetting.setOnClickListener {
@@ -66,10 +77,6 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
         scannerInfoView.setNotScanning()
     }
 
-    private fun startAnimation() {
-        scannerInfoView.setScanning()
-        musicList.clear()
-    }
 
     override fun onScannerComplete() {
         //动画结束之后,需要显示或者更新一些视图

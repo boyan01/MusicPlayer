@@ -1,6 +1,7 @@
 package tech.summerly.quiet.netease.api.result
 
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 
 /**
@@ -10,68 +11,88 @@ import kotlinx.serialization.SerialName
  * desc   :
  */
 class MvDetailResultBean(
-        @SerialName("data")
+        @SerializedName("data")
+        @Expose
         val data: Data? = null,
 
-        @SerialName("code")
+        @SerializedName("code")
+        @Expose
         val code: Int
 
 ) {
 
     data class Brs(
-            @SerialName("1080")
+            @SerializedName("1080")
+            @Expose
             val _1080: String? = null,
-            @SerialName("720")
+            @SerializedName("720")
+            @Expose
             val _720: String? = null,
-            @SerialName("480")
+            @SerializedName("480")
+            @Expose
             val _480: String? = null,
-            @SerialName("240")
+            @SerializedName("240")
+            @Expose
             val _240: String? = null
 
     )
 
     data class Data(
 
-            @SerialName("id")
+            @SerializedName("id")
+            @Expose
             val id: Long,
 
-            @SerialName("title")
+            @SerializedName("title")
+            @Expose
             val name: String? = null,
 
-            @SerialName("artistId")
+            @SerializedName("artistId")
+            @Expose
             val artistId: Long? = null,
 
-            @SerialName("artistName")
+            @SerializedName("artistName")
+            @Expose
             val artistName: String? = null,
 
-            @SerialName("cover")
+            @SerializedName("cover")
+            @Expose
             val cover: String? = null,
 
-            @SerialName("playCount")
+            @SerializedName("playCount")
+            @Expose
             val playCount: Long? = null,
 
-            @SerialName("subCount")
+            @SerializedName("subCount")
+            @Expose
             val subCount: Long? = null,
 
-            @SerialName("shareCount")
+            @SerializedName("shareCount")
+            @Expose
             val shareCount: Long? = null,
 
-            @SerialName("likeCount")
+            @SerializedName("likeCount")
+            @Expose
             val likeCount: Long? = null,
 
-            @SerialName("commentCount")
+            @SerializedName("commentCount")
+            @Expose
             val commentCount: Long? = null,
 
-            @SerialName("duration")
+            @SerializedName("duration")
+            @Expose
             val duration: Long,
 
-            @SerialName("publishTime")
+            @SerializedName("publishTime")
+            @Expose
             val publishTime: String? = null,
 
-            @SerialName("brs")
+            @SerializedName("brs")
+            @Expose
             val brs: Brs? = null,
 
-            @SerialName("commentThreadId")
+            @SerializedName("commentThreadId")
+            @Expose
             val commentThreadId: String? = null
     )
 }

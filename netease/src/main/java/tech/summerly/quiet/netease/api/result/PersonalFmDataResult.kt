@@ -1,6 +1,7 @@
 package tech.summerly.quiet.netease.api.result
 
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 
 /**
@@ -11,137 +12,196 @@ import kotlinx.serialization.SerialName
  */
 
 data class PersonalFmDataResult(
-        @SerialName("popAdjust")
+        @SerializedName("popAdjust")
+        @Expose
         val popAdjust: Boolean? = null,
-        @SerialName("data")
+        @SerializedName("data")
+        @Expose
         val data: List<Datum>? = null,
-        @SerialName("code")
+        @SerializedName("code")
+        @Expose
         val code: Int
 ) {
 
     data class Datum(
 
-            @SerialName("title")
+            @SerializedName("title")
+            @Expose
             val name: String,
-            @SerialName("id")
+            @SerializedName("id")
+            @Expose
             val id: Long,
-            @SerialName("position")
+            @SerializedName("position")
+            @Expose
             val position: Long? = null,
-            @SerialName("alias")
+            @SerializedName("alias")
+            @Expose
             val alias: List<Any>? = null,
-            @SerialName("status")
+            @SerializedName("status")
+            @Expose
             val status: Long? = null,
-            @SerialName("fee")
+            @SerializedName("fee")
+            @Expose
             val fee: Long? = null,
-            @SerialName("copyrightId")
+            @SerializedName("copyrightId")
+            @Expose
             val copyrightId: Long? = null,
-            @SerialName("disc")
+            @SerializedName("disc")
+            @Expose
             val disc: String? = null,
-            @SerialName("no")
+            @SerializedName("no")
+            @Expose
             val no: Long? = null,
-            @SerialName("artists")
+            @SerializedName("artists")
+            @Expose
             val artists: List<Artist>? = null,
-            @SerialName("album")
+            @SerializedName("album")
+            @Expose
             val album: Album? = null,
-            @SerialName("starred")
+            @SerializedName("starred")
+            @Expose
             val starred: Boolean? = null,
-            @SerialName("popularity")
+            @SerializedName("popularity")
+            @Expose
             val popularity: Long? = null,
-            @SerialName("score")
+            @SerializedName("score")
+            @Expose
             val score: Long? = null,
-            @SerialName("starredNum")
+            @SerializedName("starredNum")
+            @Expose
             val starredNum: Long? = null,
-            @SerialName("duration")
+            @SerializedName("duration")
+            @Expose
             val duration: Int,
-            @SerialName("playedNum")
+            @SerializedName("playedNum")
+            @Expose
             val playedNum: Long? = null,
-            @SerialName("dayPlays")
+            @SerializedName("dayPlays")
+            @Expose
             val dayPlays: Long? = null,
-            @SerialName("hearTime")
+            @SerializedName("hearTime")
+            @Expose
             val hearTime: Long? = null,
-            @SerialName("ringtone")
+            @SerializedName("ringtone")
+            @Expose
             val ringtone: Any? = null,
-            @SerialName("crbt")
+            @SerializedName("crbt")
+            @Expose
             val crbt: Any? = null,
-            @SerialName("audition")
+            @SerializedName("audition")
+            @Expose
             val audition: Any? = null,
-            @SerialName("commentThreadId")
+            @SerializedName("commentThreadId")
+            @Expose
             val commentThreadId: String? = null,
-            @SerialName("mvid")
+            @SerializedName("mvid")
+            @Expose
             val mvid: Long? = null,
-            @SerialName("alg")
+            @SerializedName("alg")
+            @Expose
             val alg: String? = null
 
     )
 
     data class Album(
 
-            @SerialName("title")
+            @SerializedName("title")
+            @Expose
             val name: String? = null,
-            @SerialName("id")
+            @SerializedName("id")
+            @Expose
             val id: Long? = null,
-            @SerialName("type")
+            @SerializedName("type")
+            @Expose
             val type: String? = null,
-            @SerialName("size")
+            @SerializedName("size")
+            @Expose
             val size: Long? = null,
-            @SerialName("picId")
+            @SerializedName("picId")
+            @Expose
             val picId: Long? = null,
-            @SerialName("blurPicUrl")
+            @SerializedName("blurPicUrl")
+            @Expose
             val blurPicUrl: String? = null,
-            @SerialName("companyId")
+            @SerializedName("companyId")
+            @Expose
             val companyId: Long? = null,
-            @SerialName("pic")
+            @SerializedName("pic")
+            @Expose
             val pic: Long? = null,
-            @SerialName("picUrl")
+            @SerializedName("picUrl")
+            @Expose
             val picUrl: String? = null,
-            @SerialName("publishTime")
+            @SerializedName("publishTime")
+            @Expose
             val publishTime: Long? = null,
-            @SerialName("description")
+            @SerializedName("description")
+            @Expose
             val description: String? = null,
-            @SerialName("tags")
+            @SerializedName("tags")
+            @Expose
             val tags: String? = null,
-            @SerialName("company")
+            @SerializedName("company")
+            @Expose
             val company: Any? = null,
-            @SerialName("briefDesc")
+            @SerializedName("briefDesc")
+            @Expose
             val briefDesc: String? = null,
-            @SerialName("songs")
+            @SerializedName("songs")
+            @Expose
             val songs: List<Any>? = null,
-            @SerialName("alias")
+            @SerializedName("alias")
+            @Expose
             val alias: List<Any>? = null,
-            @SerialName("status")
+            @SerializedName("status")
+            @Expose
             val status: Long? = null,
-            @SerialName("copyrightId")
+            @SerializedName("copyrightId")
+            @Expose
             val copyrightId: Long? = null,
-            @SerialName("commentThreadId")
+            @SerializedName("commentThreadId")
+            @Expose
             val commentThreadId: String? = null,
-            @SerialName("picId_str")
+            @SerializedName("picId_str")
+            @Expose
             val picIdStr: String? = null
 
     )
 
     data class Artist(
 
-            @SerialName("title")
+            @SerializedName("title")
+            @Expose
             val name: String,
-            @SerialName("id")
+            @SerializedName("id")
+            @Expose
             val id: Long,
-            @SerialName("picId")
+            @SerializedName("picId")
+            @Expose
             val picId: Long? = null,
-            @SerialName("img1v1Id")
+            @SerializedName("img1v1Id")
+            @Expose
             val img1v1Id: Long? = null,
-            @SerialName("briefDesc")
+            @SerializedName("briefDesc")
+            @Expose
             val briefDesc: String? = null,
-            @SerialName("picUrl")
+            @SerializedName("picUrl")
+            @Expose
             val picUrl: String? = null,
-            @SerialName("img1v1Url")
+            @SerializedName("img1v1Url")
+            @Expose
             val img1v1Url: String? = null,
-            @SerialName("albumSize")
+            @SerializedName("albumSize")
+            @Expose
             val albumSize: Long? = null,
-            @SerialName("alias")
+            @SerializedName("alias")
+            @Expose
             val alias: List<Any>? = null,
-            @SerialName("trans")
+            @SerializedName("trans")
+            @Expose
             val trans: String? = null,
-            @SerialName("musicSize")
+            @SerializedName("musicSize")
+            @Expose
             val musicSize: Long? = null
     )
 }

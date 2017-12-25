@@ -1,8 +1,7 @@
 package tech.summerly.quiet.commonlib.bean
 
-import android.annotation.SuppressLint
+import android.os.Parcel
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
 
 
 /**
@@ -12,8 +11,6 @@ import kotlinx.android.parcel.Parcelize
  * desc   : 被播放的基本单位. 所有的不管是来自本地,还是来自网络的音乐,都得转换为此对象,
  *          才能被 MusicPlayerService 播放
  */
-@SuppressLint("ParcelCreator")
-@Parcelize
 data class Music(
         val id: Long,
         val title: String,
@@ -24,11 +21,47 @@ data class Music(
         val mvId: Long,
         val duration: Long,
         val playUri: List<MusicUri>
-        ) : Parcelable {
+) : Parcelable {
 
     @Transient
     var isFavorite: Boolean = false
 
+    constructor(parcel: Parcel) : this(
+            parcel.readLong(),
+            parcel.readString(),
+            parcel.createTypedArrayList(Artist.CREATOR),
+            parcel.readParcelable(Album::class.java.classLoader),
+            parcel.readString(),
+            MusicType.valueOf(parcel.readString()),
+            parcel.readLong(),
+            parcel.readLong(),
+            parcel.createTypedArrayList(MusicUri.CREATOR))
+
     fun toShortString(): String = "$id : $title"
     fun artistAlbumString(): String = "${album.name} - ${artist.joinToString("/")}"
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeLong(id)
+        parcel.writeString(title)
+        parcel.writeTypedList(artist)
+        parcel.writeParcelable(album, flags)
+        parcel.writeString(picUri)
+        parcel.writeString(type.name)
+        parcel.writeLong(mvId)
+        parcel.writeLong(duration)
+        parcel.writeTypedList(playUri)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Music> {
+        override fun createFromParcel(parcel: Parcel): Music {
+            return Music(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Music?> {
+            return arrayOfNulls(size)
+        }
+    }
 }

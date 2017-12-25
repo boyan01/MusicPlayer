@@ -1,7 +1,7 @@
 package tech.summerly.quiet.netease.api.converter
 
 import android.util.Base64
-import kotlinx.serialization.json.JSON
+import com.google.gson.Gson
 import tech.summerly.quiet.commonlib.utils.log
 import java.math.BigInteger
 import javax.crypto.Cipher
@@ -31,8 +31,9 @@ internal object Crypto {
      * 返回的map中 params 是加密的请求数据
      *  encSecKey 是请求数据的密钥
      */
+    @Suppress("unused")
     fun encrypt(obj: Any): Map<String, String> {
-        return encrypt(JSON.stringify(obj))
+        return encrypt(Gson().toJson(obj))
     }
 
     fun encrypt(json: String): Map<String, String> {

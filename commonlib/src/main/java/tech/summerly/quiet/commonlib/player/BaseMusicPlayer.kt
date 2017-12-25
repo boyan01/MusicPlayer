@@ -4,14 +4,15 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
 import kotlinx.coroutines.experimental.launch
-import kotlinx.serialization.json.JSON
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.player.state.PlayerState
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.edit
+import tech.summerly.quiet.commonlib.utils.fromJson
 import tech.summerly.quiet.commonlib.utils.log
 
 @Suppress("MemberVisibilityCanPrivate")
@@ -129,11 +130,17 @@ abstract class BaseMusicPlayer(context: Context) {
         }
     }
 
+    init {
+        PlayerStateKeeper(baseContext).restore()
+    }
+
 
     protected inner class PlayerStateKeeper(context: Context) {
 
 
         val preference: SharedPreferences = context.getSharedPreferences("music_player_info", Context.MODE_PRIVATE)
+
+        private val gson = Gson()
 
         fun savePlaylist(
                 musics: Collection<Music>,
@@ -143,7 +150,7 @@ abstract class BaseMusicPlayer(context: Context) {
                 return
             }
             saveCurrent(playing ?: musics.elementAtOrNull(0), editor)
-            val listJson = JSON.stringify(musics)
+            val listJson = gson.toJson(musics)
             editor.putString(KEY_PLAY_LIST, listJson)
             editor.apply()
         }
@@ -151,7 +158,7 @@ abstract class BaseMusicPlayer(context: Context) {
         fun saveCurrent(playing: Music?,
                         editor: SharedPreferences.Editor = preference.edit()) {
             playing ?: return
-            editor.putString(KEY_CURRENT_MUSIC, JSON.stringify(playing))
+            editor.putString(KEY_CURRENT_MUSIC, gson.toJson(playing))
             editor.apply()
         }
 
@@ -165,14 +172,14 @@ abstract class BaseMusicPlayer(context: Context) {
 
         fun restore() {
             playMode.postValue(PlayMode.fromName(preference.getString(KEY_PLAY_MODE, PlayMode.Sequence.name)))
-            val saved = JSON.parse<Music>(preference.getString(KEY_CURRENT_MUSIC, ""))
+            val saved = gson.fromJson<Music>(preference.getString(KEY_CURRENT_MUSIC, ""))
             if (corePlayer.getPlayerState().value == PlayerState.Playing) {
                 if (playingMusic.value != saved) {
                     corePlayer.stop()
                 }
             }
             playingMusic.value = saved
-            val list = JSON.parse<List<Music>>(preference.getString(KEY_PLAY_LIST, ""))
+            val list = gson.fromJson<List<Music>>(preference.getString(KEY_PLAY_LIST, "")) ?: emptyList()
             setPlaylist(list)
         }
 
