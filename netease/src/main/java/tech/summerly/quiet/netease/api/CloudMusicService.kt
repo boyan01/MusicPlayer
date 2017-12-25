@@ -2,7 +2,6 @@ package tech.summerly.quiet.netease.api
 
 import retrofit2.Call
 import retrofit2.http.*
-import tech.summerly.quiet.data.netease.result.*
 import tech.summerly.quiet.netease.api.result.*
 
 /**

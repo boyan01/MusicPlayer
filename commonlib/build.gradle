@@ -30,10 +30,6 @@ android {
 
 }
 
-androidExtensions {
-    experimental = true
-}
-
 kotlin {
     experimental {
         coroutines 'enable'
@@ -72,7 +68,7 @@ dependencies {
     api "org.jetbrains.anko:anko-support-v4-commons:$anko_version"
 
     //serialization
-    api "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization_version"
+    api 'com.google.code.gson:gson:2.8.2'
 
     //co-routines
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.20"

@@ -1,6 +1,7 @@
 package tech.summerly.quiet.netease.api.result
 
-import kotlinx.serialization.SerialName
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
 
 /**
@@ -12,146 +13,204 @@ import kotlinx.serialization.SerialName
 
 data class UserDetailResultBean(
 
-        @SerialName("profile")
+        @SerializedName("profile")
+        @Expose
         val profile: Profile? = null,
 
-        @SerialName("level")
+        @SerializedName("level")
+        @Expose
         val level: Int? = null,
 
-        @SerialName("listenSongs")
+        @SerializedName("listenSongs")
+        @Expose
         val listenSongs: Long? = null,
 
-        @SerialName("userPoint")
+        @SerializedName("userPoint")
+        @Expose
         val userPoint: UserPoint? = null,
 
-        //        @SerialName("mobileSign")
+        //        @SerializedName("mobileSign")
+//        @Expose
 //        val mobileSign: Boolean? = null,
-//        @SerialName("pcSign")
+//        @SerializedName("pcSign")
+//        @Expose
 //        val pcSign: Boolean? = null,
 
-//        @SerialName("peopleCanSeeMyPlayRecord")
+//        @SerializedName("peopleCanSeeMyPlayRecord")
+//        @Expose
 //        val peopleCanSeeMyPlayRecord: Boolean? = null,
 
-//        @SerialName("bindings")
+//        @SerializedName("bindings")
+//        @Expose
 //        val bindings: List<Binding>? = null,
 
-        @SerialName("adValid")
+        @SerializedName("adValid")
+        @Expose
         val adValid: Boolean? = null,
 
-        @SerialName("code")
+        @SerializedName("code")
+        @Expose
         val code: Long,
 
-        @SerialName("createDays")
+        @SerializedName("createDays")
+        @Expose
         val createDays: Long? = null
 ) {
 
     data class Profile(
 
 
-            @SerialName("userId")
+            @SerializedName("userId")
+            @Expose
             val userId: Long? = null,
-            @SerialName("nickname")
+            @SerializedName("nickname")
+            @Expose
             val nickname: String? = null,
-            @SerialName("avatarUrl")
+            @SerializedName("avatarUrl")
+            @Expose
             val avatarUrl: String? = null,
-            @SerialName("backgroundUrl")
+            @SerializedName("backgroundUrl")
+            @Expose
             val backgroundUrl: String? = null,
-            @SerialName("playlistCount")
+            @SerializedName("playlistCount")
+            @Expose
             val playlistCount: Long? = null
 
 
-//            @SerialName("followed")
+//            @SerializedName("followed")
+//            @Expose
 //            val followed: Boolean? = null,
-//            @SerialName("djStatus")
+//            @SerializedName("djStatus")
+//            @Expose
 //            val djStatus: Long? = null,
-//            @SerialName("detailDescription")
+//            @SerializedName("detailDescription")
+//            @Expose
 //            val detailDescription: String? = null,
-//            @SerialName("avatarImgIdStr")
+//            @SerializedName("avatarImgIdStr")
+//            @Expose
 //            val avatarImgIdStr: String? = null,
-//            @SerialName("backgroundImgIdStr")
+//            @SerializedName("backgroundImgIdStr")
+//            @Expose
 //            val backgroundImgIdStr: String? = null,
-//            @SerialName("description")
+//            @SerializedName("description")
+//            @Expose
 //            val description: String? = null,
-//            @SerialName("accountStatus")
+//            @SerializedName("accountStatus")
+//            @Expose
 //            val accountStatus: Long? = null,
-//            @SerialName("province")
+//            @SerializedName("province")
+//            @Expose
 //            val province: Long? = null,
-//            @SerialName("defaultAvatar")
+//            @SerializedName("defaultAvatar")
+//            @Expose
 //            val defaultAvatar: Boolean? = null,
-//            @SerialName("gender")
+//            @SerializedName("gender")
+//            @Expose
 //            val gender: Long? = null,
-//            @SerialName("birthday")
+//            @SerializedName("birthday")
+//            @Expose
 //            val birthday: Long? = null,
-//            @SerialName("city")
+//            @SerializedName("city")
+//            @Expose
 //            val city: Long? = null,
-//            @SerialName("mutual")
+//            @SerializedName("mutual")
+//            @Expose
 //            val mutual: Boolean? = null,
-//            @SerialName("remarkName")
+//            @SerializedName("remarkName")
+//            @Expose
 //            val remarkName: Any? = null,
-//            @SerialName("experts")
+//            @SerializedName("experts")
+//            @Expose
 //            val experts: Experts? = null,
-//            @SerialName("avatarImgId")
+//            @SerializedName("avatarImgId")
+//            @Expose
 //            val avatarImgId: Long? = null,
-//            @SerialName("backgroundImgId")
+//            @SerializedName("backgroundImgId")
+//            @Expose
 //            val backgroundImgId: Long? = null,
-//            @SerialName("expertTags")
+//            @SerializedName("expertTags")
+//            @Expose
 //            val expertTags: Any? = null,
-//            @SerialName("vipType")
+//            @SerializedName("vipType")
+//            @Expose
 //            val vipType: Long? = null,
-//            @SerialName("userType")
+//            @SerializedName("userType")
+//            @Expose
 //            val userType: Long? = null,
-//            @SerialName("authStatus")
+//            @SerializedName("authStatus")
+//            @Expose
 //            val authStatus: Long? = null,
-//            @SerialName("signature")
+//            @SerializedName("signature")
+//            @Expose
 //            val signature: String? = null,
-//            @SerialName("authority")
+//            @SerializedName("authority")
+//            @Expose
 //            val authority: Long? = null,
-//            @SerialName("followeds")
+//            @SerializedName("followeds")
+//            @Expose
 //            val followeds: Long? = null,
-//            @SerialName("follows")
+//            @SerializedName("follows")
+//            @Expose
 //            val follows: Long? = null,
-//            @SerialName("blacklist")
+//            @SerializedName("blacklist")
+//            @Expose
 //            val blacklist: Boolean? = null,
-//            @SerialName("eventCount")
+//            @SerializedName("eventCount")
+//            @Expose
 //            val eventCount: Long? = null,
-//            @SerialName("playlistBeSubscribedCount")
+//            @SerializedName("playlistBeSubscribedCount")
+//            @Expose
 //            val playlistBeSubscribedCount: Long? = null
 
     )
 
 //    data class Binding(
 //
-//            @SerialName("expiresIn")
+//            @SerializedName("expiresIn")
+//            @Expose
 //            val expiresIn: Long? = null,
-//            @SerialName("refreshTime")
+//            @SerializedName("refreshTime")
+//            @Expose
 //            val refreshTime: Long? = null,
-//            @SerialName("userId")
+//            @SerializedName("userId")
+//            @Expose
 //            val userId: Long? = null,
-//            @SerialName("tokenJsonStr")
+//            @SerializedName("tokenJsonStr")
+//            @Expose
 //            val tokenJsonStr: String? = null,
-//            @SerialName("url")
+//            @SerializedName("url")
+//            @Expose
 //            val url: String? = null,
-//            @SerialName("expired")
+//            @SerializedName("expired")
+//            @Expose
 //            val expired: Boolean? = null,
-//            @SerialName("id")
+//            @SerializedName("id")
+//            @Expose
 //            val id: Long? = null,
-//            @SerialName("type")
+//            @SerializedName("type")
+//            @Expose
 //            val type: Long? = null
 //    )
 
     data class UserPoint(
 
-            @SerialName("userId")
+            @SerializedName("userId")
+            @Expose
             val userId: Long? = null,
-            @SerialName("balance")
+            @SerializedName("balance")
+            @Expose
             val balance: Long? = null,
-            @SerialName("updateTime")
+            @SerializedName("updateTime")
+            @Expose
             val updateTime: Long? = null,
-            @SerialName("version")
+            @SerializedName("version")
+            @Expose
             val version: Long? = null,
-            @SerialName("status")
+            @SerializedName("status")
+            @Expose
             val status: Long? = null,
-            @SerialName("blockBalance")
+            @SerializedName("blockBalance")
+            @Expose
             val blockBalance: Long? = null
 
     )

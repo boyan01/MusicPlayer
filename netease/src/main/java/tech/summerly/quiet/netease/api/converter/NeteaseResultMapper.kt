@@ -1,7 +1,5 @@
 package tech.summerly.quiet.netease.api.converter
 
-import tech.summerly.quiet.data.netease.result.PlaylistDetailResultBean
-
 /**
  * author : SUMMERLY
  * e-mail : yangbinyhbn@gmail.com

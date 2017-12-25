@@ -1,14 +1,11 @@
 package tech.summerly.quiet.commonlib.bean
 
-import android.annotation.SuppressLint
+import android.os.Parcel
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
 
 /**
  *
  */
-@SuppressLint("ParcelCreator")
-@Parcelize
 data class MusicUri(
         val bitrate: Int,
 
@@ -23,5 +20,29 @@ data class MusicUri(
         val dateValid: Long
 ) : Parcelable {
 
+    constructor(parcel: Parcel) : this(
+            parcel.readInt(),
+            parcel.readString(),
+            parcel.readLong())
+
     fun isValid() = dateValid > System.currentTimeMillis()
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(bitrate)
+        parcel.writeString(uri)
+        parcel.writeLong(dateValid)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<MusicUri> {
+        override fun createFromParcel(parcel: Parcel): MusicUri {
+            return MusicUri(parcel)
+        }
+
+        override fun newArray(size: Int): Array<MusicUri?> {
+            return arrayOfNulls(size)
+        }
+    }
 }
