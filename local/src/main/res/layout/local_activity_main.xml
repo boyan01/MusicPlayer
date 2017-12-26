@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@null"
+        app:contentInsetStart="8dp"
         app:title="@null">
 
         <include layout="@layout/local_main_header_tab" />
