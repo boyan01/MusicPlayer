@@ -62,7 +62,7 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
             scannerInfoView.setScanning()
             musicList.clear()
             launch {
-                val isGranted = requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                val isGranted: Boolean = requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 if (isGranted) {
                     presenter.startScannerJob()
                 } else {

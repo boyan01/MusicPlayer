@@ -15,7 +15,7 @@ import tech.summerly.quiet.local.database.entity.MusicEntity
  */
 class EntityMapper {
 
-    fun convertToMusicEntity(music: Music, albumId: Long): MusicEntity = with(music) {
+    fun convertToMusicEntity(music: Music, albumId: Long = music.album.id): MusicEntity = with(music) {
         MusicEntity(
                 id = id,
                 title = title,

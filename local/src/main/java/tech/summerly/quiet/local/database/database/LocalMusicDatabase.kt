@@ -17,7 +17,7 @@ import tech.summerly.quiet.local.database.entity.*
             AlbumEntity::class,
             PlaylistEntity::class, MusicPlaylistRelation::class
         ],
-        version = 2,
+        version = 3,
         exportSchema = false
 )
 internal abstract class LocalMusicDatabase : RoomDatabase() {

@@ -8,7 +8,8 @@ import tech.summerly.quiet.local.database.converter.ArchTypeConverter
  * Created by summer on 17-12-21
  */
 @Entity(
-        tableName = "entity_music"
+        tableName = "entity_music",
+        indices = [Index(value = ["playUri"], unique = true)]
 )
 @TypeConverters(ArchTypeConverter::class)
 data class MusicEntity(

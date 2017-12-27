@@ -34,13 +34,16 @@ internal interface MusicDao {
     @Query(value = "select * from entity_music where id = :id limit 1")
     fun getMusicById(id: Long): MusicEntity
 
+    @Query(value = "select * from entity_music where playUri = :uri limit 1")
+    fun getMusicByPlayUri(uri: String): MusicEntity
+
     @Query(value = "select entity_music.* from relation_music_playlist " +
             "left join entity_music on entity_music.id = relation_music_playlist.music_id " +
             "left join entity_playlist on entity_playlist.id = relation_music_playlist.playlist_id " +
             "where entity_playlist.id = :playlistId")
     fun getMusicByPlaylist(playlistId: Long): List<MusicEntity>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertMusic(music: MusicEntity): Long
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -56,7 +59,7 @@ internal interface MusicDao {
     fun removeArtist(artists: List<ArtistEntity>): Int
 
     @Delete
-    fun removeAlbum(artists: List<ArtistEntity>): Int
+    fun removeAlbum(album: AlbumEntity): Int
 
     @Delete
     fun removePlaylist(playlist: PlaylistEntity): Int

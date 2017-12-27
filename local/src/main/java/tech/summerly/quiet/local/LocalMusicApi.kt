@@ -4,9 +4,12 @@ import android.content.Context
 import tech.summerly.quiet.commonlib.bean.Album
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.utils.inTransaction
 import tech.summerly.quiet.local.database.database.LocalMusicDatabase
 import tech.summerly.quiet.local.database.entity.MusicArtistRelation
+import tech.summerly.quiet.local.fragments.BaseLocalFragment
 import tech.summerly.quiet.local.utils.EntityMapper
+import java.io.File
 
 /**
  * Created by summer on 17-12-21
@@ -19,7 +22,9 @@ class LocalMusicApi private constructor(context: Context) {
 
     private val mapper = EntityMapper()
 
-    private val musicDao = LocalMusicDatabase.getInstance(context).musicDao()
+    private val database = LocalMusicDatabase.getInstance(context)
+
+    private val musicDao = database.musicDao()
 
     /**
      * insert a music to database
@@ -28,8 +33,57 @@ class LocalMusicApi private constructor(context: Context) {
         val albumId = insertAlbumSafely(music.album)
         val musicEntity = mapper.convertToMusicEntity(music, albumId)
         val musicId = musicDao.insertMusic(musicEntity)
+        if (musicId == -1L) { // insert failed
+            val musicOld = musicDao.getMusicByPlayUri(musicEntity.playUri)
+            if (musicOld.copy(id = musicEntity.id) == musicEntity) {
+                return
+            } else {
+                deleteMusic(music)
+                insertMusic(music)
+            }
+            return
+        }
+        //insert artist
         val artistIds = insertArtistSafely(music.artist)
+
+        //insert relation of artist and music
         artistIds.map { MusicArtistRelation(musicId, it) }.let { musicDao.insertMusicArtist(it) }
+        BaseLocalFragment.postValue(System.currentTimeMillis())
+    }
+
+    fun deleteMusic(music: Music,
+                    isDeleteFromDisk: Boolean = false) {
+
+        //delete all info for this music
+        database.openHelper.writableDatabase.inTransaction {
+            delete("entity_music", "id = ?", arrayOf(music.id))
+            delete("relation_music_artist", "music_id = ?", arrayOf(music.id))
+            delete("relation_music_playlist", "music_id = ?", arrayOf(music.id))
+        }
+
+        //remove unlinked artists
+        music.artist
+                .map(mapper::convertToArtistEntity)
+                .filter {
+                    musicDao.getMusicByArtist(it.id).isEmpty()
+                }
+                .let {
+                    musicDao.removeArtist(it)
+                }
+
+        //remove unlinked album
+        if (musicDao.getMusicByAlbum(music.album.id).isEmpty()) {
+            musicDao.removeAlbum(mapper.convertToAlbumEntity(music.album))
+        }
+
+        //remove from disk
+        if (isDeleteFromDisk) {
+            val file = File(music.playUri.getOrNull(0)?.uri)
+            if (file.exists()) {
+                file.delete()
+            }
+        }
+        BaseLocalFragment.postValue(System.currentTimeMillis())
     }
 
     /**

@@ -13,12 +13,10 @@ import kotlinx.android.synthetic.main.local_activity_main.*
 import kotlinx.android.synthetic.main.local_main_header_tab.*
 import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.base.BaseActivity
-import tech.summerly.quiet.commonlib.bean.Album
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.local.fragments.LocalArtistFragment
 import tech.summerly.quiet.local.fragments.LocalOverviewFragment
 import tech.summerly.quiet.local.fragments.LocalTotalFragment
-import tech.summerly.quiet.local.fragments.SimpleLocalFragment
 
 /**
  * Created by summer on 17-12-21
@@ -26,10 +24,6 @@ import tech.summerly.quiet.local.fragments.SimpleLocalFragment
 
 class LocalMusicActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
 
-    private val localAlbumList = ArrayList<Album>()
-
-
-    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -66,16 +60,12 @@ class LocalMusicActivity : BaseActivity(), BottomControllerFragment.BottomContro
             0 -> LocalOverviewFragment()
             1 -> LocalTotalFragment()
             2 -> LocalArtistFragment()
-            3 -> buildSimpleFragment(localAlbumList)
+            3 -> LocalOverviewFragment()
             else -> Fragment()
         }.also {
             fragments[position] = it
         }
 
-
-        private fun buildSimpleFragment(items: List<Any>): SimpleLocalFragment {
-            return SimpleLocalFragment().also { it.setItems(items) }
-        }
 
         // display four fragment: overview , total , artist , album
         override fun getCount(): Int = 4
