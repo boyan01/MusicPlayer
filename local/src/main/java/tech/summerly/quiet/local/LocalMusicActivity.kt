@@ -51,6 +51,10 @@ class LocalMusicActivity : BaseActivity(), BottomControllerFragment.BottomContro
         return super.onOptionsItemSelected(item)
     }
 
+    fun setCurrentPage(position: Int, smoothScroll: Boolean = true) {
+        pager.setCurrentItem(position, smoothScroll)
+    }
+
 
     private inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 

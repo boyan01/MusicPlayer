@@ -11,4 +11,14 @@
     <string name="local_nav_title_artist">歌手</string>
     <string name="local_nav_title_album">专辑</string>
     <string name="local_title_scanner_music">扫描本地音乐</string>
+
+    <string name="local_overview_nav_total">所有音乐</string>
+    <string name="local_overview_nav_artist">歌手</string>
+    <string name="local_overview_nav_album">专辑</string>
+    <string name="local_overview_nav_trend">播放排行</string>
+    <string name="local_overview_nav_latest">最近播放</string>
+    <string name="local_header_playlist_title">我的歌单</string>
+    <string name="local_description_playlist_header_more">有关歌单的更多选项</string>
+    <string name="local_description_music_more">有关歌曲'%s'的更多选项</string>
+
 </resources>

@@ -14,15 +14,17 @@ import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
-import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.observeFilterNull
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
+import tech.summerly.quiet.local.LocalMusicActivity
 import tech.summerly.quiet.local.LocalMusicApi
+import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.fragments.items.LocalArtistItemViewBinder
 import tech.summerly.quiet.local.fragments.items.LocalMusicItemViewBinder
+import tech.summerly.quiet.local.fragments.items.LocalOverviewNavItemViewBinder
+import tech.summerly.quiet.local.fragments.items.LocalPlaylistHeaderViewBinder
 import kotlin.coroutines.experimental.CoroutineContext
 
 /**
@@ -54,21 +56,22 @@ abstract class BaseLocalFragment : BaseFragment() {
         }
     }
 
-    protected val musicPlayer: BaseMusicPlayer
-        get() = MusicPlayerManager.INSTANCE.getMusicPlayer()
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val recyclerView = RecyclerView(context)
         val layoutManager = GridLayoutManager(context, getSpanCount())
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup(){
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return 1
             }
         }
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = MultiTypeAdapter().also {
-            it.register(Music::class.java, LocalMusicItemViewBinder(this::checkMusicIsPlaying))
+            it.register(Music::class.java, LocalMusicItemViewBinder())
             it.register(Artist::class.java, LocalArtistItemViewBinder())
+            it.register(LocalOverviewNavItemViewBinder.Navigator::class.java,
+                    LocalOverviewNavItemViewBinder(this::onOverviewNavClick))
+            it.register(LocalPlaylistHeaderViewBinder.PlaylistHeader::class.java,
+                    LocalPlaylistHeaderViewBinder())
         }
         return recyclerView
     }
@@ -108,14 +111,24 @@ abstract class BaseLocalFragment : BaseFragment() {
         multiTypeAdapter.setItemsByDiff(items)
     }
 
-
-    private fun checkMusicIsPlaying(music: Music): Boolean {
-        return musicPlayer.getPlayingMusic().value == music
-    }
-
     private fun CoroutineContext.checkCompletion() {
         val job = get(Job)
         if (job != null && !job.isActive) throw job.getCancellationException()
+    }
+
+    private fun onOverviewNavClick(nav: LocalOverviewNavItemViewBinder.Navigator) {
+        val activity = this.activity as? LocalMusicActivity ?: return
+        when (nav.title) {
+            R.string.local_overview_nav_total -> activity.setCurrentPage(1)
+            R.string.local_overview_nav_artist -> activity.setCurrentPage(2)
+            R.string.local_overview_nav_album -> activity.setCurrentPage(3)
+            R.string.local_overview_nav_trend -> {
+
+            }
+            R.string.local_overview_nav_latest -> {
+
+            }
+        }
     }
 
 }

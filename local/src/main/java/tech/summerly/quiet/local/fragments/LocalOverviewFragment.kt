@@ -1,31 +1,26 @@
 package tech.summerly.quiet.local.fragments
 
-import android.os.Bundle
-import android.support.annotation.DrawableRes
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
-import tech.summerly.quiet.commonlib.base.BaseFragment
+import tech.summerly.quiet.local.LocalMusicApi
+import tech.summerly.quiet.local.R
+import tech.summerly.quiet.local.fragments.items.LocalOverviewNavItemViewBinder
+import tech.summerly.quiet.local.fragments.items.LocalPlaylistHeaderViewBinder
 
 /**
  * provide an overview for LocalMusic : LocalFavMusic , LocalMusicMonitor
  */
-class LocalOverviewFragment : BaseFragment() {
+class LocalOverviewFragment : BaseLocalFragment() {
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return TextView(context).apply {
-            text = "OverView"
-            gravity = Gravity.CENTER
-        }
+    private val navItems = listOf(
+            LocalOverviewNavItemViewBinder.Navigator(R.string.local_overview_nav_total, R.drawable.local_ic_library_music_black_24dp),
+            LocalOverviewNavItemViewBinder.Navigator(R.string.local_overview_nav_artist, R.drawable.local_ic_artist_black_24dp),
+            LocalOverviewNavItemViewBinder.Navigator(R.string.local_overview_nav_album, R.drawable.local_ic_album_black_24dp),
+            LocalOverviewNavItemViewBinder.Navigator(R.string.local_overview_nav_trend, R.drawable.local_ic_trending_up_black_24dp),
+            LocalOverviewNavItemViewBinder.Navigator(R.string.local_overview_nav_latest, R.drawable.local_ic_latest_black_24dp)
+    )
+    private val header = LocalPlaylistHeaderViewBinder.PlaylistHeader()
+
+    suspend override fun loadData(localMusicApi: LocalMusicApi): List<Any> {
+        return navItems + header
     }
-
-    /**
-     * 固定在顶部的Tag
-     */
-    private data class PinedTag(val title: String, @DrawableRes val icon: Int)
-
-
 }

@@ -30,8 +30,8 @@ abstract class ItemViewBinder<T> : me.drakeet.multitype.ItemViewBinder<T, ItemVi
 
     open class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         companion object {
-            operator fun invoke(@LayoutRes layoutId: Int, inflater: LayoutInflater): ViewHolder {
-                return ViewHolder(inflater.inflate(layoutId,null))
+            operator fun invoke(@LayoutRes layoutId: Int, parent: ViewGroup, inflater: LayoutInflater): ViewHolder {
+                return ViewHolder(inflater.inflate(layoutId, parent, false))
             }
         }
     }

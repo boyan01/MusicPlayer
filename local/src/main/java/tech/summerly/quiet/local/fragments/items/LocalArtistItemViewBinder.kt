@@ -11,7 +11,7 @@ import tech.summerly.quiet.local.R
 /**
  * Created by summer on 17-12-24
  */
-class LocalArtistItemViewBinder : ItemViewBinder<Artist>() {
+internal class LocalArtistItemViewBinder : ItemViewBinder<Artist>() {
 
     override fun onBindViewHolder(holder: ViewHolder, item: Artist) = with(holder.itemView) {
         item.picUri?.let {
@@ -21,7 +21,7 @@ class LocalArtistItemViewBinder : ItemViewBinder<Artist>() {
     }
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
-        return ViewHolder(R.layout.local_item_artist, inflater)
+        return ViewHolder(R.layout.local_item_artist, parent, inflater)
     }
 
 }
