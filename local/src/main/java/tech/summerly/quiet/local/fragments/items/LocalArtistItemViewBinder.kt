@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.local_item_artist.view.*
 import tech.summerly.quiet.commonlib.bean.Artist
+import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.ItemViewBinder
-import tech.summerly.quiet.commonlib.utils.glide.GlideApp
 import tech.summerly.quiet.local.R
 
 /**

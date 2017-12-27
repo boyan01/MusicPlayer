@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="common_tag_fragment_bottom_controller">bottom_fragment_tag</string>
+    <string name="common_channel_name_music_play_service">quiet音乐播放服务通知</string>
+    <string name="common_channel_description_music_play_service">提供播放控制的通知</string>
 </resources>

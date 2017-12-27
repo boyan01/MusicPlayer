@@ -2,6 +2,7 @@ package tech.summerly.quiet.commonlib.player
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import tech.summerly.quiet.commonlib.utils.log
 
 /**
@@ -30,9 +31,7 @@ class MusicPlayerManager(context: Context) {
 
 
     fun getMusicPlayer(): BaseMusicPlayer {
-        val player = musicPlayer ?: SimpleMusicPlayer(baseContext).also { musicPlayer = it }
-        bindPlayerToService(player = player)
-        return player
+        return musicPlayer ?: SimpleMusicPlayer(baseContext).also { setMusicPlayer(it) }
     }
 
     fun setMusicPlayer(player: BaseMusicPlayer) {
@@ -42,6 +41,7 @@ class MusicPlayerManager(context: Context) {
 
     private fun bindPlayerToService(player: BaseMusicPlayer) {
         log { "attempt to bind to play service" }
+        baseContext.startService(Intent(baseContext, MusicPlayerService::class.java))
     }
 
 }

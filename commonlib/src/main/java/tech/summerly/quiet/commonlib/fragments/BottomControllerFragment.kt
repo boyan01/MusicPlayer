@@ -15,7 +15,6 @@ import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.state.PlayerState
 import tech.summerly.quiet.commonlib.utils.*
-import tech.summerly.quiet.commonlib.utils.glide.GlideApp
 
 /**
  * Created by summer on 17-12-17

@@ -5,11 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.local_item_music.view.*
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.utils.ItemViewBinder
-import tech.summerly.quiet.commonlib.utils.glide.GlideApp
-import tech.summerly.quiet.commonlib.utils.invisible
-import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.commonlib.utils.visible
+import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.local.R
 
 /**
