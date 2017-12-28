@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:foreground="@drawable/netease_gradient_fm_mask"
         android:scaleType="centerCrop"
-        tools:srcCompat="@color/common_colorPrimaryDark" />
+        tools:srcCompat="@color/common_color_primary_dark" />
 
     <LinearLayout
         android:layout_width="match_parent"

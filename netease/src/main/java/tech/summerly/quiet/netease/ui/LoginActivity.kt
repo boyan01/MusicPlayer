@@ -1,7 +1,12 @@
 package tech.summerly.quiet.netease.ui
 
+import android.app.ProgressDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.transition.TransitionManager
 import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.TextView
 import kotlinx.android.synthetic.main.netease_activity_login.*
 import kotlinx.coroutines.experimental.Job
@@ -38,6 +43,29 @@ class LoginActivity : BaseActivity() {
         buttonLogin.setOnClickListener {
             attemptToLogin()
         }
+        inputPhone.onTextChanged {
+            TransitionManager.beginDelayedTransition(container)
+            tilPhone.isErrorEnabled = false
+        }
+        inputPassword.onTextChanged {
+            TransitionManager.beginDelayedTransition(container)
+            tilPassword.isErrorEnabled = false
+        }
+    }
+
+    private fun EditText.onTextChanged(callback: () -> Unit) {
+        addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                callback()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
     }
 
     private fun attemptToLogin() {
@@ -51,19 +79,21 @@ class LoginActivity : BaseActivity() {
         //because we check jobLogin first
         val progressDialog = progressDialog(R.string.netease_hint_login_waitting) {
             setCanceledOnTouchOutside(false)
+            setProgressStyle(ProgressDialog.STYLE_SPINNER)
         }
-        progressDialog.show()
-        jobLogin = launch {
+        jobLogin = launch(UI) {
             val phoneStr = inputPhone.text.toString().trim()
             val password = inputPassword.text.toString().trim()
             if (!isValidPhone(phoneStr) || !isValidPassword(password)) {
+                jobLogin = null
                 return@launch
             }
+            progressDialog.show()
             val loginResult = NeteaseCloudMusicApi(this@LoginActivity).login(phoneStr, password)
             if (loginResult.code == 200) {
                 loginSuccess()
             } else {
-                launch(UI) { inputPhone.error = getString(R.string.netease_error_login_failed) }
+                inputPhone.error = getString(R.string.netease_error_login_failed)
             }
             log { "login result $loginResult" }
             jobLogin = null
@@ -81,7 +111,7 @@ class LoginActivity : BaseActivity() {
 
     private fun isValidPassword(password: String): Boolean {
         if (password.isEmpty()) {
-            launch(UI) { tilPassword.error = getString(R.string.netease_error_empty_password) }
+            tilPassword.error = getString(R.string.netease_error_empty_password)
             return false
         }
         return true
@@ -89,7 +119,7 @@ class LoginActivity : BaseActivity() {
 
     private fun isValidPhone(phoneStr: String): Boolean {
         if (phoneStr.isEmpty()) {
-            launch(UI) { tilPhone.error = getString(R.string.netease_error_empty_phone) }
+            tilPhone.error = getString(R.string.netease_error_empty_phone)
             return false
         }
         return true

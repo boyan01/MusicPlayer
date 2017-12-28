@@ -1,6 +1,7 @@
 package tech.summerly.quiet.netease.api
 
 import android.content.Context
+import kotlinx.coroutines.experimental.CancellationException
 import okhttp3.Cache
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
@@ -8,6 +9,7 @@ import tech.summerly.quiet.commonlib.utils.await
 import tech.summerly.quiet.commonlib.utils.md5
 import tech.summerly.quiet.netease.api.bean.MusicSearchResult
 import tech.summerly.quiet.netease.api.converter.Crypto
+import tech.summerly.quiet.netease.api.converter.NeteaseResultMapper
 import tech.summerly.quiet.netease.api.result.LoginResultBean
 import tech.summerly.quiet.netease.api.result.MusicDetailResultBean
 import tech.summerly.quiet.netease.api.result.MusicUrlResultBean
@@ -23,6 +25,8 @@ class NeteaseCloudMusicApi(context: Context) {
     private val neteaseService = CloudMusicServiceProvider()
             .provideCloudMusicService(PersistentCookieStore(context.applicationContext),
                     Cache(context.cacheDir, 1024 * 1024))
+
+    private val mapper = NeteaseResultMapper()
 
     /**
      * 搜索服务
@@ -95,6 +99,15 @@ class NeteaseCloudMusicApi(context: Context) {
     }
 
     suspend fun getFmMusics(): List<Music> {
-        TODO()
+        val params = Crypto.encrypt("""
+            {"csrf_token":""}
+        """.trimIndent())
+        val personalFmDataResult = neteaseService.personalFm(params).await()
+        if (personalFmDataResult.code != 200) {
+            throw CancellationException("fetch fm musics failed!")
+        }
+        return personalFmDataResult.data?.map {
+            mapper.convertToMusic(it)
+        } ?: emptyList()
     }
 }

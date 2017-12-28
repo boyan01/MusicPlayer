@@ -12,37 +12,19 @@ import com.google.gson.annotations.SerializedName
  */
 
 data class PersonalFmDataResult(
-        @SerializedName("popAdjust")
-        @Expose
         val popAdjust: Boolean? = null,
-        @SerializedName("data")
-        @Expose
         val data: List<Datum>? = null,
-        @SerializedName("code")
-        @Expose
         val code: Int
 ) {
 
     data class Datum(
 
-            @SerializedName("title")
-            @Expose
             val name: String,
-            @SerializedName("id")
-            @Expose
             val id: Long,
-            @SerializedName("position")
-            @Expose
             val position: Long? = null,
-            @SerializedName("alias")
-            @Expose
             val alias: List<Any>? = null,
-            @SerializedName("status")
-            @Expose
-            val status: Long? = null,
-            @SerializedName("fee")
-            @Expose
-            val fee: Long? = null,
+//            val status: Long? = null,
+//            val fee: Long? = null,
             @SerializedName("copyrightId")
             @Expose
             val copyrightId: Long? = null,
@@ -172,7 +154,7 @@ data class PersonalFmDataResult(
 
             @SerializedName("title")
             @Expose
-            val name: String,
+            val name: String?,
             @SerializedName("id")
             @Expose
             val id: Long,

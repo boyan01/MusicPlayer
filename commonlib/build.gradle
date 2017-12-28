@@ -43,7 +43,6 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.5.0'
 
     //android support
-    api "com.android.support:appcompat-v7:$android_support_version"
     api "com.android.support:design:$android_support_version"
     api "com.android.support:support-v4:$android_support_version"
     api "com.android.support:palette-v7:$android_support_version"
@@ -57,8 +56,6 @@ dependencies {
     api "android.arch.persistence.room:runtime:$architecture_version"
     kapt "android.arch.persistence.room:compiler:$architecture_version"
     testApi "android.arch.persistence.room:testing:$architecture_version"
-    //animation
-    api 'com.andkulikov:transitionseverywhere:1.7.5'
 
     //anko
     api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
@@ -90,13 +87,11 @@ dependencies {
 
     //net
     api 'com.squareup.retrofit2:retrofit:2.3.0'
+    api 'com.squareup.retrofit2:converter-gson:2.3.0'
     api 'com.squareup.okhttp3:logging-interceptor:3.9.1'
     api 'com.squareup.okhttp3:okhttp:3.9.1'
 
     //mp3
     api 'com.mpatric:mp3agic:0.9.0'
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }

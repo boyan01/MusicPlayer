@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="common_color_primary">#4CAF50</color>
-    <color name="common_colorPrimaryLight">#81C784</color>
-    <color name="common_colorPrimaryDark">#388E3C</color>
+    <color name="common_color_primary_light">#81C784</color>
+    <color name="common_color_primary_dark">#388E3C</color>
 
     <color name="common_colorAccent">#DD2C00</color>
 

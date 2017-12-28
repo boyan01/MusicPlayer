@@ -51,7 +51,7 @@ class EntityMapper {
                 title = title,
                 album = album,
                 artist = artists,
-                playUri = listOf(MusicUri(bitrate, playUri, Long.MAX_VALUE)),
+                playUri = mutableListOf(MusicUri(bitrate, playUri, Long.MAX_VALUE)),
                 type = type,
                 duration = duration,
                 picUri = picUri,

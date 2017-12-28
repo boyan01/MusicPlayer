@@ -2,11 +2,10 @@ package tech.summerly.quiet.netease.api
 
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Converter
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import tech.summerly.quiet.commonlib.cookie.CookieStore
 import tech.summerly.quiet.commonlib.utils.randomUserAgent
-import java.lang.reflect.Type
 
 /**
  * author : SUMMERLY
@@ -26,11 +25,7 @@ internal class CloudMusicServiceProvider {
                                  cache: Cache): CloudMusicService {
         return Retrofit.Builder()
                 .baseUrl(URL_BASE)
-                .addConverterFactory(object : Converter.Factory() {
-                    override fun responseBodyConverter(type: Type, annotations: Array<out Annotation>, retrofit: Retrofit): Converter<ResponseBody, Any> {
-                        TODO()
-                    }
-                })
+                .addConverterFactory(GsonConverterFactory.create())
                 .client(generateClient(cookieStore, cache))
                 .build()
                 .create(CloudMusicService::class.java)
@@ -54,7 +49,7 @@ internal class CloudMusicServiceProvider {
                     it.proceed(request)
                 }
                 .addInterceptor(HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.HEADERS
+                    level = HttpLoggingInterceptor.Level.BODY
                 })
                 .cookieJar(object : CookieJar {
                     override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>) {

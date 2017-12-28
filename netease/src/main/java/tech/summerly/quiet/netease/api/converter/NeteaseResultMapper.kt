@@ -1,15 +1,22 @@
 package tech.summerly.quiet.netease.api.converter
 
+import tech.summerly.quiet.commonlib.bean.Album
+import tech.summerly.quiet.commonlib.bean.Artist
+import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.netease.api.result.PersonalFmDataResult
+
 /**
  * author : SUMMERLY
  * e-mail : yangbinyhbn@gmail.com
  * time   : 2017/8/26
- * desc   : 将 [CloudMusicService] 返回的 ResultBean 转换为应用中通用的实体类
+ * desc   : 将  CloudMusicService 返回的 ResultBean 转换为应用中通用的实体类
  */
 @Suppress("MemberVisibilityCanPrivate", "unused")
 internal class NeteaseResultMapper {
 
-//    fun convertToPlaylist(resultBean: PlaylistDetailResultBean.Playlist): Playlist {
+    //    fun convertToPlaylist(resultBean: PlaylistDetailResultBean.Playlist): Playlist {
 //        return Playlist(
 //                id = resultBean.id,
 //                name = resultBean.name,
@@ -67,34 +74,33 @@ internal class NeteaseResultMapper {
 //        )
 //    }
 //
-//    fun convertToMusic(resultBean: PersonalFmDataResult.Datum): Music {
-//        return Music(
-//                id = resultBean.id,
-//                title = resultBean.name,
-//                url = null,
-//                artist = resultBean.artists?.map {
-//                    Artist(
-//                            id = it.id,
-//                            name = it.name,
-//                            picUrl = it.picUrl,
-//                            type = MusicType.NETEASE
-//                    )
-//                } ?: emptyList(),
-//                picUrl = resultBean.album?.picUrl,
-//                album = resultBean.album.let {
-//                    Album(
-//                            id = it?.id ?: 0L,
-//                            name = it?.name ?: "unknown",
-//                            picUrl = it?.picUrl,
-//                            type = MusicType.NETEASE
-//                    )
-//                },
-//                type = MusicType.NETEASE_FM,
-//                mvId = resultBean.mvid ?: 0L,
-//                duration = resultBean.duration,
-//                isFavorite = resultBean.starred ?: false
-//        )
-//    }
+    fun convertToMusic(resultBean: PersonalFmDataResult.Datum): Music {
+        return Music(
+                id = resultBean.id,
+                title = resultBean.name,
+                playUri = ArrayList(),
+                artist = resultBean.artists?.map {
+                    Artist(
+                            id = it.id,
+                            name = it.name ?: "",
+                            picUri = it.picUrl,
+                            type = MusicType.NETEASE
+                    )
+                } ?: emptyList(),
+                picUri = resultBean.album?.picUrl,
+                album = resultBean.album.let {
+                    Album(
+                            id = it?.id ?: 0L,
+                            name = it?.name ?: "unknown",
+                            picUri = it?.picUrl,
+                            type = MusicType.NETEASE
+                    )
+                },
+                type = MusicType.NETEASE_FM,
+                mvId = resultBean.mvid ?: 0L,
+                duration = resultBean.duration.toLong()
+        ).also { it.isFavorite = resultBean.starred ?: false }
+    }
 //
 //    fun convertToMusic(songsBean: MusicSearchResultBean.SongsBean): Music {
 //        return Music(

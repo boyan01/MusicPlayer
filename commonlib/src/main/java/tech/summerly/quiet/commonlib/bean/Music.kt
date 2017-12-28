@@ -20,7 +20,7 @@ data class Music(
         val type: MusicType,
         val mvId: Long,
         val duration: Long,
-        val playUri: List<MusicUri>
+        val playUri: MutableList<MusicUri>
 ) : Parcelable {
 
     @Transient
@@ -37,8 +37,8 @@ data class Music(
             parcel.readLong(),
             parcel.createTypedArrayList(MusicUri.CREATOR))
 
-    fun toShortString(): String = "$id : $title"
-    fun artistAlbumString(): String = "${album.name} - ${artist.joinToString("/")}"
+    fun toShortString(): String = "$id : $title - ${artist.joinToString("/") { it.name }}"
+    fun artistAlbumString(): String = "${album.name} - ${artist.joinToString { it.name }}"
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(id)
         parcel.writeString(title)

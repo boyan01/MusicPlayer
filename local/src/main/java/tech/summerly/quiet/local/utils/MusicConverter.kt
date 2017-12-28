@@ -36,7 +36,7 @@ object MusicConverter {
                 type = MusicType.LOCAL,
                 mvId = 0,
                 duration = mp3File.duration(),
-                playUri = listOf(musicUri)
+                playUri = mutableListOf(musicUri)
         ).also {
             it.isFavorite = false
         }

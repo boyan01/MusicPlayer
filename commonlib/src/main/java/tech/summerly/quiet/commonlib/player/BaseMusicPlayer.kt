@@ -26,7 +26,7 @@ abstract class BaseMusicPlayer(context: Context) {
 //        private val KEY_POSITION = "position"
     }
 
-    private val baseContext = context.applicationContext
+    protected val baseContext = context.applicationContext
 
     /**
      * this collection of play list
@@ -64,6 +64,7 @@ abstract class BaseMusicPlayer(context: Context) {
      * everything get ready , just to start play music
      */
     protected fun performPlay(music: Music) {
+        log { music.toShortString() }
         if (playingMusic.value != music) {
             playingMusic.postValue(music)
         }
@@ -96,7 +97,7 @@ abstract class BaseMusicPlayer(context: Context) {
             PlayerState.Loading -> Unit
             else -> {
                 val shouldBePlay = playingMusic.value
-                        ?: getNextMusic(null)
+                        ?: getNext()
                 shouldBePlay?.let(this@BaseMusicPlayer::performPlay)
                 Unit
             }
