@@ -13,11 +13,13 @@ import android.view.animation.LinearInterpolator
 import kotlinx.coroutines.experimental.*
 import org.jetbrains.anko.coroutines.experimental.asReference
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.state.PlayerState
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.observeForeverFilterNull
-import tv.danmaku.ijk.media.player.IMediaPlayer
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
+import java.io.File
+import java.net.URI
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.experimental.suspendCoroutine
 
@@ -52,7 +54,7 @@ class CoreMediaPlayer {
             val musicPlaying = currentPlaying
             while (mediaPlayer.isPlaying && musicPlaying == currentPlaying) {
                 delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
-                position.value = mediaPlayer.currentPosition
+                position.postValue(mediaPlayer.currentPosition)
             }
         }
     }
@@ -100,17 +102,41 @@ class CoreMediaPlayer {
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
         val ref = mediaPlayer.asReference()
         async(CommonPool) {
-            val url: String = music.playUri[0].uri
+            playerState.postValue(PlayerState.Loading)
+            val url: String = music.getPlayableUrl()
             log { "准备播放 : $url" }
             ref().dataSource = url
-            playerState.postValue(PlayerState.Loading)
-            ref().prepareSuspend()
+            ref().prepareAsyncAwait()
             ref().start()
             playerState.postValue(PlayerState.Playing)
+            sendProgress()
         }
     }
 
-    private suspend fun IjkMediaPlayer.prepareSuspend(): Unit = suspendCoroutine { cont ->
+    /**
+     * try to get an player url for music
+     * this url could be file'path (local file) , http url (net resource)
+     */
+    private suspend fun Music.getPlayableUrl(): String = suspendCancellableCoroutine { continuation ->
+        when (this.type) {
+            MusicType.LOCAL -> {
+                if (playUri.isEmpty()) {
+                    continuation.resumeWithException(Exception("no playable url!"))
+                    return@suspendCancellableCoroutine
+                }
+                val file = File(URI(playUri[0].uri))
+                if (!file.exists()) {
+                    continuation.resumeWithException(Exception("file not exists!"))
+                    return@suspendCancellableCoroutine
+                }
+                val path = file.path
+                continuation.resume(path)
+            }
+            MusicType.NETEASE, MusicType.NETEASE_FM -> TODO()
+        }
+    }
+
+    private suspend fun IjkMediaPlayer.prepareAsyncAwait(): Unit = suspendCoroutine { cont ->
         setOnPreparedListener {
             cont.resume(Unit)
         }

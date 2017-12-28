@@ -3,6 +3,7 @@ package tech.summerly.quiet.commonlib.player
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import tech.summerly.quiet.commonlib.player.state.PlayerState
 import tech.summerly.quiet.commonlib.utils.log
 
 /**
@@ -29,19 +30,31 @@ class MusicPlayerManager(context: Context) {
 
     private var musicPlayer: BaseMusicPlayer? = null
 
+    private var isBindToService = true
 
     fun getMusicPlayer(): BaseMusicPlayer {
-        return musicPlayer ?: SimpleMusicPlayer(baseContext).also { setMusicPlayer(it) }
+        return musicPlayer ?: getOrCreateSimplePlayer()
     }
 
     fun setMusicPlayer(player: BaseMusicPlayer) {
+        if (musicPlayer?.javaClass == player.javaClass) {
+            return
+        }
         musicPlayer = player
-        bindPlayerToService(player)
+        if (player.playerState.value == PlayerState.Playing && !isBindToService) {
+            bindPlayerToService()
+        }
     }
 
-    private fun bindPlayerToService(player: BaseMusicPlayer) {
+    private fun bindPlayerToService() {
         log { "attempt to bind to play service" }
         baseContext.startService(Intent(baseContext, MusicPlayerService::class.java))
+        isBindToService = true
+    }
+
+    fun getOrCreateSimplePlayer(): SimpleMusicPlayer {
+        return musicPlayer as? SimpleMusicPlayer
+                ?: SimpleMusicPlayer(baseContext).also { setMusicPlayer(it) }
     }
 
 }

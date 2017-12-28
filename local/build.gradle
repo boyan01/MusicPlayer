@@ -42,5 +42,5 @@ kotlin {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     kapt "android.arch.persistence.room:compiler:$architecture_version"
-    implementation project(path: ':commonlib')
+    implementation project(':commonlib')
 }

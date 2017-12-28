@@ -9,6 +9,20 @@
     tools:context=".LocalMusicScannerActivity">
 
     <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/buttonClose"
+        style="@style/Widget.AppCompat.ActionButton.Overflow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:contentDescription="@string/local_description_close_scanner_activity"
+        android:src="@drawable/common_ic_close_black_24dp"
+        android:tooltipText="@string/local_description_close_scanner_activity"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedAttribute" />
+
+    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageSearchProfile"
         android:layout_width="0dp"
         android:layout_height="0dp"

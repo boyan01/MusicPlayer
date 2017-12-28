@@ -1,6 +1,7 @@
 package tech.summerly.quiet.local.fragments.items
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.local_item_music.view.*
@@ -34,13 +35,16 @@ internal class LocalMusicItemViewBinder : ItemViewBinder<Music>() {
             now_playing_indicator.invisible()
         }
         setOnClickListener {
-            log { "item click : ${item.toShortString()}" }
+            MusicPlayerManager.INSTANCE.getOrCreateSimplePlayer().play(item)
         }
         popup_menu.setOnClickListener {
             log { "popup menu" }
         }
         item.picUri?.let { GlideApp.with(this).load(it).into(image) }
-        image.contentDescription = context.getString(R.string.local_description_music_more, item.title)
+        popup_menu.contentDescription = context.getString(R.string.local_description_music_more, item.title)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            popup_menu.tooltipText = context.getString(R.string.local_tips_more_options)
+        }
         text_item_title.text = item.title
         text_item_subtitle.text = item.artist.joinToString("/") { it.name }
         text_item_subtitle_2.text = item.album.name

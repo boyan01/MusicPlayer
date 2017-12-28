@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.common_fragment_controller_bottom.view.*
-import org.jetbrains.anko.dimen
+import org.jetbrains.anko.dip
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
@@ -58,9 +58,8 @@ class BottomControllerFragment : BaseFragment() {
     }
 
     private fun setControllerState(state: PlayerState) = runWithRoot {
-        if (state != PlayerState.Loading) {
-            progressPlayPause.gone()
-        }
+        progressPlayPause.gone()
+        controllerPauseOrPlay.visible()
         when (state) {
             PlayerState.Playing -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
             PlayerState.Pausing -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_play_circle_outline_black_24dp)
@@ -120,7 +119,7 @@ class BottomControllerFragment : BaseFragment() {
             val fragment = supportFragmentManager.findFragmentByTag(getString(R.string.common_tag_fragment_bottom_controller))
             with(fragment.view) {
                 this ?: return@with
-                layoutParams.height = dimen(64)
+                layoutParams.height = dip(64)
                 parent.requestLayout()
             }
         }

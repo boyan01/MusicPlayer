@@ -4,7 +4,6 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.app.Service
 import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.content.Context
@@ -25,6 +24,7 @@ import tech.summerly.quiet.commonlib.player.state.PlayerState
 import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.GlideRequest
 import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.commonlib.utils.observe
 
 /**
  * author : yangbin10
@@ -66,8 +66,15 @@ class MusicPlayerService : Service(), LifecycleOwner {
 
     override fun onCreate() {
         super.onCreate()
+        log { "on created " }
         notificationHelper = PlayerNotificationHelper(this)
-        lifecycleRegister.markState(Lifecycle.State.CREATED)
+        lifecycleRegister.markState(Lifecycle.State.STARTED)
+        musicPlayer.playerState.observe(this) {
+            notification()
+        }
+        musicPlayer.getPlayingMusic().observe(this) {
+            notification()
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null

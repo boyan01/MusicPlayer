@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
-import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import kotlinx.coroutines.experimental.*
 import org.jetbrains.anko.attempt
 import retrofit2.Call
 import retrofit2.Callback
@@ -77,4 +77,9 @@ suspend fun <T> Call<T>.await(): T = suspendCancellableCoroutine { continuation 
         }
     }
 }
+
+
+fun CoroutineDispatcher.submit(parent: Job? = null,
+                               block: suspend CoroutineScope.() -> Unit)
+        = launch(context = this, parent = parent, block = block)
 

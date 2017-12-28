@@ -12,12 +12,14 @@ import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.view.View
 import kotlinx.android.synthetic.main.local_activity_music_scanner.*
 import kotlinx.android.synthetic.main.local_activity_music_scanner.view.*
+import kotlinx.coroutines.experimental.cancelAndJoin
 import kotlinx.coroutines.experimental.launch
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.requestPermission
+import tech.summerly.quiet.commonlib.utils.submit
 import tech.summerly.quiet.local.scanner.LocalMusicScannerContract
 import tech.summerly.quiet.local.scanner.LocalMusicScannerPresenter
 import tech.summerly.quiet.local.scanner.LocalScannerSettingDialog
@@ -61,7 +63,7 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
         buttonStartScanner.setOnClickListener {
             scannerInfoView.setScanning()
             musicList.clear()
-            launch {
+            launch(parent = job) {
                 val isGranted: Boolean = requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 if (isGranted) {
                     presenter.startScannerJob()
@@ -70,7 +72,12 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
                 }
             }
         }
-
+        buttonClose.setOnClickListener {
+            UI.submit {
+                job.cancelAndJoin()
+                finish()
+            }
+        }
         textSearchSetting.setOnClickListener {
             LocalScannerSettingDialog().show(supportFragmentManager, "LocalScannerSetting")
         }
