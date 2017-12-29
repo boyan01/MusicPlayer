@@ -2,6 +2,8 @@ package tech.summerly.quiet.commonlib.bean
 
 import android.os.Parcel
 import android.os.Parcelable
+import java.io.File
+import java.net.URI
 
 
 /**
@@ -11,7 +13,7 @@ import android.os.Parcelable
  * desc   : 被播放的基本单位. 所有的不管是来自本地,还是来自网络的音乐,都得转换为此对象,
  *          才能被 MusicPlayerService 播放
  */
-data class Music(
+open class Music(
         val id: Long,
         val title: String,
         val artist: List<Artist>,
@@ -51,8 +53,36 @@ data class Music(
         parcel.writeTypedList(playUri)
     }
 
+    /**
+     * try to get an player url for music
+     * this url could be file'path (local file) , http url (net resource)
+     */
+    open suspend fun getPlayableUrl(): String {
+        if (playUri.isEmpty()) {
+            error("no playable url!")
+        }
+        val uri = playUri[0].uri
+        if (uri.startsWith("file:", true)) {
+            val file = File(URI(uri))
+            if (file.exists()) {
+                return file.path
+            } else {
+                error("no playable url!")
+            }
+        }
+        if (uri.startsWith("http:", true)) {
+            return uri
+        }
+        error("no playable url!")
+    }
+
+
     override fun describeContents(): Int {
         return 0
+    }
+
+    override fun toString(): String {
+        return "Music(title='$title', mvId=$mvId, duration=$duration)"
     }
 
     companion object CREATOR : Parcelable.Creator<Music> {

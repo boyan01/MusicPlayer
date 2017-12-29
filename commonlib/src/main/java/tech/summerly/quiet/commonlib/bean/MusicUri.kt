@@ -17,19 +17,22 @@ data class MusicUri(
          * When [dateValid] is greater than the currentTimeMillis, you can think
          * of this link [uri] has been invalidated
          */
-        val dateValid: Long
+        val dateValid: Long,
+        val md5: String? = null
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
             parcel.readInt(),
             parcel.readString(),
-            parcel.readLong())
+            parcel.readLong(),
+            parcel.readString())
 
     fun isValid() = dateValid > System.currentTimeMillis()
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeInt(bitrate)
         parcel.writeString(uri)
         parcel.writeLong(dateValid)
+        parcel.writeString(md5)
     }
 
     override fun describeContents(): Int {

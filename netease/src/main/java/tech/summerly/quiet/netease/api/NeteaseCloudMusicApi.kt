@@ -4,6 +4,7 @@ import android.content.Context
 import kotlinx.coroutines.experimental.CancellationException
 import okhttp3.Cache
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicUri
 import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
 import tech.summerly.quiet.commonlib.utils.await
 import tech.summerly.quiet.commonlib.utils.md5
@@ -109,5 +110,29 @@ class NeteaseCloudMusicApi(context: Context) {
         return personalFmDataResult.data?.map {
             mapper.convertToMusic(it)
         } ?: emptyList()
+    }
+
+    /**
+     * 获取指定ID的音乐的播放链接
+     */
+    suspend fun musicUrl(id: Long, bitrate: Int = 999000): MusicUri {
+        val encrypt = Crypto.encrypt("""
+        {
+            "ids" : ["$id"],
+            "br" : $bitrate,
+            "csrf_token" : ""
+        }
+        """.trimIndent()
+        )
+        val data = neteaseService.musicUrl(encrypt).await().data?.get(0) ?: error("fetch url failed")
+        if (data.url == null) {
+            error("fetch url failed")
+        }
+        return MusicUri(
+                data.bitrate,
+                data.url!!,
+                System.currentTimeMillis() + 10 * 1000 * 60,
+                data.md5
+        )
     }
 }

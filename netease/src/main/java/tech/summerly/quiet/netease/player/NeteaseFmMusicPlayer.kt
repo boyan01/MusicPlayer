@@ -2,10 +2,6 @@ package tech.summerly.quiet.netease.player
 
 import android.content.Context
 import kotlinx.coroutines.experimental.launch
-import okhttp3.Call
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
 import tech.summerly.quiet.commonlib.utils.log
@@ -21,7 +17,6 @@ class NeteaseFmMusicPlayer(context: Context) : BaseMusicPlayer(context) {
     private val neteaseApi = NeteaseCloudMusicApi(context)
 
     override val musicList = ArrayList<Music>()
-
 
     override suspend fun getNextMusic(current: Music?): Music? = suspendCoroutine {
         val nextIndex = musicList.indexOf(current) + 1

@@ -99,6 +99,7 @@ class CoreMediaPlayer {
 
     fun play(music: Music) {
         currentPlaying = music
+        mediaPlayer.reset()
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
         val ref = mediaPlayer.asReference()
         async(CommonPool) {
@@ -113,28 +114,7 @@ class CoreMediaPlayer {
         }
     }
 
-    /**
-     * try to get an player url for music
-     * this url could be file'path (local file) , http url (net resource)
-     */
-    private suspend fun Music.getPlayableUrl(): String = suspendCancellableCoroutine { continuation ->
-        when (this.type) {
-            MusicType.LOCAL -> {
-                if (playUri.isEmpty()) {
-                    continuation.resumeWithException(Exception("no playable url!"))
-                    return@suspendCancellableCoroutine
-                }
-                val file = File(URI(playUri[0].uri))
-                if (!file.exists()) {
-                    continuation.resumeWithException(Exception("file not exists!"))
-                    return@suspendCancellableCoroutine
-                }
-                val path = file.path
-                continuation.resume(path)
-            }
-            MusicType.NETEASE, MusicType.NETEASE_FM -> TODO()
-        }
-    }
+
 
     private suspend fun IjkMediaPlayer.prepareAsyncAwait(): Unit = suspendCoroutine { cont ->
         setOnPreparedListener {
