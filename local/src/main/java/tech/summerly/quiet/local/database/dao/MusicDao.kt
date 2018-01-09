@@ -76,4 +76,15 @@ internal interface MusicDao {
     @Query("select * from entity_album where name = :name")
     fun getAlbumByName(name: String): AlbumEntity
 
+    @Query("select * from entity_playlist")
+    fun getPlaylists(): List<PlaylistEntity>
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertMusicPlaylist(relations: List<MusicPlaylistRelation>)
+
+    @Query("select * from entity_playlist where title = :title")
+    fun getPlaylistByTitle(title: String): PlaylistEntity?
+
+    @Insert
+    fun insertPlaylist(playlist: PlaylistEntity): Long
 }

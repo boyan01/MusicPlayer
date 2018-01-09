@@ -1,4 +1,8 @@
-apply plugin: 'com.android.library'
+if (isIndependentApk.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
 
 apply plugin: 'kotlin-android'
 
@@ -16,6 +20,10 @@ android {
         versionName "1.0"
         resourcePrefix "local"
 
+        if (isIndependentApk.toBoolean()){
+            applicationId "tech.summerly.quiet.local"
+        }
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -23,6 +31,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            if (isIndependentApk.toBoolean()) {
+                manifest.srcFile 'src/main/AndroidManifest_debug.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            }
         }
     }
 

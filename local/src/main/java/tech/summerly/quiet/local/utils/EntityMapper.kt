@@ -1,12 +1,10 @@
 package tech.summerly.quiet.local.utils
 
-import tech.summerly.quiet.commonlib.bean.Album
-import tech.summerly.quiet.commonlib.bean.Artist
-import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.bean.MusicUri
+import tech.summerly.quiet.commonlib.bean.*
 import tech.summerly.quiet.local.database.entity.AlbumEntity
 import tech.summerly.quiet.local.database.entity.ArtistEntity
 import tech.summerly.quiet.local.database.entity.MusicEntity
+import tech.summerly.quiet.local.database.entity.PlaylistEntity
 
 /**
  * Created by summer on 17-12-22
@@ -56,6 +54,16 @@ class EntityMapper {
                 duration = duration,
                 picUri = picUri,
                 mvId = 0
+        )
+    }
+
+    fun convertToPlaylist(playlistEntity: PlaylistEntity, count: Int): Playlist = with(playlistEntity) {
+        Playlist(
+                id = id,
+                name = title,
+                coverImageUri = coverUri,
+                musicCount = count,
+                type = MusicType.LOCAL
         )
     }
 }

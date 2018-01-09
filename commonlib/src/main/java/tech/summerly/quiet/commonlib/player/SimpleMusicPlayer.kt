@@ -108,4 +108,25 @@ class SimpleMusicPlayer(context: Context) : BaseMusicPlayer(context) {
             }
         }
     }
+
+    fun insertToNext(music: Music) {
+        if (musicList.isEmpty()) {
+            musicList.add(music)
+            return
+        }
+        //check if music is playing
+        if (playingMusic.value == music) {
+            return
+        }
+        //remove if musicList contain this item
+        musicList.remove(music)
+
+        val index = musicList.indexOf(playingMusic.value) + 1
+        musicList.add(index, music)
+
+        if (playMode.value == PlayMode.Shuffle) {
+            val indexShuffle = shuffleMusicList.indexOf(playingMusic.value) + 1
+            shuffleMusicList.add(indexShuffle, music)
+        }
+    }
 }

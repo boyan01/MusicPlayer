@@ -38,7 +38,12 @@ abstract class BaseLocalFragment : BaseFragment() {
     /**
      * used to sense the changes of the database
      */
-    companion object Observe : MutableLiveData<Long>()
+    companion object Observe : MutableLiveData<Pair<String, Long>>() {
+
+        fun postChange(table: String) {
+            postValue(table to System.currentTimeMillis())
+        }
+    }
 
     protected lateinit var localMusicApi: LocalMusicApi
 
@@ -47,7 +52,7 @@ abstract class BaseLocalFragment : BaseFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         localMusicApi = LocalMusicApi.getLocalMusicApi(context)
-        Observe.observeFilterNull(this) { newVersion ->
+        Observe.observeFilterNull(this) { table, newVersion ->
             log { "is database changed : ${newVersion > this.version}" }
             if (newVersion > this.version) {
                 fetchDataAndDisplay()

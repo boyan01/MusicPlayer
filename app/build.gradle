@@ -47,7 +47,10 @@ dependencies {
     kapt "android.arch.persistence.room:compiler:$architecture_version"
     implementation "android.arch.persistence.room:rxjava2:$architecture_version"
 
+    if (!isIndependentApk.toBoolean()) {
+        implementation project(':netease')
+        implementation project(':local')
+    }
     implementation project(':commonlib')
-    implementation project(':netease')
-    implementation project(':local')
+
 }

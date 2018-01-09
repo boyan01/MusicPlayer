@@ -31,8 +31,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
+        android:tooltipText="@string/local_tips_more_options"
         android:background="?actionBarItemBackground"
-        android:tint="@color/common_color_icon_active" />
+        android:tint="@color/common_color_icon_active"
+        tools:ignore="UnusedAttribute" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,12 +1,18 @@
 package tech.summerly.quiet.local
 
+import android.arch.lifecycle.MutableLiveData
 import android.content.Context
+import android.support.annotation.VisibleForTesting
+import kotlinx.coroutines.experimental.async
 import tech.summerly.quiet.commonlib.bean.Album
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.Playlist
 import tech.summerly.quiet.commonlib.utils.inTransaction
 import tech.summerly.quiet.local.database.database.LocalMusicDatabase
 import tech.summerly.quiet.local.database.entity.MusicArtistRelation
+import tech.summerly.quiet.local.database.entity.MusicPlaylistRelation
+import tech.summerly.quiet.local.database.entity.PlaylistEntity
 import tech.summerly.quiet.local.fragments.BaseLocalFragment
 import tech.summerly.quiet.local.utils.EntityMapper
 import java.io.File
@@ -15,9 +21,12 @@ import java.io.File
  * Created by summer on 17-12-21
  */
 class LocalMusicApi private constructor(context: Context) {
-    companion object {
-
+    companion object Observe : MutableLiveData<Version>() {
         fun getLocalMusicApi(context: Context) = LocalMusicApi(context.applicationContext)
+
+        private fun postChange(table: String) {
+            postValue(table v System.currentTimeMillis())
+        }
     }
 
     private val mapper = EntityMapper()
@@ -56,9 +65,9 @@ class LocalMusicApi private constructor(context: Context) {
 
         //delete all info for this music
         database.openHelper.writableDatabase.inTransaction {
-            delete("entity_music", "id = ?", arrayOf(music.id))
             delete("relation_music_artist", "music_id = ?", arrayOf(music.id))
             delete("relation_music_playlist", "music_id = ?", arrayOf(music.id))
+            delete("entity_music", "id = ?", arrayOf(music.id))
         }
 
         //remove unlinked artists
@@ -83,7 +92,7 @@ class LocalMusicApi private constructor(context: Context) {
                 file.delete()
             }
         }
-        BaseLocalFragment.postValue(System.currentTimeMillis())
+        postChange("music")
     }
 
     /**
@@ -130,4 +139,45 @@ class LocalMusicApi private constructor(context: Context) {
                 }
     }
 
+    fun getPlaylists() = async {
+        val list = ArrayList<Playlist>()
+        database.openHelper.readableDatabase.inTransaction {
+            musicDao.getPlaylists().forEach {
+                val cursor = query("select count(*) from relation_music_playlist where playlist_id = ?", arrayOf(it.id))
+                cursor ?: return@forEach
+                cursor.moveToFirst()
+                val count = cursor.getInt(0)
+                list.add(mapper.convertToPlaylist(it, count))
+                cursor.close()
+            }
+        }
+        return@async list
+    }
+
+    fun createPlaylist(title: String) = async {
+        require(title.isNotEmpty())
+        //first check if name is exist
+        if (musicDao.getPlaylistByTitle(title) != null) {
+            return@async -2
+        }
+        val playlist = PlaylistEntity(id = 0, title = title, coverUri = null)
+        val id = musicDao.insertPlaylist(playlist)
+        if (id == -1L) {
+            return@async -1
+        }
+        BaseLocalFragment.postChange()
+        return@async 0
+    }
+
+    fun insertMusic(playlist: Playlist, musics: Array<Music>) {
+        val relations = musics.map {
+            MusicPlaylistRelation(it.id, playlist.id)
+        }
+        musicDao.insertMusicPlaylist(relations)
+    }
 }
+
+data class Version(
+        val name: String,
+        val version: Long
+)

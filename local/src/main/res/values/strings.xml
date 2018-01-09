@@ -19,8 +19,23 @@
     <string name="local_overview_nav_latest">最近播放</string>
     <string name="local_header_playlist_title">我的歌单</string>
     <string name="local_description_playlist_header_more">有关歌单的更多选项</string>
-    <string name="local_description_music_more">有关歌曲'%s'的更多选项</string>
+    <string name="local_description_music_more">有关歌曲\'%s'的更多选项</string>
     <string name="local_description_close_scanner_activity">关闭歌曲文件扫描界面</string>
     <string name="local_tips_more_options">更多选项</string>
+    <string name="local_action_add_to_next">下一首播放</string>
+    <string name="local_action_add_to_playlist">添加到歌单</string>
+    <string name="local_action_album">专辑</string>
+    <string name="local_action_delete">删除</string>
+    <string name="local_message_delete_template">即将删除%s</string>
+    <string name="local_toast_delete_succeed_template">已删除%s</string>
+    <string name="local_toast_delete_failed_template">删除失败，原因：%s</string>
+    <string name="local_title_playlist_selector">请选择要加入的歌单</string>
+    <string name="local_description_create_playlist">新增歌单</string>
+    <string name="local_playlist_item_subtitle_template">%d首</string>
+    <string name="local_message_insert_playlist_succeed">添加成功</string>
+    <string name="local_error_text_empty">请不要输入空白</string>
+    <string name="local_title_playlist_creator">创建新歌单</string>
+    <string name="local_message_create_playlist_failed">创建歌单失败</string>
+    <string name="local_error_repeated">重复了</string>
 
 </resources>

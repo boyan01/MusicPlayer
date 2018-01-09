@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="?android:actionBarSize"
+        android:background="@color/common_color_primary"
+        android:gravity="center|start"
+        android:paddingEnd="16dp"
+        android:paddingStart="16dp"
+        android:text="@string/local_title_playlist_selector"
+        android:textColor="@color/common_text_primary_dark_background"
+        android:textAppearance="@style/CommonAppTheme.Title" />
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:contentDescription="@string/local_description_create_playlist"
+        android:src="@drawable/local_ic_add_black_24dp"
+        android:tint="@color/common_background"
+        app:fabSize="mini"
+        app:layout_anchor="@id/header"
+        app:layout_anchorGravity="end|bottom"
+        app:rippleColor="@color/common_background" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listPlaylist"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"
+        android:layout_marginTop="?android:actionBarSize"
+        android:background="@color/common_backgroundDark"
+        app:layoutManager="LinearLayoutManager"
+        tools:listitem="@layout/local_item_playlist" />
+
+</android.support.design.widget.CoordinatorLayout>
