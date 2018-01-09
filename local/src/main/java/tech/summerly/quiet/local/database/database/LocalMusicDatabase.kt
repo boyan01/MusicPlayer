@@ -12,10 +12,10 @@ import tech.summerly.quiet.local.database.entity.*
  */
 @Database(
         entities = [
-            MusicEntity::class,
-            ArtistEntity::class, MusicArtistRelation::class,
-            AlbumEntity::class,
-            PlaylistEntity::class, MusicPlaylistRelation::class
+        MusicEntity::class,
+        ArtistEntity::class, MusicArtistRelation::class,
+        AlbumEntity::class,
+        PlaylistEntity::class, MusicPlaylistRelation::class
         ],
         version = 3,
         exportSchema = false
@@ -26,6 +26,7 @@ internal abstract class LocalMusicDatabase : RoomDatabase() {
     abstract fun musicDao(): MusicDao
 
     companion object {
+
         private const val DB_NAME = "local_music.db"
 
         private var instance: LocalMusicDatabase? = null

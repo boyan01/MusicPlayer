@@ -37,9 +37,9 @@ abstract class ItemViewBinder<T> : me.drakeet.multitype.ItemViewBinder<T, ItemVi
     }
 }
 
-
 fun MultiTypeAdapter.setItemsByDiff(items: List<Any>, detectMove: Boolean = false) {
-    val old = this.items
+    @Suppress("UNCHECKED_CAST")//fuck type checker
+    val old = this.items as MutableList<Any>
     launch {
         val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
             override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
@@ -55,7 +55,8 @@ fun MultiTypeAdapter.setItemsByDiff(items: List<Any>, detectMove: Boolean = fals
             }
         }, detectMove)
         launch(UI) {
-            setItems(items)
+            old.clear()
+            old.addAll(items)
             result.dispatchUpdatesTo(this@setItemsByDiff)
         }
     }

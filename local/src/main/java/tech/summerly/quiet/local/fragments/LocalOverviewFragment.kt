@@ -2,6 +2,7 @@ package tech.summerly.quiet.local.fragments
 
 import tech.summerly.quiet.local.LocalMusicApi
 import tech.summerly.quiet.local.R
+import tech.summerly.quiet.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.LocalOverviewNavItemViewBinder
 import tech.summerly.quiet.local.fragments.items.LocalPlaylistHeaderViewBinder
 
@@ -9,6 +10,10 @@ import tech.summerly.quiet.local.fragments.items.LocalPlaylistHeaderViewBinder
  * provide an overview for LocalMusic : LocalFavMusic , LocalMusicMonitor
  */
 class LocalOverviewFragment : BaseLocalFragment() {
+
+    override fun isInterestedChange(table: Table): Boolean {
+        return table == Table.Playlist
+    }
 
 
     private val navItems = listOf(

@@ -1,7 +1,5 @@
 package tech.summerly.quiet.local.fragments
 
-import android.arch.lifecycle.MutableLiveData
-import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -11,16 +9,17 @@ import android.view.ViewGroup
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
+import tech.summerly.quiet.commonlib.AppContext
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
-import tech.summerly.quiet.commonlib.utils.observeFilterNull
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
 import tech.summerly.quiet.local.LocalMusicActivity
 import tech.summerly.quiet.local.LocalMusicApi
 import tech.summerly.quiet.local.R
+import tech.summerly.quiet.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.LocalArtistItemViewBinder
 import tech.summerly.quiet.local.fragments.items.LocalMusicItemViewBinder
 import tech.summerly.quiet.local.fragments.items.LocalOverviewNavItemViewBinder
@@ -32,34 +31,33 @@ import kotlin.coroutines.experimental.CoroutineContext
  * template fragment for [tech.summerly.quiet.local.LocalMusicActivity],
  * only contains a recycle view
  */
-@Suppress("MemberVisibilityCanPrivate")
 abstract class BaseLocalFragment : BaseFragment() {
 
-    /**
-     * used to sense the changes of the database
-     */
-    companion object Observe : MutableLiveData<Pair<String, Long>>() {
-
-        fun postChange(table: String) {
-            postValue(table to System.currentTimeMillis())
-        }
-    }
-
-    protected lateinit var localMusicApi: LocalMusicApi
+    private lateinit var localMusicApi: LocalMusicApi
 
     private var version = 0L
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        localMusicApi = LocalMusicApi.getLocalMusicApi(context)
-        Observe.observeFilterNull(this) { table, newVersion ->
-            log { "is database changed : ${newVersion > this.version}" }
-            if (newVersion > this.version) {
-                fetchDataAndDisplay()
-                this.version = newVersion
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        localMusicApi = LocalMusicApi.getLocalMusicApi(AppContext.instance)
+        Table.values().filter {
+            isInterestedChange(it)
+        }.forEach {
+            it.listenChange(this) { newVersion ->
+                log { "is database changed : ${newVersion > this.version}" }
+                if (newVersion > this.version) {
+                    fetchDataAndDisplay()
+                    this.version = newVersion
+                }
             }
         }
     }
+
+    /**
+     * be interested in this table's change
+     * use to refresh the data view when database is changed
+     */
+    protected abstract fun isInterestedChange(table: Table): Boolean
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val recyclerView = RecyclerView(context)
@@ -70,7 +68,7 @@ abstract class BaseLocalFragment : BaseFragment() {
             }
         }
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = MultiTypeAdapter().also {
+        recyclerView.adapter = MultiTypeAdapter(mutableListOf<Any>()).also {
             it.register(Music::class.java, LocalMusicItemViewBinder())
             it.register(Artist::class.java, LocalArtistItemViewBinder())
             it.register(LocalOverviewNavItemViewBinder.Navigator::class.java,
@@ -113,7 +111,7 @@ abstract class BaseLocalFragment : BaseFragment() {
      */
     private fun showItems(items: List<Any>) = runWithRoot {
         this as? RecyclerView ?: return@runWithRoot
-        multiTypeAdapter.setItemsByDiff(items)
+        multiTypeAdapter.setItemsByDiff(items, true)
     }
 
     private fun CoroutineContext.checkCompletion() {

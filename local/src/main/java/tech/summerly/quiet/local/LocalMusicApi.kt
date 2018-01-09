@@ -1,8 +1,6 @@
 package tech.summerly.quiet.local
 
-import android.arch.lifecycle.MutableLiveData
 import android.content.Context
-import android.support.annotation.VisibleForTesting
 import kotlinx.coroutines.experimental.async
 import tech.summerly.quiet.commonlib.bean.Album
 import tech.summerly.quiet.commonlib.bean.Artist
@@ -10,23 +8,21 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.Playlist
 import tech.summerly.quiet.commonlib.utils.inTransaction
 import tech.summerly.quiet.local.database.database.LocalMusicDatabase
+import tech.summerly.quiet.local.database.database.Table
 import tech.summerly.quiet.local.database.entity.MusicArtistRelation
 import tech.summerly.quiet.local.database.entity.MusicPlaylistRelation
 import tech.summerly.quiet.local.database.entity.PlaylistEntity
 import tech.summerly.quiet.local.fragments.BaseLocalFragment
-import tech.summerly.quiet.local.utils.EntityMapper
+import tech.summerly.quiet.local.database.converter.EntityMapper
 import java.io.File
 
 /**
  * Created by summer on 17-12-21
  */
 class LocalMusicApi private constructor(context: Context) {
-    companion object Observe : MutableLiveData<Version>() {
-        fun getLocalMusicApi(context: Context) = LocalMusicApi(context.applicationContext)
 
-        private fun postChange(table: String) {
-            postValue(table v System.currentTimeMillis())
-        }
+    companion object {
+        fun getLocalMusicApi(context: Context) = LocalMusicApi(context.applicationContext)
     }
 
     private val mapper = EntityMapper()
@@ -57,8 +53,9 @@ class LocalMusicApi private constructor(context: Context) {
 
         //insert relation of artist and music
         artistIds.map { MusicArtistRelation(musicId, it) }.let { musicDao.insertMusicArtist(it) }
-        BaseLocalFragment.postValue(System.currentTimeMillis())
+        Table.Music.postChange()
     }
+
 
     fun deleteMusic(music: Music,
                     isDeleteFromDisk: Boolean = false) {
@@ -77,12 +74,14 @@ class LocalMusicApi private constructor(context: Context) {
                     musicDao.getMusicByArtist(it.id).isEmpty()
                 }
                 .let {
+                    Table.Artist.postChange()
                     musicDao.removeArtist(it)
                 }
 
         //remove unlinked album
         if (musicDao.getMusicByAlbum(music.album.id).isEmpty()) {
             musicDao.removeAlbum(mapper.convertToAlbumEntity(music.album))
+            Table.Album.postChange()
         }
 
         //remove from disk
@@ -92,7 +91,7 @@ class LocalMusicApi private constructor(context: Context) {
                 file.delete()
             }
         }
-        postChange("music")
+        Table.Music.postChange()
     }
 
     /**
@@ -116,6 +115,7 @@ class LocalMusicApi private constructor(context: Context) {
     private fun insertAlbumSafely(album: Album): Long {
         val albumEntity = mapper.convertToAlbumEntity(album)
         val albumId = musicDao.insertAlbum(albumEntity)
+        Table.Album.postChange()
         return if (albumId == -1L) {
             musicDao.getAlbumByName(album.name).id
         } else {
@@ -128,7 +128,7 @@ class LocalMusicApi private constructor(context: Context) {
      * return the id which artist insert to
      */
     private fun insertArtistSafely(artists: List<Artist>): List<Long> {
-        return artists.map(mapper::convertToArtistEntity)
+        val ids = artists.map(mapper::convertToArtistEntity)
                 .map { artistEntity ->
                     val id = musicDao.insertArtist(artistEntity)
                     if (id == -1L) {
@@ -137,6 +137,8 @@ class LocalMusicApi private constructor(context: Context) {
                         id
                     }
                 }
+        Table.Artist.postChange()
+        return ids
     }
 
     fun getPlaylists() = async {
@@ -165,7 +167,7 @@ class LocalMusicApi private constructor(context: Context) {
         if (id == -1L) {
             return@async -1
         }
-        BaseLocalFragment.postChange()
+        Table.Playlist.postChange()
         return@async 0
     }
 
@@ -174,10 +176,6 @@ class LocalMusicApi private constructor(context: Context) {
             MusicPlaylistRelation(it.id, playlist.id)
         }
         musicDao.insertMusicPlaylist(relations)
+        Table.PlaylistMusic.postChange()
     }
 }
-
-data class Version(
-        val name: String,
-        val version: Long
-)

@@ -1,4 +1,4 @@
-package tech.summerly.quiet.local.utils
+package tech.summerly.quiet.local.database.converter
 
 import tech.summerly.quiet.commonlib.bean.*
 import tech.summerly.quiet.local.database.entity.AlbumEntity

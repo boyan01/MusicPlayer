@@ -3,51 +3,55 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
-    android:background="?android:selectableItemBackground">
+    android:layout_height="56dp">
 
     <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:foreground="@color/common_colorImageMask"
+        android:id="@+id/imageIcon"
+        android:layout_width="56dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@drawable/local_ic_album_black_24dp" />
+        app:tint="@color/netease_color_primary"
+        tools:src="@drawable/common_ic_play_circle_outline_black_24dp" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:ellipsize="end"
-        android:lines="1"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
         android:textColor="@color/common_text_primary"
-        android:textSize="17sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image"
+        app:layout_constraintStart_toEndOf="@id/imageIcon"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="奇幻" />
+        tools:text="本地音乐" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textSubTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:textColor="@color/common_text_secondary"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textTitle"
-        app:layout_constraintTop_toTopOf="@+id/textTitle"
-        tools:text="12首" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginStart="8dp"
+        tools:text="(30)" />
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1px"
         android:background="@color/common_color_divider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/imageIcon" />
+
 </android.support.constraint.ConstraintLayout>

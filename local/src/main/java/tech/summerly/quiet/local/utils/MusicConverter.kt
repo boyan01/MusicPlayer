@@ -21,6 +21,7 @@ object MusicConverter {
             return null
         }
         val mp3File = attempt { Mp3File(file) }.value
+
         val title = mp3File.title(file)
         val artist = mp3File.artist()
         val picPath = mp3File.artWork()?.let {

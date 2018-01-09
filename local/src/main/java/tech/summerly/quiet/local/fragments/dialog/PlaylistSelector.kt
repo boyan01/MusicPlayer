@@ -16,11 +16,10 @@ import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.bean.Playlist
 import tech.summerly.quiet.commonlib.utils.inputDialog
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
-import tech.summerly.quiet.commonlib.utils.observeFilterNull
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
 import tech.summerly.quiet.local.LocalMusicApi
 import tech.summerly.quiet.local.R
-import tech.summerly.quiet.local.fragments.BaseLocalFragment
+import tech.summerly.quiet.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.LocalPlaylistItemViewBinder
 
 internal class LocalPlaylistSelectorFragment : BottomSheetDialogFragment() {
@@ -45,10 +44,10 @@ internal class LocalPlaylistSelectorFragment : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
-        BaseLocalFragment.observeFilterNull(this@LocalPlaylistSelectorFragment) {
-            if (it > version) {
+        Table.Playlist.listenChange(this@LocalPlaylistSelectorFragment) { newVersion ->
+            if (newVersion > version) {
                 refreshData()
-                version = it
+                version = newVersion
             }
         }
         fabAdd.setOnClickListener {
@@ -70,7 +69,7 @@ internal class LocalPlaylistSelectorFragment : BottomSheetDialogFragment() {
                 }
             }.show()
         }
-        listPlaylist.adapter = MultiTypeAdapter().also {
+        listPlaylist.adapter = MultiTypeAdapter(mutableListOf<Any>()).also {
             it.register(Playlist::class.java, LocalPlaylistItemViewBinder(this@LocalPlaylistSelectorFragment::onPlaylistItemClicked))
         }
         refreshData()
