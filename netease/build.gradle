@@ -1,4 +1,8 @@
-apply plugin: 'com.android.library'
+if (isIndependentApk.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+}
 
 apply plugin: 'kotlin-android'
 
@@ -13,6 +17,11 @@ android {
         targetSdkVersion target_sdk.toInteger()
         versionCode 1
         versionName "1.0"
+        resourcePrefix "netease"
+
+        if (isIndependentApk.toBoolean()) {
+            applicationId "tech.summerly.quiet.netease"
+        }
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -25,8 +34,15 @@ android {
         }
     }
 
-    resourcePrefix "netease"
-
+    sourceSets {
+        main {
+            if (isIndependentApk.toBoolean()) {
+                manifest.srcFile 'src/main/AndroidManifest_debug.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+            }
+        }
+    }
 }
 
 kotlin {
@@ -39,5 +55,9 @@ kotlin {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
     implementation project(path: ':commonlib')
 }

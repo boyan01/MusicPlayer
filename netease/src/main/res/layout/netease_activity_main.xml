@@ -20,10 +20,12 @@
                 android:layout_width="?android:attr/actionBarSize"
                 android:layout_height="match_parent"
                 android:padding="8dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:src="@drawable/common_icon_notification_default" />
+                tools:src="@drawable/common_icon_notification_default"
+                tools:visibility="visible" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:layout_width="wrap_content"
@@ -34,6 +36,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/imageUser"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginStart="16dp"
                 tools:text="UserName" />
 
             <android.support.v7.widget.AppCompatImageView
