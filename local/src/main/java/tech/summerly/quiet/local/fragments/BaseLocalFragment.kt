@@ -14,6 +14,8 @@ import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.Playlist
+import tech.summerly.quiet.commonlib.items.CommonItemA
+import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
@@ -71,8 +73,8 @@ abstract class BaseLocalFragment : BaseFragment() {
         recyclerView.adapter = MultiTypeAdapter(mutableListOf<Any>()).also {
             it.register(Music::class.java, LocalMusicItemViewBinder())
             it.register(Artist::class.java, LocalArtistItemViewBinder())
-            it.register(LocalOverviewNavItemViewBinder.Navigator::class.java,
-                    LocalOverviewNavItemViewBinder(this::onOverviewNavClick))
+            it.register(CommonItemA::class.java,
+                    CommonItemAViewBinder(this::onOverviewNavClick))
             it.register(LocalPlaylistHeaderViewBinder.PlaylistHeader::class.java,
                     LocalPlaylistHeaderViewBinder())
             it.register(Playlist::class.java, LocalPlaylistItemViewBinder(this::onPlaylistClicked))
@@ -124,7 +126,7 @@ abstract class BaseLocalFragment : BaseFragment() {
         log { "playlist : $playlist" }
     }
 
-    private fun onOverviewNavClick(nav: LocalOverviewNavItemViewBinder.Navigator) {
+    private fun onOverviewNavClick(nav: CommonItemA) {
         val activity = this.activity as? LocalMusicActivity ?: return
         when (nav.title) {
             R.string.local_overview_nav_total -> activity.setCurrentPage(1)
