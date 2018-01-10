@@ -14,13 +14,13 @@ import tech.summerly.quiet.commonlib.AppContext
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.bean.Playlist
-import tech.summerly.quiet.commonlib.utils.inputDialog
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
 import tech.summerly.quiet.local.LocalMusicApi
 import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.LocalPlaylistItemViewBinder
+import tech.summerly.quiet.local.utils.showPlaylistCreatorDialog
 
 internal class LocalPlaylistSelectorFragment : BottomSheetDialogFragment() {
 
@@ -44,30 +44,16 @@ internal class LocalPlaylistSelectorFragment : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
-        Table.Playlist.listenChange(this@LocalPlaylistSelectorFragment) { newVersion ->
+        val changeObserver = { newVersion: Long ->
             if (newVersion > version) {
                 refreshData()
                 version = newVersion
             }
         }
+        Table.Playlist.listenChange(this@LocalPlaylistSelectorFragment, changeObserver)
+        Table.PlaylistMusic.listenChange(this@LocalPlaylistSelectorFragment, changeObserver)
         fabAdd.setOnClickListener {
-            context.inputDialog(
-                    title = context.getString(R.string.local_title_playlist_creator)
-            ) { dialogInterface, textInputLayout ->
-                val text = textInputLayout.editText?.text.toString().trim()
-                if (text.isEmpty()) {
-                    textInputLayout.error = context.getString(R.string.local_error_text_empty)
-                    return@inputDialog
-                }
-                launch(UI) {
-                    val result = LocalMusicApi.getLocalMusicApi(getContext()).createPlaylist(text).await()
-                    when (result) {
-                        -1 -> textInputLayout.error = getContext().getString(R.string.local_message_create_playlist_failed)
-                        -2 -> textInputLayout.error = getContext().getString(R.string.local_error_repeated)
-                        0 -> dialogInterface.dismiss()
-                    }
-                }
-            }.show()
+            context.showPlaylistCreatorDialog()
         }
         listPlaylist.adapter = MultiTypeAdapter(mutableListOf<Any>()).also {
             it.register(Playlist::class.java, LocalPlaylistItemViewBinder(this@LocalPlaylistSelectorFragment::onPlaylistItemClicked))

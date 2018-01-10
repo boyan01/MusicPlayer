@@ -13,6 +13,7 @@ import tech.summerly.quiet.commonlib.AppContext
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.Playlist
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
@@ -20,10 +21,7 @@ import tech.summerly.quiet.local.LocalMusicActivity
 import tech.summerly.quiet.local.LocalMusicApi
 import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.database.database.Table
-import tech.summerly.quiet.local.fragments.items.LocalArtistItemViewBinder
-import tech.summerly.quiet.local.fragments.items.LocalMusicItemViewBinder
-import tech.summerly.quiet.local.fragments.items.LocalOverviewNavItemViewBinder
-import tech.summerly.quiet.local.fragments.items.LocalPlaylistHeaderViewBinder
+import tech.summerly.quiet.local.fragments.items.*
 import kotlin.coroutines.experimental.CoroutineContext
 
 /**
@@ -40,6 +38,8 @@ abstract class BaseLocalFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         localMusicApi = LocalMusicApi.getLocalMusicApi(AppContext.instance)
+
+        //to perceive database's changes
         Table.values().filter {
             isInterestedChange(it)
         }.forEach {
@@ -75,6 +75,7 @@ abstract class BaseLocalFragment : BaseFragment() {
                     LocalOverviewNavItemViewBinder(this::onOverviewNavClick))
             it.register(LocalPlaylistHeaderViewBinder.PlaylistHeader::class.java,
                     LocalPlaylistHeaderViewBinder())
+            it.register(Playlist::class.java, LocalPlaylistItemViewBinder(this::onPlaylistClicked))
         }
         return recyclerView
     }
@@ -117,6 +118,10 @@ abstract class BaseLocalFragment : BaseFragment() {
     private fun CoroutineContext.checkCompletion() {
         val job = get(Job)
         if (job != null && !job.isActive) throw job.getCancellationException()
+    }
+
+    private fun onPlaylistClicked(playlist: Playlist) {
+        log { "playlist : $playlist" }
     }
 
     private fun onOverviewNavClick(nav: LocalOverviewNavItemViewBinder.Navigator) {

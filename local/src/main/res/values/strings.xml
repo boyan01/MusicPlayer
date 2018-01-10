@@ -19,7 +19,7 @@
     <string name="local_overview_nav_latest">最近播放</string>
     <string name="local_header_playlist_title">我的歌单</string>
     <string name="local_description_playlist_header_more">有关歌单的更多选项</string>
-    <string name="local_description_music_more">有关歌曲\'%s'的更多选项</string>
+    <string name="local_description_music_more">有关歌曲%s的更多选项</string>
     <string name="local_description_close_scanner_activity">关闭歌曲文件扫描界面</string>
     <string name="local_tips_more_options">更多选项</string>
     <string name="local_action_add_to_next">下一首播放</string>
@@ -37,5 +37,6 @@
     <string name="local_title_playlist_creator">创建新歌单</string>
     <string name="local_message_create_playlist_failed">创建歌单失败</string>
     <string name="local_error_repeated">重复了</string>
+    <string name="local_popup_playlist_create">新建歌单</string>
 
 </resources>

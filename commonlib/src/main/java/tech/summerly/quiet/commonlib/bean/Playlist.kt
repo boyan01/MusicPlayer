@@ -10,4 +10,8 @@ class Playlist(
         var coverImageUri: String?,
         val musicCount: Int,
         val type: MusicType
-)
+) {
+    override fun toString(): String {
+        return "Playlist(id=$id, name='$name', musicCount=$musicCount)"
+    }
+}

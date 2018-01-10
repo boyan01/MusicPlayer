@@ -1,19 +1,19 @@
 package tech.summerly.quiet.local
 
 import android.content.Context
+import kotlinx.coroutines.experimental.Deferred
 import kotlinx.coroutines.experimental.async
 import tech.summerly.quiet.commonlib.bean.Album
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.Playlist
 import tech.summerly.quiet.commonlib.utils.inTransaction
+import tech.summerly.quiet.local.database.converter.EntityMapper
 import tech.summerly.quiet.local.database.database.LocalMusicDatabase
 import tech.summerly.quiet.local.database.database.Table
 import tech.summerly.quiet.local.database.entity.MusicArtistRelation
 import tech.summerly.quiet.local.database.entity.MusicPlaylistRelation
 import tech.summerly.quiet.local.database.entity.PlaylistEntity
-import tech.summerly.quiet.local.fragments.BaseLocalFragment
-import tech.summerly.quiet.local.database.converter.EntityMapper
 import java.io.File
 
 /**
@@ -108,8 +108,8 @@ class LocalMusicApi private constructor(context: Context) {
     /**
      * get all artist in database
      */
-    fun getArtists(): List<Artist> {
-        return musicDao.getArtists().map(mapper::convertToArtist)
+    fun getArtists(): Deferred<List<Artist>> = async {
+        musicDao.getArtists().map(mapper::convertToArtist)
     }
 
     private fun insertAlbumSafely(album: Album): Long {

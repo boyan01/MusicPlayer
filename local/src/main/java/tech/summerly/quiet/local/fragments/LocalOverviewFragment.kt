@@ -26,6 +26,6 @@ class LocalOverviewFragment : BaseLocalFragment() {
     private val header = LocalPlaylistHeaderViewBinder.PlaylistHeader()
 
     suspend override fun loadData(localMusicApi: LocalMusicApi): List<Any> {
-        return navItems + header
+        return navItems + header + localMusicApi.getPlaylists().await()
     }
 }

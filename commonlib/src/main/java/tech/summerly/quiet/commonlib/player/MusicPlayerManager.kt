@@ -59,5 +59,8 @@ class MusicPlayerManager(context: Context) {
 
 }
 
+val musicPlayer: BaseMusicPlayer
+    get() = MusicPlayerManager.INSTANCE.getMusicPlayer()
+
 val simpleMusicPlayer: SimpleMusicPlayer
     get() = MusicPlayerManager.INSTANCE.getOrCreateSimplePlayer()
