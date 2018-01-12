@@ -46,6 +46,12 @@ android {
 
 }
 
+kapt {
+    arguments {
+        arg("moduleName", project.getName())
+    }
+}
+
 androidExtensions {
     experimental = true
 }
@@ -65,4 +71,5 @@ dependencies {
 
     kapt "android.arch.persistence.room:compiler:$architecture_version"
     implementation project(':commonlib')
+    kapt 'com.alibaba:arouter-compiler:1.1.4'
 }

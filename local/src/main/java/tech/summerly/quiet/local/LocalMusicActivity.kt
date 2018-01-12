@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.local_activity_main.*
 import kotlinx.android.synthetic.main.local_main_header_tab.*
 import org.jetbrains.anko.startActivity
@@ -21,7 +22,7 @@ import tech.summerly.quiet.local.fragments.LocalTotalFragment
 /**
  * Created by summer on 17-12-21
  */
-
+@Route(path = "/local/main")
 class LocalMusicActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
 
     override fun onCreate(savedInstanceState: Bundle?) {

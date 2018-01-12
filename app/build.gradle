@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
 
     compileSdkVersion compile_sdk.toInteger()
@@ -22,6 +24,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+}
+
+kapt {
+    arguments {
+        arg("moduleName", project.getName())
     }
 }
 
@@ -52,5 +60,6 @@ dependencies {
         implementation project(':local')
     }
     implementation project(':commonlib')
+    kapt 'com.alibaba:arouter-compiler:1.1.4'
 
 }

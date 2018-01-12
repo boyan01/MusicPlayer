@@ -10,6 +10,8 @@ import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
 import android.widget.ImageView
+import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.netease_activity_main.*
 import kotlinx.android.synthetic.main.netease_header_playlist.view.*
 import kotlinx.coroutines.experimental.launch
@@ -34,6 +36,7 @@ import tech.summerly.quiet.netease.ui.items.NeteasePlaylistItemViewBinder
 /**
  * Created by summer on 17-12-30
  */
+@Route(path = "/netease/main")
 class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.BottomControllerContainer {
 
     companion object {
@@ -136,8 +139,14 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
     }
 
     private fun setNotLogin() {
-        findHeader(getString(R.string.netease_playlist_header_collect)).isLoading = false
-        findHeader(getString(R.string.netease_playlist_header_create)).isLoading = false
+        findHeader(getString(R.string.netease_playlist_header_collect)).apply {
+            isLoading = false
+            isExpanded = false
+        }
+        findHeader(getString(R.string.netease_playlist_header_create)).apply {
+            isLoading = false
+            isExpanded = false
+        }
         recycler.multiTypeAdapter.notifyDataSetChanged()
 
         textUserName.text = getString(R.string.netease_title_not_login)
@@ -225,7 +234,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
     private fun onNavItemClicked(item: CommonItemA) {
         when (item.title) {
             getString(R.string.netease_nav_title_local) -> {
-
+                ARouter.getInstance().build("/local/main").navigation()
             }
             getString(R.string.netease_nav_title_download) -> {
 

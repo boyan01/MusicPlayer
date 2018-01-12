@@ -95,4 +95,5 @@ dependencies {
     //mp3
     api 'com.mpatric:mp3agic:0.9.0'
 
+    api 'com.alibaba:arouter-api:1.3.1'
 }
