@@ -1,11 +1,10 @@
 package tech.summerly.quiet.netease.api.converter
 
-import tech.summerly.quiet.commonlib.bean.Album
-import tech.summerly.quiet.commonlib.bean.Artist
-import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.bean.MusicType
+import kotlinx.coroutines.experimental.Deferred
+import tech.summerly.quiet.commonlib.bean.*
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.netease.api.result.PersonalFmDataResult
+import tech.summerly.quiet.netease.api.result.PlaylistResultBean
 
 /**
  * author : SUMMERLY
@@ -100,6 +99,16 @@ internal class NeteaseResultMapper {
                 mvId = resultBean.mvid ?: 0L,
                 duration = resultBean.duration.toLong()
         ).also { it.isFavorite = resultBean.starred ?: false }
+    }
+
+    fun convertToPlaylist(playlistResultBean: PlaylistResultBean.PlaylistBean): Playlist = with(playlistResultBean) {
+        return Playlist(
+                id = id,
+                name = name,
+                coverImageUri = coverImgUrl,
+                musicCount = trackCount.toInt(),
+                type = MusicType.NETEASE
+        )
     }
 //
 //    fun convertToMusic(songsBean: MusicSearchResultBean.SongsBean): Music {

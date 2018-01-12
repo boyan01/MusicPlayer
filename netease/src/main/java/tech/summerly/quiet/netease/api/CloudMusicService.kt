@@ -1,5 +1,6 @@
 package tech.summerly.quiet.netease.api
 
+import kotlinx.coroutines.experimental.Deferred
 import retrofit2.Call
 import retrofit2.http.*
 import tech.summerly.quiet.netease.api.result.*
@@ -38,7 +39,7 @@ interface CloudMusicService {
 
     @FormUrlEncoded
     @POST("/weapi/user/playlist")
-    fun userPlayList(@FieldMap request: Map<String, String>): Call<PlaylistResultBean>
+    fun userPlayList(@FieldMap request: Map<String, String>): Deferred<PlaylistResultBean>
 
     @FormUrlEncoded
     @POST("/weapi/v1/discovery/recommend/songs")

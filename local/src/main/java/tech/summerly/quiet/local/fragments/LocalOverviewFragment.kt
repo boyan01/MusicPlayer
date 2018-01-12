@@ -16,13 +16,15 @@ class LocalOverviewFragment : BaseLocalFragment() {
     }
 
 
-    private val navItems = listOf(
-            CommonItemA(R.string.local_overview_nav_total, R.drawable.local_ic_library_music_black_24dp),
-            CommonItemA(R.string.local_overview_nav_artist, R.drawable.local_ic_artist_black_24dp),
-            CommonItemA(R.string.local_overview_nav_album, R.drawable.local_ic_album_black_24dp),
-            CommonItemA(R.string.local_overview_nav_trend, R.drawable.local_ic_trending_up_black_24dp),
-            CommonItemA(R.string.local_overview_nav_latest, R.drawable.local_ic_latest_black_24dp)
-    )
+    private val navItems by lazy {
+        listOf(
+                CommonItemA(getString(R.string.local_overview_nav_total), R.drawable.local_ic_library_music_black_24dp),
+                CommonItemA(getString(R.string.local_overview_nav_artist), R.drawable.local_ic_artist_black_24dp),
+                CommonItemA(getString(R.string.local_overview_nav_album), R.drawable.local_ic_album_black_24dp),
+                CommonItemA(getString(R.string.local_overview_nav_trend), R.drawable.local_ic_trending_up_black_24dp),
+                CommonItemA(getString(R.string.local_overview_nav_latest), R.drawable.local_ic_latest_black_24dp)
+        )
+    }
     private val header = LocalPlaylistHeaderViewBinder.PlaylistHeader()
 
     suspend override fun loadData(localMusicApi: LocalMusicApi): List<Any> {

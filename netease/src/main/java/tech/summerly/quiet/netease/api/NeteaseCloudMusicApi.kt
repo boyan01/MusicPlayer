@@ -2,9 +2,11 @@ package tech.summerly.quiet.netease.api
 
 import android.content.Context
 import kotlinx.coroutines.experimental.CancellationException
+import kotlinx.coroutines.experimental.Deferred
 import okhttp3.Cache
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicUri
+import tech.summerly.quiet.commonlib.bean.Playlist
 import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
 import tech.summerly.quiet.commonlib.utils.await
 import tech.summerly.quiet.commonlib.utils.md5
@@ -14,6 +16,7 @@ import tech.summerly.quiet.netease.api.converter.NeteaseResultMapper
 import tech.summerly.quiet.netease.api.result.LoginResultBean
 import tech.summerly.quiet.netease.api.result.MusicDetailResultBean
 import tech.summerly.quiet.netease.api.result.MusicUrlResultBean
+import tech.summerly.quiet.netease.api.result.PlaylistResultBean
 
 /**
  * author : SUMMERLY
@@ -134,5 +137,21 @@ class NeteaseCloudMusicApi(context: Context) {
                 System.currentTimeMillis() + 10 * 1000 * 60,
                 data.md5
         )
+    }
+
+    suspend fun getUserPlaylists(userId: Long, offset: Int = 0, limit: Int = 1000): List<PlaylistResultBean.PlaylistBean> {
+        val encrypt = Crypto.encrypt("""
+            {
+                "offset" : $offset ,
+                "uid" : "$userId",
+                "limit" : $limit ,
+                "csrf_token" : ""
+            }
+        """.trimIndent())
+        val result = neteaseService.userPlayList(encrypt).await()
+        if (result.code != 200) {
+            error("error response!")
+        }
+        return result.playlist ?: emptyList()
     }
 }

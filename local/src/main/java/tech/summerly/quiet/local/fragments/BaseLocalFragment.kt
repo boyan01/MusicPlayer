@@ -1,6 +1,8 @@
 package tech.summerly.quiet.local.fragments
 
 import android.os.Bundle
+import android.support.v7.widget.AppCompatImageView
+import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -129,13 +131,13 @@ abstract class BaseLocalFragment : BaseFragment() {
     private fun onOverviewNavClick(nav: CommonItemA) {
         val activity = this.activity as? LocalMusicActivity ?: return
         when (nav.title) {
-            R.string.local_overview_nav_total -> activity.setCurrentPage(1)
-            R.string.local_overview_nav_artist -> activity.setCurrentPage(2)
-            R.string.local_overview_nav_album -> activity.setCurrentPage(3)
-            R.string.local_overview_nav_trend -> {
+            getString(R.string.local_overview_nav_total) -> activity.setCurrentPage(1)
+            getString(R.string.local_overview_nav_artist) -> activity.setCurrentPage(2)
+            getString(R.string.local_overview_nav_album) -> activity.setCurrentPage(3)
+            getString(R.string.local_overview_nav_trend) -> {
 
             }
-            R.string.local_overview_nav_latest -> {
+            getString(R.string.local_overview_nav_latest) -> {
 
             }
         }

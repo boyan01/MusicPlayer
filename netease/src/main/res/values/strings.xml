@@ -15,5 +15,7 @@
     <string name="netease_nav_title_fm">私人FM</string>
     <string name="netease_nav_title_latest">最近播放</string>
     <string name="netease_nav_title_daily">每日推荐</string>
+    <string name="netease_playlist_header_create">创建的歌单</string>
+    <string name="netease_playlist_header_collect">收藏的歌单</string>
 
 </resources>

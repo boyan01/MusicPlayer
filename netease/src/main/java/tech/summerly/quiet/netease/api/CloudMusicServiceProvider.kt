@@ -1,5 +1,6 @@
 package tech.summerly.quiet.netease.api
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -26,6 +27,7 @@ internal class CloudMusicServiceProvider {
         return Retrofit.Builder()
                 .baseUrl(URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .client(generateClient(cookieStore, cache))
                 .build()
                 .create(CloudMusicService::class.java)
