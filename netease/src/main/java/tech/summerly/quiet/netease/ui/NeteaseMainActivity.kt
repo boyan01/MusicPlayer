@@ -2,6 +2,8 @@ package tech.summerly.quiet.netease.ui
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
@@ -10,24 +12,33 @@ import android.support.v7.widget.RecyclerView
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.netease_activity_main.*
 import kotlinx.android.synthetic.main.netease_header_playlist.view.*
-import kotlinx.coroutines.experimental.Deferred
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
+import tech.summerly.quiet.commonlib.mvp.BaseView
+import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
+import tech.summerly.quiet.netease.api.result.LoginResultBean
+import tech.summerly.quiet.netease.api.result.PlaylistResultBean
+import tech.summerly.quiet.netease.persistence.NeteasePreference
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeader
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeaderViewBinder
+import tech.summerly.quiet.netease.ui.items.NeteasePlaylistItemViewBinder
 
 /**
  * Created by summer on 17-12-30
  */
-class NeteaseMainActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
+class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.BottomControllerContainer {
+
+    companion object {
+        private val REQUEST_LOGIN = 101
+    }
 
     private val navItems by lazy {
         listOf(
@@ -57,6 +68,7 @@ class NeteaseMainActivity : BaseActivity(), BottomControllerFragment.BottomContr
         })
         recycler.multiTypeAdapter.register(NeteasePlaylistHeader::class.java,
                 NeteasePlaylistHeaderViewBinder(this::onPlaylistsHeaderClick))
+        recycler.multiTypeAdapter.register(PlaylistResultBean.PlaylistBean::class.java, NeteasePlaylistItemViewBinder())
         recycler.itemAnimator = object : DefaultItemAnimator() {
 
             var animatorExpandIndicator: Animator? = null
@@ -95,20 +107,83 @@ class NeteaseMainActivity : BaseActivity(), BottomControllerFragment.BottomContr
         items.addAll(navItems)
         items.add(NeteasePlaylistHeader(getString(R.string.netease_playlist_header_create), true))
         items.add(NeteasePlaylistHeader(getString(R.string.netease_playlist_header_collect), true))
+        loadNeteasePlaylists()
         recycler.multiTypeAdapter.notifyDataSetChanged()
     }
 
-    private suspend fun getItems(): Deferred<List<Any>> = async {
-        return@async navItems + NeteaseCloudMusicApi(this@NeteaseMainActivity).getUserPlaylists(1L)
+    private fun loadNeteasePlaylists() {
+        launch(UI) {
+            val user = NeteasePreference.getLoginUser()
+            if (user == null) {
+                setNotLogin()
+                return@launch
+            }
+            setLogin(user)
+            val id = user.userId
+            val playlists = NeteaseCloudMusicApi(this@NeteaseMainActivity)
+                    .getUserPlaylists(id)
+            playlistCreate.clear()
+            playlistCreate.addAll(playlists.filter { it.userId == id })
+            playlistCollect.clear()
+            playlistCollect.addAll(playlists.filter { it.userId != id })
+            showPlaylists()
+        }
     }
 
-    private suspend fun getUserPlaylists(): List<Any> {
-        val id = 1000L
-        val playlists = NeteaseCloudMusicApi(this).getUserPlaylists(id)
-        val playlistGroup = playlists.groupBy { if (it.userId == id) "personal" else "others" }
-        return (playlistGroup["personal"] ?: emptyList()) + (playlistGroup["others"] ?: emptyList())
+    private fun setLogin(profile: LoginResultBean.Profile) {
+        textUserName.text = profile.nickname
+        GlideApp.with(this).load(profile.avatarUrl).into(imageUser)
     }
 
+    private fun setNotLogin() {
+        findHeader(getString(R.string.netease_playlist_header_collect)).isLoading = false
+        findHeader(getString(R.string.netease_playlist_header_create)).isLoading = false
+        recycler.multiTypeAdapter.notifyDataSetChanged()
+
+        textUserName.text = getString(R.string.netease_title_not_login)
+        textUserName.setOnClickListener {
+            startActivityForResult(Intent(this, LoginActivity::class.java), REQUEST_LOGIN)
+        }
+    }
+
+
+    /**
+     * find the playlist'header from [items] by title
+     */
+    private fun findHeader(title: String): NeteasePlaylistHeader {
+        return items.find { it is NeteasePlaylistHeader && it.title == title } as NeteasePlaylistHeader
+    }
+
+    /**
+     * display playlists
+     * insert the [playlistCollect] and [playlistCreate] into list [items] , if header is expanded
+     */
+    private fun showPlaylists() {
+        //check if header is expanded
+        val headerCreate = findHeader(getString(R.string.netease_playlist_header_create))
+        headerCreate.isLoading = false
+        if (headerCreate.isExpanded) {
+            items.addAll(items.indexOf(headerCreate) + 1, playlistCreate)
+        }
+
+        val headerCollect = findHeader(getString(R.string.netease_playlist_header_collect))
+        headerCollect.isLoading = false
+        if (headerCollect.isExpanded) {
+            items.addAll(items.indexOf(headerCollect) + 1, playlistCollect)
+        }
+        recycler.multiTypeAdapter.notifyDataSetChanged()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == REQUEST_LOGIN && resultCode == Activity.RESULT_OK) {
+            loadData()
+        }
+    }
+
+
+    /**
+     * invoke when playlist'header has been clicked
+     */
     private fun onPlaylistsHeaderClick(header: NeteasePlaylistHeader, position: Int) {
         if (header.isExpanded) {
             header.isExpanded = false

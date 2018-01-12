@@ -17,5 +17,6 @@
     <string name="netease_nav_title_daily">每日推荐</string>
     <string name="netease_playlist_header_create">创建的歌单</string>
     <string name="netease_playlist_header_collect">收藏的歌单</string>
+    <string name="netease_title_not_login">未登录</string>
 
 </resources>

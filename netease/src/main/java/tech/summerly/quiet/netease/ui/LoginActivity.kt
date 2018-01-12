@@ -1,5 +1,8 @@
+@file:Suppress("DEPRECATION")
+
 package tech.summerly.quiet.netease.ui
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.os.Bundle
 import android.text.Editable
@@ -17,6 +20,8 @@ import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
+import tech.summerly.quiet.netease.api.result.LoginResultBean
+import tech.summerly.quiet.netease.persistence.NeteasePreference
 
 /**
  * author : yangbin10
@@ -91,7 +96,7 @@ class LoginActivity : BaseActivity() {
             progressDialog.show()
             val loginResult = NeteaseCloudMusicApi(this@LoginActivity).login(phoneStr, password)
             if (loginResult.code == 200) {
-                loginSuccess()
+                loginSuccess(loginResult.profile!!)
             } else {
                 inputPhone.error = getString(R.string.netease_error_login_failed)
             }
@@ -105,7 +110,9 @@ class LoginActivity : BaseActivity() {
         }
     }
 
-    private fun loginSuccess() {
+    private fun loginSuccess(profile: LoginResultBean.Profile) {
+        NeteasePreference.saveLoginUser(profile)
+        setResult(Activity.RESULT_OK)
         finish()
     }
 
