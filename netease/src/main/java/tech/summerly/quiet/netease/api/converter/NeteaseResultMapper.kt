@@ -1,8 +1,6 @@
 package tech.summerly.quiet.netease.api.converter
 
-import kotlinx.coroutines.experimental.Deferred
 import tech.summerly.quiet.commonlib.bean.*
-import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.netease.api.result.PersonalFmDataResult
 import tech.summerly.quiet.netease.api.result.PlaylistResultBean
 

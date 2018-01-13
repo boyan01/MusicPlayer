@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.common_fragment_controller_bottom.view.*
-import org.jetbrains.anko.dip
+import org.jetbrains.anko.dimen
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
@@ -37,7 +37,6 @@ class BottomControllerFragment : BaseFragment() {
             setControllerState(it)
         }
         musicPlayer.getPlayingMusic().observe(this) {
-            log { "更新底部控制栏: $it" }
             updateMusicInfo(it)
         }
     }
@@ -119,7 +118,7 @@ class BottomControllerFragment : BaseFragment() {
             val fragment = supportFragmentManager.findFragmentByTag(getString(R.string.common_tag_fragment_bottom_controller))
             with(fragment.view) {
                 this ?: return@with
-                layoutParams.height = dip(64)
+                layoutParams.height = dimen(R.dimen.common_height_bottom_controller)
                 parent.requestLayout()
             }
         }

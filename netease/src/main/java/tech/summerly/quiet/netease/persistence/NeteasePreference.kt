@@ -2,15 +2,15 @@ package tech.summerly.quiet.netease.persistence
 
 import android.content.Context
 import com.google.gson.Gson
-import tech.summerly.quiet.commonlib.AppContext
 import tech.summerly.quiet.commonlib.utils.edit
 import tech.summerly.quiet.commonlib.utils.fromJson
+import tech.summerly.quiet.netease.NeteaseModule
 import tech.summerly.quiet.netease.api.result.LoginResultBean
 
 internal object NeteasePreference {
 
     private val context: Context
-        get() = AppContext.instance
+        get() = NeteaseModule.instance
 
     private const val prefix = "netease_"
 
@@ -24,7 +24,7 @@ internal object NeteasePreference {
         return Gson().fromJson(json)
     }
 
-    fun saveLoginUser(profile: LoginResultBean.Profile) {
+    fun saveLoginUser(profile: LoginResultBean.Profile?) {
         val preferences = context.getSharedPreferences(NAME_USER, Context.MODE_PRIVATE)
         preferences.edit {
             putString(KEY_USER, Gson().toJson(profile))

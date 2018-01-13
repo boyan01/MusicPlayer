@@ -13,13 +13,12 @@ import android.view.animation.LinearInterpolator
 import kotlinx.coroutines.experimental.*
 import org.jetbrains.anko.coroutines.experimental.asReference
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.player.MusicUrlManager
 import tech.summerly.quiet.commonlib.player.state.PlayerState
+import tech.summerly.quiet.commonlib.utils.headerNetease
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.observeForeverFilterNull
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
-import java.io.File
-import java.net.URI
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.experimental.suspendCoroutine
 
@@ -69,10 +68,11 @@ class CoreMediaPlayer {
             field = value
         }
 
+    internal val isPlaying get() = mediaPlayer.isPlaying
 
     init {
         //设置音量 fixme
-//        val volume = AppContext.instance.defaultSharedPreferences.get(string(R.string.pref_key_audio_volume), DEFAULT_VOLUME_MAX)
+//        val volume = LibModule.instance.defaultSharedPreferences.get(string(R.string.pref_key_audio_volume), DEFAULT_VOLUME_MAX)
 //        this.volume = volume / DEFAULT_VOLUME_MAX.toFloat()
 
         //为mediaPlayer设置监听
@@ -102,18 +102,21 @@ class CoreMediaPlayer {
         mediaPlayer.reset()
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
         val ref = mediaPlayer.asReference()
-        async(CommonPool) {
+        launch(CommonPool + playExceptionHandler) {
             playerState.postValue(PlayerState.Loading)
-            val url: String = music.getPlayableUrl()
+            val url = MusicUrlManager.getPlayableUrl(music) ?: error("can not get url")
             log { "准备播放 : $url" }
-            ref().dataSource = url
+            ref().setDataSource(url, headerNetease)
             ref().prepareAsyncAwait()
-            ref().start()
-            playerState.postValue(PlayerState.Playing)
+            start()
             sendProgress()
         }
     }
 
+    private val playExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+        playerState.postValue(PlayerState.Pausing)
+        log { "player : error ${throwable.message}" }
+    }
 
 
     private suspend fun IjkMediaPlayer.prepareAsyncAwait(): Unit = suspendCoroutine { cont ->
@@ -129,14 +132,17 @@ class CoreMediaPlayer {
      */
     fun start() {
         mediaPlayer.start()
+        playerState.postValue(PlayerState.Playing)
     }
 
     fun stop() {
         mediaPlayer.stop()
+        playerState.postValue(PlayerState.Pausing)
     }
 
     fun pause() {
         mediaPlayer.pause()
+        playerState.postValue(PlayerState.Pausing)
     }
 
 

@@ -21,4 +21,6 @@
     <dimen name="common_fragment_player_action_button_size">36dp</dimen>
     <dimen name="common_music_overview_bar_height">260dp</dimen>
     <dimen name="common_status_bar_height">24dp</dimen>
+
+    <dimen name="common_height_bottom_controller">64dp</dimen>
 </resources>

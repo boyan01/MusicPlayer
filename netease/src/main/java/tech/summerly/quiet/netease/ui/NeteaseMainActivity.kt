@@ -23,6 +23,7 @@ import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.mvp.BaseView
 import tech.summerly.quiet.commonlib.utils.GlideApp
+import tech.summerly.quiet.commonlib.utils.PopupMenu
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
@@ -102,6 +103,23 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
                 animatorExpandIndicator?.start()
             }
         }
+        moreAction.setOnClickListener {
+            val menu = PopupMenu(it, R.menu.netease_menu_main) {
+                when (it.itemId) {
+                    R.id.netease_menu_main_logout -> {
+                        NeteasePreference.saveLoginUser(null)
+                        loadData()
+                    }
+                    R.id.netease_menu_main_setting -> {
+                        //TODO goto setting
+                    }
+                }
+                true
+            }
+            if (NeteasePreference.getLoginUser() == null) {
+                menu.menu.removeItem(R.id.netease_menu_main_logout)
+            }
+        }
         loadData()
     }
 
@@ -148,6 +166,8 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
             isExpanded = false
         }
         recycler.multiTypeAdapter.notifyDataSetChanged()
+        playlistCreate.clear()
+        playlistCollect.clear()
 
         textUserName.text = getString(R.string.netease_title_not_login)
         textUserName.setOnClickListener {
@@ -186,6 +206,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == REQUEST_LOGIN && resultCode == Activity.RESULT_OK) {
             loadData()
+            textUserName.setOnClickListener(null)
         }
     }
 

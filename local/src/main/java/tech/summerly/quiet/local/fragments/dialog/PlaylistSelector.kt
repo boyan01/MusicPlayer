@@ -10,7 +10,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import org.jetbrains.anko.support.v4.toast
-import tech.summerly.quiet.commonlib.AppContext
+import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.bean.Playlist
@@ -64,7 +64,7 @@ internal class LocalPlaylistSelectorFragment : BottomSheetDialogFragment() {
     private fun refreshData() {
         val view = this.view ?: return
         launch(UI) {
-            val playlists = LocalMusicApi.getLocalMusicApi(AppContext.instance).getPlaylists().await()
+            val playlists = LocalMusicApi.getLocalMusicApi(LibModule.instance).getPlaylists().await()
             view.listPlaylist.multiTypeAdapter.setItemsByDiff(playlists)
         }
     }
@@ -87,6 +87,6 @@ private fun Playlist.insertMusic(musics: Array<Music>) {
     if (type != MusicType.LOCAL) {
         return
     }
-    LocalMusicApi.getLocalMusicApi(AppContext.instance)
+    LocalMusicApi.getLocalMusicApi(LibModule.instance)
             .insertMusic(this, musics)
 }

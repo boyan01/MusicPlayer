@@ -2,6 +2,7 @@ package tech.summerly.quiet.commonlib.player
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
@@ -10,10 +11,7 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.player.state.PlayerState
-import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
-import tech.summerly.quiet.commonlib.utils.edit
-import tech.summerly.quiet.commonlib.utils.fromJson
-import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.commonlib.utils.*
 
 @Suppress("MemberVisibilityCanPrivate")
 abstract class BaseMusicPlayer(context: Context) {
@@ -26,7 +24,7 @@ abstract class BaseMusicPlayer(context: Context) {
 //        private val KEY_POSITION = "position"
     }
 
-    protected val baseContext = context.applicationContext
+    protected val baseContext: Context = context.applicationContext
 
     /**
      * this collection of play list
@@ -37,6 +35,15 @@ abstract class BaseMusicPlayer(context: Context) {
      * to control the player's play order
      */
     val playMode = WithDefaultLiveData(PlayMode.Sequence)
+
+    //use to save the current [playMode] to preference
+    private val playModeObserve = Observer { playMode: PlayMode? ->
+        playerStateKeeper.savePlayMode(playMode)
+    }
+
+    init {
+        playMode.observeForever(playModeObserve)
+    }
 
     /**
      * get the position of current playing music has been play.
@@ -60,6 +67,8 @@ abstract class BaseMusicPlayer(context: Context) {
 
     protected val corePlayer: CoreMediaPlayer = CoreMediaPlayer()
 
+    protected val playerStateKeeper: PlayerStateKeeper = PlayerStateKeeper(baseContext)
+
     /**
      * everything get ready , just to start play music
      */
@@ -69,6 +78,7 @@ abstract class BaseMusicPlayer(context: Context) {
             playingMusic.postValue(music)
         }
         corePlayer.play(music)
+        playerStateKeeper.saveCurrent(music)
     }
 
     fun playNext() = launch {
@@ -117,6 +127,7 @@ abstract class BaseMusicPlayer(context: Context) {
         if (musics.isEmpty()) {
             playingMusic.value = null
         }
+        playerStateKeeper.savePlaylist(musics)
     }
 
     fun seekToPosition(position: Long) {
@@ -129,6 +140,7 @@ abstract class BaseMusicPlayer(context: Context) {
             keeper.savePlayMode(playMode.value, editor = this)
             keeper.savePlaylist(musicList, playing = playingMusic.value, editor = this)
         }
+        playMode.removeObserver(playModeObserve)
     }
 
     init {
@@ -173,13 +185,14 @@ abstract class BaseMusicPlayer(context: Context) {
 
         fun restore() {
             playMode.postValue(PlayMode.fromName(preference.getString(KEY_PLAY_MODE, PlayMode.Sequence.name)))
+            //fixme might cause NeteaseMusic can
             val saved = gson.fromJson<Music>(preference.getString(KEY_CURRENT_MUSIC, ""))
             if (corePlayer.getPlayerState().value == PlayerState.Playing) {
                 if (playingMusic.value != saved) {
                     corePlayer.stop()
                 }
             }
-            playingMusic.value = saved
+            playingMusic.postValue(saved)
             val list = gson.fromJson<List<Music>>(preference.getString(KEY_PLAY_LIST, "")) ?: emptyList()
             setPlaylist(list)
         }

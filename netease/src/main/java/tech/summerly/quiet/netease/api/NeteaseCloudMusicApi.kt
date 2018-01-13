@@ -83,8 +83,8 @@ class NeteaseCloudMusicApi(context: Context) {
         return neteaseService.musicUrl(encrypt).await().data ?: emptyList()
     }
 
-    suspend fun getMusicUrl(id: Long, bitrate: Int = 999000): String? {
-        return getMusicUrl(ids = *longArrayOf(id), bitrate = bitrate).find { it.id == id }?.url
+    suspend fun getMusicUrl(id: Long, bitrate: Int = 999000): MusicUrlResultBean.Datum? {
+        return getMusicUrl(ids = *longArrayOf(id), bitrate = bitrate).find { it.id == id }
     }
 
     suspend fun getLyric(id: Long): String? {

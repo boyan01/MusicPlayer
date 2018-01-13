@@ -1,8 +1,6 @@
 package tech.summerly.quiet.local.fragments
 
 import android.os.Bundle
-import android.support.v7.widget.AppCompatImageView
-import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -11,7 +9,7 @@ import android.view.ViewGroup
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
-import tech.summerly.quiet.commonlib.AppContext
+import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
@@ -41,7 +39,7 @@ abstract class BaseLocalFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        localMusicApi = LocalMusicApi.getLocalMusicApi(AppContext.instance)
+        localMusicApi = LocalMusicApi.getLocalMusicApi(LibModule.instance)
 
         //to perceive database's changes
         Table.values().filter {

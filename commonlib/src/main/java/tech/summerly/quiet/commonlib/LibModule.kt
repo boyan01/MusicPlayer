@@ -1,6 +1,8 @@
 package tech.summerly.quiet.commonlib
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 import com.alibaba.android.arouter.launcher.ARouter
 import com.facebook.stetho.Stetho
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
@@ -9,24 +11,24 @@ import tech.summerly.quiet.commonlib.player.MusicPlayerManager
  * Created by summer on 17-12-17.
  * Base Application context
  */
-class AppContext : Application() {
+class LibModule {
 
     companion object {
-        private var context: AppContext? = null
+        @SuppressLint("StaticFieldLeak")
+        private var context: Context? = null
 
-        val instance: AppContext
+        val instance: Context
             get() = context!!
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        context = this
-        MusicPlayerManager.init(this)
-        Stetho.initializeWithDefaults(this)
+    fun onCreate(context: Context) {
+        LibModule.context = context
+        MusicPlayerManager.init(context)
+        Stetho.initializeWithDefaults(context)
         if (BuildConfig.DEBUG) {
             ARouter.openDebug()
             ARouter.openLog()
         }
-        ARouter.init(this)
+        ARouter.init(context.applicationContext as Application?)
     }
 }

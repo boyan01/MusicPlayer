@@ -40,6 +40,9 @@ android {
                 manifest.srcFile 'src/main/AndroidManifest_debug.xml'
             } else {
                 manifest.srcFile 'src/main/AndroidManifest.xml'
+                java {
+                    exclude 'debug/***'
+                }
             }
         }
     }

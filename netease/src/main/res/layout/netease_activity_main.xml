@@ -47,13 +47,15 @@
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/moreAction"
-                style="@style/Widget.AppCompat.Light.ActionButton.Overflow"
+                style="@style/Widget.AppCompat.ActionButton.Overflow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:tooltipText="@string/netease_tips_action_more"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/common_text_primary_dark_background" />
+                app:tint="@color/common_text_primary_dark_background"
+                tools:ignore="UnusedAttribute" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.Toolbar>
