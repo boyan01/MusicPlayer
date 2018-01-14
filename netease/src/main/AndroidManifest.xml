@@ -6,15 +6,15 @@
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true"
-            android:theme="@style/NeteaseAppTheme" />
+            android:theme="@style/NeteaseAppTheme.TranslucentNavigation" />
         <activity
             android:name=".ui.NeteaseFmActivity"
             android:exported="true"
-            android:theme="@style/NeteaseAppTheme" />
+            android:theme="@style/NeteaseAppTheme.TranslucentNavigation" />
         <activity
             android:name=".ui.NeteaseMainActivity"
             android:exported="true"
-            android:theme="@style/NeteaseAppTheme"/>
+            android:theme="@style/NeteaseAppTheme" />
     </application>
 
 </manifest>

@@ -12,6 +12,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="NeteaseAppTheme.TranslucentNavigation">
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
+
     <style name="NeteaseLoginTextLayout">
         <!-- Hint color and label color in FALSE state -->
         <item name="android:textColorHint">@color/common_text_primary_dark_background</item>

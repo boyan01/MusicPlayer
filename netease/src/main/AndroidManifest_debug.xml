@@ -5,16 +5,15 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <application
-        android:name="debug.DebugAppContext">
+    <application android:name="debug.DebugAppContext">
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true"
-            android:theme="@style/NeteaseAppTheme" />
+            android:theme="@style/NeteaseAppTheme.TranslucentNavigation" />
         <activity
             android:name=".ui.NeteaseFmActivity"
             android:exported="true"
-            android:theme="@style/NeteaseAppTheme" />
+            android:theme="@style/NeteaseAppTheme.TranslucentNavigation" />
         <activity
             android:name=".ui.NeteaseMainActivity"
             android:exported="true"

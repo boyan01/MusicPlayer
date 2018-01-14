@@ -27,10 +27,13 @@ class NeteaseFmActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.netease_activity_fm)
+        initView()
         listenEvent()
         musicPlayer.getPlayingMusic().observeFilterNull(this) {
             UI.submit {
-                val picture = GlideApp.with(act).asBitmap().loadAndGet(it.picUri) ?: return@submit
+                val height = (getScreenWidth() * 0.8f).toInt()
+                val picture = GlideApp.with(act).asBitmap().loadAndGet(it.picUri, height, height)
+                        ?: return@submit
                 imageArtwork.setImageBitmap(picture)
                 val blur = FastBlur.doBlur(picture, 24, false)
                 imageBackground.setImageBitmap(blur)
@@ -61,19 +64,23 @@ class NeteaseFmActivity : BaseActivity() {
         }
     }
 
+    private fun initView() {
+        toolbar.inflateMenu(R.menu.netease_menu_fm_player)
+        toolbar.overflowIcon?.setTint(color(R.color.common_text_primary_dark_background))
+        navigationViewPlaceHolder.layoutParams.height = getNavigationBarHeight()
+    }
+
     /**
      * update toolbar menu items when music has been changed
      */
     private fun updateMenuItems(music: Music) = with(toolbar.menu) {
         findItem(R.id.netease_menu_fm_album)
-                .title = getString(R.string.netease_menu_fm_album) + ":${music.album.name}"
+                .title = getString(R.string.netease_menu_fm_album) + ": ${music.album.name}"
         findItem(R.id.netease_menu_fm_artist)
-                .title = getString(R.string.netease_menu_fm_artist) + ":${music.artist.joinToString("/") { it.name }}"
+                .title = getString(R.string.netease_menu_fm_artist) + ": ${music.artist.joinToString("/") { it.name }}"
     }
 
     private fun listenEvent() {
-        toolbar.inflateMenu(R.menu.netease_menu_fm_player)
-        toolbar.overflowIcon?.setTint(color(R.color.common_text_primary_dark_background))
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.netease_menu_fm_add_playlist -> {
