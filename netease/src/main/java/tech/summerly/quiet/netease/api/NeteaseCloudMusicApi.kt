@@ -2,11 +2,9 @@ package tech.summerly.quiet.netease.api
 
 import android.content.Context
 import kotlinx.coroutines.experimental.CancellationException
-import kotlinx.coroutines.experimental.Deferred
 import okhttp3.Cache
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicUri
-import tech.summerly.quiet.commonlib.bean.Playlist
 import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
 import tech.summerly.quiet.commonlib.utils.await
 import tech.summerly.quiet.commonlib.utils.md5

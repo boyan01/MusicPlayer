@@ -204,7 +204,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (resultCode == REQUEST_LOGIN && resultCode == Activity.RESULT_OK) {
+        if (requestCode == REQUEST_LOGIN && resultCode == Activity.RESULT_OK) {
             loadData()
             textUserName.setOnClickListener(null)
         }

@@ -14,6 +14,7 @@ import tech.summerly.quiet.netease.api.result.PlaylistResultBean
 internal class NeteasePlaylistItemViewBinder : ItemViewBinder<PlaylistResultBean.PlaylistBean>() {
     override fun onBindViewHolder(holder: ViewHolder, item: PlaylistResultBean.PlaylistBean): Unit = with(holder.itemView) {
         textTitle.text = item.name
+        textSubTitle.text = context.getString(R.string.netease_playlist_subtitle_template,item.trackCount)
         GlideApp.with(this).load(item.coverImgUrl).into(imageCover)
     }
 

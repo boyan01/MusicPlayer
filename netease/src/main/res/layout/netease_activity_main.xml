@@ -69,9 +69,9 @@
         tools:listitem="@layout/netease_item_common_1" />
 
     <fragment
-        android:name="tech.summerly.quiet.commonlib.fragments.BottomControllerFragment"
+        android:name="tech.summerly.quiet.netease.ui.NeteaseBottomControllerFragment"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:tag="@string/common_tag_fragment_bottom_controller"
         tools:layout="@layout/common_fragment_controller_bottom" />
 

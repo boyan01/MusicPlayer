@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/netease_menu_fm_add_playlist"
+        android:title="@string/netease_menu_fm_add_playlist" />
+    <item
+        android:id="@+id/netease_menu_fm_download"
+        android:title="@string/netease_menu_fm_download" />
+    <item
+        android:id="@+id/netease_menu_fm_share"
+        android:title="@string/netease_menu_fm_share" />
+    <item
+        android:id="@+id/netease_menu_fm_artist"
+        android:title="@string/netease_menu_fm_artist" />
+    <item
+        android:id="@+id/netease_menu_fm_album"
+        android:title="@string/netease_menu_fm_album" />
+    <item
+        android:id="@+id/netease_menu_fm_quality"
+        android:title="@string/netease_menu_fm_quality" />
+    <item
+        android:id="@+id/netease_menu_fm_timer"
+        android:title="@string/netease_menu_fm_timer" />
+</menu>

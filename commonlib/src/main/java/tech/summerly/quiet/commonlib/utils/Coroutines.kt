@@ -24,7 +24,6 @@ import retrofit2.Response
  * @param height target picture' height , default is original size
  * @return  if failed return null
  */
-@Deprecated("")
 suspend fun <T : Any> GlideRequest<T>.loadAndGet(any: Any?,
                                                  width: Int = Target.SIZE_ORIGINAL,
                                                  height: Int = Target.SIZE_ORIGINAL)

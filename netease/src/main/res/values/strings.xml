@@ -20,5 +20,13 @@
     <string name="netease_title_not_login">未登录</string>
     <string name="netease_menu_action_main_logout">退出登录</string>
     <string name="netease_menu_action_main_setting">设置</string>
+    <string name="netease_playlist_subtitle_template">(共%d首)</string>
+    <string name="netease_menu_fm_add_playlist">收藏到歌单</string>
+    <string name="netease_menu_fm_download">下载</string>
+    <string name="netease_menu_fm_share">分享</string>
+    <string name="netease_menu_fm_quality">音质</string>
+    <string name="netease_menu_fm_artist">歌手</string>
+    <string name="netease_menu_fm_album">专辑</string>
+    <string name="netease_menu_fm_timer">定时播放</string>
 
 </resources>

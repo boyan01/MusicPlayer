@@ -87,11 +87,13 @@ data class PersonalFmDataResult(
 
     data class Album(
 
-            @SerializedName("title")
-            @Expose
             val name: String? = null,
             @SerializedName("id")
             @Expose
+
+
+
+
             val id: Long? = null,
             @SerializedName("type")
             @Expose
@@ -152,7 +154,7 @@ data class PersonalFmDataResult(
 
     data class Artist(
 
-            @SerializedName("title")
+            @SerializedName("name")
             @Expose
             val name: String?,
             @SerializedName("id")

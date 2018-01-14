@@ -85,7 +85,7 @@
         android:tint="@color/common_color_icon_active"
         app:layout_constraintEnd_toStartOf="@+id/controllerSkipNext"
         app:layout_constraintTop_toTopOf="@+id/controllerSkipNext"
-        app:srcCompat="@drawable/common_ic_pause_circle_outline_black_24dp" />
+        app:srcCompat="@drawable/common_ic_play_circle_outline_black_24dp" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/controllerSkipNext"

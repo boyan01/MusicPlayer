@@ -1,20 +1,20 @@
 package tech.summerly.quiet.netease.ui
 
 import android.os.Bundle
+import android.widget.SeekBar
 import kotlinx.android.synthetic.main.netease_activity_fm.*
+import org.jetbrains.anko.act
 import tech.summerly.quiet.commonlib.base.BaseActivity
+import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.state.PlayerState
-import tech.summerly.quiet.commonlib.utils.GlideApp
-import tech.summerly.quiet.commonlib.utils.observe
-import tech.summerly.quiet.commonlib.utils.observeFilterNull
+import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.player.NeteaseFmMusicPlayer
 
 /**
- * author : yangbin10
- * date   : 2017/12/22
+ * activity of personal fm radio
  */
 class NeteaseFmActivity : BaseActivity() {
 
@@ -28,13 +28,19 @@ class NeteaseFmActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.netease_activity_fm)
         listenEvent()
-        initPlayer()
         musicPlayer.getPlayingMusic().observeFilterNull(this) {
-            GlideApp.with(this).load(it.picUri).into(imageArtwork)
+            UI.submit {
+                val picture = GlideApp.with(act).asBitmap().loadAndGet(it.picUri) ?: return@submit
+                imageArtwork.setImageBitmap(picture)
+                val blur = FastBlur.doBlur(picture, 24, false)
+                imageBackground.setImageBitmap(blur)
+            }
+            toolbar.title = it.title
             textArtist.text = it.artistAlbumString()
             textMusicName.text = it.title
-            textDuration.text = it.duration.toString()
-            seekBar.max = (it.duration / 1000).toInt()
+            textDuration.text = it.duration.toMusicTimeStamp()
+            seekBar.max = (it.duration).toInt()
+            updateMenuItems(it)
         }
         musicPlayer.playerState.observe(this) {
             when (it) {
@@ -46,13 +52,54 @@ class NeteaseFmActivity : BaseActivity() {
             }
         }
         musicPlayer.position.observeFilterNull(this) {
-            val progress = (it / 1000).toInt()
-            textCurrentPosition.text = progress.toString()
+            if (isSeekBarTracking) { //do not change seekBar progress when user is tracking touch
+                return@observeFilterNull
+            }
+            val progress = it.toInt()
+            textCurrentPosition.text = progress.toMusicTimeStamp()
             seekBar.progress = progress
         }
     }
 
+    /**
+     * update toolbar menu items when music has been changed
+     */
+    private fun updateMenuItems(music: Music) = with(toolbar.menu) {
+        findItem(R.id.netease_menu_fm_album)
+                .title = getString(R.string.netease_menu_fm_album) + ":${music.album.name}"
+        findItem(R.id.netease_menu_fm_artist)
+                .title = getString(R.string.netease_menu_fm_artist) + ":${music.artist.joinToString("/") { it.name }}"
+    }
+
     private fun listenEvent() {
+        toolbar.inflateMenu(R.menu.netease_menu_fm_player)
+        toolbar.overflowIcon?.setTint(color(R.color.common_text_primary_dark_background))
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.netease_menu_fm_add_playlist -> {
+
+                }
+                R.id.netease_menu_fm_share -> {
+
+                }
+                R.id.netease_menu_fm_artist -> {
+
+                }
+                R.id.netease_menu_fm_album -> {
+
+                }
+                R.id.netease_menu_fm_download -> {
+
+                }
+                R.id.netease_menu_fm_quality -> {
+
+                }
+                R.id.netease_menu_fm_timer -> {
+
+                }
+            }
+            true
+        }
         buttonDelete.setOnClickListener {
             markPlayingAsDislike()
         }
@@ -69,14 +116,31 @@ class NeteaseFmActivity : BaseActivity() {
         buttonComment.setOnClickListener {
 
         }
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+        seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    musicPlayer.seekToPosition(progress.toLong())
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+                isSeekBarTracking = true
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                isSeekBarTracking = false
+            }
+
+        })
     }
+
+    private var isSeekBarTracking = false
 
     private fun markPlayingAsDislike() {
 
     }
 
-    //init fm player and start to play
-    private fun initPlayer() {
-        //TODO
-    }
 }

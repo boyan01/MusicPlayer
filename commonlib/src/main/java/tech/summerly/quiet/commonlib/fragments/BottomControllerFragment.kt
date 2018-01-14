@@ -19,7 +19,7 @@ import tech.summerly.quiet.commonlib.utils.*
 /**
  * Created by summer on 17-12-17
  */
-class BottomControllerFragment : BaseFragment() {
+open class BottomControllerFragment : BaseFragment() {
 
     private val musicPlayer: BaseMusicPlayer
         get() = MusicPlayerManager.INSTANCE.getMusicPlayer()
@@ -42,6 +42,11 @@ class BottomControllerFragment : BaseFragment() {
     }
 
     private fun listenEvent(root: View) = with(root) {
+        setOnClickListener { view ->
+            musicPlayer.getPlayingMusic().value?.let {
+                onControllerClick(view, it)
+            }
+        }
         controllerPauseOrPlay.setOnClickListener {
             musicPlayer.playPause()
         }
@@ -51,8 +56,8 @@ class BottomControllerFragment : BaseFragment() {
         controllerSkipPrevious.setOnClickListener {
             musicPlayer.playPrevious()
         }
-        this.setOnClickListener {
-            //TODO
+        controllerPlaylist.setOnClickListener {
+
         }
     }
 
@@ -67,6 +72,10 @@ class BottomControllerFragment : BaseFragment() {
                 controllerPauseOrPlay.gone()
             }
         }
+    }
+
+    protected open fun onControllerClick(view: View, music: Music) {
+
     }
 
     private fun updateMusicInfo(music: Music?) = runWithRoot {
