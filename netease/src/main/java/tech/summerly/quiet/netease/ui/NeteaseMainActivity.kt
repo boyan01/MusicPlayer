@@ -78,7 +78,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
             var animatorExpandIndicator: Animator? = null
 
             override fun onChangeStarting(holder: RecyclerView.ViewHolder, oldItem: Boolean) {
-//                start change animation
+                //start change animation
                 items[holder.adapterPosition].takeIf { it is NeteasePlaylistHeader }?.let {
                     it as NeteasePlaylistHeader
                     if (it.isExpanded) {

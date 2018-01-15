@@ -28,5 +28,10 @@
     <string name="netease_menu_fm_artist">歌手</string>
     <string name="netease_menu_fm_album">专辑</string>
     <string name="netease_menu_fm_timer">定时播放</string>
+    <string name="netease_popup_add_to_next">下一首播放</string>
+    <string name="netease_popup_comment">评论</string>
+    <string name="netease_header_music_title_play_all">播放全部</string>
+    <string name="netease_header_action_multi_select">多选</string>
+    <string name="netease_tips_daily_recommend_description">根据你的音乐口味生成，每天 6:00 更新</string>
 
 </resources>

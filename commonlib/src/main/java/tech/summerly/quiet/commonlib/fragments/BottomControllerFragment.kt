@@ -6,11 +6,13 @@ import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.common_fragment_controller_bottom.view.*
 import org.jetbrains.anko.dimen
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.state.PlayerState
@@ -75,8 +77,16 @@ open class BottomControllerFragment : BaseFragment() {
     }
 
     protected open fun onControllerClick(view: View, music: Music) {
-
+        when (music.type) {
+            MusicType.NETEASE_FM -> {
+                ARouter.getInstance().build("/netease/fm").navigation()
+            }
+            else -> {
+                //todo
+            }
+        }
     }
+
 
     private fun updateMusicInfo(music: Music?) = runWithRoot {
         //首先根据music是否为空来控制底部控制fragment的显示与否。
@@ -88,7 +98,7 @@ open class BottomControllerFragment : BaseFragment() {
         //更新音乐信息
         musicTitle.text = music.title
         musicSubTitle.text = music.artistAlbumString()
-        GlideApp.with(this).load(music.picUri).into(artWork)
+        GlideApp.with(this).load(music.getPictureUrl()).into(artWork)
     }
 
     interface BottomControllerContainer {

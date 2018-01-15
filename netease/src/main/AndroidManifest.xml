@@ -15,6 +15,9 @@
             android:name=".ui.NeteaseMainActivity"
             android:exported="true"
             android:theme="@style/NeteaseAppTheme" />
+        <activity
+            android:name=".ui.NeteaseDailyRecommendActivity"
+            android:theme="@style/NeteaseAppTheme" />
     </application>
 
 </manifest>

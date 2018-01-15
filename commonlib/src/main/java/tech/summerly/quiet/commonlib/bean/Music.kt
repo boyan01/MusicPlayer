@@ -94,4 +94,21 @@ open class Music(
             return arrayOfNulls(size)
         }
     }
+
+    fun getHighestQuality(): String? {
+        playUri.sortByDescending { it.bitrate }
+        if (playUri.isEmpty()) {
+            return null
+        }
+        val bitrate = playUri[0].bitrate
+        return when {
+            bitrate in 224000..320000 -> {
+                "HQ"
+            }
+            bitrate > 320000 -> {
+                "SQ"
+            }
+            else -> null
+        }
+    }
 }

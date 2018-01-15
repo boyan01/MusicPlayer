@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"
+    android:background="@color/netease_color_primary_dark">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="@drawable/netease_gradient_fm_mask" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:fontFamily="serif"
+        android:textColor="@color/common_text_primary_dark_background"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:typeface="serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.3"
+        tools:text="12" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageIconTips"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="2dp"
+        android:src="@drawable/netease_ic_highlight_black_24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/textTips"
+        app:layout_constraintStart_toStartOf="@id/textDay"
+        app:layout_constraintTop_toTopOf="@id/textTips"
+        app:tint="@color/common_text_secondary_dark_background" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textTips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/netease_tips_daily_recommend_description"
+        android:textColor="@color/common_text_secondary_dark_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/imageIconTips"
+        app:layout_constraintTop_toBottomOf="@id/textDay"
+        app:layout_goneMarginStart="0dp" />
+
+</android.support.constraint.ConstraintLayout>

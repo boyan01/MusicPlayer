@@ -10,7 +10,7 @@ import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 /**
  * to fetch the url for netease music
  */
-object NeteaseMusicUrlGetter : MusicUrlGetter {
+internal object NeteaseMusicUrlGetter : MusicUrlGetter {
 
     override suspend fun getPlayableUrl(music: Music): String? = with(music) {
         val uris = playUri

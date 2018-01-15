@@ -13,7 +13,6 @@ import android.widget.EditText
 import android.widget.TextView
 import kotlinx.android.synthetic.main.netease_activity_login.*
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.progressDialog
 import tech.summerly.quiet.commonlib.base.BaseActivity

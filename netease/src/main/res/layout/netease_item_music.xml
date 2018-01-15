@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/netease_item_music_height">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@color/netease_color_primary"
+        tools:visibility="visible" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/common_text_primary"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@id/guidelineCenter"
+        app:layout_constraintEnd_toStartOf="@id/indicatorMV"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/image"
+        tools:text="The ring of young" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/indicatorMV"
+        style="@style/NeteaseMusicItemIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="MV"
+        android:visibility="gone"
+        app:layout_constraintBaseline_toBaselineOf="@id/textTitle"
+        app:layout_constraintBottom_toBottomOf="@id/textTitle"
+        app:layout_constraintEnd_toStartOf="@id/imageMore"
+        app:layout_constraintStart_toEndOf="@id/textTitle"
+        app:layout_constraintTop_toTopOf="@id/textTitle"
+        tools:ignore="HardcodedText"
+        tools:visibility="visible" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/indicatorQuality"
+        style="@style/NeteaseMusicItemIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBaseline_toBaselineOf="@id/textSubTitle"
+        app:layout_constraintBottom_toBottomOf="@id/textSubTitle"
+        app:layout_constraintStart_toStartOf="@id/textTitle"
+        app:layout_constraintTop_toTopOf="@id/textSubTitle"
+        tools:text="SQ"
+        tools:visibility="visible" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textSubTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/common_text_secondary"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/imageMore"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/indicatorQuality"
+        app:layout_constraintTop_toBottomOf="@id/guidelineCenter"
+        app:layout_goneMarginStart="0dp"
+        tools:text="Jack H" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageMore"
+        style="@style/Widget.AppCompat.ActionButton.Overflow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:tooltipText="@string/netease_tips_action_more"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedAttribute" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guidelineCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".5" />
+
+    <view
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:background="@color/common_color_divider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/textTitle" />
+</android.support.constraint.ConstraintLayout>

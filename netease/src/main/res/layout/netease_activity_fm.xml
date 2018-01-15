@@ -16,6 +16,7 @@
         tools:srcCompat="@color/common_color_primary_dark" />
 
     <LinearLayout
+        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -24,7 +25,6 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
-            android:layout_marginTop="@dimen/netease_status_bar_height"
             android:background="#4e000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -237,9 +237,5 @@
                 app:srcCompat="@drawable/netease_ic_comment_black_24dp" />
         </android.support.constraint.ConstraintLayout>
 
-        <View
-            android:id="@+id/navigationViewPlaceHolder"
-            android:layout_width="match_parent"
-            android:layout_height="0dp" />
     </LinearLayout>
 </FrameLayout>

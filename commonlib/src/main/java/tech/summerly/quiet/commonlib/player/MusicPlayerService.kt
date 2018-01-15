@@ -21,10 +21,7 @@ import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.notification.NotificationHelper
 import tech.summerly.quiet.commonlib.player.state.PlayerState
-import tech.summerly.quiet.commonlib.utils.GlideApp
-import tech.summerly.quiet.commonlib.utils.GlideRequest
-import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.commonlib.utils.observe
+import tech.summerly.quiet.commonlib.utils.*
 
 /**
  * author : yangbin10
@@ -115,7 +112,7 @@ class MusicPlayerService : Service(), LifecycleOwner {
     /**
      *
      */
-    private fun GlideRequest<Bitmap>.loadWithDefault(uri: String?, handler: (Bitmap) -> Unit) {
+    private fun GlideRequest<Bitmap>.loadWithDefault(uri: Any?, handler: (Bitmap) -> Unit) {
         val default = BitmapFactory.decodeResource(resources, R.drawable.common_icon_notification_default)
         if (uri == null) {
             handler(default)
@@ -152,7 +149,7 @@ class MusicPlayerService : Service(), LifecycleOwner {
             return
         }
         log { "popup notification for music player" }
-        val uri = music.picUri
+        val uri = music.getPictureUrl()
         GlideApp.with(this).asBitmap().loadWithDefault(uri) {
             val playing = isPlaying
             notificationHelper.buildNotification(music, isPlaying, it)?.let {

@@ -2,6 +2,7 @@ package tech.summerly.quiet.netease.ui
 
 import android.os.Bundle
 import android.widget.SeekBar
+import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.netease_activity_fm.*
 import org.jetbrains.anko.act
 import tech.summerly.quiet.commonlib.base.BaseActivity
@@ -16,6 +17,7 @@ import tech.summerly.quiet.netease.player.NeteaseFmMusicPlayer
 /**
  * activity of personal fm radio
  */
+@Route(path = "/netease/fm")
 class NeteaseFmActivity : BaseActivity() {
 
     private val musicPlayer: BaseMusicPlayer
@@ -32,7 +34,7 @@ class NeteaseFmActivity : BaseActivity() {
         musicPlayer.getPlayingMusic().observeFilterNull(this) {
             UI.submit {
                 val height = (getScreenWidth() * 0.8f).toInt()
-                val picture = GlideApp.with(act).asBitmap().loadAndGet(it.picUri, height, height)
+                val picture = GlideApp.with(act).asBitmap().loadAndGet(it.getPictureUrl(), height, height)
                         ?: return@submit
                 imageArtwork.setImageBitmap(picture)
                 val blur = FastBlur.doBlur(picture, 24, false)
@@ -67,7 +69,7 @@ class NeteaseFmActivity : BaseActivity() {
     private fun initView() {
         toolbar.inflateMenu(R.menu.netease_menu_fm_player)
         toolbar.overflowIcon?.setTint(color(R.color.common_text_primary_dark_background))
-        navigationViewPlaceHolder.layoutParams.height = getNavigationBarHeight()
+//        navigationViewPlaceHolder.layoutParams.height = getNavigationBarHeight()
     }
 
     /**
