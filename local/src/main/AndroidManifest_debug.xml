@@ -4,6 +4,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
+        android:name="debug.DebugAppContext"
         android:icon="@drawable/common_ic_play_circle_outline_black_24dp"
         android:label="@string/local_app_name">
         <activity
