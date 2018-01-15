@@ -3,6 +3,7 @@ package tech.summerly.quiet.netease.api.converter
 import tech.summerly.quiet.commonlib.bean.*
 import tech.summerly.quiet.netease.api.result.PersonalFmDataResult
 import tech.summerly.quiet.netease.api.result.PlaylistResultBean
+import tech.summerly.quiet.netease.api.result.RecommendSongResultBean
 
 /**
  * author : SUMMERLY
@@ -108,6 +109,39 @@ internal class NeteaseResultMapper {
                 type = MusicType.NETEASE
         )
     }
+
+    fun convertToMusic(resultBean: RecommendSongResultBean.Recommend): Music {
+        return Music(
+                id = resultBean.id,
+                title = resultBean.name,
+                artist = resultBean.artists?.map(this::convertToArtist) ?: emptyList(),
+                picUri = resultBean.album.picUrl,
+                album = convertToAlbum(resultBean.album),
+                type = MusicType.NETEASE,
+                mvId = resultBean.mvid ?: 0L,
+                duration = resultBean.duration.toLong(),
+                playUri = mutableListOf()
+        )
+    }
+
+    fun convertToArtist(artistResult: RecommendSongResultBean.Artist) =
+            Artist(
+                    id = artistResult.id,
+                    name = artistResult.name,
+                    picUri = artistResult.picUrl,
+                    type = MusicType.NETEASE
+            )
+
+    private fun convertToAlbum(albumResult: RecommendSongResultBean.Album): Album {
+        return Album(
+                id = albumResult.id,
+                name = albumResult.name,
+                picUri = albumResult.picUrl,
+                type = MusicType.NETEASE
+        )
+    }
+
+
 //
 //    fun convertToMusic(songsBean: MusicSearchResultBean.SongsBean): Music {
 //        return Music(

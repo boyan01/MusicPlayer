@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/netease_item_music_height">
+    android:layout_height="@dimen/netease_item_music_height"
+    android:background="?android:selectableItemBackground">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/image"
@@ -23,8 +24,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:lines="1"
         android:textColor="@color/common_text_primary"
         android:textSize="17sp"
+        app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toTopOf="@id/guidelineCenter"
         app:layout_constraintEnd_toStartOf="@id/indicatorMV"
         app:layout_constraintHorizontal_bias="0"
@@ -66,8 +70,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
+        android:ellipsize="end"
+        android:lines="1"
         android:textColor="@color/common_text_secondary"
         android:textSize="15sp"
+        app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toStartOf="@id/imageMore"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -94,7 +101,7 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent=".5" />
 
-    <view
+    <View
         android:layout_width="0dp"
         android:layout_height="1px"
         android:background="@color/common_color_divider"

@@ -43,7 +43,7 @@ interface CloudMusicService {
 
     @FormUrlEncoded
     @POST("/weapi/v1/discovery/recommend/songs")
-    fun recommendSongs(@FieldMap request: Map<String, String>): Call<RecommendSongResultBean>
+    fun recommendSongs(@FieldMap request: Map<String, String>): Deferred<RecommendSongResultBean>
 
     @FormUrlEncoded
     @POST("/weapi/point/dailyTask")

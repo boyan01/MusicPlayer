@@ -22,8 +22,6 @@ data class RecommendSongResultBean(
 ) {
     data class Recommend(
 
-            @SerializedName("title")
-            @Expose
             val name: String,
 
             @SerializedName("id")
@@ -147,8 +145,6 @@ data class RecommendSongResultBean(
 
     data class Album(
 
-            @SerializedName("title")
-            @Expose
             val name: String,
             @SerializedName("id")
             @Expose
@@ -218,8 +214,6 @@ data class RecommendSongResultBean(
 
     data class Artist(
 
-            @SerializedName("title")
-            @Expose
             val name: String,
             @SerializedName("id")
             @Expose
@@ -261,8 +255,6 @@ data class RecommendSongResultBean(
 
     data class Artist__(
 
-            @SerializedName("title")
-            @Expose
             val name: String? = null,
             @SerializedName("id")
             @Expose

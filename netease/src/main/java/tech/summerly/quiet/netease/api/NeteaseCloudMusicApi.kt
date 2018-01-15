@@ -8,6 +8,7 @@ import tech.summerly.quiet.commonlib.bean.MusicUri
 import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
 import tech.summerly.quiet.commonlib.utils.await
 import tech.summerly.quiet.commonlib.utils.md5
+import tech.summerly.quiet.netease.NeteaseModule
 import tech.summerly.quiet.netease.api.bean.MusicSearchResult
 import tech.summerly.quiet.netease.api.converter.Crypto
 import tech.summerly.quiet.netease.api.converter.NeteaseResultMapper
@@ -22,7 +23,7 @@ import tech.summerly.quiet.netease.api.result.PlaylistResultBean
  * time   : 2017/8/23
  * desc   :
  */
-class NeteaseCloudMusicApi(context: Context) {
+class NeteaseCloudMusicApi(context: Context = NeteaseModule.instance) {
 
     private val neteaseService = CloudMusicServiceProvider()
             .provideCloudMusicService(PersistentCookieStore(context.applicationContext),
@@ -151,5 +152,19 @@ class NeteaseCloudMusicApi(context: Context) {
             error("error response!")
         }
         return result.playlist ?: emptyList()
+    }
+
+    suspend fun getDailyRecommend(): List<Music> {
+        val encrypt = Crypto.encrypt("""
+            {"offset":0,"total":true,"limit":20,"csrf_token":""}
+        """.trimIndent())
+        val recommend = neteaseService.recommendSongs(encrypt).await()
+        if (recommend.code != 200 && recommend.recommend?.isEmpty() != false) {
+            error("error response")
+        }
+        recommend.recommend!!
+        return recommend.recommend.map {
+            mapper.convertToMusic(it)
+        }
     }
 }

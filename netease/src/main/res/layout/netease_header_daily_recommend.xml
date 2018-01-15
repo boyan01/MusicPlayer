@@ -10,7 +10,8 @@
         android:id="@+id/imageBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="@drawable/netease_gradient_fm_mask" />
+        android:foreground="@drawable/netease_gradient_fm_mask"
+        android:scaleType="centerCrop" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textDay"
