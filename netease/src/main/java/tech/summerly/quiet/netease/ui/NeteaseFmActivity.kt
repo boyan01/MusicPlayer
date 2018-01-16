@@ -64,6 +64,19 @@ class NeteaseFmActivity : BaseActivity() {
             textCurrentPosition.text = progress.toMusicTimeStamp()
             seekBar.progress = progress
         }
+        playMusicIfNecessary()
+    }
+
+    private fun playMusicIfNecessary() {
+        if (musicPlayer.playerState.value != PlayerState.Playing) {
+            //start player
+            val current = musicPlayer.getPlayingMusic().value
+            if (current != null) {
+                musicPlayer.play(current)
+            } else {
+                musicPlayer.playNext()
+            }
+        }
     }
 
     private fun initView() {

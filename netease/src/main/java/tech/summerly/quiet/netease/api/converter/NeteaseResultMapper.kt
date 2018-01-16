@@ -111,6 +111,13 @@ internal class NeteaseResultMapper {
     }
 
     fun convertToMusic(resultBean: RecommendSongResultBean.Recommend): Music {
+        val playUri = ArrayList<MusicUri>()
+        if (resultBean.hMusic != null) {
+            playUri.add(MusicUri.HIGH_QUALITY)
+        }
+        if (resultBean.lMusic != null || resultBean.bMusic != null) {
+            playUri.add(MusicUri.NORMAL_QUALITY)
+        }
         return Music(
                 id = resultBean.id,
                 title = resultBean.name,
@@ -120,7 +127,7 @@ internal class NeteaseResultMapper {
                 type = MusicType.NETEASE,
                 mvId = resultBean.mvid ?: 0L,
                 duration = resultBean.duration.toLong(),
-                playUri = mutableListOf()
+                playUri = playUri
         )
     }
 

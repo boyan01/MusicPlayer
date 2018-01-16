@@ -11,7 +11,10 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.player.state.PlayerState
-import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
+import tech.summerly.quiet.commonlib.utils.edit
+import tech.summerly.quiet.commonlib.utils.fromJson
+import tech.summerly.quiet.commonlib.utils.log
 
 @Suppress("MemberVisibilityCanPrivate")
 abstract class BaseMusicPlayer(context: Context) {
@@ -120,6 +123,13 @@ abstract class BaseMusicPlayer(context: Context) {
 
     fun play(music: Music) {
         log { music.toShortString() }
+        if (playerState.value == PlayerState.Pausing && playingMusic.value == music) {
+            corePlayer.start()
+            return
+        }
+        if (corePlayer.isPlaying && corePlayer.currentPlaying == music) {
+            return
+        }
         performPlay(music)
     }
 
@@ -185,16 +195,15 @@ abstract class BaseMusicPlayer(context: Context) {
 
         fun restore() {
             playMode.postValue(PlayMode.fromName(preference.getString(KEY_PLAY_MODE, PlayMode.Sequence.name)))
-            //fixme might cause NeteaseMusic can
             val saved = gson.fromJson<Music>(preference.getString(KEY_CURRENT_MUSIC, ""))
             if (corePlayer.getPlayerState().value == PlayerState.Playing) {
                 if (playingMusic.value != saved) {
                     corePlayer.stop()
                 }
             }
-            playingMusic.postValue(saved)
             val list = gson.fromJson<List<Music>>(preference.getString(KEY_PLAY_LIST, "")) ?: emptyList()
             setPlaylist(list)
+            playingMusic.value = saved
         }
 
     }

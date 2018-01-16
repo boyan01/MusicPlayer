@@ -9,10 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.netease_item_music.view.*
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.utils.ItemViewBinder
-import tech.summerly.quiet.commonlib.utils.gone
-import tech.summerly.quiet.commonlib.utils.popupMenu
-import tech.summerly.quiet.commonlib.utils.visible
+import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.R
 
 /**
@@ -21,6 +18,11 @@ import tech.summerly.quiet.netease.R
  */
 open class NeteaseMusicItemViewBinder : ItemViewBinder<Music>() {
     override fun onBindViewHolder(holder: ViewHolder, item: Music): Unit = with(holder.itemView) {
+        val canPlay = item.playUri.isNotEmpty()
+        setOnClickListener {
+
+        }
+        checkPlayable(canPlay)
         checkMv(item)
         checkQuality(item)
         textTitle.text = item.title
@@ -32,7 +34,18 @@ open class NeteaseMusicItemViewBinder : ItemViewBinder<Music>() {
             }
             onMorePopupMenuShow(menu)
         }
-        requestLayout()
+        //textTitle'width need be recalculate
+        textTitle.requestLayout()
+    }
+
+    private fun View.checkPlayable(canPlay: Boolean) {
+        if (!canPlay) {
+            textTitle.setTextColor(context.color(R.color.common_textDisable))
+            textSubTitle.setTextColor(context.color(R.color.common_textDisable))
+        } else {
+            textTitle.setTextColor(context.color(R.color.common_text_primary))
+            textSubTitle.setTextColor(context.color(R.color.common_text_secondary))
+        }
     }
 
     protected open fun onMorePopupMenuShow(menu: PopupMenu) {

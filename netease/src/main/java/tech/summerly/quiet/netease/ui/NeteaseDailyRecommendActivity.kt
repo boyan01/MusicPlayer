@@ -39,6 +39,9 @@ class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.B
             it.register(NeteaseMusicHeader::class.java, NeteaseMusicHeaderViewBinder())
             it.register(Music::class.java, NeteaseMusicItemViewBinder())
         }
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
         loadData()
     }
 

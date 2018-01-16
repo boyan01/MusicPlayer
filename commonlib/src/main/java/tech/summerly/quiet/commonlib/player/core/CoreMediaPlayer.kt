@@ -109,7 +109,6 @@ class CoreMediaPlayer {
             ref().setDataSource(url, headerNetease)
             ref().prepareAsyncAwait()
             start()
-            sendProgress()
         }
     }
 
@@ -133,6 +132,7 @@ class CoreMediaPlayer {
     fun start() {
         mediaPlayer.start()
         playerState.postValue(PlayerState.Playing)
+        sendProgress()
     }
 
     fun stop() {

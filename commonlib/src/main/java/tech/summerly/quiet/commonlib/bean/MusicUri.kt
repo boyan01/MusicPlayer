@@ -47,5 +47,9 @@ data class MusicUri(
         override fun newArray(size: Int): Array<MusicUri?> {
             return arrayOfNulls(size)
         }
+
+        val NORMAL_QUALITY = MusicUri(bitrate = 192000, uri = "", dateValid = 0L)
+        val HIGH_QUALITY = MusicUri(bitrate = 320000, uri = "", dateValid = 0L)
+        val SUPER_QUALITY = MusicUri(bitrate = 840000, uri = "", dateValid = 0L)
     }
 }

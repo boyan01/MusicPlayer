@@ -3,15 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="wrap_content"
     android:background="@color/netease_color_primary">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageBackground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:foreground="@drawable/netease_gradient_daily_recommend_header"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/netease_background_header_recommend_daily"
+        app:layout_constraintDimensionRatio="5:2" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textDay"
@@ -43,9 +45,11 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textTips"
+        style="@style/TextAppearance.AppCompat.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
+        android:background="@color/common_transparentSecondaryDark"
         android:text="@string/netease_tips_daily_recommend_description"
         android:textColor="@color/common_text_secondary_dark_background"
         app:layout_constraintBottom_toBottomOf="parent"
