@@ -33,5 +33,8 @@
     <string name="netease_header_music_title_play_all">播放全部</string>
     <string name="netease_header_action_multi_select">多选</string>
     <string name="netease_tips_daily_recommend_description">根据你的音乐口味生成，每天 6:00 更新</string>
+    <string name="netease_alert_need_login">使用此功能需要登陆,是否跳转到登陆界面</string>
+    <string name="netease_action_give_up">算了</string>
+    <string name="netease_title_daily_recommend">@string/netease_nav_title_daily</string>
 
 </resources>

@@ -16,9 +16,9 @@
         tools:srcCompat="@color/common_color_primary_dark" />
 
     <LinearLayout
-        android:fitsSystemWindows="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
@@ -238,4 +238,6 @@
         </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
+
+
 </FrameLayout>

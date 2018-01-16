@@ -159,6 +159,10 @@ class NeteaseCloudMusicApi(context: Context = NeteaseModule.instance) {
             {"offset":0,"total":true,"limit":20,"csrf_token":""}
         """.trimIndent())
         val recommend = neteaseService.recommendSongs(encrypt).await()
+        if (recommend.code == 301) {
+            //need login
+            error("please login first!")
+        }
         if (recommend.code != 200 && recommend.recommend?.isEmpty() != false) {
             error("error response")
         }

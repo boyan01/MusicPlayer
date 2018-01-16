@@ -11,6 +11,7 @@ import android.transition.TransitionManager
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
+import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.netease_activity_login.*
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
@@ -26,6 +27,7 @@ import tech.summerly.quiet.netease.persistence.NeteasePreference
  * author : yangbin10
  * date   : 2017/12/21
  */
+@Route(path = "/netease/login")
 class LoginActivity : BaseActivity() {
 
     private var jobLogin: Job? = null

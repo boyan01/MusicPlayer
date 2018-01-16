@@ -1,37 +1,40 @@
 package tech.summerly.quiet.netease.ui
 
+import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
+import kotlinx.android.synthetic.main.netease_activity_daily_recommend.*
 import kotlinx.coroutines.experimental.CoroutineExceptionHandler
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
-import org.jetbrains.anko.ctx
+import org.jetbrains.anko.toast
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
+import tech.summerly.quiet.commonlib.utils.alert
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
+import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 import tech.summerly.quiet.netease.ui.items.*
+import tech.summerly.quiet.netease.utils.isLogin
 
 /**
  * activity for daily recommend 30 songs
  */
 @Route(path = "/netease/daily")
-class NeteaseDailyRecommendActivity : BaseActivity() {
+class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
 
-    private val view: RecyclerView by lazy {
-        val recyclerView = RecyclerView(ctx)
-        recyclerView.layoutManager = LinearLayoutManager(ctx)
-        recyclerView
+    companion object {
+        private val REQUEST_LOGIN = 101
     }
 
     private val items = ArrayList<Any>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(view)
-        view.adapter = MultiTypeAdapter(items).also {
+        setContentView(R.layout.netease_activity_daily_recommend)
+        recyclerList.adapter = MultiTypeAdapter(items).also {
             it.register(NeteaseDailyHeader::class.java, NeteaseDailyHeaderViewBinder())
             it.register(NeteaseMusicHeader::class.java, NeteaseMusicHeaderViewBinder())
             it.register(Music::class.java, NeteaseMusicItemViewBinder())
@@ -39,15 +42,35 @@ class NeteaseDailyRecommendActivity : BaseActivity() {
         loadData()
     }
 
-    private val loadExceptionHandler = CoroutineExceptionHandler { coroutineContext, throwable ->
+    private val loadExceptionHandler = CoroutineExceptionHandler { _, throwable ->
         throwable.printStackTrace()
+        throwable.message?.let(::toast)
     }
 
     private fun loadData() = launch(UI + loadExceptionHandler) {
+        //check if login
+        if (!isLogin()) {
+            if (alert(message = getString(R.string.netease_alert_need_login),
+                    negative = getString(R.string.netease_action_give_up))) {
+                ARouter.getInstance().build("/netease/login")
+                        .navigation(this@NeteaseDailyRecommendActivity, REQUEST_LOGIN)
+            } else {
+                finish()
+            }
+            return@launch
+        }
         val songs = NeteaseCloudMusicApi().getDailyRecommend()
         items.add(NeteaseDailyHeader("12"))
         items.add(NeteaseMusicHeader(songs.size))
         items.addAll(songs)
-        view.multiTypeAdapter.notifyDataSetChanged()
+        recyclerList.multiTypeAdapter.notifyDataSetChanged()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        //do not need to check if is login success,because loadData method will check it
+        if (requestCode == REQUEST_LOGIN) {
+            loadData()
+        }
     }
 }

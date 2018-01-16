@@ -16,7 +16,7 @@ class NeteaseModule {
         @SuppressLint("StaticFieldLeak")
         private var context: Context? = null
 
-        val instance get() = context!!
+        internal val instance get() = context!!
     }
 
     fun onCreate(context: Context) {

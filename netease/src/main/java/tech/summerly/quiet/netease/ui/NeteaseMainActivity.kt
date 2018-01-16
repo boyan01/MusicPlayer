@@ -33,6 +33,7 @@ import tech.summerly.quiet.netease.persistence.NeteasePreference
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeader
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeaderViewBinder
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistItemViewBinder
+import tech.summerly.quiet.netease.utils.logout
 
 /**
  * Created by summer on 17-12-30
@@ -107,7 +108,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
             val menu = popupMenu(it, R.menu.netease_menu_main) {
                 when (it.itemId) {
                     R.id.netease_menu_main_logout -> {
-                        NeteasePreference.saveLoginUser(null)
+                        logout()
                         loadData()
                     }
                     R.id.netease_menu_main_setting -> {

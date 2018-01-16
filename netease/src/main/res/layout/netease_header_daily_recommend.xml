@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    android:background="@color/netease_color_primary_dark">
+    android:background="@color/netease_color_primary">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="@drawable/netease_gradient_fm_mask"
+        android:foreground="@drawable/netease_gradient_daily_recommend_header"
         android:scaleType="centerCrop" />
 
     <android.support.v7.widget.AppCompatTextView
