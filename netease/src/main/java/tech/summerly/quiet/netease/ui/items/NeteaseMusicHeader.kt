@@ -2,7 +2,7 @@ package tech.summerly.quiet.netease.ui.items
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.netease_item_playlist.view.*
+import kotlinx.android.synthetic.main.netease_header_music.view.*
 import tech.summerly.quiet.commonlib.utils.ItemViewBinder
 import tech.summerly.quiet.netease.R
 
@@ -20,7 +20,7 @@ internal class NeteaseMusicHeaderViewBinder : ItemViewBinder<NeteaseMusicHeader>
         setOnClickListener {
 
         }
-        imageAction.setOnClickListener {
+        imageMultiSelect.setOnClickListener {
 
         }
     }

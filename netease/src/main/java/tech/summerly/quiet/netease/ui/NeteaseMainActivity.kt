@@ -23,8 +23,8 @@ import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.mvp.BaseView
 import tech.summerly.quiet.commonlib.utils.GlideApp
-import tech.summerly.quiet.commonlib.utils.PopupMenu
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
+import tech.summerly.quiet.commonlib.utils.popupMenu
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 import tech.summerly.quiet.netease.api.result.LoginResultBean
@@ -104,7 +104,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
             }
         }
         moreAction.setOnClickListener {
-            val menu = PopupMenu(it, R.menu.netease_menu_main) {
+            val menu = popupMenu(it, R.menu.netease_menu_main) {
                 when (it.itemId) {
                     R.id.netease_menu_main_logout -> {
                         NeteasePreference.saveLoginUser(null)
@@ -264,7 +264,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
                 startActivity<NeteaseFmActivity>()
             }
             getString(R.string.netease_nav_title_daily) -> {
-
+                startActivity<NeteaseDailyRecommendActivity>()
             }
             getString(R.string.netease_nav_title_latest) -> {
 
