@@ -1,9 +1,24 @@
 package tech.summerly.quiet.commonlib.utils
 
-import android.content.Context
+import android.support.annotation.ColorInt
 import android.support.annotation.ColorRes
+import android.support.annotation.DrawableRes
+import android.support.annotation.StringRes
+import android.support.v4.content.ContextCompat
+import tech.summerly.quiet.commonlib.LibModule
 
 /**
- * Created by summer on 17-12-21
+ * 对获取 Android Resource 的一层简单的封装，方便调用
  */
-fun Context.color(@ColorRes id: Int) = resources.getColor(id)
+
+fun string(@StringRes stringId: Int) = LibModule.instance.getString(stringId)!!
+
+fun string(@StringRes stringId: Int, vararg formatArgs: Any) = string(stringId).format(*formatArgs)
+
+fun color(@ColorRes colorId: Int) = ContextCompat.getColor(LibModule.instance, colorId)
+
+fun drawable(@DrawableRes id: Int, @ColorInt tint: Int = 0) = LibModule.instance.getDrawable(id)!!.also {
+    if (tint != 0) {
+        it.setTint(tint)
+    }
+}
