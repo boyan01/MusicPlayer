@@ -40,11 +40,11 @@ open class NeteaseMusicItemViewBinder : ItemViewBinder<Music>() {
 
     private fun View.checkPlayable(canPlay: Boolean) {
         if (!canPlay) {
-            textTitle.setTextColor(context.color(R.color.common_textDisable))
-            textSubTitle.setTextColor(context.color(R.color.common_textDisable))
+            textTitle.setTextColor(color(R.color.common_textDisable))
+            textSubTitle.setTextColor(color(R.color.common_textDisable))
         } else {
-            textTitle.setTextColor(context.color(R.color.common_text_primary))
-            textSubTitle.setTextColor(context.color(R.color.common_text_secondary))
+            textTitle.setTextColor(color(R.color.common_text_primary))
+            textSubTitle.setTextColor(color(R.color.common_text_secondary))
         }
     }
 

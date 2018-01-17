@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.local_item_music.view.*
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.musicPlayer
-import tech.summerly.quiet.commonlib.player.simpleMusicPlayer
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.fragments.dialog.LocalPlaylistSelectorFragment
@@ -17,6 +16,7 @@ import tech.summerly.quiet.local.utils.showMusicDeleteDialog
  * recycler view item binder for local music
  */
 internal class LocalMusicItemViewBinder : ItemViewBinder<Music>() {
+
 
     //to check current music is playing , if true ,will set a playing indicator for this music
     private fun checkMusicIsPlaying(music: Music): Boolean {
@@ -34,13 +34,13 @@ internal class LocalMusicItemViewBinder : ItemViewBinder<Music>() {
             now_playing_indicator.invisible()
         }
         setOnClickListener {
-            simpleMusicPlayer.play(item)
+            musicPlayer.play(item)
         }
         popup_menu.setOnClickListener {
             popupMenu(it, R.menu.local_popup_music_item) {
                 when (it.itemId) {
                     R.id.local_popup_music_add_to_next -> {
-                        simpleMusicPlayer.insertToNext(item)
+                        musicPlayer.insertToNext(item)
                     }
                     R.id.local_popup_music_add_to_playlist -> {
                         LocalPlaylistSelectorFragment(arrayOf(item))

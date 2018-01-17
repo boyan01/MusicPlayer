@@ -8,13 +8,6 @@ import android.support.v7.widget.PopupMenu
 import android.view.MenuItem
 import android.view.View
 
-@Deprecated("", ReplaceWith("popupMenu(anchor, menuRes, context, itemClickListener)"))
-fun PopupMenu(anchor: View,
-              @MenuRes menuRes: Int,
-              context: Context = anchor.context,
-              itemClickListener: Context.(MenuItem) -> Boolean): PopupMenu {
-    return popupMenu(anchor, menuRes, context, itemClickListener)
-}
 
 fun popupMenu(anchor: View,
               @MenuRes menuRes: Int,

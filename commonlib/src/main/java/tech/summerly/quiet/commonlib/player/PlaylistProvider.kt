@@ -21,48 +21,46 @@ abstract class MusicPlaylistProviderFactory {
 
     }
 
-    abstract fun createMusicPlaylistProvider(): MusicPlaylistProvider
+    abstract fun createMusicPlaylistProvider(current: Music?,
+                                             playMode: PlayMode,
+                                             musicList: ArrayList<Music>): MusicPlaylistProvider
 
 }
 
-interface MusicPlaylistProvider {
+abstract class MusicPlaylistProvider(
+        protected var current: Music?,
+        protected open var playMode: PlayMode,
+        protected open val musicList: ArrayList<Music>
+) {
 
-    val current: Music?
+    abstract fun setPlaylist(musics: List<Music>)
 
-    var playMode: PlayMode
+    abstract fun getPlaylist(): List<Music>
 
-    fun setPlaylist(musics: List<Music>)
+    abstract suspend fun getNextMusic(music: Music? = current): Music?
 
-    fun getPlaylist(): List<Music>
+    abstract suspend fun getPreviousMusic(music: Music? = current): Music?
 
-    suspend fun getNextMusic(music: Music? = current): Music?
+    abstract fun clear()
 
-    suspend fun getPreviousMusic(music: Music? = current): Music?
+    abstract fun isTypeAccept(type: MusicType): Boolean
 
-    fun clear()
-
-    fun isTypeAccept(type: MusicType): Boolean
-
-    fun insertToNext(music: Music)
+    abstract fun insertToNext(music: Music)
 }
 
-class SimplePlaylistProvider : MusicPlaylistProvider {
-
-    override var playMode: PlayMode = PlayMode.Sequence
-
-    override var current: Music? = null
-
-    private val musicList = ArrayList<Music>()
+class SimplePlaylistProvider(current: Music?,
+                             playMode: PlayMode,
+                             musicList: ArrayList<Music>
+) : MusicPlaylistProvider(current, playMode, musicList) {
 
     private val shuffleMusicList = ArrayList<Music>()
 
     override fun setPlaylist(musics: List<Music>) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        musicList.clear()
+        musicList.addAll(musics)
     }
 
-    override fun getPlaylist(): List<Music> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun getPlaylist(): List<Music> = musicList
 
     suspend override fun getNextMusic(music: Music?): Music? {
         if (musicList.isEmpty()) {
@@ -179,11 +177,12 @@ class SimplePlaylistProvider : MusicPlaylistProvider {
     }
 
     override fun clear() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        musicList.clear()
+        current = null
     }
 
     override fun isTypeAccept(type: MusicType): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return type == MusicType.LOCAL || type == MusicType.NETEASE
     }
 
 }

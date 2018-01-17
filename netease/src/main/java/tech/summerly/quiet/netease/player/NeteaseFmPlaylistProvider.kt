@@ -10,7 +10,11 @@ import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.netease.NeteaseModule
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 
-class NeteaseFmPlaylistProvider : MusicPlaylistProvider {
+class NeteaseFmPlaylistProvider(
+        current: Music?,
+        musicList: ArrayList<Music>
+) : MusicPlaylistProvider(current, PlayMode.Sequence, musicList) {
+
     override var playMode: PlayMode = PlayMode.Sequence
         set(value) {
             field = PlayMode.Sequence
@@ -22,12 +26,8 @@ class NeteaseFmPlaylistProvider : MusicPlaylistProvider {
 
     private val neteaseApi = NeteaseCloudMusicApi(NeteaseModule.instance)
 
-    override var current: Music? = null
-
-    private val musicList = ArrayList<Music>()
-
     override fun setPlaylist(musics: List<Music>) {
-
+        //do nothing , because do not need it
     }
 
     override fun getPlaylist(): List<Music> = musicList

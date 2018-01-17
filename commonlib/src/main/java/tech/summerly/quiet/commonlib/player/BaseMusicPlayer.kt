@@ -7,7 +7,6 @@ import kotlinx.coroutines.experimental.launch
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
-import tech.summerly.quiet.commonlib.player.MusicPlayerManager.playingMusic
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
 import tech.summerly.quiet.commonlib.player.core.OnPlayerStateChangeListener
 import tech.summerly.quiet.commonlib.player.core.PlayerState
@@ -53,10 +52,13 @@ class BaseMusicPlayer(
      * everything get ready , just to start play music
      */
     private fun performPlay(music: Music) {
-        log { music.toShortString() }
-        current = music
+        //check type
+        if (!playlistProvider.isTypeAccept(music.type)) {
+            internalPlaylistProvider = MusicPlaylistProviderFactory[music.type]
+        }
         if (corePlayer.playing != music) {
             onPlayingMusicChange(corePlayer.playing, music)
+            playlistProvider.current = music
         }
         corePlayer.play(music)
     }
@@ -91,23 +93,7 @@ class BaseMusicPlayer(
      */
     fun play(music: Music) {
         log { music.toShortString() }
-        if (corePlayer.isPlaying && corePlayer.playing == music) {
-            return
-        }
         performPlay(music)
-    }
-
-    fun setPlaylist(musics: List<Music>) {
-        if (musics.isEmpty()) {
-
-        }
-    }
-
-    fun clearPlaylist() {
-        internalPlaylistProvider.clear()
-        onPlayingMusicChange(corePlayer.playing, null)
-        corePlayer.release()
-        destroy()
     }
 
     internal fun destroy() {
@@ -116,6 +102,10 @@ class BaseMusicPlayer(
             //            keeper.savePlayMode(playMode.value, editor = this)
             keeper.savePlaylist(internalPlaylistProvider.getPlaylist(), playing = corePlayer.playing, editor = this)
         }
+    }
+
+    fun insertToNext(music: Music) {
+        TODO()
     }
 
     private inner class PlayerStateKeeper(context: Context) {

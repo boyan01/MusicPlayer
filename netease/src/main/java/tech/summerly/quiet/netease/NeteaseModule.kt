@@ -2,10 +2,12 @@ package tech.summerly.quiet.netease
 
 import android.annotation.SuppressLint
 import android.content.Context
+import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.MusicPlaylistProvider
 import tech.summerly.quiet.commonlib.player.MusicPlaylistProviderFactory
 import tech.summerly.quiet.commonlib.player.MusicUrlManager
+import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.netease.player.NeteaseFmPlaylistProvider
 import tech.summerly.quiet.netease.utils.NeteaseMusicUrlGetter
 
@@ -27,8 +29,8 @@ class NeteaseModule {
         MusicUrlManager.addMusicUrlGetter(MusicType.NETEASE, NeteaseMusicUrlGetter)
         MusicUrlManager.addMusicUrlGetter(MusicType.NETEASE_FM, NeteaseMusicUrlGetter)
         MusicPlaylistProviderFactory.setFactory(MusicType.NETEASE_FM, object : MusicPlaylistProviderFactory() {
-            override fun createMusicPlaylistProvider(): MusicPlaylistProvider {
-                return NeteaseFmPlaylistProvider()
+            override fun createMusicPlaylistProvider(current: Music?, playMode: PlayMode, musicList: ArrayList<Music>): MusicPlaylistProvider {
+                return NeteaseFmPlaylistProvider(current, musicList)
             }
         })
     }

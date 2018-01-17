@@ -54,10 +54,10 @@ class MusicPlayerService : Service(), LifecycleOwner {
 
 
     private val playerManager: MusicPlayerManager
-        get() = MusicPlayerManager.INSTANCE
+        get() = MusicPlayerManager
 
     private val musicPlayer: BaseMusicPlayer
-        get() = MusicPlayerManager.INSTANCE.getMusicPlayer()
+        get() = MusicPlayerManager.musicPlayer()
 
     private val currentPlaying: Music?
         get() = musicPlayer.corePlayer.playing

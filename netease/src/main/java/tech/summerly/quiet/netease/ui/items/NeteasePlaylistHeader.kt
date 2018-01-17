@@ -4,10 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.netease_header_playlist.view.*
-import tech.summerly.quiet.commonlib.utils.ItemViewBinder
-import tech.summerly.quiet.commonlib.utils.PopupMenu
-import tech.summerly.quiet.commonlib.utils.invisible
-import tech.summerly.quiet.commonlib.utils.visible
+import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.R
 
 /**
@@ -40,7 +37,7 @@ internal class NeteasePlaylistHeaderViewBinder(
     }
 
     private fun createHeaderMenu(anchor: View) {
-        PopupMenu(anchor, R.menu.netease_popup_playlist_header) {
+        popupMenu(anchor, R.menu.netease_popup_playlist_header) {
             true
         }
     }

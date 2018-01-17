@@ -23,7 +23,7 @@ import tech.summerly.quiet.commonlib.utils.*
 open class BottomControllerFragment : BaseFragment() {
 
     private val playerManager: MusicPlayerManager
-        get() = MusicPlayerManager.INSTANCE
+        get() = MusicPlayerManager
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
