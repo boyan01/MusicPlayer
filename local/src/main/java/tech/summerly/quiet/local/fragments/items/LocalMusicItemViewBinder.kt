@@ -20,7 +20,7 @@ internal class LocalMusicItemViewBinder : ItemViewBinder<Music>() {
 
     //to check current music is playing , if true ,will set a playing indicator for this music
     private fun checkMusicIsPlaying(music: Music): Boolean {
-        return musicPlayer.getPlayingMusic().value == music
+        return musicPlayer.current == music
     }
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
@@ -37,7 +37,7 @@ internal class LocalMusicItemViewBinder : ItemViewBinder<Music>() {
             simpleMusicPlayer.play(item)
         }
         popup_menu.setOnClickListener {
-            PopupMenu(it, R.menu.local_popup_music_item) {
+            popupMenu(it, R.menu.local_popup_music_item) {
                 when (it.itemId) {
                     R.id.local_popup_music_add_to_next -> {
                         simpleMusicPlayer.insertToNext(item)

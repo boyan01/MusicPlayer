@@ -5,7 +5,10 @@ import android.app.Application
 import android.content.Context
 import com.alibaba.android.arouter.launcher.ARouter
 import com.facebook.stetho.Stetho
-import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.player.MusicPlaylistProvider
+import tech.summerly.quiet.commonlib.player.MusicPlaylistProviderFactory
+import tech.summerly.quiet.commonlib.player.SimplePlaylistProvider
 
 /**
  * Created by summer on 17-12-17.
@@ -23,12 +26,18 @@ class LibModule {
 
     fun onCreate(context: Context) {
         LibModule.context = context
-        MusicPlayerManager.init(context)
         Stetho.initializeWithDefaults(context)
         if (BuildConfig.DEBUG) {
             ARouter.openDebug()
             ARouter.openLog()
         }
         ARouter.init(context.applicationContext as Application?)
+        val simplePlaylistFactory = object : MusicPlaylistProviderFactory() {
+            override fun createMusicPlaylistProvider(): MusicPlaylistProvider {
+                return SimplePlaylistProvider()
+            }
+        }
+        MusicPlaylistProviderFactory.setFactory(MusicType.LOCAL, simplePlaylistFactory)
+        MusicPlaylistProviderFactory.setFactory(MusicType.NETEASE, simplePlaylistFactory)
     }
 }

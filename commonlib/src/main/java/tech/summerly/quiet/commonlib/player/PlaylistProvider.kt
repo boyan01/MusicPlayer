@@ -1,20 +1,70 @@
 package tech.summerly.quiet.commonlib.player
 
-import android.content.Context
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.utils.log
 
-/**
- * Created by summer on 17-12-22
- */
-class SimpleMusicPlayer(context: Context) : BaseMusicPlayer(context) {
 
-    override val musicList = ArrayList<Music>()
+abstract class MusicPlaylistProviderFactory {
+    companion object {
+        private val factories = HashMap<MusicType, MusicPlaylistProviderFactory>()
+
+        fun setFactory(type: MusicType, factory: MusicPlaylistProviderFactory) {
+            factories.put(type, factory)
+        }
+
+        operator fun get(type: MusicType): MusicPlaylistProvider {
+            return factories[type]?.createMusicPlaylistProvider()
+                    ?: throw IllegalStateException("haven't set factory for type:[$type] yet!")
+        }
+
+    }
+
+    abstract fun createMusicPlaylistProvider(): MusicPlaylistProvider
+
+}
+
+interface MusicPlaylistProvider {
+
+    val current: Music?
+
+    var playMode: PlayMode
+
+    fun setPlaylist(musics: List<Music>)
+
+    fun getPlaylist(): List<Music>
+
+    suspend fun getNextMusic(music: Music? = current): Music?
+
+    suspend fun getPreviousMusic(music: Music? = current): Music?
+
+    fun clear()
+
+    fun isTypeAccept(type: MusicType): Boolean
+
+    fun insertToNext(music: Music)
+}
+
+class SimplePlaylistProvider : MusicPlaylistProvider {
+
+    override var playMode: PlayMode = PlayMode.Sequence
+
+    override var current: Music? = null
+
+    private val musicList = ArrayList<Music>()
 
     private val shuffleMusicList = ArrayList<Music>()
 
-    override suspend fun getNextMusic(current: Music?): Music? {
+    override fun setPlaylist(musics: List<Music>) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun getPlaylist(): List<Music> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    suspend override fun getNextMusic(music: Music?): Music? {
         if (musicList.isEmpty()) {
             log { "empty playlist!" }
             return null
@@ -22,13 +72,13 @@ class SimpleMusicPlayer(context: Context) : BaseMusicPlayer(context) {
         if (current == null) {
             return musicList[0]
         }
-        return when (playMode.value) {
+        return when (playMode) {
             PlayMode.Single -> {
                 current
             }
             PlayMode.Sequence -> {
                 //if can not find ,index will be zero , it will right too
-                val index = musicList.indexOf(current) + 1
+                val index = current?.let { musicList.indexOf(it) + 1 } ?: 1
                 if (index == musicList.size) {
                     musicList[0]
                 } else {
@@ -37,8 +87,7 @@ class SimpleMusicPlayer(context: Context) : BaseMusicPlayer(context) {
             }
             PlayMode.Shuffle -> {
                 ensureShuffleListGenerate()
-                //if can not find ,index will be zero , it will right too
-                val index = shuffleMusicList.indexOf(current)
+                val index = current?.let { shuffleMusicList.indexOf(it) } ?: -1
                 when (index) {
                     -1 -> musicList[0]
                     musicList.size - 1 -> {
@@ -73,8 +122,7 @@ class SimpleMusicPlayer(context: Context) : BaseMusicPlayer(context) {
         shuffleMusicList.addAll(list)
     }
 
-    override suspend fun getPreviousMusic(current: Music?): Music? {
-
+    suspend override fun getPreviousMusic(music: Music?): Music? {
         if (musicList.isEmpty()) {
             log { "try too play next with empty playlist!" }
             return null
@@ -82,12 +130,12 @@ class SimpleMusicPlayer(context: Context) : BaseMusicPlayer(context) {
         if (current == null) {
             return musicList[0]
         }
-        return when (playMode.value) {
+        return when (playMode) {
             PlayMode.Single -> {
                 current
             }
             PlayMode.Sequence -> {
-                val index = musicList.indexOf(current)
+                val index = current?.let { musicList.indexOf(it) } ?: -1
                 when (index) {
                     -1 -> musicList[0]
                     0 -> musicList[musicList.size - 1]
@@ -96,7 +144,7 @@ class SimpleMusicPlayer(context: Context) : BaseMusicPlayer(context) {
             }
             PlayMode.Shuffle -> {
                 ensureShuffleListGenerate()
-                val index = shuffleMusicList.indexOf(current)
+                val index = current?.let { shuffleMusicList.indexOf(it) } ?: -1
                 when (index) {
                     -1 -> musicList[0]
                     0 -> {
@@ -109,24 +157,33 @@ class SimpleMusicPlayer(context: Context) : BaseMusicPlayer(context) {
         }
     }
 
-    fun insertToNext(music: Music) {
+    override fun insertToNext(music: Music) {
         if (musicList.isEmpty()) {
             musicList.add(music)
             return
         }
         //check if music is playing
-        if (playingMusic.value == music) {
+        if (MusicPlayerManager.playingMusic.value == music) {
             return
         }
         //remove if musicList contain this item
         musicList.remove(music)
 
-        val index = musicList.indexOf(playingMusic.value) + 1
+        val index = musicList.indexOf(MusicPlayerManager.playingMusic.value) + 1
         musicList.add(index, music)
 
-        if (playMode.value == PlayMode.Shuffle) {
-            val indexShuffle = shuffleMusicList.indexOf(playingMusic.value) + 1
+        if (playMode == PlayMode.Shuffle) {
+            val indexShuffle = shuffleMusicList.indexOf(MusicPlayerManager.playingMusic.value) + 1
             shuffleMusicList.add(indexShuffle, music)
         }
     }
+
+    override fun clear() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun isTypeAccept(type: MusicType): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }

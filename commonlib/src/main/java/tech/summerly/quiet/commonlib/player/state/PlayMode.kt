@@ -18,10 +18,14 @@ enum class PlayMode {
             }
         }
 
+
+        @Deprecated("", ReplaceWith("PlayMode(name)", "tech.summerly.quiet.commonlib.player.state.PlayMode.Companion.invoke"))
+        fun fromName(name: String) = invoke(name)
+
         /**
          * safely convert enum name to instance
          */
-        fun fromName(name: String) = when (name) {
+        operator fun invoke(name: String) = when (name) {
             Shuffle.name -> Shuffle
             Single.name -> Single
             Sequence.name -> Sequence

@@ -1,66 +1,81 @@
 package tech.summerly.quiet.commonlib.player
 
-import android.annotation.SuppressLint
-import android.content.Context
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
-import tech.summerly.quiet.commonlib.player.state.PlayerState
+import tech.summerly.quiet.commonlib.LibModule
+import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.player.core.PlayerState
+import tech.summerly.quiet.commonlib.player.service.MusicPlayerService
+import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.log
 
 /**
  * Created by summer on 17-12-17
  *
  */
-class MusicPlayerManager(context: Context) {
+object MusicPlayerManager {
 
-    companion object {
 
-        @Suppress("ObjectPropertyName")
-        @SuppressLint("StaticFieldLeak")
-        private var _instance: MusicPlayerManager? = null
+    val playerState: LiveData<PlayerState> get() = internalPlayerState
 
-        val INSTANCE: MusicPlayerManager
-            get() = _instance!!
+    private val internalPlayerState = WithDefaultLiveData<PlayerState>(PlayerState.Idle)
 
-        fun init(context: Context) {
-            _instance = MusicPlayerManager(context)
-        }
+
+    private val onPlayerStateChange = { state: PlayerState ->
+        internalPlayerState.postValue(state)
     }
 
-    private val baseContext = context.applicationContext
+    private val onPositionChange = { position: Long ->
+        internalPosition.postValue(position)
+    }
+
+    private val onMusicChange = { _: Music?, new: Music? ->
+        internalPlayingMusic.postValue(new)
+    }
+
+    private val onError = { throwable: Throwable ->
+
+    }
+
+
+    private val baseContext get() = LibModule.instance
 
     private var musicPlayer: BaseMusicPlayer? = null
 
-    private var isBindToService = true
+    fun musicPlayer(type: MusicType = MusicType.LOCAL): BaseMusicPlayer {
+        val musicPlayer = musicPlayer ?: synchronized(MusicPlayerManager) {
+            musicPlayer ?: newMusicPlayer().also { musicPlayer = it }
 
-    fun getMusicPlayer(): BaseMusicPlayer {
-        return musicPlayer ?: getOrCreateSimplePlayer()
+        }
+        musicPlayer.setType(type)
+        return musicPlayer
     }
 
-    fun setMusicPlayer(player: BaseMusicPlayer) {
-        if (musicPlayer?.javaClass == player.javaClass) {
-            return
-        }
-        musicPlayer = player
-        if (player.playerState.value == PlayerState.Playing && !isBindToService) {
-            bindPlayerToService()
-        }
+    /**
+     * create a new [BaseMusicPlayer] when [musicPlayer] is not available
+     */
+    private fun newMusicPlayer(): BaseMusicPlayer {
+        val player = BaseMusicPlayer(
+                onMusicChange, onPlayerStateChange, onPositionChange, onError
+        )
+        bindPlayerToService()
+        return player
     }
 
     private fun bindPlayerToService() {
         log { "attempt to bind to play service" }
         baseContext.startService(Intent(baseContext, MusicPlayerService::class.java))
-        isBindToService = true
     }
 
-    fun getOrCreateSimplePlayer(): SimpleMusicPlayer {
-        return musicPlayer as? SimpleMusicPlayer
-                ?: SimpleMusicPlayer(baseContext).also { setMusicPlayer(it) }
-    }
+    val playingMusic: LiveData<Music> get() = internalPlayingMusic
+    private val internalPlayingMusic = MutableLiveData<Music>()
+    val position: LiveData<Long> get() = internalPosition
+    private val internalPosition = MutableLiveData<Long>()
 
 }
 
 val musicPlayer: BaseMusicPlayer
-    get() = MusicPlayerManager.INSTANCE.getMusicPlayer()
+    get() = MusicPlayerManager.musicPlayer()
 
-val simpleMusicPlayer: SimpleMusicPlayer
-    get() = MusicPlayerManager.INSTANCE.getOrCreateSimplePlayer()

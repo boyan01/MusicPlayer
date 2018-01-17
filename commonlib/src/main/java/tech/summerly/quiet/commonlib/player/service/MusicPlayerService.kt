@@ -1,4 +1,4 @@
-package tech.summerly.quiet.commonlib.player
+package tech.summerly.quiet.commonlib.player.service
 
 import android.app.Notification
 import android.app.PendingIntent
@@ -20,7 +20,8 @@ import com.bumptech.glide.request.transition.Transition
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.notification.NotificationHelper
-import tech.summerly.quiet.commonlib.player.state.PlayerState
+import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.*
 
 /**
@@ -52,24 +53,27 @@ class MusicPlayerService : Service(), LifecycleOwner {
     private lateinit var notificationHelper: PlayerNotificationHelper
 
 
+    private val playerManager: MusicPlayerManager
+        get() = MusicPlayerManager.INSTANCE
+
     private val musicPlayer: BaseMusicPlayer
         get() = MusicPlayerManager.INSTANCE.getMusicPlayer()
 
     private val currentPlaying: Music?
-        get() = musicPlayer.getPlayingMusic().value
+        get() = musicPlayer.corePlayer.playing
 
     private val isPlaying: Boolean
-        get() = musicPlayer.playerState.value == PlayerState.Playing
+        get() = musicPlayer.corePlayer.isPlaying
 
     override fun onCreate() {
         super.onCreate()
         log { "on created " }
         notificationHelper = PlayerNotificationHelper(this)
         lifecycleRegister.markState(Lifecycle.State.STARTED)
-        musicPlayer.playerState.observe(this) {
+        playerManager.playerState.observe(this) {
             notification()
         }
-        musicPlayer.getPlayingMusic().observe(this) {
+        playerManager.playingMusic.observe(this) {
             notification()
         }
     }
@@ -209,19 +213,19 @@ class MusicPlayerService : Service(), LifecycleOwner {
             val action: PendingIntent
             when (which) {
                 0 -> {
-                    intent.action = MusicPlayerService.action_play_previous
+                    intent.action = action_play_previous
                     action = PendingIntent.getService(context, 0, intent, 0)
                 }
                 1 -> {
-                    intent.action = MusicPlayerService.action_play_pause
+                    intent.action = action_play_pause
                     action = PendingIntent.getService(context, 1, intent, 0)
                 }
                 2 -> {
-                    intent.action = MusicPlayerService.action_play_next
+                    intent.action = action_play_next
                     action = PendingIntent.getService(context, 2, intent, 0)
                 }
                 3 -> {
-                    intent.action = MusicPlayerService.action_exit
+                    intent.action = action_exit
                     action = PendingIntent.getService(context, 3, intent, 0)
                 }
                 else -> error("")

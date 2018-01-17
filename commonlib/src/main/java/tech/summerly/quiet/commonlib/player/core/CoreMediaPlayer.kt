@@ -2,25 +2,23 @@ package tech.summerly.quiet.commonlib.player.core
 
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer.*
 import android.os.Build
 import android.view.animation.LinearInterpolator
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.CoroutineExceptionHandler
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.coroutines.experimental.asReference
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.MusicUrlManager
-import tech.summerly.quiet.commonlib.player.state.PlayerState
 import tech.summerly.quiet.commonlib.utils.headerNetease
 import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.commonlib.utils.observeForeverFilterNull
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
-import java.util.concurrent.TimeUnit
 import kotlin.coroutines.experimental.suspendCoroutine
+import kotlin.properties.Delegates
 
 /**
  * author : summerly
@@ -28,54 +26,46 @@ import kotlin.coroutines.experimental.suspendCoroutine
  * time   : 2017/7/26
  * desc   :
  */
+@Suppress("MemberVisibilityCanPrivate")
 class CoreMediaPlayer {
 
     companion object {
 
-        private val DURATION_UPDATE_PROGRESS = 200L
+        var volume by Delegates.observable(100F) { property, oldValue, newValue ->
 
-        var volume = MutableLiveData<Float>()
-    }
-
-
-    private var progressPublishJob: Job? = null
-
-    private val position = MutableLiveData<Long>()
-
-    private val playerState = MutableLiveData<PlayerState>()
-
-
-    fun getPlayerState(): LiveData<PlayerState> = playerState
-
-    private fun sendProgress() {
-        progressPublishJob?.cancel()
-        progressPublishJob = launch {
-            val musicPlaying = currentPlaying
-            while (mediaPlayer.isPlaying && musicPlaying == currentPlaying) {
-                delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
-                position.postValue(mediaPlayer.currentPosition)
-            }
         }
     }
 
-    fun getPosition() = position
-
-
-    private var mediaPlayer = IjkMediaPlayer()
-
-    var currentPlaying: Music? = null
+    var position: Long = 0L
         private set(value) {
             field = value
         }
 
-    internal val isPlaying get() = mediaPlayer.isPlaying
+    private val onMediaPlayerStateChangeListenerList = ArrayList<OnPlayerStateChangeListener>()
 
-    init {
-        //设置音量 fixme
-//        val volume = LibModule.instance.defaultSharedPreferences.get(string(R.string.pref_key_audio_volume), DEFAULT_VOLUME_MAX)
-//        this.volume = volume / DEFAULT_VOLUME_MAX.toFloat()
+    private var playerState by Delegates.observable(PlayerState.Idle) { property, oldValue, newValue ->
+        onMediaPlayerStateChangeListenerList.forEach {
+            it(newValue)
+        }
+    }
 
-        //为mediaPlayer设置监听
+    internal fun addOnMediaPlayerStateChangeListener(onPlayerStateChangeListener: OnPlayerStateChangeListener) {
+        onMediaPlayerStateChangeListenerList.add(onPlayerStateChangeListener)
+    }
+
+    fun getState() = playerState
+
+    private val mediaPlayer = createMediaPlayer()
+
+    var playing: Music? = null
+        private set(value) {
+            field = value
+        }
+
+    val isPlaying get() = mediaPlayer.isPlaying
+
+    private fun createMediaPlayer(): IjkMediaPlayer {
+        val mediaPlayer = IjkMediaPlayer()
         mediaPlayer.setOnErrorListener { _, _, extra ->
             val message = when (extra) {
                 MEDIA_ERROR_IO -> "无法获取数据"
@@ -88,22 +78,20 @@ class CoreMediaPlayer {
             true
         }
         mediaPlayer.setOnCompletionListener {
-            playerState.postValue(PlayerState.Pausing)
+            //on complete todo
         }
-
-        CoreMediaPlayer.volume.observeForeverFilterNull {
-            mediaPlayer.setVolume(it, it)
-        }
+        mediaPlayer.setVolume(CoreMediaPlayer.volume, CoreMediaPlayer.volume)
+        return mediaPlayer
     }
 
 
     fun play(music: Music) {
-        currentPlaying = music
+        playing = music
         mediaPlayer.reset()
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
         val ref = mediaPlayer.asReference()
         launch(CommonPool + playExceptionHandler) {
-            playerState.postValue(PlayerState.Loading)
+            playerState = PlayerState.Loading
             val url = MusicUrlManager.getPlayableUrl(music) ?: error("can not get url")
             log { "准备播放 : $url" }
             ref().setDataSource(url, headerNetease)
@@ -113,10 +101,9 @@ class CoreMediaPlayer {
     }
 
     private val playExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        playerState.postValue(PlayerState.Pausing)
+        playerState = PlayerState.Idle
         log { "player : error ${throwable.message}" }
     }
-
 
     private suspend fun IjkMediaPlayer.prepareAsyncAwait(): Unit = suspendCoroutine { cont ->
         setOnPreparedListener {
@@ -131,30 +118,26 @@ class CoreMediaPlayer {
      */
     fun start() {
         mediaPlayer.start()
-        playerState.postValue(PlayerState.Playing)
-        sendProgress()
     }
 
     fun stop() {
         mediaPlayer.stop()
-        playerState.postValue(PlayerState.Pausing)
     }
 
     fun pause() {
         mediaPlayer.pause()
-        playerState.postValue(PlayerState.Pausing)
     }
 
 
     fun seekTo(position: Long) {
-        log { "player: seek to $position" }
         mediaPlayer.seekTo(position)
     }
 
     fun release() {
         stop()
-        currentPlaying = null
+        playing = null
         mediaPlayer.release()
+        onMediaPlayerStateChangeListenerList.clear()
     }
 
     /**
@@ -169,7 +152,7 @@ class CoreMediaPlayer {
         animator.interpolator = LinearInterpolator()
         animator.addUpdateListener {
             val volume = it.animatedValue as Float
-            CoreMediaPlayer.volume.value = volume
+            mediaPlayer.setVolume(volume, volume)
         }
         animator.addListener(object : AnimatorListenerAdapter() {
             //TODO
@@ -198,4 +181,14 @@ class CoreMediaPlayer {
 
     }
 
+}
+
+typealias OnPlayerStateChangeListener = (PlayerState) -> Unit
+
+enum class PlayerState {
+    Idle,
+    Pausing,
+    Playing,
+    Loading,
+    Complete
 }

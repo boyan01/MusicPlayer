@@ -17,9 +17,9 @@ class AppContext : Application() {
     }
 
     private fun initModule(className: String) {
-        val neteaseModuleClass = Class.forName(className)
-        val instance = neteaseModuleClass.constructors[0].newInstance()
-        neteaseModuleClass.getMethod("onCreate", Context::class.java).invoke(instance, this)
+        val moduleClass = Class.forName(className)
+        val instance = moduleClass.constructors[0].newInstance()
+        moduleClass.getMethod("onCreate", Context::class.java).invoke(instance, this)
 
     }
 }

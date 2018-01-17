@@ -13,9 +13,8 @@ import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
-import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.player.state.PlayerState
+import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.utils.*
 
 /**
@@ -23,8 +22,8 @@ import tech.summerly.quiet.commonlib.utils.*
  */
 open class BottomControllerFragment : BaseFragment() {
 
-    private val musicPlayer: BaseMusicPlayer
-        get() = MusicPlayerManager.INSTANCE.getMusicPlayer()
+    private val playerManager: MusicPlayerManager
+        get() = MusicPlayerManager.INSTANCE
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,28 +34,28 @@ open class BottomControllerFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        musicPlayer.playerState.observeFilterNull(this) {
+        playerManager.playerState.observeFilterNull(this) {
             setControllerState(it)
         }
-        musicPlayer.getPlayingMusic().observe(this) {
+        playerManager.playingMusic.observe(this) {
             updateMusicInfo(it)
         }
     }
 
     private fun listenEvent(root: View) = with(root) {
         setOnClickListener { view ->
-            musicPlayer.getPlayingMusic().value?.let {
+            playerManager.playingMusic.value?.let {
                 onControllerClick(view, it)
             }
         }
         controllerPauseOrPlay.setOnClickListener {
-            musicPlayer.playPause()
+            playerManager.musicPlayer().playPause()
         }
         controllerSkipNext.setOnClickListener {
-            musicPlayer.playNext()
+            playerManager.musicPlayer().playNext()
         }
         controllerSkipPrevious.setOnClickListener {
-            musicPlayer.playPrevious()
+            playerManager.musicPlayer().playPrevious()
         }
         controllerPlaylist.setOnClickListener {
 
@@ -68,11 +67,11 @@ open class BottomControllerFragment : BaseFragment() {
         controllerPauseOrPlay.visible()
         when (state) {
             PlayerState.Playing -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
-            PlayerState.Pausing -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_play_circle_outline_black_24dp)
             PlayerState.Loading -> {
                 progressPlayPause.visible()
                 controllerPauseOrPlay.gone()
             }
+            else -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_play_circle_outline_black_24dp)
         }
     }
 

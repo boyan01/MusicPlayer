@@ -7,12 +7,12 @@ import kotlinx.android.synthetic.main.netease_activity_fm.*
 import org.jetbrains.anko.act
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.player.state.PlayerState
+import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.R
-import tech.summerly.quiet.netease.player.NeteaseFmMusicPlayer
 
 /**
  * activity of personal fm radio
@@ -21,9 +21,10 @@ import tech.summerly.quiet.netease.player.NeteaseFmMusicPlayer
 class NeteaseFmActivity : BaseActivity() {
 
     private val musicPlayer: BaseMusicPlayer
-        get() = MusicPlayerManager.INSTANCE.getMusicPlayer() as? NeteaseFmMusicPlayer
-                ?: NeteaseFmMusicPlayer(this)
-                .also { MusicPlayerManager.INSTANCE.setMusicPlayer(it) }
+        get() = MusicPlayerManager.musicPlayer(MusicType.NETEASE_FM)
+
+    private val playerManager: MusicPlayerManager
+        get() = MusicPlayerManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +32,7 @@ class NeteaseFmActivity : BaseActivity() {
         setContentView(R.layout.netease_activity_fm)
         initView()
         listenEvent()
-        musicPlayer.getPlayingMusic().observeFilterNull(this) {
+        playerManager.playingMusic.observeFilterNull(this) {
             UI.submit {
                 val height = (getScreenWidth() * 0.8f).toInt()
                 val picture = GlideApp.with(act).asBitmap().loadAndGet(it.getPictureUrl(), height, height)
@@ -47,16 +48,19 @@ class NeteaseFmActivity : BaseActivity() {
             seekBar.max = (it.duration).toInt()
             updateMenuItems(it)
         }
-        musicPlayer.playerState.observe(this) {
+        playerManager.playerState.observe(this) {
             when (it) {
                 PlayerState.Playing ->
                     buttonPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
                 PlayerState.Pausing ->
                     buttonPlay.setImageResource(R.drawable.common_ic_play_circle_outline_black_24dp)
                 PlayerState.Loading -> Unit
+                else -> {
+
+                }
             }
         }
-        musicPlayer.position.observeFilterNull(this) {
+        playerManager.position.observeFilterNull(this) {
             if (isSeekBarTracking) { //do not change seekBar progress when user is tracking touch
                 return@observeFilterNull
             }
@@ -68,9 +72,9 @@ class NeteaseFmActivity : BaseActivity() {
     }
 
     private fun playMusicIfNecessary() {
-        if (musicPlayer.playerState.value != PlayerState.Playing) {
+        if (musicPlayer.corePlayer.getState() != PlayerState.Playing) {
             //start player
-            val current = musicPlayer.getPlayingMusic().value
+            val current = musicPlayer.current
             if (current != null) {
                 musicPlayer.play(current)
             } else {
@@ -144,7 +148,7 @@ class NeteaseFmActivity : BaseActivity() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    musicPlayer.seekToPosition(progress.toLong())
+                    musicPlayer.corePlayer.seekTo(progress.toLong())
                 }
             }
 

@@ -1,133 +1,97 @@
 package tech.summerly.quiet.commonlib.player
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import kotlinx.coroutines.experimental.launch
+import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager.playingMusic
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
+import tech.summerly.quiet.commonlib.player.core.OnPlayerStateChangeListener
+import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.player.state.PlayMode
-import tech.summerly.quiet.commonlib.player.state.PlayerState
-import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.edit
 import tech.summerly.quiet.commonlib.utils.fromJson
 import tech.summerly.quiet.commonlib.utils.log
 
-@Suppress("MemberVisibilityCanPrivate")
-abstract class BaseMusicPlayer(context: Context) {
+typealias OnPlayingMusicChange = (old: Music?, new: Music?) -> Unit
+typealias OnPlayerStateChange = OnPlayerStateChangeListener
+typealias OnPositionChange = (position: Long) -> Unit
+typealias OnError = (Throwable) -> Unit
+
+class BaseMusicPlayer(
+        private val onPlayingMusicChange: OnPlayingMusicChange,
+        private val onPlayerStateChange: OnPlayerStateChange,
+        private val onPositionChange: OnPositionChange,
+        private val onError: OnError
+) {
 
     companion object {
-
         private val KEY_PLAY_LIST = "music_list"
         private val KEY_CURRENT_MUSIC = "music_current"
         private val KEY_PLAY_MODE = "play_mode"
-//        private val KEY_POSITION = "position"
     }
 
-    protected val baseContext: Context = context.applicationContext
+    private val baseContext get() = LibModule.instance
+
+    private var internalPlaylistProvider: MusicPlaylistProvider = MusicPlaylistProviderFactory[MusicType.LOCAL]
+
 
     /**
-     * this collection of play list
+     *
      */
-    protected abstract val musicList: Collection<Music>
+    var current: Music? = null
 
-    /**
-     * to control the player's play order
-     */
-    val playMode = WithDefaultLiveData(PlayMode.Sequence)
+    val corePlayer: CoreMediaPlayer = CoreMediaPlayer()
+            .also { it.addOnMediaPlayerStateChangeListener(onPlayerStateChange) }
 
-    //use to save the current [playMode] to preference
-    private val playModeObserve = Observer { playMode: PlayMode? ->
-        playerStateKeeper.savePlayMode(playMode)
-    }
-
-    init {
-        playMode.observeForever(playModeObserve)
-    }
-
-    /**
-     * get the position of current playing music has been play.
-     * unit: MS
-     */
-    val position: LiveData<Long>
-        get() = corePlayer.getPosition()
-
-    /**
-     * get the state of current playing music: playing? pause? or loading.
-     */
-    val playerState: LiveData<PlayerState>
-        get() = corePlayer.getPlayerState()
-
-    protected val playingMusic = MutableLiveData<Music>()
-
-    /**
-     * get player current playing music
-     */
-    fun getPlayingMusic(): LiveData<Music> = playingMusic
-
-    protected val corePlayer: CoreMediaPlayer = CoreMediaPlayer()
-
-    protected val playerStateKeeper: PlayerStateKeeper = PlayerStateKeeper(baseContext)
+    val playlistProvider get() = internalPlaylistProvider
 
     /**
      * everything get ready , just to start play music
      */
-    protected fun performPlay(music: Music) {
+    private fun performPlay(music: Music) {
         log { music.toShortString() }
-        if (playingMusic.value != music) {
-            playingMusic.postValue(music)
+        current = music
+        if (corePlayer.playing != music) {
+            onPlayingMusicChange(corePlayer.playing, music)
         }
         corePlayer.play(music)
-        playerStateKeeper.saveCurrent(music)
     }
 
     fun playNext() = launch {
-        val next = getNext() ?: return@launch
+        val next = playlistProvider.getNextMusic(current) ?: return@launch
         performPlay(next)
     }
 
     fun playPrevious() = launch {
-        val previous = getPrevious() ?: return@launch
+        val previous = playlistProvider.getPreviousMusic(current) ?: return@launch
         performPlay(previous)
     }
 
-    suspend fun getNext() = getNextMusic(playingMusic.value)
-
-    suspend fun getPrevious() = getPreviousMusic(playingMusic.value)
-
-    protected abstract suspend fun getNextMusic(current: Music?): Music?
-
-    protected abstract suspend fun getPreviousMusic(current: Music?): Music?
-
-
     fun playPause() = launch {
-        when (corePlayer.getPlayerState().value) {
+        when (corePlayer.getState()) {
             PlayerState.Pausing -> corePlayer.start()
             PlayerState.Playing -> corePlayer.pause()
             PlayerState.Loading -> Unit
             else -> {
-                val shouldBePlay = playingMusic.value
-                        ?: getNext()
+                val shouldBePlay = corePlayer.playing ?: playlistProvider.getNextMusic(current)
                 shouldBePlay?.let(this@BaseMusicPlayer::performPlay)
                 Unit
             }
         }
     }
 
-    fun stop() {
-        corePlayer.stop()
-    }
-
+    /**
+     * try to play [music]
+     * if this music is playing , do nothing
+     * else will force to play this music from start , even it is pausing
+     */
     fun play(music: Music) {
         log { music.toShortString() }
-        if (playerState.value == PlayerState.Pausing && playingMusic.value == music) {
-            corePlayer.start()
-            return
-        }
-        if (corePlayer.isPlaying && corePlayer.currentPlaying == music) {
+        if (corePlayer.isPlaying && corePlayer.playing == music) {
             return
         }
         performPlay(music)
@@ -135,33 +99,29 @@ abstract class BaseMusicPlayer(context: Context) {
 
     fun setPlaylist(musics: List<Music>) {
         if (musics.isEmpty()) {
-            playingMusic.value = null
+
         }
-        playerStateKeeper.savePlaylist(musics)
     }
 
-    fun seekToPosition(position: Long) {
-        corePlayer.seekTo(position)
+    fun clearPlaylist() {
+        internalPlaylistProvider.clear()
+        onPlayingMusicChange(corePlayer.playing, null)
+        corePlayer.release()
+        destroy()
     }
 
-    fun destroy() {
+    internal fun destroy() {
         val keeper = PlayerStateKeeper(baseContext)
         keeper.preference.edit {
-            keeper.savePlayMode(playMode.value, editor = this)
-            keeper.savePlaylist(musicList, playing = playingMusic.value, editor = this)
+            //            keeper.savePlayMode(playMode.value, editor = this)
+            keeper.savePlaylist(internalPlaylistProvider.getPlaylist(), playing = corePlayer.playing, editor = this)
         }
-        playMode.removeObserver(playModeObserve)
     }
 
-    init {
-        PlayerStateKeeper(baseContext).restore()
-    }
+    private inner class PlayerStateKeeper(context: Context) {
 
 
-    protected inner class PlayerStateKeeper(context: Context) {
-
-
-        val preference: SharedPreferences = context.getSharedPreferences("music_player_info", Context.MODE_PRIVATE)
+        val preference: SharedPreferences = context.getSharedPreferences("common_music_player_info", Context.MODE_PRIVATE)
 
         private val gson = Gson()
 
@@ -192,20 +152,16 @@ abstract class BaseMusicPlayer(context: Context) {
             editor.apply()
         }
 
+        fun getPlayMode() = PlayMode(preference.getString(KEY_PLAY_MODE, PlayMode.Sequence.name))
 
-        fun restore() {
-            playMode.postValue(PlayMode.fromName(preference.getString(KEY_PLAY_MODE, PlayMode.Sequence.name)))
-            val saved = gson.fromJson<Music>(preference.getString(KEY_CURRENT_MUSIC, ""))
-            if (corePlayer.getPlayerState().value == PlayerState.Playing) {
-                if (playingMusic.value != saved) {
-                    corePlayer.stop()
-                }
-            }
-            val list = gson.fromJson<List<Music>>(preference.getString(KEY_PLAY_LIST, "")) ?: emptyList()
-            setPlaylist(list)
-            playingMusic.value = saved
-        }
+        fun getCurrentMusic() = gson.fromJson<Music>(preference.getString(KEY_CURRENT_MUSIC, ""))
 
+        fun getPlaylist() = gson.fromJson<List<Music>>(preference.getString(KEY_PLAY_LIST, "")) ?: emptyList()
     }
 
+    fun setType(type: MusicType) {
+        if (!internalPlaylistProvider.isTypeAccept(type)) {
+            internalPlaylistProvider = MusicPlaylistProviderFactory[type]
+        }
+    }
 }
