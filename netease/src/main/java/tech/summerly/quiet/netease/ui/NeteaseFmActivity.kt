@@ -1,9 +1,11 @@
 package tech.summerly.quiet.netease.ui
 
 import android.os.Bundle
+import android.transition.TransitionManager
 import android.widget.SeekBar
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.netease_activity_fm.*
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.act
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
@@ -13,6 +15,7 @@ import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.R
+import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 
 /**
  * activity of personal fm radio
@@ -46,6 +49,7 @@ class NeteaseFmActivity : BaseActivity() {
             textMusicName.text = it.title
             textDuration.text = it.duration.toMusicTimeStamp()
             seekBar.max = (it.duration).toInt()
+            showLyric(it)
             updateMenuItems(it)
         }
         playerManager.playerState.observe(this) {
@@ -61,6 +65,7 @@ class NeteaseFmActivity : BaseActivity() {
             }
         }
         playerManager.position.observeFilterNull(this) {
+            lyricView.scrollLyricTo(it.toInt())
             if (isSeekBarTracking) { //do not change seekBar progress when user is tracking touch
                 return@observeFilterNull
             }
@@ -69,6 +74,10 @@ class NeteaseFmActivity : BaseActivity() {
             seekBar.progress = progress
         }
         playMusicIfNecessary()
+    }
+
+    private fun showLyric(music: Music) = launch(UI) {
+        lyricView.setLyricText(NeteaseCloudMusicApi().getLyric(music.id))
     }
 
     private fun playMusicIfNecessary() {
@@ -151,7 +160,7 @@ class NeteaseFmActivity : BaseActivity() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    musicPlayer.corePlayer.seekTo(progress.toLong())
+                    musicPlayer.seekTo(progress.toLong())
                 }
             }
 
@@ -164,6 +173,20 @@ class NeteaseFmActivity : BaseActivity() {
             }
 
         })
+        playerInfo.setOnClickListener {
+            TransitionManager.beginDelayedTransition(playerInfo)
+            if (lyricView.isVisible) {
+                lyricView.invisible()
+                imageArtwork.visible()
+                textMusicName.visible()
+                textArtist.visible()
+            } else {
+                lyricView.visible()
+                imageArtwork.invisible()
+                textMusicName.invisible()
+                textArtist.invisible()
+            }
+        }
     }
 
     private var isSeekBarTracking = false

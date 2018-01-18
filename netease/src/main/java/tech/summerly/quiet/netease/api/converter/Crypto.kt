@@ -2,7 +2,6 @@ package tech.summerly.quiet.netease.api.converter
 
 import android.util.Base64
 import com.google.gson.Gson
-import tech.summerly.quiet.commonlib.utils.log
 import java.math.BigInteger
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
@@ -37,7 +36,6 @@ internal object Crypto {
     }
 
     fun encrypt(json: String): Map<String, String> {
-        log { "加密请求 :$json" }
         val secKey = createSecretKey()
         //对参数请求进行以 [nonce] 加密后的结果再次使用 createSecretKry() 产生的随机数进行加密
         val encText = aesEncrypt(aesEncrypt(json, nonce), secKey)

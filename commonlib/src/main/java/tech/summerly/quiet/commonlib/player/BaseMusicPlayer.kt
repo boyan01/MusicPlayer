@@ -129,4 +129,9 @@ class BaseMusicPlayer(
             }
         }
     }
+
+    fun seekTo(position: Long) {
+        corePlayer.seekTo(position)
+        onPositionChange(position)
+    }
 }
