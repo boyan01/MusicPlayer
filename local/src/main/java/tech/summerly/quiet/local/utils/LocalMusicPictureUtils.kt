@@ -1,7 +1,7 @@
 package tech.summerly.quiet.local.utils
 
 import org.jetbrains.anko.attempt
-import tech.summerly.quiet.commonlib.LibModule
+import tech.summerly.quiet.local.LocalModule
 import java.io.File
 
 /**
@@ -14,7 +14,7 @@ object LocalMusicPictureUtils {
     private const val ARTWORK_FOLDER_NAME = "artwork"
 
     private val artworkCache: File by lazy {
-        File(LibModule.instance.externalCacheDir, ARTWORK_FOLDER_NAME).apply { mkdirs() }
+        File(LocalModule.externalCacheDir, ARTWORK_FOLDER_NAME).apply { mkdirs() }
     }
 
     /**

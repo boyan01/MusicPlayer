@@ -1,9 +1,9 @@
 package tech.summerly.quiet.netease.utils
 
-import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicUri
 import tech.summerly.quiet.commonlib.player.MusicUrlGetter
+import tech.summerly.quiet.netease.NeteaseModule
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 
 
@@ -21,7 +21,7 @@ internal object NeteaseMusicUrlGetter : MusicUrlGetter {
         if (uris.isNotEmpty()) {
             return uris[0].uri
         }
-        val datum = NeteaseCloudMusicApi(LibModule.instance).getMusicUrl(id) ?: error("can not get url")
+        val datum = NeteaseCloudMusicApi(NeteaseModule).getMusicUrl(id) ?: error("can not get url")
         val url = datum.url ?: error("can not get url")
         playUri.clear()
         playUri.add(MusicUri(datum.bitrate, url,

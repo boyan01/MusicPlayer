@@ -1,7 +1,7 @@
 package tech.summerly.quiet.netease
 
-import android.annotation.SuppressLint
 import android.content.Context
+import tech.summerly.quiet.commonlib.base.BaseModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.MusicPlaylistProvider
@@ -9,6 +9,7 @@ import tech.summerly.quiet.commonlib.player.MusicPlaylistProviderFactory
 import tech.summerly.quiet.commonlib.player.MusicUrlFetcher
 import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
+import tech.summerly.quiet.netease.NeteaseModule.onCreate
 import tech.summerly.quiet.netease.player.NeteaseFmPlaylistProvider
 import tech.summerly.quiet.netease.utils.NeteaseMusicUrlGetter
 
@@ -16,17 +17,10 @@ import tech.summerly.quiet.netease.utils.NeteaseMusicUrlGetter
  * module global context holder
  * [onCreate] will be invoke after application created
  */
-class NeteaseModule {
+internal object NeteaseModule : BaseModule() {
 
-    companion object {
-        @SuppressLint("StaticFieldLeak")
-        private var context: Context? = null
 
-        internal val instance get() = context!!
-    }
-
-    fun onCreate(context: Context) {
-        NeteaseModule.context = context.applicationContext
+    override fun onCreate() {
         MusicUrlFetcher.addMusicUrlGetter(MusicType.NETEASE, NeteaseMusicUrlGetter)
         MusicUrlFetcher.addMusicUrlGetter(MusicType.NETEASE_FM, NeteaseMusicUrlGetter)
         MusicPlaylistProviderFactory.setFactory(MusicType.NETEASE_FM, object : MusicPlaylistProviderFactory() {

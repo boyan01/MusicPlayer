@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
-import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
@@ -19,11 +18,15 @@ import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
+import tech.summerly.quiet.local.LocalModule
 import tech.summerly.quiet.local.LocalMusicActivity
 import tech.summerly.quiet.local.LocalMusicApi
 import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.database.database.Table
-import tech.summerly.quiet.local.fragments.items.*
+import tech.summerly.quiet.local.fragments.items.LocalArtistItemViewBinder
+import tech.summerly.quiet.local.fragments.items.LocalMusicItemViewBinder
+import tech.summerly.quiet.local.fragments.items.LocalPlaylistHeaderViewBinder
+import tech.summerly.quiet.local.fragments.items.LocalPlaylistItemViewBinder
 import kotlin.coroutines.experimental.CoroutineContext
 
 /**
@@ -39,7 +42,7 @@ abstract class BaseLocalFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        localMusicApi = LocalMusicApi.getLocalMusicApi(LibModule.instance)
+        localMusicApi = LocalMusicApi.getLocalMusicApi(LocalModule)
 
         //to perceive database's changes
         Table.values().filter {

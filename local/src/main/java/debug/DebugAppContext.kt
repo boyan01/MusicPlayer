@@ -1,7 +1,7 @@
 package debug
 
 import android.app.Application
-import tech.summerly.quiet.commonlib.LibModule
+import tech.summerly.quiet.commonlib.base.BaseModule
 import tech.summerly.quiet.local.LocalModule
 
 /**
@@ -11,7 +11,7 @@ class DebugAppContext : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        LibModule().onCreate(this)
-        LocalModule().onCreate(this)
+        BaseModule(this, "tech.summerly.quiet.commonlib.LibModule")
+        BaseModule(this, "tech.summerly.quiet.local.LocalModule")
     }
 }

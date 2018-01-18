@@ -10,7 +10,7 @@ import tech.summerly.quiet.netease.api.result.LoginResultBean
 internal object NeteasePreference {
 
     private val context: Context
-        get() = NeteaseModule.instance
+        get() = NeteaseModule
 
     private const val prefix = "netease_"
 

@@ -21,7 +21,7 @@ class NeteaseFmPlaylistProvider(
         //do nothing
     }
 
-    private val neteaseApi = NeteaseCloudMusicApi(NeteaseModule.instance)
+    private val neteaseApi = NeteaseCloudMusicApi(NeteaseModule)
 
     override fun setPlaylist(musics: List<Music>) {
         //do nothing , because do not need it

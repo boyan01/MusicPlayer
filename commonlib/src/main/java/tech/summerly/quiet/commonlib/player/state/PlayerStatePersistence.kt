@@ -16,7 +16,7 @@ internal class PlayerStateKeeper {
     }
 
     private val preference: SharedPreferences =
-            LibModule.instance.getSharedPreferences("common_music_player_info",
+            LibModule.getSharedPreferences("common_music_player_info",
                     Context.MODE_PRIVATE)
 
     private val gson = Gson()

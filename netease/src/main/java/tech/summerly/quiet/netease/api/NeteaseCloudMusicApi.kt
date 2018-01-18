@@ -23,7 +23,7 @@ import tech.summerly.quiet.netease.api.result.PlaylistResultBean
  * time   : 2017/8/23
  * desc   :
  */
-class NeteaseCloudMusicApi(context: Context = NeteaseModule.instance) {
+class NeteaseCloudMusicApi(context: Context = NeteaseModule) {
 
     private val neteaseService = CloudMusicServiceProvider()
             .provideCloudMusicService(PersistentCookieStore(context.applicationContext),

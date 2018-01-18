@@ -64,7 +64,7 @@ class BaseMusicPlayer(
 
     private fun bindPlayerToService() {
         log { "attempt to bind to play service" }
-        LibModule.instance.startService(Intent(LibModule.instance, MusicPlayerService::class.java))
+        LibModule.startService(Intent(LibModule, MusicPlayerService::class.java))
     }
 
     fun playNext() = launch {
