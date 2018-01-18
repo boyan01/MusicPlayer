@@ -7,9 +7,9 @@ package tech.summerly.quiet.netease.api.result
  * desc   :
  */
 data class LyricResultBean(
-        val lrc: LrcBean,
-        val klyric: LrcBean,
-        val tlyric: LrcBean,
+        val lrc: LrcBean?,
+        val klyric: LrcBean?,
+        val tlyric: LrcBean?,
         val code: Int
 //                           val sgc: Boolean,
 //                           val sfy: Boolean,

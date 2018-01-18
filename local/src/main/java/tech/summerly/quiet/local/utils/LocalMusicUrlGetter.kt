@@ -9,7 +9,7 @@ import java.net.URI
  * author : yangbin10
  * date   : 2018/1/18
  */
-object LocalMusicUrlGetter : MusicUrlGetter {
+internal object LocalMusicUrlGetter : MusicUrlGetter {
 
     suspend override fun getPlayableUrl(music: Music): String? = with(music) {
         if (playUri.isEmpty()) {

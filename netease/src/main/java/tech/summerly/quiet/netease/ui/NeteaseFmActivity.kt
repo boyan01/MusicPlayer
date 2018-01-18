@@ -77,6 +77,9 @@ class NeteaseFmActivity : BaseActivity() {
     }
 
     private fun showLyric(music: Music) = launch(UI) {
+        if (music.type != MusicType.NETEASE || music.type != MusicType.NETEASE_FM) {
+            return@launch
+        }
         lyricView.setLyricText(NeteaseCloudMusicApi().getLyric(music.id))
     }
 

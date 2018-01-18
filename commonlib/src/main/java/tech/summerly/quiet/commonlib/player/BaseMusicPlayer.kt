@@ -49,7 +49,7 @@ class BaseMusicPlayer(
     private fun performPlay(music: Music) {
         //check playlist provider whether accept this music type
         setType(music.type)
-        if (playlistProvider.getPlaylist().contains(music)) {
+        if (!playlistProvider.getPlaylist().contains(music)) {
             playlistProvider.insertToNext(music)
         }
         if (corePlayer.playing != music) {
@@ -112,8 +112,10 @@ class BaseMusicPlayer(
     }
 
     fun setType(type: MusicType) {
-        if (!internalPlaylistProvider.isTypeAccept(type)) {
+        if (!internalPlaylistProvider.isTypeAccept(type)) { // if need to change provider type
+            corePlayer.stop()
             internalPlaylistProvider = newPlaylistProvider(type)
+            playNext()
         }
     }
 

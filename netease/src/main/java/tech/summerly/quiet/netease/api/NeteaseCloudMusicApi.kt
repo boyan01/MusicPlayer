@@ -87,7 +87,7 @@ class NeteaseCloudMusicApi(context: Context = NeteaseModule) {
     }
 
     suspend fun getLyric(id: Long): String? {
-        return neteaseService.lyric(id, Crypto.encrypt("{}")).await().lrc.lyric
+        return neteaseService.lyric(id, Crypto.encrypt("{}")).await().lrc?.lyric
     }
 
     suspend fun login(phone: String, password: String): LoginResultBean {

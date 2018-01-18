@@ -1,6 +1,5 @@
 package tech.summerly.quiet.netease
 
-import android.content.Context
 import tech.summerly.quiet.commonlib.base.BaseModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
@@ -29,7 +28,10 @@ internal object NeteaseModule : BaseModule() {
                     musicList: ArrayList<Music>,
                     playerStateListener: BasePlayerDataListener
             ): MusicPlaylistProvider {
-                return NeteaseFmPlaylistProvider(current, musicList, playerStateListener)
+                musicList.removeAll { it.type != MusicType.NETEASE_FM }
+                return NeteaseFmPlaylistProvider(current.takeIf { it?.type == MusicType.NETEASE_FM },
+                        musicList,
+                        playerStateListener)
             }
         })
     }

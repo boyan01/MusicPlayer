@@ -8,7 +8,7 @@ import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.ItemViewBinder
 import tech.summerly.quiet.local.R
 
-class LocalPlaylistItemViewBinder(
+internal class LocalPlaylistItemViewBinder(
         private val onItemClick: (Playlist) -> Unit
 ) : ItemViewBinder<Playlist>() {
 

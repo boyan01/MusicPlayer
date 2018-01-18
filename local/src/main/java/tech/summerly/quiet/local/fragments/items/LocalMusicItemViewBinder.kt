@@ -15,7 +15,9 @@ import tech.summerly.quiet.local.utils.showMusicDeleteDialog
  * Created by summer on 17-12-23
  * recycler view item binder for local music
  */
-internal class LocalMusicItemViewBinder : ItemViewBinder<Music>() {
+internal class LocalMusicItemViewBinder(
+        private val onMusicItemClick: (music: Music) -> Unit
+) : ItemViewBinder<Music>() {
 
 
     //to check current music is playing , if true ,will set a playing indicator for this music
@@ -34,7 +36,7 @@ internal class LocalMusicItemViewBinder : ItemViewBinder<Music>() {
             now_playing_indicator.invisible()
         }
         setOnClickListener {
-            musicPlayer.play(item)
+            onMusicItemClick(item)
         }
         popup_menu.setOnClickListener {
             popupMenu(it, R.menu.local_popup_music_item) {

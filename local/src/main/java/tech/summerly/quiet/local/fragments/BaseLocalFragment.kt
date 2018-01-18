@@ -12,9 +12,11 @@ import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.bean.Playlist
 import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
+import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
@@ -74,7 +76,7 @@ abstract class BaseLocalFragment : BaseFragment() {
         }
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = MultiTypeAdapter(mutableListOf<Any>()).also {
-            it.register(Music::class.java, LocalMusicItemViewBinder())
+            it.register(Music::class.java, LocalMusicItemViewBinder(this::onMusicClicked))
             it.register(Artist::class.java, LocalArtistItemViewBinder())
             it.register(CommonItemA::class.java,
                     CommonItemAViewBinder(this::onOverviewNavClick))
@@ -127,6 +129,14 @@ abstract class BaseLocalFragment : BaseFragment() {
 
     private fun onPlaylistClicked(playlist: Playlist) {
         log { "playlist : $playlist" }
+    }
+
+    protected open fun onMusicClicked(music: Music) = runWithRoot {
+        this as? RecyclerView ?: return@runWithRoot
+        musicPlayer.setType(MusicType.LOCAL)
+        val items = multiTypeAdapter.items.filterIsInstance(Music::class.java)
+        musicPlayer.playlistProvider.setPlaylist(items)
+        musicPlayer.play(music)
     }
 
     private fun onOverviewNavClick(nav: CommonItemA) {
