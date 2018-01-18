@@ -40,7 +40,7 @@ internal class LocalMusicItemViewBinder : ItemViewBinder<Music>() {
             popupMenu(it, R.menu.local_popup_music_item) {
                 when (it.itemId) {
                     R.id.local_popup_music_add_to_next -> {
-                        musicPlayer.insertToNext(item)
+                        musicPlayer.playlistProvider.insertToNext(item)
                     }
                     R.id.local_popup_music_add_to_playlist -> {
                         LocalPlaylistSelectorFragment(arrayOf(item))

@@ -2,7 +2,9 @@ package tech.summerly.quiet.commonlib.player
 
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
+import tech.summerly.quiet.commonlib.player.state.PlayerStateKeeper
 import tech.summerly.quiet.commonlib.utils.log
 
 
@@ -14,24 +16,46 @@ abstract class MusicPlaylistProviderFactory {
             factories.put(type, factory)
         }
 
-        operator fun get(type: MusicType): MusicPlaylistProvider {
-            return factories[type]?.createMusicPlaylistProvider()
+        /**
+         * get MusicPlaylistProvider by type
+         * @param type null means undefined, so the truly type will depend on latest music'type.
+         * @param playerStateListener to listen playlistProvider's internal change.
+         */
+        operator fun get(type: MusicType?, playerStateListener: BasePlayerDataListener): MusicPlaylistProvider {
+            val dataKeeper = PlayerStateKeeper()
+            val latest = dataKeeper.getCurrentMusic()
+            val playlist = dataKeeper.getPlaylist()
+            val playMode = dataKeeper.getPlayMode()
+            return factories[type ?: latest?.type ?: MusicType.LOCAL]?.createMusicPlaylistProvider(latest, playMode, playlist, playerStateListener)
                     ?: throw IllegalStateException("haven't set factory for type:[$type] yet!")
         }
-
     }
 
     abstract fun createMusicPlaylistProvider(current: Music?,
                                              playMode: PlayMode,
-                                             musicList: ArrayList<Music>): MusicPlaylistProvider
+                                             musicList: ArrayList<Music>,
+                                             playerStateListener: BasePlayerDataListener): MusicPlaylistProvider
 
 }
 
 abstract class MusicPlaylistProvider(
-        protected var current: Music?,
-        protected open var playMode: PlayMode,
-        protected open val musicList: ArrayList<Music>
-) {
+        current: Music?,
+        playMode: PlayMode,
+        open val musicList: ArrayList<Music>,
+        private val playerStateListener: BasePlayerDataListener
+) : BasePlayerDataListener by playerStateListener {
+
+    var current: Music? = null
+        set(value) {
+            onCurrentMusicUpdated(field, value)
+            field = value
+        }
+
+    var playMode: PlayMode = playMode
+        set(value) {
+            onPlayModeUpdated(value)
+            field = value
+        }
 
     abstract fun setPlaylist(musics: List<Music>)
 
@@ -46,18 +70,25 @@ abstract class MusicPlaylistProvider(
     abstract fun isTypeAccept(type: MusicType): Boolean
 
     abstract fun insertToNext(music: Music)
+
+    init {
+        this.current = current
+        this.playMode = playMode
+    }
 }
 
 class SimplePlaylistProvider(current: Music?,
                              playMode: PlayMode,
-                             musicList: ArrayList<Music>
-) : MusicPlaylistProvider(current, playMode, musicList) {
+                             musicList: ArrayList<Music>,
+                             playerStateListener: BasePlayerDataListener
+) : MusicPlaylistProvider(current, playMode, musicList, playerStateListener) {
 
     private val shuffleMusicList = ArrayList<Music>()
 
     override fun setPlaylist(musics: List<Music>) {
         musicList.clear()
         musicList.addAll(musics)
+        onPlaylistUpdated(musics)
     }
 
     override fun getPlaylist(): List<Music> = musicList
@@ -174,11 +205,13 @@ class SimplePlaylistProvider(current: Music?,
             val indexShuffle = shuffleMusicList.indexOf(MusicPlayerManager.playingMusic.value) + 1
             shuffleMusicList.add(indexShuffle, music)
         }
+        onPlaylistUpdated(musicList)
     }
 
     override fun clear() {
         musicList.clear()
         current = null
+        onPlaylistUpdated(musicList)
     }
 
     override fun isTypeAccept(type: MusicType): Boolean {

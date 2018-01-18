@@ -72,6 +72,9 @@ class NeteaseFmActivity : BaseActivity() {
     }
 
     private fun playMusicIfNecessary() {
+        if (musicPlayer.corePlayer.getState() == PlayerState.Pausing) {
+            musicPlayer.corePlayer.start()
+        }
         if (musicPlayer.corePlayer.getState() != PlayerState.Playing) {
             //start player
             val current = musicPlayer.current

@@ -10,6 +10,7 @@ import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.MusicPlaylistProvider
 import tech.summerly.quiet.commonlib.player.MusicPlaylistProviderFactory
 import tech.summerly.quiet.commonlib.player.SimplePlaylistProvider
+import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 
 /**
@@ -35,8 +36,8 @@ class LibModule {
         }
         ARouter.init(context.applicationContext as Application?)
         val simplePlaylistFactory = object : MusicPlaylistProviderFactory() {
-            override fun createMusicPlaylistProvider(current: Music?, playMode: PlayMode, musicList: ArrayList<Music>): MusicPlaylistProvider {
-                return SimplePlaylistProvider(current, playMode, musicList)
+            override fun createMusicPlaylistProvider(current: Music?, playMode: PlayMode, musicList: ArrayList<Music>, playerStateListener: BasePlayerDataListener): MusicPlaylistProvider {
+                return SimplePlaylistProvider(current, playMode, musicList, playerStateListener)
             }
         }
         MusicPlaylistProviderFactory.setFactory(MusicType.LOCAL, simplePlaylistFactory)

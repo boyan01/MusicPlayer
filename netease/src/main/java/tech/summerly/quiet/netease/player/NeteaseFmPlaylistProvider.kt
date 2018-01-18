@@ -5,6 +5,7 @@ import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.MusicPlaylistProvider
+import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.netease.NeteaseModule
@@ -12,13 +13,9 @@ import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 
 class NeteaseFmPlaylistProvider(
         current: Music?,
-        musicList: ArrayList<Music>
-) : MusicPlaylistProvider(current, PlayMode.Sequence, musicList) {
-
-    override var playMode: PlayMode = PlayMode.Sequence
-        set(value) {
-            field = PlayMode.Sequence
-        }
+        musicList: ArrayList<Music>,
+        playerStateListener: BasePlayerDataListener
+) : MusicPlaylistProvider(current, PlayMode.Sequence, musicList, playerStateListener) {
 
     override fun insertToNext(music: Music) {
         //do nothing

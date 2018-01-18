@@ -7,6 +7,7 @@ import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.Headers
 import com.bumptech.glide.module.AppGlideModule
+import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Album
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
@@ -43,7 +44,15 @@ class PictureUrl : GlideUrl {
 
 private fun String?.toPictureUrl(): Any = PictureUrl(this)
 
-fun Music.getPictureUrl(): Any = this.picUri.toPictureUrl()
+fun Music.getPictureUrl(): Any {
+    if (picUri == null) {
+        return R.drawable.common_ic_favorite_border_red_24dp
+    }
+    if (picUri.startsWith("file:",true)){
+        return picUri
+    }
+    return picUri.toPictureUrl()
+}
 
 fun Artist.getPictureUrl(): Any = this.picUri.toPictureUrl()
 

@@ -11,7 +11,7 @@ interface MusicUrlGetter {
     suspend fun getPlayableUrl(music: Music): String?
 }
 
-object MusicUrlManager : MusicUrlGetter {
+object MusicUrlFetcher : MusicUrlGetter {
 
     private val map = HashMap<MusicType, MusicUrlGetter>()
 

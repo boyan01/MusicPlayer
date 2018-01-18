@@ -2,25 +2,22 @@ package tech.summerly.quiet.commonlib.player
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.content.Intent
-import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.player.service.MusicPlayerService
+import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
+import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.log
 
-/**
- * Created by summer on 17-12-17
- *
- */
-object MusicPlayerManager {
+object MusicPlayerManager : BasePlayerDataListener {
 
 
-    val playerState: LiveData<PlayerState> get() = internalPlayerState
-
-    private val internalPlayerState = WithDefaultLiveData<PlayerState>(PlayerState.Idle)
+    private val internalPlayingMusic = MutableLiveData<Music>()
+    private val internalPosition = MutableLiveData<Long>()
+    private val internalPlayerState = WithDefaultLiveData(PlayerState.Idle)
+    private val internalPlayMode = WithDefaultLiveData(PlayMode.Sequence)
+    private val internalPlaylist = MutableLiveData<List<Music>>()
 
 
     private val onPlayerStateChange = { state: PlayerState ->
@@ -28,28 +25,19 @@ object MusicPlayerManager {
     }
 
     private val onPositionChange = { position: Long ->
+        log { "on position change: $position" }
         internalPosition.postValue(position)
     }
 
-    private val onMusicChange = { _: Music?, new: Music? ->
-        internalPlayingMusic.postValue(new)
+    private val errorLogger = { throwable: Throwable ->
+        throwable.printStackTrace()
     }
 
-    private val onError = { throwable: Throwable ->
+    private var musicPlayer: BaseMusicPlayer = newMusicPlayer()
 
-    }
-
-
-    private val baseContext get() = LibModule.instance
-
-    private var musicPlayer: BaseMusicPlayer? = null
-
-    fun musicPlayer(type: MusicType = MusicType.LOCAL): BaseMusicPlayer {
-        val musicPlayer = musicPlayer ?: synchronized(MusicPlayerManager) {
-            musicPlayer ?: newMusicPlayer().also { musicPlayer = it }
-
-        }
-        musicPlayer.setType(type)
+    fun musicPlayer(type: MusicType? = null): BaseMusicPlayer {
+        val musicPlayer = musicPlayer
+        type?.let { musicPlayer.setType(it) }
         return musicPlayer
     }
 
@@ -57,22 +45,31 @@ object MusicPlayerManager {
      * create a new [BaseMusicPlayer] when [musicPlayer] is not available
      */
     private fun newMusicPlayer(): BaseMusicPlayer {
-        val player = BaseMusicPlayer(
-                onMusicChange, onPlayerStateChange, onPositionChange, onError
+        return BaseMusicPlayer(
+                onPlayerStateChange, MusicPlayerManager, onPositionChange, errorLogger
         )
-        bindPlayerToService()
-        return player
     }
 
-    private fun bindPlayerToService() {
-        log { "attempt to bind to play service" }
-        baseContext.startService(Intent(baseContext, MusicPlayerService::class.java))
-    }
+
 
     val playingMusic: LiveData<Music> get() = internalPlayingMusic
-    private val internalPlayingMusic = MutableLiveData<Music>()
     val position: LiveData<Long> get() = internalPosition
-    private val internalPosition = MutableLiveData<Long>()
+    val playerState: LiveData<PlayerState> get() = internalPlayerState
+    val playMode: LiveData<PlayMode> get() = internalPlayMode
+    val playlist: LiveData<List<Music>> get() = internalPlaylist
+
+    override fun onCurrentMusicUpdated(old: Music?, new: Music?) {
+        internalPlayingMusic.postValue(new)
+        log { "change: $old to $new" }
+    }
+
+    override fun onPlayModeUpdated(playMode: PlayMode) {
+        internalPlayMode.postValue(playMode)
+    }
+
+    override fun onPlaylistUpdated(playlist: List<Music>) {
+        internalPlaylist.postValue(playlist)
+    }
 
 }
 
