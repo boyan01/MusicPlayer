@@ -42,18 +42,30 @@ class PictureUrl : GlideUrl {
 
 }
 
-private fun String?.toPictureUrl(): Any = PictureUrl(this)
+private fun String.toPictureUrl(): Any {
+    if (startsWith("file:", true)) {
+        return this
+    }
+    return PictureUrl(this)
+}
 
 fun Music.getPictureUrl(): Any {
     if (picUri == null) {
-        return R.drawable.common_ic_favorite_border_red_24dp
-    }
-    if (picUri.startsWith("file:",true)){
-        return picUri
+        return R.drawable.common_image_music_disk
     }
     return picUri.toPictureUrl()
 }
 
-fun Artist.getPictureUrl(): Any = this.picUri.toPictureUrl()
+fun Artist.getPictureUrl(): Any {
+    if (picUri == null) {
+        return R.drawable.common_image_audience
+    }
+    return picUri.toPictureUrl()
+}
 
-fun Album.getPictureUrl(): Any = this.picUri.toPictureUrl()
+fun Album.getPictureUrl(): Any {
+    if (picUri == null) {
+        return R.drawable.common_image_audience
+    }
+    return picUri.toPictureUrl()
+}
