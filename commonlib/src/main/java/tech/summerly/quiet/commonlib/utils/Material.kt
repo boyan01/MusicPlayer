@@ -14,8 +14,8 @@ fun Bitmap.generatePalette() = async {
 
 fun Palette.getMuteSwatch(night: Boolean = isNightMode()): Palette.Swatch {
     return if (night) {
-        darkMutedSwatch ?: Palette.Swatch(color(R.color.common_background), 100)
+        darkMutedSwatch ?: Palette.Swatch(color(R.color.common_backgroundDark), 100)
     } else {
-        mutedSwatch ?: Palette.Swatch(color(R.color.common_background), 100)
+        mutedSwatch ?: Palette.Swatch(color(R.color.common_backgroundDark), 100)
     }
 }
