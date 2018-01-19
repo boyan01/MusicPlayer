@@ -15,6 +15,7 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
+import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.*
 
 /**
@@ -62,14 +63,21 @@ open class BottomControllerFragment : BaseFragment() {
         }
     }
 
+    @Synchronized
     private fun setControllerState(state: PlayerState) = runWithRoot {
         progressPlayPause.gone()
         controllerPauseOrPlay.visible()
         when (state) {
             PlayerState.Playing -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
             PlayerState.Loading -> {
-                progressPlayPause.visible()
-                controllerPauseOrPlay.gone()
+                controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
+                // delay 500ms to display load progress bar
+                handler.postDelayed({
+                    if (!isDetached && view != null && musicPlayer.corePlayer.getState() == PlayerState.Loading) {
+                        progressPlayPause.visible()
+                        controllerPauseOrPlay.gone()
+                    }
+                }, 500)
             }
             else -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_play_circle_outline_black_24dp)
         }
@@ -86,18 +94,18 @@ open class BottomControllerFragment : BaseFragment() {
         }
     }
 
-
-    private fun updateMusicInfo(music: Music?) = runWithRoot {
+    private fun updateMusicInfo(music: Music?) {
         //首先根据music是否为空来控制底部控制fragment的显示与否。
+        val root = view ?: return
         if (music == null) {
             (activity as? BottomControllerContainer)?.hideBottomController()
-            return@runWithRoot
+            return
         }
         (activity as? BottomControllerContainer)?.showBottomController()
         //更新音乐信息
-        musicTitle.text = music.title
-        musicSubTitle.text = music.artistAlbumString()
-        GlideApp.with(this).load(music.getPictureUrl()).into(artWork)
+        root.musicTitle.text = music.title
+        root.musicSubTitle.text = music.artistAlbumString()
+        GlideApp.with(this).load(music.getPictureUrl()).into(root.artWork)
     }
 
     interface BottomControllerContainer {
