@@ -6,6 +6,8 @@ import kotlinx.android.synthetic.main.local_item_artist.view.*
 import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.ItemViewBinder
+import tech.summerly.quiet.commonlib.utils.getPictureUrl
+import tech.summerly.quiet.commonlib.utils.getScreenWidth
 import tech.summerly.quiet.local.R
 
 /**
@@ -14,9 +16,12 @@ import tech.summerly.quiet.local.R
 internal class LocalArtistItemViewBinder : ItemViewBinder<Artist>() {
 
     override fun onBindViewHolder(holder: ViewHolder, item: Artist) = with(holder.itemView) {
-        item.picUri?.let {
-            GlideApp.with(this).asBitmap().load(it).into(image)
-        }
+        GlideApp.with(this)
+                .asBitmap()
+                .load(item.getPictureUrl())
+                .fitCenter()
+                .override(getScreenWidth() / 3)
+                .into(image)
         title.text = item.name
     }
 

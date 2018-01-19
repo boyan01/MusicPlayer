@@ -59,8 +59,7 @@ internal class LocalMusicItemViewBinder(
                 true
             }
         }
-        (item.picUri ?: R.drawable.local_ic_album_black_24dp)
-                .let { GlideApp.with(this).load(it).into(image) }
+        GlideApp.with(this).load(item.getPictureUrl()).into(image)
         popup_menu.contentDescription = context.getString(R.string.local_description_music_more, item.title)
         text_item_title.text = item.title
         text_item_subtitle.text = item.artist.joinToString("/") { it.name }
