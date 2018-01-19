@@ -38,5 +38,7 @@
     <string name="local_message_create_playlist_failed">创建歌单失败</string>
     <string name="local_error_repeated">重复了</string>
     <string name="local_popup_playlist_create">新建歌单</string>
+    <string name="local_menu_main_setting">设置</string>
+    <string name="local_menu_main_netease">网易云音乐</string>
 
 </resources>

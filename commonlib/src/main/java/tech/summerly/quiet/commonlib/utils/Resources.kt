@@ -5,6 +5,7 @@ import android.support.annotation.ColorRes
 import android.support.annotation.DrawableRes
 import android.support.annotation.StringRes
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatDelegate
 import tech.summerly.quiet.commonlib.LibModule
 
 /**
@@ -21,4 +22,8 @@ fun drawable(@DrawableRes id: Int, @ColorInt tint: Int = 0) = LibModule.getDrawa
     if (tint != 0) {
         it.setTint(tint)
     }
+}
+
+fun isNightMode(): Boolean {
+    return AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
 }

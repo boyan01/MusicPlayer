@@ -6,8 +6,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.view.Menu
-import android.view.MenuItem
+import android.view.Gravity
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.local_activity_main.*
@@ -15,6 +14,7 @@ import kotlinx.android.synthetic.main.local_main_header_tab.*
 import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
+import tech.summerly.quiet.commonlib.utils.popupMenu
 import tech.summerly.quiet.local.fragments.LocalArtistFragment
 import tech.summerly.quiet.local.fragments.LocalOverviewFragment
 import tech.summerly.quiet.local.fragments.LocalTotalFragment
@@ -31,25 +31,18 @@ class LocalMusicActivity : BaseActivity(), BottomControllerFragment.BottomContro
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         }
         setContentView(R.layout.local_activity_main)
-        setSupportActionBar(localToolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
         pager.adapter = SectionsPagerAdapter(supportFragmentManager)
         pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(pager))
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.local_menu_activity_main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-        if (id == R.id.local_music_action_scan) {
-            startActivity<LocalMusicScannerActivity>()
-            return true
+        imageMenu.setOnClickListener {
+            popupMenu(it, R.menu.local_menu_activity_main, gravity = Gravity.BOTTOM) {
+                val id = it.itemId
+                if (id == R.id.local_menu_main_scan) {
+                    startActivity<LocalMusicScannerActivity>()
+                }
+                true
+            }
         }
-        return super.onOptionsItemSelected(item)
     }
 
     fun setCurrentPage(position: Int, smoothScroll: Boolean = true) {
