@@ -54,8 +54,10 @@ class NeteaseFmActivity : BaseActivity() {
         }
         playerManager.playerState.observe(this) {
             when (it) {
-                PlayerState.Playing ->
+                PlayerState.Playing -> {
+                    textDuration.text = musicPlayer.corePlayer.duration.toMusicTimeStamp()
                     buttonPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
+                }
                 PlayerState.Pausing ->
                     buttonPlay.setImageResource(R.drawable.common_ic_play_circle_outline_black_24dp)
                 PlayerState.Loading -> Unit

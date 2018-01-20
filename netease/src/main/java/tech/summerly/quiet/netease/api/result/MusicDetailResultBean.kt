@@ -12,23 +12,17 @@ import com.google.gson.annotations.SerializedName
  * 注释掉的参数是 json 中原有的,但是我们并不感兴趣的参数.
  */
 data class MusicDetailResultBean(
-        @SerializedName("songs")
-        @Expose
-        var songs: List<Song>,
+        var songs: List<Song>?,
 
         //        @SerializedName("privileges")
 //        @Expose
 //        var privileges: List<Privilege>,
 
-        @SerializedName("code")
-        @Expose
         var code: Int
 ) {
     //音乐详情
     data class Song(
 
-            @SerializedName("title")
-            @Expose
             val name: String,
 
             @SerializedName("id")
@@ -65,7 +59,7 @@ data class MusicDetailResultBean(
 
             @SerializedName("mv")
             @Expose
-            val mv: Long? = null//mv的ID
+            val mv: Long? = null,//mv的ID
 
             //        @SerializedName("pst")
 //        @Expose
@@ -135,9 +129,9 @@ data class MusicDetailResultBean(
 //        @SerializedName("rurl")
 //        @Expose
 //        var rurl: Any? = null,
-//        @SerializedName("mst")
-//        @Expose
-//        var mst: Long? = null,
+            @SerializedName("mst")
+            @Expose
+            var mst: Long? = null
 //        @SerializedName("cp")
 //        @Expose
 //        var cp: Long? = null,
@@ -147,12 +141,8 @@ data class MusicDetailResultBean(
 
     data class Album(
 
-            @SerializedName("id")
-            @Expose
             var id: Long,
 
-            @SerializedName("title")
-            @Expose
             var name: String,
 
             @SerializedName("picUrl")
@@ -169,13 +159,9 @@ data class MusicDetailResultBean(
     )
 
     data class Artist(
-            @SerializedName("id")
-            @Expose
-            var id: Long? = null,
+            var id: Long,
 
-            @SerializedName("title")
-            @Expose
-            var name: String? = null
+            var name: String
 
 //        @SerializedName("tns")
 //        @Expose

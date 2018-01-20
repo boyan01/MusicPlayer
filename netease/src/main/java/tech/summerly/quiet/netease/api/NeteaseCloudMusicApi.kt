@@ -13,8 +13,8 @@ import tech.summerly.quiet.netease.api.bean.MusicSearchResult
 import tech.summerly.quiet.netease.api.converter.Crypto
 import tech.summerly.quiet.netease.api.converter.NeteaseResultMapper
 import tech.summerly.quiet.netease.api.result.LoginResultBean
-import tech.summerly.quiet.netease.api.result.MusicDetailResultBean
 import tech.summerly.quiet.netease.api.result.MusicUrlResultBean
+import tech.summerly.quiet.netease.api.result.PlaylistDetailResultBean
 import tech.summerly.quiet.netease.api.result.PlaylistResultBean
 
 /**
@@ -55,7 +55,7 @@ class NeteaseCloudMusicApi(context: Context = NeteaseModule) {
         TODO()
     }
 
-    suspend fun getMusicDetail(id: Long): MusicDetailResultBean {
+    suspend fun getMusicDetail(id: Long): Music {
         val encrypt = Crypto.encrypt("""
             {
                 "c"  : "[{\"id\" : $id}]",
@@ -63,7 +63,14 @@ class NeteaseCloudMusicApi(context: Context = NeteaseModule) {
                 "csrf_token": ""
             }
         """.trimIndent())
-        return neteaseService.musicDetail(encrypt).await()
+        val (songs, code) = neteaseService.musicDetail(encrypt).await()
+        if (code == 301) {
+            error("need login")
+        }
+        if (songs == null || songs.isEmpty()) {
+            error("error response")
+        }
+        return songs.map { mapper.convertToMusic(it) }[0]
     }
 
     /**
@@ -126,7 +133,8 @@ class NeteaseCloudMusicApi(context: Context = NeteaseModule) {
         }
         """.trimIndent()
         )
-        val data = neteaseService.musicUrl(encrypt).await().data?.get(0) ?: error("fetch url failed")
+        val data = neteaseService.musicUrl(encrypt).await().data?.get(0)
+                ?: error("fetch url failed")
         if (data.url == null) {
             error("fetch url failed")
         }
@@ -170,5 +178,23 @@ class NeteaseCloudMusicApi(context: Context = NeteaseModule) {
         return recommend.recommend.map {
             mapper.convertToMusic(it)
         }
+    }
+
+    suspend fun getPlaylistDetail(playlistId: Long): PlaylistDetailResultBean.Playlist {
+        val encrypt = Crypto.encrypt("""
+            {
+                "id":"$playlistId",
+                "n":1000000,
+                "csrf_token":""
+            }
+        """.trimIndent())
+        val playlistDetailBean = neteaseService.playlistDetail(encrypt).await()
+        if (playlistDetailBean.code == 301) {
+            error("please login first")
+        }
+        if (playlistDetailBean.code != 200 && playlistDetailBean.playlist == null) {
+            error("error response")
+        }
+        return playlistDetailBean.playlist!!
     }
 }

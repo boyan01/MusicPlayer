@@ -36,5 +36,9 @@
     <string name="netease_alert_need_login">使用此功能需要登陆,是否跳转到登陆界面</string>
     <string name="netease_action_give_up">算了</string>
     <string name="netease_title_daily_recommend">@string/netease_nav_title_daily</string>
+    <string name="netease_comment">评论</string>
+    <string name="netease_collect">收藏</string>
+    <string name="netease_share">分享</string>
+    <string name="netease_download">下载</string>
 
 </resources>

@@ -21,6 +21,7 @@ open class Music(
         val picUri: String?,
         val type: MusicType,
         val mvId: Long,
+        @Deprecated("不可信")
         val duration: Long,
         val playUri: MutableList<MusicUri>
 ) : Parcelable {

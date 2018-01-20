@@ -180,6 +180,8 @@ class CoreMediaPlayer {
 
     }
 
+    val duration: Long get() = mediaPlayer.duration.toLong()
+
 }
 
 typealias CorePlayerStateListener = (PlayerState) -> Unit

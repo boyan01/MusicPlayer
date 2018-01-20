@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarPlaylist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/netease_color_primary"
+            android:paddingTop="24dp"
+            android:translationZ="1dp"
+            app:navigationIcon="@drawable/netease_ic_arrow_back_white_24dp"
+            app:title="歌单"
+            app:titleTextColor="@color/common_text_primary_dark_background" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/netease_item_music" />
+
+
+    </FrameLayout>
+
+    <fragment
+        android:name="tech.summerly.quiet.commonlib.fragments.BottomControllerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:tag="@string/common_tag_fragment_bottom_controller"
+        tools:layout="@layout/common_fragment_controller_bottom" />
+
+</LinearLayout>

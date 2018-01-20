@@ -1,6 +1,7 @@
 package tech.summerly.quiet.netease.api.converter
 
 import tech.summerly.quiet.commonlib.bean.*
+import tech.summerly.quiet.netease.api.result.MusicDetailResultBean
 import tech.summerly.quiet.netease.api.result.PersonalFmDataResult
 import tech.summerly.quiet.netease.api.result.PlaylistResultBean
 import tech.summerly.quiet.netease.api.result.RecommendSongResultBean
@@ -145,6 +146,28 @@ internal class NeteaseResultMapper {
                 name = albumResult.name,
                 picUri = albumResult.picUrl,
                 type = MusicType.NETEASE
+        )
+    }
+
+    fun convertToMusic(music: MusicDetailResultBean.Song): Music = with(music) {
+        val playUri = mutableListOf<MusicUri>()
+        if (high != null) {
+            playUri.add(MusicUri.HIGH_QUALITY)
+        }
+        if (medium != null || low != null) {
+            playUri.add(MusicUri.NORMAL_QUALITY)
+        }
+        return@with Music(
+                id = id,
+                title = name,
+                artist = artist?.map { Artist(it.id, it.name, null, MusicType.NETEASE) }
+                        ?: emptyList(),
+                album = Album(album?.id ?: 0L, album?.name ?: "", album?.picUrl, MusicType.NETEASE),
+                picUri = album?.picUrl,
+                type = MusicType.NETEASE,
+                mvId = mv ?: 0L,
+                playUri = playUri,
+                duration = 0
         )
     }
 

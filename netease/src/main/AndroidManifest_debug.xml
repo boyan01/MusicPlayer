@@ -26,6 +26,9 @@
         <activity
             android:name=".ui.NeteaseDailyRecommendActivity"
             android:theme="@style/NeteaseAppTheme" />
+        <activity
+            android:name=".ui.NeteasePlaylistDetailActivity"
+            android:theme="@style/NeteaseAppTheme" />
     </application>
 
 </manifest>
