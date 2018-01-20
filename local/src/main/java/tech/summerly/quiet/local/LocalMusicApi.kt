@@ -22,7 +22,7 @@ import java.io.File
 class LocalMusicApi private constructor(context: Context) {
 
     companion object {
-        fun getLocalMusicApi(context: Context) = LocalMusicApi(context.applicationContext)
+        fun getLocalMusicApi(context: Context = LocalModule) = LocalMusicApi(context.applicationContext)
     }
 
     private val mapper = EntityMapper()

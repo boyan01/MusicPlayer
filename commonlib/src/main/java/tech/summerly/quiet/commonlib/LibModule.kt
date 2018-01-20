@@ -11,7 +11,6 @@ import tech.summerly.quiet.commonlib.player.MusicPlaylistProviderFactory
 import tech.summerly.quiet.commonlib.player.SimplePlaylistProvider
 import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
-import tech.summerly.quiet.commonlib.utils.log
 
 /**
  * Created by summer on 17-12-17.

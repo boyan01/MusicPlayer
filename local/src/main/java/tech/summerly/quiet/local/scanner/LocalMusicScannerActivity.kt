@@ -1,4 +1,4 @@
-package tech.summerly.quiet.local
+package tech.summerly.quiet.local.scanner
 
 import android.Manifest
 import android.content.Context
@@ -15,43 +15,32 @@ import kotlinx.android.synthetic.main.local_activity_music_scanner.view.*
 import kotlinx.coroutines.experimental.cancelAndJoin
 import kotlinx.coroutines.experimental.launch
 import tech.summerly.quiet.commonlib.base.BaseActivity
-import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.utils.LoggerLevel
-import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.commonlib.utils.requestPermission
-import tech.summerly.quiet.commonlib.utils.submit
-import tech.summerly.quiet.local.scanner.LocalMusicScannerContract
-import tech.summerly.quiet.local.scanner.LocalMusicScannerPresenter
-import tech.summerly.quiet.local.scanner.LocalScannerSettingDialog
-import tech.summerly.quiet.local.scanner.persistence.LocalMusicScannerSetting
+import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.local.LocalModule
+import tech.summerly.quiet.local.R
 import java.lang.reflect.Array
 import java.lang.reflect.InvocationTargetException
 
 /**
  * Created by summer on 17-12-21
  */
-class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View {
+internal class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View {
+    override fun onMusicScan(folder: String, name: String) {
+        log { "path :$folder , name:$name" }
+    }
 
 
     companion object {
         private val PATH_INTERNAL_STORAGE: String = Environment.getExternalStorageDirectory().path
     }
 
+    private val disks = listOfNotNull(PATH_INTERNAL_STORAGE, getStoragePath(LocalModule, true))
+
     override val presenter: LocalMusicScannerPresenter by lazy {
-        LocalMusicScannerPresenter(
-                view = this,
-                paths = listOfNotNull(PATH_INTERNAL_STORAGE, getStoragePath(this, true)).toTypedArray(),
-                actionSaveMusic = LocalMusicApi.getLocalMusicApi(this)::insertMusic,
-                preference = LocalMusicScannerSetting(this)
-        )
+        LocalMusicScannerPresenter(this)
     }
 
     private lateinit var scannerInfoView: ScannerInfoView
-
-    /**
-     * 记录下扫描到的歌曲标题
-     */
-    private val musicList = ArrayList<Music>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,21 +51,21 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
         scannerInfoView = ScannerInfoView(scannerContainer)
         buttonStartScanner.setOnClickListener {
             scannerInfoView.setScanning()
-            musicList.clear()
-            launch(parent = job) {
+            launch(UI + job) {
                 val isGranted: Boolean = requestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                if (isGranted) {
-                    presenter.startScannerJob()
-                } else {
-                    launch(UI) { scannerInfoView.setNotScanning() }
+                if (!isGranted) {
+                    scannerInfoView.setNotScanning()
+                    return@launch
                 }
+                log { "start scan $disks" }
+                disks.forEach {
+                    presenter.scan(it).join()
+                }
+                onScannerComplete()
             }
         }
         buttonClose.setOnClickListener {
-            UI.submit {
-                job.cancelAndJoin()
-                finish()
-            }
+            onBackPressed()
         }
         textSearchSetting.setOnClickListener {
             LocalScannerSettingDialog().show(supportFragmentManager, "LocalScannerSetting")
@@ -91,13 +80,10 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
     }
 
     override fun onBackPressed() {
-        presenter.stopScanMusics()
-        super.onBackPressed()
-    }
-
-    override fun onAMusicScan(music: Music) {
-        log { "扫描到音乐 : ${music.toShortString()}" }
-        musicList.add(music)
+        UI.submit {
+            job.cancelAndJoin()
+            super.onBackPressed()
+        }
     }
 
     override fun onScannerError(msg: String?) {
@@ -108,7 +94,7 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
 
         //设置视图显示状态处于扫描中
         fun setScanning() {
-            view.buttonStartScanner.visibility = View.GONE
+            view.buttonStartScanner.gone()
             view.textSearchSetting.visibility = View.GONE
             view.progressBar.visibility = View.VISIBLE
             (view.imageSearchProfile.drawable as Animatable).start()
@@ -134,7 +120,7 @@ class LocalMusicScannerActivity : BaseActivity(), LocalMusicScannerContract.View
     /**
      * @param is_removale true返回外置存储卡路径 false返回内置存储卡的路径
      */
-    private fun getStoragePath(mContext: Context = this, is_removale: Boolean): String? {
+    private fun getStoragePath(mContext: Context = LocalModule, is_removale: Boolean): String? {
 
         val mStorageManager = mContext.getSystemService(Context.STORAGE_SERVICE) as StorageManager
         val storageVolumeClazz: Class<*>?

@@ -40,5 +40,9 @@
     <string name="local_popup_playlist_create">新建歌单</string>
     <string name="local_menu_main_setting">设置</string>
     <string name="local_menu_main_netease">网易云音乐</string>
+    <string name="local_scanner_setting_title_filter_size">大小过滤</string>
+    <string name="local_scanner_setting_filter_duration">过滤时长小于30S的音频</string>
+    <string name="local_scanner_setting_filter_file_size">过滤大小小于500Kb的文件</string>
+    <string name="local_scanner_setting_title_filter_path">文件夹过滤</string>
 
 </resources>

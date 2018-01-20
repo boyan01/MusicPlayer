@@ -11,20 +11,20 @@ import java.net.URI
  */
 internal object LocalMusicUrlGetter : MusicUrlGetter {
 
-    suspend override fun getPlayableUrl(music: Music): String? = with(music) {
+    override suspend fun getPlayableUrl(music: Music): String? = with(music) {
         if (playUri.isEmpty()) {
-            error("no playable url!")
+            return@with null
         }
         val uri = playUri[0].uri
         if (uri.startsWith("file:", true)) {
             val file = File(URI(uri))
-            if (file.exists()) {
-                return file.path
+            return if (file.exists()) {
+                file.path
             } else {
-                error("no playable url!")
+                null
             }
         }
-        error("no playable url!")
+        return@with null
     }
 
 }

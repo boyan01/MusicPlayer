@@ -18,6 +18,7 @@ import tech.summerly.quiet.commonlib.utils.popupMenu
 import tech.summerly.quiet.local.fragments.LocalArtistFragment
 import tech.summerly.quiet.local.fragments.LocalOverviewFragment
 import tech.summerly.quiet.local.fragments.LocalTotalFragment
+import tech.summerly.quiet.local.scanner.LocalMusicScannerActivity
 
 /**
  * Created by summer on 17-12-21

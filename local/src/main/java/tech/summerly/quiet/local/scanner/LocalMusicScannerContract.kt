@@ -1,6 +1,6 @@
 package tech.summerly.quiet.local.scanner
 
-import tech.summerly.quiet.commonlib.bean.Music
+import kotlinx.coroutines.experimental.Job
 import tech.summerly.quiet.commonlib.mvp.BaseView
 
 /**
@@ -10,17 +10,15 @@ import tech.summerly.quiet.commonlib.mvp.BaseView
 class LocalMusicScannerContract {
     interface View : BaseView {
         val presenter: Presenter
-        fun onAMusicScan(music: Music)
         fun onScannerError(msg: String?)
         fun onScannerComplete()
+        fun onMusicScan(folder: String, name: String)
     }
 
     interface Presenter {
 
         val view: View
 
-        fun startScannerJob()
-
-        fun stopScanMusics()
+        fun scan(path: String): Job
     }
 }
