@@ -42,7 +42,7 @@ import tech.summerly.quiet.netease.utils.logout
 class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.BottomControllerContainer {
 
     companion object {
-        private val REQUEST_LOGIN = 101
+        private const val REQUEST_LOGIN = 101
     }
 
     private val navItems by lazy {
@@ -262,7 +262,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
 
             }
             getString(R.string.netease_nav_title_fm) -> {
-                startActivity<NeteaseFmActivity>()
+                ARouter.getInstance().build("/netease/fm").withBoolean("play", true).navigation()
             }
             getString(R.string.netease_nav_title_daily) -> {
                 startActivity<NeteaseDailyRecommendActivity>()

@@ -86,18 +86,14 @@ class NeteaseFmActivity : BaseActivity() {
     }
 
     private fun playMusicIfNecessary() {
-        if (musicPlayer.corePlayer.getState() == PlayerState.Pausing) {
-            musicPlayer.corePlayer.start()
+        if (musicPlayer.corePlayer.getState() == PlayerState.Playing
+                || musicPlayer.corePlayer.getState() == PlayerState.Loading) {
+            return
         }
-        if (musicPlayer.corePlayer.getState() != PlayerState.Playing) {
-            //start player
-            val current = musicPlayer.current
-            if (current != null) {
-                musicPlayer.play(current)
-            } else {
-                musicPlayer.playNext()
-            }
+        if (!intent.getBooleanExtra("play", false)) {
+            return
         }
+        musicPlayer.playPause()
     }
 
     private fun initView() {
