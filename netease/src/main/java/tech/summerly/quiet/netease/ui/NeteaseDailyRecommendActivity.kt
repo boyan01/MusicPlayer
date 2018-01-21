@@ -8,8 +8,11 @@ import kotlinx.android.synthetic.main.netease_activity_daily_recommend.*
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
+import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.alert
+import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
@@ -23,7 +26,7 @@ import tech.summerly.quiet.netease.utils.isLogin
 class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
 
     companion object {
-        private val REQUEST_LOGIN = 101
+        private const val REQUEST_LOGIN = 101
     }
 
     private val items = ArrayList<Any>()
@@ -62,7 +65,9 @@ class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.B
     }
 
     private fun onMusicClick(music: Music) {
-
+        musicPlayer.setType(MusicType.NETEASE)
+        musicPlayer.playlistProvider.setPlaylist(items.filterIsInstance(Music::class.java))
+        musicPlayer.play(music)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

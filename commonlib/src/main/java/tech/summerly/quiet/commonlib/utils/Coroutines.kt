@@ -5,11 +5,14 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.android.UI
 import org.jetbrains.anko.attempt
+import org.jetbrains.anko.toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
+import tech.summerly.quiet.commonlib.LibModule
 
 /*
  * author : yangbin10
@@ -78,7 +81,17 @@ suspend fun <T> Call<T>.await(): T = suspendCancellableCoroutine { continuation 
 }
 
 
+private val defaultCoroutineExceptionHandler = CoroutineExceptionHandler { _, throwable ->
+    throwable.printStackTrace()
+    throwable.message?.let {
+        LibModule.toast(it)
+    }
+}
+
+fun asyncUI(block: suspend (() -> Unit)) = launch(UI + defaultCoroutineExceptionHandler) {
+    block()
+}
+
 fun CoroutineDispatcher.submit(parent: Job? = null,
-                               block: suspend CoroutineScope.() -> Unit)
-        = launch(context = this, parent = parent, block = block)
+                               block: suspend CoroutineScope.() -> Unit) = launch(context = this, parent = parent, block = block)
 

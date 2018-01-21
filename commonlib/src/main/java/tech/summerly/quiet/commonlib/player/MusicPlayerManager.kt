@@ -9,11 +9,13 @@ import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.commonlib.utils.observeForeverFilterNull
 
 object MusicPlayerManager : BasePlayerDataListener {
 
 
     private val internalPlayingMusic = MutableLiveData<Music>()
+    private val internalMusicChange = MutableLiveData<Pair<Music?, Music?>>()
     private val internalPosition = MutableLiveData<Long>()
     private val internalPlayerState = WithDefaultLiveData(PlayerState.Idle)
     private val internalPlayMode = WithDefaultLiveData(PlayMode.Sequence)
@@ -50,8 +52,17 @@ object MusicPlayerManager : BasePlayerDataListener {
         )
     }
 
+    init {
+
+        playerState.observeForeverFilterNull {
+            if (it == PlayerState.Complete) {
+                musicPlayer().playNext()
+            }
+        }
+    }
 
 
+    val musicChange: LiveData<Pair<Music?, Music?>> = internalMusicChange
     val playingMusic: LiveData<Music> get() = internalPlayingMusic
     val position: LiveData<Long> get() = internalPosition
     val playerState: LiveData<PlayerState> get() = internalPlayerState
@@ -60,6 +71,7 @@ object MusicPlayerManager : BasePlayerDataListener {
 
     override fun onCurrentMusicUpdated(old: Music?, new: Music?) {
         internalPlayingMusic.postValue(new)
+        internalMusicChange.postValue(old to new)
         log { "change: $old to $new" }
     }
 

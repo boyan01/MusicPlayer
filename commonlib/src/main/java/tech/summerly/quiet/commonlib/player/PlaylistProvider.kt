@@ -26,7 +26,8 @@ abstract class MusicPlaylistProviderFactory {
             val latest = dataKeeper.getCurrentMusic()
             val playlist = dataKeeper.getPlaylist()
             val playMode = dataKeeper.getPlayMode()
-            return factories[type ?: latest?.type ?: MusicType.LOCAL]?.createMusicPlaylistProvider(latest, playMode, playlist, playerStateListener)
+            return factories[type ?: latest?.type
+            ?: MusicType.LOCAL]?.createMusicPlaylistProvider(latest, playMode, playlist, playerStateListener)
                     ?: throw IllegalStateException("haven't set factory for type:[$type] yet!")
         }
     }
@@ -93,7 +94,7 @@ class SimplePlaylistProvider(current: Music?,
 
     override fun getPlaylist(): List<Music> = musicList
 
-    suspend override fun getNextMusic(music: Music?): Music? {
+    override suspend fun getNextMusic(music: Music?): Music? {
         if (musicList.isEmpty()) {
             log { "empty playlist!" }
             return null
@@ -151,7 +152,7 @@ class SimplePlaylistProvider(current: Music?,
         shuffleMusicList.addAll(list)
     }
 
-    suspend override fun getPreviousMusic(music: Music?): Music? {
+    override suspend fun getPreviousMusic(music: Music?): Music? {
         if (musicList.isEmpty()) {
             log { "try too play next with empty playlist!" }
             return null

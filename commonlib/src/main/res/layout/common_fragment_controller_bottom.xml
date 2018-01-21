@@ -5,7 +5,7 @@
     android:id="@+id/sceneControllerBottom"
     android:layout_width="match_parent"
     android:layout_height="@dimen/common_height_bottom_controller"
-    android:background="@color/common_backgroundDark"
+    android:background="@color/common_background_dark"
     android:foreground="?android:selectableItemBackground">
 
 
@@ -16,9 +16,9 @@
         android:layout_marginStart="8dp"
         android:foreground="@color/common_colorImageMask"
         android:scaleType="centerCrop"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline5"
+        app:layout_constraintTop_toTopOf="parent"
         tools:src="@color/common_color_primary" />
 
     <android.support.v7.widget.AppCompatTextView
@@ -31,9 +31,11 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="@color/common_text_primary"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
+        app:layout_constraintBottom_toTopOf="@id/musicSubTitle"
         app:layout_constraintEnd_toStartOf="@+id/controllerPauseOrPlay"
         app:layout_constraintStart_toEndOf="@+id/artWork"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintWidth_default="spread"
         tools:text="缘分一道桥（电影《长城》主题曲）" />
 
@@ -50,43 +52,29 @@
         android:maxWidth="200dp"
         android:textColor="@color/common_text_secondary"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/controllerPauseOrPlay"
         app:layout_constraintStart_toEndOf="@+id/artWork"
-        app:layout_constraintTop_toTopOf="@+id/guideline5"
+        app:layout_constraintTop_toBottomOf="@id/musicTitle"
         app:layout_constraintWidth_default="spread"
         tools:text="王力宏/谭维维 - 缘分一道桥" />
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/controllerSkipPrevious"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_marginBottom="8dp"
-        android:background="?android:selectableItemBackgroundBorderless"
-        android:padding="4dp"
-        android:tint="@color/common_color_icon_active"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/guideline5"
-        app:layout_constraintEnd_toStartOf="@+id/controllerPauseOrPlay"
-        app:layout_constraintTop_toTopOf="@+id/guideline5"
-        app:srcCompat="@drawable/common_ic_skip_previous_black_24dp" />
-
     <ProgressBar
         android:id="@+id/progressPlayPause"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
         android:padding="4dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/controllerPauseOrPlay"
-        app:layout_constraintStart_toStartOf="@id/controllerPauseOrPlay"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/controllerPlaylist"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/controllerPauseOrPlay"
         style="@style/Widget.AppCompat.ActionButton.Overflow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackgroundBorderless"
         android:padding="4dp"
         android:src="@drawable/common_ic_play_circle_outline_black_24dp"
         android:tint="@color/common_color_icon_active"
@@ -95,35 +83,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/controllerSkipNext"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="?android:selectableItemBackgroundBorderless"
-        android:padding="4dp"
-        android:tint="@color/common_color_icon_active"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/controllerPlaylist"
-        app:layout_constraintEnd_toStartOf="@+id/controllerPlaylist"
-        app:layout_constraintTop_toTopOf="@+id/controllerPlaylist"
-        app:srcCompat="@drawable/common_ic_skip_next_black_24dp" />
-
-    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/controllerPlaylist"
         style="@style/Widget.AppCompat.ActionButton.Overflow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackgroundBorderless"
+        android:tooltipText="@string/common_tooltips_playing_list"
         android:src="@drawable/common_ic_playlist_play_black_24dp"
         android:tint="@color/common_color_icon_active"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
 </android.support.constraint.ConstraintLayout>
 

@@ -18,7 +18,7 @@
     <color name="common_color_divider">#1effffff</color>
 
     <color name="common_background">#303030</color>
-    <color name="common_backgroundDark">#212121</color>
+    <color name="common_background_dark">#212121</color>
     <color name="common_backgroundLight">#424242</color>
 
 

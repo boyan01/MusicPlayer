@@ -38,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="320dp"
         android:layout_marginTop="?android:actionBarSize"
-        android:background="@color/common_backgroundDark"
+        android:background="@color/common_background_dark"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/local_item_playlist" />
 

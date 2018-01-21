@@ -10,9 +10,9 @@ import tech.summerly.quiet.commonlib.utils.fromJson
 internal class PlayerStateKeeper {
 
     companion object {
-        private val KEY_PLAY_LIST = "music_list"
-        private val KEY_CURRENT_MUSIC = "music_current"
-        private val KEY_PLAY_MODE = "play_mode"
+        private const val KEY_PLAY_LIST = "music_list"
+        private const val KEY_CURRENT_MUSIC = "music_current"
+        private const val KEY_PLAY_MODE = "play_mode"
     }
 
     private val preference: SharedPreferences =
@@ -25,9 +25,6 @@ internal class PlayerStateKeeper {
             musics: Collection<Music>,
             playing: Music? = null,
             editor: SharedPreferences.Editor = preference.edit()) {
-        if (musics.isEmpty()) {
-            return
-        }
         saveCurrent(playing ?: musics.elementAtOrNull(0), editor)
         val listJson = gson.toJson(musics)
         editor.putString(KEY_PLAY_LIST, listJson)
@@ -36,7 +33,6 @@ internal class PlayerStateKeeper {
 
     fun saveCurrent(playing: Music?,
                     editor: SharedPreferences.Editor = preference.edit()) {
-        playing ?: return
         editor.putString(KEY_CURRENT_MUSIC, gson.toJson(playing))
         editor.apply()
     }

@@ -88,7 +88,6 @@ class BaseMusicPlayer(
             else -> {
                 val shouldBePlay = playlistProvider.current ?: playlistProvider.getNextMusic()
                 shouldBePlay?.let(this@BaseMusicPlayer::performPlay)
-                Unit
             }
         }
     }

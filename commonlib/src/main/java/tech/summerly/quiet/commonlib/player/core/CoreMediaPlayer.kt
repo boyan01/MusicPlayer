@@ -74,7 +74,7 @@ class CoreMediaPlayer {
             true
         }
         mediaPlayer.setOnCompletionListener {
-            //on complete todo
+            playerState = PlayerState.Complete
         }
         mediaPlayer.setVolume(CoreMediaPlayer.volume, CoreMediaPlayer.volume)
         return mediaPlayer
@@ -83,6 +83,7 @@ class CoreMediaPlayer {
 
     fun play(music: Music) = async(CommonPool + playExceptionHandler) {
         playing = music
+        mediaPlayer.stop()
         mediaPlayer.reset()
         @Suppress("DEPRECATION")
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
@@ -118,7 +119,7 @@ class CoreMediaPlayer {
 
     fun stop() {
         mediaPlayer.stop()
-        playerState = PlayerState.Pausing
+        playerState = PlayerState.Idle
     }
 
     fun pause() {

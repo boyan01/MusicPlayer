@@ -52,14 +52,10 @@ open class BottomControllerFragment : BaseFragment() {
         controllerPauseOrPlay.setOnClickListener {
             playerManager.musicPlayer().playPause()
         }
-        controllerSkipNext.setOnClickListener {
-            playerManager.musicPlayer().playNext()
-        }
-        controllerSkipPrevious.setOnClickListener {
-            playerManager.musicPlayer().playPrevious()
-        }
         controllerPlaylist.setOnClickListener {
-
+            activity?.supportFragmentManager?.let {
+                PlayingListFragment().show(it, string(R.string.common_tag_fragment_playing_list))
+            }
         }
     }
 

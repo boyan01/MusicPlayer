@@ -22,7 +22,7 @@
     <color name="common_colorRipple">#bf797979</color>
 
     <color name="common_background">#FAFAFA</color>
-    <color name="common_backgroundDark">#EEEEEE</color>
+    <color name="common_background_dark">#EEEEEE</color>
     <color name="common_backgroundLight">#ffffff</color>
 
     <color name="common_transparent">#00000000</color>
