@@ -36,7 +36,7 @@ data class PlaylistDetailResultBean(
 
     data class Artist(
             val id: Long,
-            val name: String?
+            val name: String
     )
 
     data class Album(

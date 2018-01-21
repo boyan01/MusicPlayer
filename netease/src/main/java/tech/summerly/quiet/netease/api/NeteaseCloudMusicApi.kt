@@ -180,7 +180,7 @@ class NeteaseCloudMusicApi(context: Context = NeteaseModule) {
         }
     }
 
-    suspend fun getPlaylistDetail(playlistId: Long): PlaylistDetailResultBean.Playlist {
+    suspend fun getPlaylistDetail(playlistId: Long): Pair<PlaylistDetailResultBean.Playlist, List<Music>> {
         val encrypt = Crypto.encrypt("""
             {
                 "id":"$playlistId",
@@ -192,9 +192,11 @@ class NeteaseCloudMusicApi(context: Context = NeteaseModule) {
         if (playlistDetailBean.code == 301) {
             error("please login first")
         }
-        if (playlistDetailBean.code != 200 && playlistDetailBean.playlist == null) {
+        if (playlistDetailBean.code != 200 || playlistDetailBean.playlist == null) {
             error("error response")
         }
-        return playlistDetailBean.playlist!!
+        return playlistDetailBean.playlist to
+                (playlistDetailBean.playlist.tracks?.map { mapper.convertToMusic(it) }
+                        ?: emptyList())
     }
 }

@@ -5,10 +5,7 @@ import android.os.Bundle
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.netease_activity_daily_recommend.*
-import kotlinx.coroutines.experimental.CoroutineExceptionHandler
-import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
-import org.jetbrains.anko.toast
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
@@ -37,7 +34,7 @@ class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.B
         recyclerList.adapter = MultiTypeAdapter(items).also {
             it.register(NeteaseDailyHeader::class.java, NeteaseDailyHeaderViewBinder())
             it.register(NeteaseMusicHeader::class.java, NeteaseMusicHeaderViewBinder())
-            it.register(Music::class.java, NeteaseMusicItemViewBinder())
+            it.register(Music::class.java, NeteaseMusicItemViewBinder(this::onMusicClick))
         }
         toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -45,28 +42,27 @@ class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.B
         loadData()
     }
 
-    private val loadExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        throwable.printStackTrace()
-        throwable.message?.let(::toast)
-    }
-
-    private fun loadData() = launch(UI + loadExceptionHandler) {
+    private fun loadData() = asyncUI {
         //check if login
         if (!isLogin()) {
             if (alert(message = getString(R.string.netease_alert_need_login),
-                    negative = getString(R.string.netease_action_give_up))) {
+                            negative = getString(R.string.netease_action_give_up))) {
                 ARouter.getInstance().build("/netease/login")
                         .navigation(this@NeteaseDailyRecommendActivity, REQUEST_LOGIN)
             } else {
                 finish()
             }
-            return@launch
+            return@asyncUI
         }
         val songs = NeteaseCloudMusicApi().getDailyRecommend()
         items.add(NeteaseDailyHeader("12"))
         items.add(NeteaseMusicHeader(songs.size))
         items.addAll(songs)
         recyclerList.multiTypeAdapter.notifyDataSetChanged()
+    }
+
+    private fun onMusicClick(music: Music) {
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

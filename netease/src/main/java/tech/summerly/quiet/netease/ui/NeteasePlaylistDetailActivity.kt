@@ -8,7 +8,10 @@ import kotlinx.coroutines.experimental.Job
 import me.drakeet.multitype.MultiTypeAdapter
 import org.jetbrains.anko.dip
 import tech.summerly.quiet.commonlib.base.BaseActivity
+import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
+import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
@@ -18,8 +21,8 @@ import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 import tech.summerly.quiet.netease.api.result.PlaylistDetailResultBean
 import tech.summerly.quiet.netease.ui.items.NeteaseMusicHeader
 import tech.summerly.quiet.netease.ui.items.NeteaseMusicHeaderViewBinder
+import tech.summerly.quiet.netease.ui.items.NeteaseMusicItemViewBinder
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistDetailHeaderViewBinder
-import tech.summerly.quiet.netease.ui.items.NeteasePlaylistMusicItemViewBinder
 
 /**
  * author: summerly
@@ -50,7 +53,8 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
             it.register(PlaylistDetailResultBean.Playlist::class.java,
                     NeteasePlaylistDetailHeaderViewBinder(this::setBackgroundColor))
             it.register(NeteaseMusicHeader::class.java, NeteaseMusicHeaderViewBinder())
-            it.register(PlaylistDetailResultBean.Track::class.java, NeteasePlaylistMusicItemViewBinder())
+            it.register(Music::class.java,
+                    NeteaseMusicItemViewBinder(this::onMusicClick))
         }
         list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -67,6 +71,12 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
         toolbarPlaylist.setNavigationOnClickListener {
             onBackPressed()
         }
+    }
+
+    private fun onMusicClick(music: Music) {
+        musicPlayer.setType(MusicType.NETEASE)
+        musicPlayer.playlistProvider.setPlaylist(items.filterIsInstance(Music::class.java))
+        musicPlayer.play(music)
     }
 
     private fun setBackgroundColor(color: Int) {
@@ -88,11 +98,10 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
             }
             val playlistString = intent.getStringExtra("playlist_detail")
             log { playlistString }
-            val playlist = neteaseCloudMusicApi.getPlaylistDetail(id)
+            val (playlist, musics) = neteaseCloudMusicApi.getPlaylistDetail(id)
             items += playlist
-            val tracks = playlist.tracks ?: return@asyncUI
-            items += NeteaseMusicHeader(tracks.size)
-            items.addAll(tracks)
+            items += NeteaseMusicHeader(musics.size)
+            items.addAll(musics)
             list.multiTypeAdapter.notifyDataSetChanged()
         }
     }

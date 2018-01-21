@@ -1,10 +1,7 @@
 package tech.summerly.quiet.netease.api.converter
 
 import tech.summerly.quiet.commonlib.bean.*
-import tech.summerly.quiet.netease.api.result.MusicDetailResultBean
-import tech.summerly.quiet.netease.api.result.PersonalFmDataResult
-import tech.summerly.quiet.netease.api.result.PlaylistResultBean
-import tech.summerly.quiet.netease.api.result.RecommendSongResultBean
+import tech.summerly.quiet.netease.api.result.*
 
 /**
  * author : SUMMERLY
@@ -45,20 +42,22 @@ internal class NeteaseResultMapper {
 //        )
 //    }
 //
-//    fun convertToMusic(resultBean: PlaylistDetailResultBean.Track): Music {
-//        return Music(
-//                id = resultBean.id,
-//                title = resultBean.name ?: string(R.string.music_info_unknown),
-//                url = null, //目前无法也无需初始化其 URI ,我们只需要知道歌曲的ID就行了.
-//                artist = resultBean.ar?.map(this::convertToArtist) ?: emptyList(),
-//                picUrl = null,
-//                album = convertToAlbum(resultBean.al),
-//                type = MusicType.NETEASE,
-//                mvId = resultBean.mv,
-//                duration = resultBean.dt
-//        )
-//    }
-//
+    fun convertToMusic(resultBean: PlaylistDetailResultBean.Track): Music {
+        val album = convertToAlbum(resultBean.al)
+        return Music(
+                id = resultBean.id,
+                title = resultBean.name ?: "",
+                playUri = mutableListOf(MusicUri.NORMAL_QUALITY), //目前无法也无需初始化其 URI ,我们只需要知道歌曲的ID就行了.
+                artist = resultBean.ar?.map(this::convertToArtist) ?: emptyList(),
+                picUri = album.picUri,
+                album = album,
+                type = MusicType.NETEASE,
+                mvId = resultBean.mv,
+                duration = resultBean.dt.toLong()
+        )
+    }
+
+    //
 //    fun convertToMusic(resultBean: RecommendSongResultBean.Recommend): Music {
 //        return Music(
 //                id = resultBean.id,
@@ -172,7 +171,7 @@ internal class NeteaseResultMapper {
     }
 
 
-//
+    //
 //    fun convertToMusic(songsBean: MusicSearchResultBean.SongsBean): Music {
 //        return Music(
 //                id = songsBean.id,
@@ -210,21 +209,21 @@ internal class NeteaseResultMapper {
 //            )
 //
 //
-//    fun convertToArtist(artistResult: PlaylistDetailResultBean.Artist) =
-//            Artist(
-//                    id = artistResult.id,
-//                    name = artistResult.name ?: string(R.string.music_info_unknown),
-//                    picUrl = null,
-//                    type = MusicType.NETEASE
-//            )
-//
-//    fun convertToAlbum(albumResult: PlaylistDetailResultBean.Album?) =
-//            Album(
-//                    id = albumResult?.id ?: 0,
-//                    name = albumResult?.name ?: "unknown",
-//                    picUrl = albumResult?.picUrl,
-//                    type = MusicType.NETEASE
-//            )
+    private fun convertToArtist(artistResult: PlaylistDetailResultBean.Artist) =
+            Artist(
+                    id = artistResult.id,
+                    name = artistResult.name,
+                    picUri = null,
+                    type = MusicType.NETEASE
+            )
+
+    private fun convertToAlbum(albumResult: PlaylistDetailResultBean.Album?) =
+            Album(
+                    id = albumResult?.id ?: 0,
+                    name = albumResult?.name ?: "unknown",
+                    picUri = albumResult?.picUrl,
+                    type = MusicType.NETEASE
+            )
 //
 //    private fun convertToAlbum(albumResult: RecommendSongResultBean.Album): Album {
 //        return Album(
