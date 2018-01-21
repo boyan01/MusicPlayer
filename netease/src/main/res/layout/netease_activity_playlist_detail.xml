@@ -15,7 +15,7 @@
             android:id="@+id/toolbarPlaylist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/netease_color_primary"
+            android:background="@color/common_transparent"
             android:paddingTop="24dp"
             android:translationZ="1dp"
             app:navigationIcon="@drawable/netease_ic_arrow_back_white_24dp"
