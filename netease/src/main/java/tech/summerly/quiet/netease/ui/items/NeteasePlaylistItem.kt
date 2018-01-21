@@ -23,6 +23,9 @@ internal class NeteasePlaylistItemViewBinder : ItemViewBinder<PlaylistResultBean
                     .withObject("playlist_detail", item)
                     .navigation(context)
         }
+        imageAction.setOnClickListener {
+
+        }
     }
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
