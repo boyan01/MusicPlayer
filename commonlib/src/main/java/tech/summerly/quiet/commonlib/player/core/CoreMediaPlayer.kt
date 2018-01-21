@@ -81,6 +81,7 @@ class CoreMediaPlayer {
     }
 
 
+    @Synchronized
     fun play(music: Music) = async(CommonPool + playExceptionHandler) {
         playing = music
         mediaPlayer.stop()

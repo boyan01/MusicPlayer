@@ -47,10 +47,7 @@ internal class PlayingMusicItemViewBinder : ItemViewBinder<Music>() {
                     musicPlayer.corePlayer.stop()
                     musicPlayer.playlistProvider.current = musicPlayer.playlistProvider.getNextMusic()
                 }
-                musicPlayer.playlistProvider.apply {
-                    musicList.remove(item)
-                    onPlaylistUpdated(musicList)
-                }
+                musicPlayer.playlistProvider.remove(item)
                 adapter.notifyItemRemoved(holder.adapterPosition)
             }
         }

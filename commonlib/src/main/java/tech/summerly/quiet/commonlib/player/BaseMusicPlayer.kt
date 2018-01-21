@@ -114,7 +114,6 @@ class BaseMusicPlayer(
         if (!internalPlaylistProvider.isTypeAccept(type)) { // if need to change provider type
             corePlayer.stop()
             internalPlaylistProvider = newPlaylistProvider(type)
-            playNext()
         }
     }
 

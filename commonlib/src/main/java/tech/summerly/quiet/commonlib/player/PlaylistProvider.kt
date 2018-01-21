@@ -13,7 +13,7 @@ abstract class MusicPlaylistProviderFactory {
         private val factories = HashMap<MusicType, MusicPlaylistProviderFactory>()
 
         fun setFactory(type: MusicType, factory: MusicPlaylistProviderFactory) {
-            factories.put(type, factory)
+            factories[type] = factory
         }
 
         /**
@@ -43,18 +43,18 @@ abstract class MusicPlaylistProvider(
         current: Music?,
         playMode: PlayMode,
         open val musicList: ArrayList<Music>,
-        private val playerStateListener: BasePlayerDataListener
-) : BasePlayerDataListener by playerStateListener {
+        protected val playerStateListener: BasePlayerDataListener
+) {
 
     var current: Music? = null
         set(value) {
-            onCurrentMusicUpdated(field, value)
+            playerStateListener.onCurrentMusicUpdated(field, value)
             field = value
         }
 
     var playMode: PlayMode = playMode
         set(value) {
-            onPlayModeUpdated(value)
+            playerStateListener.onPlayModeUpdated(value)
             field = value
         }
 
@@ -71,6 +71,11 @@ abstract class MusicPlaylistProvider(
     abstract fun isTypeAccept(type: MusicType): Boolean
 
     abstract fun insertToNext(music: Music)
+
+    fun remove(music: Music?) {
+        musicList.remove(music)
+        playerStateListener.onPlaylistUpdated(musicList)
+    }
 
     init {
         this.current = current
@@ -89,7 +94,7 @@ class SimplePlaylistProvider(current: Music?,
     override fun setPlaylist(musics: List<Music>) {
         musicList.clear()
         musicList.addAll(musics)
-        onPlaylistUpdated(musics)
+        playerStateListener.onPlaylistUpdated(musics)
     }
 
     override fun getPlaylist(): List<Music> = musicList
@@ -206,13 +211,13 @@ class SimplePlaylistProvider(current: Music?,
             val indexShuffle = shuffleMusicList.indexOf(MusicPlayerManager.playingMusic.value) + 1
             shuffleMusicList.add(indexShuffle, music)
         }
-        onPlaylistUpdated(musicList)
+        playerStateListener.onPlaylistUpdated(musicList)
     }
 
     override fun clear() {
         musicList.clear()
         current = null
-        onPlaylistUpdated(musicList)
+        playerStateListener.onPlaylistUpdated(musicList)
     }
 
     override fun isTypeAccept(type: MusicType): Boolean {

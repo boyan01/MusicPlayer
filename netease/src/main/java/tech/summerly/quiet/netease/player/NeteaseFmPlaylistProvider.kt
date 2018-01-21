@@ -29,7 +29,7 @@ class NeteaseFmPlaylistProvider(
 
     override fun getPlaylist(): List<Music> = musicList
 
-    suspend override fun getNextMusic(music: Music?): Music? = suspendCancellableCoroutine {
+    override suspend fun getNextMusic(music: Music?): Music? = suspendCancellableCoroutine {
         val nextIndex = musicList.indexOf(current) + 1
         if (nextIndex >= musicList.size) {
             launch {
@@ -47,9 +47,10 @@ class NeteaseFmPlaylistProvider(
 
         musicList.clear()
         musicList.addAll(musics)
+        playerStateListener.onPlaylistUpdated(musics)
     }
 
-    suspend override fun getPreviousMusic(music: Music?): Music? = null
+    override suspend fun getPreviousMusic(music: Music?): Music? = null
 
     override fun clear() {
 
