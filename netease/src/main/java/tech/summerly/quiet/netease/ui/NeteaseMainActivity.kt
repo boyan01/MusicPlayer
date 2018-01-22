@@ -61,6 +61,8 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
 
     private val playlistCollect = ArrayList<Any>()
 
+    private var isLogin = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.netease_activity_main)
@@ -153,11 +155,13 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
     }
 
     private fun setLogin(profile: LoginResultBean.Profile) {
+        isLogin = true
         textUserName.text = profile.nickname
         GlideApp.with(this).load(profile.avatarUrl).into(imageUser)
     }
 
     private fun setNotLogin() {
+        isLogin = false
         findHeader(getString(R.string.netease_playlist_header_collect)).apply {
             isLoading = false
             isExpanded = false
@@ -173,6 +177,15 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
         textUserName.text = getString(R.string.netease_title_not_login)
         textUserName.setOnClickListener {
             startActivityForResult(Intent(this, LoginActivity::class.java), REQUEST_LOGIN)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isLogin && !tech.summerly.quiet.netease.utils.isLogin()) {
+            setNotLogin()
+        } else if (!isLogin && tech.summerly.quiet.netease.utils.isLogin()) {
+            loadData()
         }
     }
 
