@@ -88,7 +88,8 @@ private val defaultCoroutineExceptionHandler = CoroutineExceptionHandler { _, th
     }
 }
 
-fun asyncUI(block: suspend (() -> Unit)) = launch(UI + defaultCoroutineExceptionHandler) {
+fun asyncUI(exceptionHandler: CoroutineExceptionHandler = defaultCoroutineExceptionHandler,
+            block: suspend (() -> Unit)) = launch(UI + exceptionHandler) {
     block()
 }
 

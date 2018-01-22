@@ -14,7 +14,6 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.netease_activity_main.*
 import kotlinx.android.synthetic.main.netease_header_playlist.view.*
-import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.base.BaseActivity
@@ -23,6 +22,7 @@ import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.mvp.BaseView
 import tech.summerly.quiet.commonlib.utils.GlideApp
+import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.popupMenu
 import tech.summerly.quiet.netease.R
@@ -62,6 +62,8 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
     private val playlistCollect = ArrayList<Any>()
 
     private var isLogin = false
+
+    private var isLoading = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,23 +137,27 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
         recycler.multiTypeAdapter.notifyDataSetChanged()
     }
 
-    private fun loadNeteasePlaylists() {
-        launch(UI) {
-            val user = NeteasePreference.getLoginUser()
-            if (user == null) {
-                setNotLogin()
-                return@launch
-            }
-            setLogin(user)
-            val id = user.userId
-            val playlists = NeteaseCloudMusicApi(this@NeteaseMainActivity)
-                    .getUserPlaylists(id)
-            playlistCreate.clear()
-            playlistCreate.addAll(playlists.filter { it.userId == id })
-            playlistCollect.clear()
-            playlistCollect.addAll(playlists.filter { it.userId != id })
-            showPlaylists()
+    private fun loadNeteasePlaylists() = asyncUI {
+        if (isLoading) {
+            return@asyncUI
         }
+        isLoading = true
+        val user = NeteasePreference.getLoginUser()
+        if (user == null) {
+            isLoading = false
+            setNotLogin()
+            return@asyncUI
+        }
+        setLogin(user)
+        val id = user.userId
+        val playlists = NeteaseCloudMusicApi(this@NeteaseMainActivity)
+                .getUserPlaylists(id)
+        playlistCreate.clear()
+        playlistCreate.addAll(playlists.filter { it.userId == id })
+        playlistCollect.clear()
+        playlistCollect.addAll(playlists.filter { it.userId != id })
+        showPlaylists()
+        isLoading = false
     }
 
     private fun setLogin(profile: LoginResultBean.Profile) {
@@ -252,7 +258,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
 
     private fun shrinkHeader(header: NeteasePlaylistHeader) {
         //the start position need to be shrink
-        val index = recycler.multiTypeAdapter.items.indexOf(header)
+        val index = items.indexOf(header)
         //the playlists need be remove from recycler view
         val playlists = when (header.title) {
             getString(R.string.netease_playlist_header_create) -> playlistCreate
