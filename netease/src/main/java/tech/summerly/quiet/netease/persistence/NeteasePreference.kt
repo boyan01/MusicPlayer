@@ -31,4 +31,11 @@ internal object NeteasePreference {
         }
     }
 
+    /**
+     * check if need to load image for each music item when display music list
+     */
+    fun isGPRSDisableMusicItemImage(): Boolean {
+        return true
+    }
+
 }

@@ -66,7 +66,6 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
                     val alpha = (scrollY / heightHeader) * 0xff
                     toolbarPlaylist.background.alpha = alpha.toInt()
                 }
-                log { "alpha : ${toolbarPlaylist.background.alpha}" }
             }
         })
         toolbarPlaylist.setNavigationOnClickListener {

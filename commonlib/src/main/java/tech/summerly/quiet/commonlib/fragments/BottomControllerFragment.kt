@@ -68,7 +68,7 @@ open class BottomControllerFragment : BaseFragment() {
             PlayerState.Loading -> {
                 controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
                 // delay 500ms to display load progress bar
-                handler.postDelayed({
+                handler?.postDelayed({
                     if (!isDetached && view != null && musicPlayer.corePlayer.getState() == PlayerState.Loading) {
                         progressPlayPause.visible()
                         controllerPauseOrPlay.gone()

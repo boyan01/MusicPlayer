@@ -80,16 +80,17 @@
         android:tint="@color/common_color_icon_active"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/controllerPlaylist"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="invisible" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/controllerPlaylist"
         style="@style/Widget.AppCompat.ActionButton.Overflow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:tooltipText="@string/common_tooltips_playing_list"
         android:src="@drawable/common_ic_playlist_play_black_24dp"
         android:tint="@color/common_color_icon_active"
+        android:tooltipText="@string/common_tooltips_playing_list"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

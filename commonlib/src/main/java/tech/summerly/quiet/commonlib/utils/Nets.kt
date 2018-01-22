@@ -1,5 +1,10 @@
 package tech.summerly.quiet.commonlib.utils
 
+import android.content.Context
+import android.net.ConnectivityManager
+import tech.summerly.quiet.commonlib.LibModule
+
+
 /**
  * Created by summer on 17-12-20
  */
@@ -42,3 +47,9 @@ val headerNetease = mapOf(
         "Host" to "music.163.com",
         "User-Agent" to randomUserAgent()
 )
+
+
+fun isWifi(): Boolean {
+    val cm = LibModule.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    return cm.activeNetworkInfo.type == ConnectivityManager.TYPE_WIFI
+}

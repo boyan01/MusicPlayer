@@ -2,15 +2,21 @@
 
 package tech.summerly.quiet.netease.ui.items
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.PopupMenu
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.request.target.ImageViewTarget
+import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.netease_item_music.view.*
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.R
+import tech.summerly.quiet.netease.persistence.NeteasePreference
 
 /**
  * author : yangbin10
@@ -42,8 +48,40 @@ internal open class NeteaseMusicItemViewBinder(
             image.visible()
             GlideApp.with(this).load(item.picUri).into(image)
         }
+        displayMusicImage(image, item.picUri)
         //textTitle'width need be recalculate
         textTitle.requestLayout()
+    }
+
+    private fun displayMusicImage(imageView: AppCompatImageView, uri: String?) {
+        if (uri == null) {
+            imageView.gone()
+            return
+        }
+        imageView.visible()
+        val isOnlyLoadFromCache = NeteasePreference.isGPRSDisableMusicItemImage() && !isWifi()
+        GlideApp.with(imageView).asBitmap()
+                .onlyRetrieveFromCache(isOnlyLoadFromCache)
+                .load(uri)
+                .into(object : ImageViewTarget<Bitmap>(imageView) {
+                    override fun onLoadFailed(errorDrawable: Drawable?) {
+                        imageView.gone()
+                    }
+
+                    override fun setResource(resource: Bitmap?) {
+                        //do nothing
+                    }
+
+                    override fun onLoadStarted(placeholder: Drawable?) {
+                        super.onLoadStarted(placeholder)
+                        imageView.setImageDrawable(placeholder)
+                    }
+
+                    override fun onResourceReady(resource: Bitmap?, transition: Transition<in Bitmap>?) {
+                        imageView.visible()
+                        imageView.setImageBitmap(resource)
+                    }
+                })
     }
 
     private fun View.checkPlayable(canPlay: Boolean) {
@@ -92,5 +130,4 @@ internal open class NeteaseMusicItemViewBinder(
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
         return ViewHolder(R.layout.netease_item_music, parent, inflater)
     }
-
 }

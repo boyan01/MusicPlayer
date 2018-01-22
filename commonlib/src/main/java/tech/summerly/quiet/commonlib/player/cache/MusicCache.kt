@@ -21,6 +21,8 @@ object MusicCacheHelper {
     // 1 Gb for default cache
     private const val SIZE_CACHE_DEFAULT = 1024 * 1024 * 1024L
 
+    private val headerInjector = HeaderInjector { headerNetease.toMutableMap() }
+
     private val musicCacheServer = HttpProxyCacheServer.Builder(context)
             .cacheDirectory(cacheRoot)
             .maxCacheSize(SIZE_CACHE_DEFAULT)
@@ -28,13 +30,7 @@ object MusicCacheHelper {
                 //usually netease music url end with .../../[md5].mp3
                 it.substringAfterLast("/")
             }
-            .headerInjector {
-                if (it.startsWith("http://m10.music.126.net")) {
-                    headerNetease
-                } else {
-                    emptyMap()
-                }
-            }
+            .headerInjector(headerInjector)
             .build()
 
     fun generateProxyUrl(uri: String): String {
