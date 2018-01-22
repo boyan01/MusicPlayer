@@ -16,7 +16,7 @@ object MusicUrlFetcher : MusicUrlGetter {
     private val map = HashMap<MusicType, MusicUrlGetter>()
 
     fun addMusicUrlGetter(type: MusicType, urlGetter: MusicUrlGetter) {
-        map.put(type, urlGetter)
+        map[type] = urlGetter
     }
 
     override suspend fun getPlayableUrl(music: Music): String? {

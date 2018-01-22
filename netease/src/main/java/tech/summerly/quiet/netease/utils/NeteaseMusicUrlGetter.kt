@@ -3,6 +3,7 @@ package tech.summerly.quiet.netease.utils
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicUri
 import tech.summerly.quiet.commonlib.player.MusicUrlGetter
+import tech.summerly.quiet.commonlib.player.cache.MusicCacheHelper
 import tech.summerly.quiet.netease.NeteaseModule
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 
@@ -26,6 +27,6 @@ internal object NeteaseMusicUrlGetter : MusicUrlGetter {
         playUri.clear()
         playUri.add(MusicUri(datum.bitrate, url,
                 System.currentTimeMillis() + 12000, datum.md5))
-        return url
+        return MusicCacheHelper.generateProxyUrl(url)
     }
 }

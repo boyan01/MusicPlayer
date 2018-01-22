@@ -28,7 +28,7 @@ class BaseMusicPlayer(
 ) {
 
     companion object {
-        private val DURATION_UPDATE_PROGRESS = 200L
+        private const val DURATION_UPDATE_PROGRESS = 200L
     }
 
     /**
