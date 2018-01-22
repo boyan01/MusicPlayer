@@ -9,7 +9,7 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/common_background_dark"
+        android:background="?colorPrimary"
         android:elevation="1dp">
 
         <LinearLayout
@@ -31,14 +31,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/common_ic_repeat_black_24dp"
-                android:tint="@color/common_color_icon_active" />
+                android:tint="@color/common_text_primary_dark_background" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/textPlayMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:textColor="@color/common_text_primary"
+                android:textColor="@color/common_text_primary_dark_background"
                 android:textSize="17sp"
                 tools:text="列表循环(16)" />
         </LinearLayout>
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:background="?android:selectableItemBackgroundBorderless"
             android:src="@drawable/ic_clear_all_black_24dp"
-            android:tint="@color/common_color_icon_active"
+            android:tint="@color/common_text_primary_dark_background"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

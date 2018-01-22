@@ -34,7 +34,6 @@ internal class PlayingMusicItemViewBinder : ItemViewBinder<Music>() {
             musicPlayer.play(item)
         }
         if (current == item) {
-            TransitionManager.beginDelayedTransition(this as ViewGroup)
             indicatorPlaying.visible()
             buttonLink.gone()
         } else {

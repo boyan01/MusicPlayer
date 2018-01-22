@@ -2,6 +2,7 @@ package tech.summerly.quiet.commonlib.fragments
 
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,7 +64,7 @@ class PlayingListFragment : BottomSheetDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.common_fragment_playing_list, container, false)
+        return inflater.cloneInContext(context).inflate(R.layout.common_fragment_playing_list, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
@@ -72,6 +73,21 @@ class PlayingListFragment : BottomSheetDialogFragment() {
         }
         list.adapter.notifyDataSetChanged()
         setEvent()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        scrollToCurrentPlaying()
+    }
+
+    private fun scrollToCurrentPlaying() {
+        val list = view?.list ?: return
+        val current = musicPlayer.current ?: return
+        val position = musicList.indexOf(current)
+        if (position < 0 || position > musicList.size) {
+            return
+        }
+        (list.layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 2)
     }
 
     private fun View.setEvent() {

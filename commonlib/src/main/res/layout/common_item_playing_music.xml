@@ -9,15 +9,16 @@
 
     <View
         android:id="@+id/indicatorPlaying"
-        android:layout_width="6dp"
+        android:layout_width="4dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:background="@color/common_color_primary"
+        android:background="?android:colorPrimary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/title"
@@ -28,10 +29,12 @@
         android:lines="1"
         android:maxWidth="200dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/common_text_primary"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/subtitle"
         app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toEndOf="@id/indicatorPlaying"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="this is a very long title" />
 
@@ -43,6 +46,7 @@
         android:layout_marginStart="4dp"
         android:lines="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/common_text_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttonLink"
         app:layout_constraintStart_toEndOf="@id/title"
