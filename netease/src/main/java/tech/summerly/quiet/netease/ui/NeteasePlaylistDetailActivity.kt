@@ -68,8 +68,11 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
                 }
             }
         })
-        toolbarPlaylist.setNavigationOnClickListener {
+        imageBack.setOnClickListener {
             onBackPressed()
+        }
+        imageSearch.setOnClickListener {
+            log { "search" }
         }
     }
 

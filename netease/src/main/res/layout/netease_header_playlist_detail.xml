@@ -66,7 +66,7 @@
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/buttonShare"
         style="@style/NeteasePlaylistDetailNavButton"
-        android:src="@drawable/ic_share_black_24dp"
+        android:src="@drawable/netease_ic_share_black_24dp"
         android:tooltipText="@string/netease_share"
         app:layout_constraintBottom_toBottomOf="@id/buttonCollection"
         app:layout_constraintEnd_toStartOf="@id/buttonDownload"

@@ -13,6 +13,8 @@ import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
 import tech.summerly.quiet.commonlib.LibModule
+import java.io.IOError
+import java.io.IOException
 
 /*
  * author : yangbin10
@@ -96,3 +98,32 @@ fun asyncUI(exceptionHandler: CoroutineExceptionHandler = defaultCoroutineExcept
 fun CoroutineDispatcher.submit(parent: Job? = null,
                                block: suspend CoroutineScope.() -> Unit) = launch(context = this, parent = parent, block = block)
 
+/**
+ * retry
+ */
+suspend fun <T> retryIO(repeatTimes: Int = 10, block: suspend () -> T): T? {
+    var curDelay = 1000L
+    repeat(repeatTimes) {
+        try {
+            return block()
+        } catch (exception: IOException) {
+            exception.printStackTrace()
+        }
+        delay(curDelay)
+        curDelay = (curDelay * 2).coerceAtMost(60_000L)
+    }
+    return null
+}
+
+suspend fun <T> retryNull(repeatTimes: Int = 10, block: suspend () -> T): T? {
+    var curDelay = 1000L
+    repeat(repeatTimes) {
+        val result = block()
+        if (result != null) {
+            return result
+        }
+        delay(curDelay)
+        curDelay = (curDelay * 2).coerceAtMost(60_000L)
+    }
+    return null
+}

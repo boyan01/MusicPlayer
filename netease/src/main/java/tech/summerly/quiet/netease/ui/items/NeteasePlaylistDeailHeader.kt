@@ -17,7 +17,7 @@ import tech.summerly.quiet.netease.api.result.PlaylistDetailResultBean
  */
 
 class NeteasePlaylistDetailHeaderViewBinder(
-        private val onBackgroundColor: (color: Int) -> Unit
+        private val onHeaderColorAvailable: (color: Int) -> Unit
 ) : ItemViewBinder<PlaylistDetailResultBean.Playlist>() {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
@@ -30,10 +30,10 @@ class NeteasePlaylistDetailHeaderViewBinder(
                 view.setImageBitmap(resource)
                 resource ?: return
                 launch(UI) {
-                    val background = resource.generatePalette().await()
-                            .getDarkMutedColor(color(R.color.netease_color_primary))
+                    val palette = resource.generatePalette().await()
+                    val background = palette.getDarkMutedColor(color(R.color.netease_color_primary))
                     setBackgroundColor(background)
-                    onBackgroundColor(background)
+                    onHeaderColorAvailable(background)
                 }
             }
         })

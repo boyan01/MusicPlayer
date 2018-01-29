@@ -32,7 +32,7 @@
         android:maxLines="1"
         android:textColor="@color/common_text_primary"
         app:layout_constraintBottom_toTopOf="@id/musicSubTitle"
-        app:layout_constraintEnd_toStartOf="@+id/controllerPauseOrPlay"
+        app:layout_constraintEnd_toStartOf="@+id/progressPlayPause"
         app:layout_constraintStart_toEndOf="@+id/artWork"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
@@ -53,7 +53,7 @@
         android:textColor="@color/common_text_secondary"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/controllerPauseOrPlay"
+        app:layout_constraintEnd_toStartOf="@+id/progressPlayPause"
         app:layout_constraintStart_toEndOf="@+id/artWork"
         app:layout_constraintTop_toBottomOf="@id/musicTitle"
         app:layout_constraintWidth_default="spread"
@@ -81,7 +81,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/controllerPlaylist"
         app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="invisible" />
+        tools:visibility="gone" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/controllerPlaylist"

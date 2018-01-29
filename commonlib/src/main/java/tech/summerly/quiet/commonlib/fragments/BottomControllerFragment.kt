@@ -61,7 +61,7 @@ open class BottomControllerFragment : BaseFragment() {
 
     @Synchronized
     private fun setControllerState(state: PlayerState) = runWithRoot {
-        progressPlayPause.gone()
+        progressPlayPause.invisible()
         controllerPauseOrPlay.visible()
         when (state) {
             PlayerState.Playing -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)

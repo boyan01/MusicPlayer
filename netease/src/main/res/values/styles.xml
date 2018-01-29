@@ -1,6 +1,6 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="NeteaseAppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="NeteaseAppTheme" parent="CommonAppTheme">
         <item name="colorPrimary">@color/netease_color_primary</item>
         <item name="colorPrimaryDark">@color/netease_color_primary_dark</item>
         <item name="colorAccent">@color/common_colorAccent</item>
@@ -66,5 +66,23 @@
         <item name="android:padding">8dp</item>
         <item name="android:tint">@color/common_text_primary_dark_background</item>
     </style>
+
+    <style name="NeteaseActionOverflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tooltipText" tools:ignore="NewApi">
+            @string/netease_tips_action_more
+        </item>
+        <item name="android:tint">@color/common_text_primary_dark_background</item>
+    </style>
+
+
+    <style name="NeteaseRippleThemeDark">
+        <item name="colorControlHighlight">@color/common_background_dark</item>
+    </style>
+
+    <style name="NeteaseActionOverflow.Dark">
+        <item name="android:theme">@style/NeteaseRippleThemeDark</item>
+        <item name="android:tint">@color/common_text_primary_dark_background</item>
+    </style>
+
 
 </resources>

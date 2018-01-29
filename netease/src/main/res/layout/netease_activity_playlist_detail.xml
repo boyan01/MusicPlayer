@@ -11,16 +11,50 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <android.support.v7.widget.Toolbar
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/toolbarPlaylist"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/common_toolbar_height_with_status_bar"
             android:background="@color/common_transparent"
             android:paddingTop="24dp"
             android:translationZ="1dp"
-            app:navigationIcon="@drawable/netease_ic_arrow_back_white_24dp"
-            app:title="歌单"
-            app:titleTextColor="@color/common_text_primary_dark_background" />
+            tools:background="@color/netease_color_primary">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/imageBack"
+                style="@style/NeteaseActionOverflow.Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/netease_ic_arrow_back_white_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/textTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/netease_title_playlist_detail"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:textColor="@color/common_text_primary_dark_background"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/imageSearch"
+                app:layout_constraintStart_toEndOf="@id/imageBack"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/imageSearch"
+                style="@style/NeteaseActionOverflow.Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:src="@drawable/netease_ic_search_white_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list"
