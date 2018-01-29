@@ -2,16 +2,12 @@
 
 package tech.summerly.quiet.netease.ui.items
 
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.PopupMenu
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.request.target.ImageViewTarget
-import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.netease_item_music.view.*
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.utils.*
@@ -53,35 +49,13 @@ internal open class NeteaseMusicItemViewBinder(
         textTitle.requestLayout()
     }
 
-    private fun displayMusicImage(imageView: AppCompatImageView, uri: String?) {
-        if (uri == null) {
-            imageView.gone()
-            return
-        }
-        imageView.visible()
+    private fun View.displayMusicImage(imageView: AppCompatImageView, uri: String?) {
         val isOnlyLoadFromCache = NeteasePreference.isGPRSDisableMusicItemImage() && !isWifi()
-        GlideApp.with(imageView).asBitmap()
+        GlideApp.with(this).asBitmap()
                 .onlyRetrieveFromCache(isOnlyLoadFromCache)
                 .load(uri)
-                .into(object : ImageViewTarget<Bitmap>(imageView) {
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-                        imageView.gone()
-                    }
-
-                    override fun setResource(resource: Bitmap?) {
-                        //do nothing
-                    }
-
-                    override fun onLoadStarted(placeholder: Drawable?) {
-                        super.onLoadStarted(placeholder)
-                        imageView.setImageDrawable(placeholder)
-                    }
-
-                    override fun onResourceReady(resource: Bitmap?, transition: Transition<in Bitmap>?) {
-                        imageView.visible()
-                        imageView.setImageBitmap(resource)
-                    }
-                })
+                .placeholder(R.drawable.common_image_placeholder_loading)
+                .into(imageView)
     }
 
     private fun View.checkPlayable(canPlay: Boolean) {

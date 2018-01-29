@@ -8,39 +8,41 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageCover"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
         android:padding="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/common_ic_play_circle_outline_black_24dp" />
+        tools:src="@drawable/common_image_placeholder_loading" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textTitle"
+        style="@style/NeteaseMusicItemTitleStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:ellipsize="end"
-        android:lines="1"
         android:textColor="@color/common_text_primary"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="@id/guidelineCenter"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/textSubTitle"
         app:layout_constraintEnd_toStartOf="@id/imageAction"
         app:layout_constraintStart_toEndOf="@+id/imageCover"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="奇幻故事" />
 
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textSubTitle"
+        style="@style/NeteaseMusicItemSubTitleStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:textColor="@color/common_text_secondary"
-        android:textSize="12sp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/imageAction"
         app:layout_constraintStart_toStartOf="@id/textTitle"
-        app:layout_constraintTop_toTopOf="@id/guidelineCenter"
+        app:layout_constraintTop_toBottomOf="@id/textTitle"
         tools:text="已下载15首" />
 
     <android.support.v7.widget.AppCompatImageView
@@ -55,16 +57,10 @@
         tools:ignore="UnusedAttribute" />
 
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guidelineCenter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent=".5" />
-
     <View
         android:layout_width="0dp"
         android:layout_height="1px"
+        android:layout_marginStart="8dp"
         android:background="@color/common_color_divider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

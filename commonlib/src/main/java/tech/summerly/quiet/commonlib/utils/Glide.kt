@@ -42,7 +42,7 @@ class PictureUrl : GlideUrl {
 
 }
 
-private fun String.toPictureUrl(): Any {
+fun String.toPictureUrl(): Any {
     if (startsWith("file:", true)) {
         return this
     }
