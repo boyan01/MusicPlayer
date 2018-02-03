@@ -2,5 +2,7 @@
     package="tech.summerly.quiet.commonlib">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <application />
+    <application >
+        <service android:name=".player.service.MusicPlayerService"/>
+    </application>
 </manifest>
