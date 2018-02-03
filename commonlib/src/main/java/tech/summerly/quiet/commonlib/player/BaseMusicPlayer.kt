@@ -1,16 +1,13 @@
 package tech.summerly.quiet.commonlib.player
 
-import android.content.Intent
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
 import tech.summerly.quiet.commonlib.player.core.CorePlayerStateListener
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.player.service.MusicPlayerService
 import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.BasePlayerDataSaver
 import tech.summerly.quiet.commonlib.player.state.plus
@@ -59,12 +56,6 @@ class BaseMusicPlayer(
             corePlayer.play(music).await()
             sendProgress()
         }
-        bindPlayerToService()
-    }
-
-    private fun bindPlayerToService() {
-        log { "attempt to bind to play service" }
-        LibModule.startService(Intent(LibModule, MusicPlayerService::class.java))
     }
 
     fun playNext() = launch {
@@ -102,8 +93,8 @@ class BaseMusicPlayer(
         performPlay(music)
     }
 
-    internal fun destroy() {
-
+    internal fun stop() {
+        corePlayer.stop()
     }
 
     private fun newPlaylistProvider(type: MusicType?): MusicPlaylistProvider {

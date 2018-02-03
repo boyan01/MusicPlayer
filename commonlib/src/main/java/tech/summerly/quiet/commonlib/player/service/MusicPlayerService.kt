@@ -1,28 +1,20 @@
 package tech.summerly.quiet.commonlib.player.service
 
-import android.app.Notification
-import android.app.PendingIntent
 import android.app.Service
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.IBinder
-import android.support.v4.app.NotificationCompat
-import android.support.v7.graphics.Palette
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
-import tech.summerly.quiet.commonlib.R
+import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.notification.NotificationHelper
 import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.commonlib.utils.LoggerLevel
+import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.commonlib.utils.observe
 
 /**
  * author : yangbin10
@@ -38,20 +30,29 @@ class MusicPlayerService : Service(), LifecycleOwner {
 
     companion object {
 
-        val action_play_previous = "previous"
+        const val action_play_previous = "previous"
 
-        val action_play_pause = "play_pause"
+        const val action_play_pause = "play_pause"
 
-        val action_play_next = "next"
+        const val action_play_next = "next"
 
-        val action_exit = "exit"
+        const val action_exit = "exit"
 
-        val action_like = "like"
+        const val action_like = "like"
 
+        private var isRunning: Boolean = false
+
+        fun start(context: Context = LibModule) {
+            if (!isRunning) {
+                context.startService(Intent(context, MusicPlayerService::class.java))
+            } else {
+                log(LoggerLevel.DEBUG) {
+                    "wo do not need to start music player service ," +
+                            "because it is already running..."
+                }
+            }
+        }
     }
-
-    private lateinit var notificationHelper: PlayerNotificationHelper
-
 
     private val playerManager: MusicPlayerManager
         get() = MusicPlayerManager
@@ -62,13 +63,9 @@ class MusicPlayerService : Service(), LifecycleOwner {
     private val currentPlaying: Music?
         get() = musicPlayer.corePlayer.playing
 
-    private val isPlaying: Boolean
-        get() = musicPlayer.corePlayer.isPlaying
-
     override fun onCreate() {
+        isRunning = true
         super.onCreate()
-        log { "on created " }
-        notificationHelper = PlayerNotificationHelper(this)
         lifecycleRegister.markState(Lifecycle.State.STARTED)
         playerManager.playerState.observe(this) {
             notification()
@@ -83,7 +80,7 @@ class MusicPlayerService : Service(), LifecycleOwner {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
             action_play_previous -> {
-                musicPlayer.playNext()
+                musicPlayer.playPrevious()
             }
 
             action_play_pause -> {
@@ -95,11 +92,14 @@ class MusicPlayerService : Service(), LifecycleOwner {
             }
             action_exit -> {
                 stopForeground(true)
+                MusicNotification.cancel(NotificationHelper.ID_NOTIFICATION_PLAY_SERVICE)
+                musicPlayer.stop()
                 stopSelf()
             }
             action_like -> {
                 //将歌曲标记为喜欢
                 //TODO
+                log { "mark as liked : $currentPlaying" }
             }
         }
         bindPlayerToService()
@@ -113,125 +113,10 @@ class MusicPlayerService : Service(), LifecycleOwner {
         instanceHolder = musicPlayer
     }
 
-    /**
-     *
-     */
-    private fun GlideRequest<Bitmap>.loadWithDefault(uri: Any?, handler: (Bitmap) -> Unit) {
-        val default = BitmapFactory.decodeResource(resources, R.drawable.common_icon_notification_default)
-        if (uri == null) {
-            handler(default)
-            return
-        }
-        load(uri).into(object : SimpleTarget<Bitmap>() {
-            override fun onResourceReady(resource: Bitmap?, transition: Transition<in Bitmap>?) {
-                if (resource != null) {
-                    handler(resource)
-                } else {
-                    handler(default)
-                }
-            }
-
-            override fun onLoadFailed(errorDrawable: Drawable?) {
-                handler(default)
-            }
-
-            override fun onLoadStarted(placeholder: Drawable?) {
-                handler(default)
-            }
-        })
-    }
-
-    /**
-     * 生成一个前台通知显示当前播放的音乐信息
-     * fixme
-     */
-    private fun notification() {
-        val music = currentPlaying
-        if (music == null) {
-            log { "current playing is null , stop foreground." }
-            stopForeground(true)
-            return
-        }
-        log { "popup notification for music player" }
-        val uri = music.getPictureUrl()
-        GlideApp.with(this).asBitmap().loadWithDefault(uri) {
-            val playing = isPlaying
-            notificationHelper.buildNotification(music, isPlaying, it)?.let {
-                if (playing) {
-                    startForeground(NotificationHelper.ID_NOTIFICATION_PLAY_SERVICE, it)
-                } else {
-                    stopForeground(false)
-                    notificationHelper.notify(NotificationHelper.ID_NOTIFICATION_PLAY_SERVICE, it)
-                }
-            }
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         lifecycleRegister.markState(Lifecycle.State.DESTROYED)
-        musicPlayer.destroy()
-        notificationHelper.cancel(NotificationHelper.ID_NOTIFICATION_PLAY_SERVICE)
-    }
-
-    private class PlayerNotificationHelper(private val context: Context) : NotificationHelper(context) {
-
-        fun buildNotification(music: Music,
-                              isPlaying: Boolean,
-                              largeIcon: Bitmap): Notification? {
-            val generate = Palette.from(largeIcon).generate()
-            val color = generate.mutedSwatch?.rgb ?: Color.WHITE
-            return NotificationCompat.Builder(context,
-                    NotificationHelper.ID_PLAY_SERVICE)
-                    .setShowWhen(false)// 隐藏时间戳
-                    .setStyle(android.support.v4.media.app.NotificationCompat.MediaStyle()// 设置通知Style
-                            .setShowActionsInCompactView(0, 1, 2))//通知处于非展开状态时显示的按钮编号
-                    .setColor(color)
-                    //大图标为专辑或歌手图标
-                    .setLargeIcon(largeIcon)
-                    .setSmallIcon(R.drawable.common_ic_skip_previous_black_24dp)
-                    // Set Notification content information
-                    .setContentText(music.artistAlbumString())
-                    .setContentInfo(music.album.name)
-                    .setContentTitle(music.title)
-                    .setColorized(true)
-                    // Add some playback controls
-                    .addAction(R.drawable.common_ic_skip_previous_black_24dp, "prev", buildPlaybackAction(0))
-                    .addAction(R.drawable.common_ic_pause_circle_outline_black_24dp.takeIf { isPlaying } ?: R.drawable.common_ic_play_circle_outline_black_24dp,
-                            "pauseOrPlay", buildPlaybackAction(1))
-                    .addAction(R.drawable.common_ic_skip_next_black_24dp, "next", buildPlaybackAction(2))
-                    .addAction(R.drawable.common_ic_close_black_24dp, "close", buildPlaybackAction(3))
-//                    .setContentIntent(let {
-//                        //                        TODO()
-////                        PendingIntent.getActivity(context, 0, intent, 0)
-//                    })
-                    .build()
-        }
-
-        private fun buildPlaybackAction(which: Int): PendingIntent {
-            val intent = Intent(context, MusicPlayerService::class.java)
-            val action: PendingIntent
-            when (which) {
-                0 -> {
-                    intent.action = action_play_previous
-                    action = PendingIntent.getService(context, 0, intent, 0)
-                }
-                1 -> {
-                    intent.action = action_play_pause
-                    action = PendingIntent.getService(context, 1, intent, 0)
-                }
-                2 -> {
-                    intent.action = action_play_next
-                    action = PendingIntent.getService(context, 2, intent, 0)
-                }
-                3 -> {
-                    intent.action = action_exit
-                    action = PendingIntent.getService(context, 3, intent, 0)
-                }
-                else -> error("")
-            }
-            return action
-        }
-
+        musicPlayer.stop()
+        isRunning = false
     }
 }

@@ -6,6 +6,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.R
 
 /**
@@ -13,13 +14,16 @@ import tech.summerly.quiet.commonlib.R
  * date   : 2017/12/27
  */
 @SuppressLint("NewApi")//lint can not work fine in this class
-open class NotificationHelper(private val context: Context) {
+open class NotificationHelper {
     companion object {
         const val ID_PLAY_SERVICE = "music_play_service"
 
         const val ID_NOTIFICATION_PLAY_SERVICE = 0x30312
-        const val ID_NOTIFICATION_FM_PLAY_SERVICE = 0x1234
+
     }
+
+    private val context: Context
+        get() = LibModule
 
     private val notificationManger: NotificationManager by lazy {
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

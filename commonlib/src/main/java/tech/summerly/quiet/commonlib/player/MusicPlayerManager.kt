@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.core.PlayerState
+import tech.summerly.quiet.commonlib.player.service.MusicPlayerService
 import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
@@ -23,11 +24,13 @@ object MusicPlayerManager : BasePlayerDataListener {
 
 
     private val onPlayerStateChange = { state: PlayerState ->
+        if (state != PlayerState.Idle) {
+            MusicPlayerService.start()
+        }
         internalPlayerState.postValue(state)
     }
 
     private val onPositionChange = { position: Long ->
-        log { "on position change: $position" }
         internalPosition.postValue(position)
     }
 
@@ -53,14 +56,12 @@ object MusicPlayerManager : BasePlayerDataListener {
     }
 
     init {
-
         playerState.observeForeverFilterNull {
             if (it == PlayerState.Complete) {
                 musicPlayer().playNext()
             }
         }
     }
-
 
     val musicChange: LiveData<Pair<Music?, Music?>> = internalMusicChange
     val playingMusic: LiveData<Music> get() = internalPlayingMusic
