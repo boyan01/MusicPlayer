@@ -30,7 +30,7 @@ private val currentIsPlaying: Boolean
     get() = MusicPlayerManager.playerState.value == PlayerState.Playing
 
 
-private object MusicNotification : NotificationHelper() {
+internal object MusicNotification : NotificationHelper() {
 
     private val context: Context
         get() = LibModule
