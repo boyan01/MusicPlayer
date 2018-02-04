@@ -38,12 +38,6 @@ internal open class NeteaseMusicItemViewBinder(
             }
             onMorePopupMenuShow(menu)
         }
-        if (item.picUri == null) {
-            image.gone()
-        } else {
-            image.visible()
-            GlideApp.with(this).load(item.picUri).into(image)
-        }
         displayMusicImage(image, item.picUri)
         //textTitle'width need be recalculate
         textTitle.requestLayout()
