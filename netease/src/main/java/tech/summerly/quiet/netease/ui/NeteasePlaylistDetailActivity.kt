@@ -3,6 +3,7 @@ package tech.summerly.quiet.netease.ui
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.netease_activity_playlist_detail.*
 import kotlinx.coroutines.experimental.Job
 import me.drakeet.multitype.MultiTypeAdapter
@@ -12,10 +13,7 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.player.musicPlayer
-import tech.summerly.quiet.commonlib.utils.LoggerLevel
-import tech.summerly.quiet.commonlib.utils.asyncUI
-import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
+import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.NeteaseModule
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
@@ -100,12 +98,23 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
                 return@asyncUI
             }
             val playlistString = intent.getStringExtra("playlist_detail")
-            log { playlistString }
+            showDefaultHeader(playlistString)
             val (playlist, musics) = neteaseCloudMusicApi.getPlaylistDetail(id)
+            items.clear()
             items += playlist
             items += NeteaseMusicHeader(musics.size)
             items.addAll(musics)
             list.multiTypeAdapter.notifyDataSetChanged()
         }
+    }
+
+    /**
+     * show a preview header before loading data from net
+     */
+    private fun showDefaultHeader(detail: String?) {
+        detail ?: return
+        val resultBean = Gson().fromJson<PlaylistDetailResultBean.Playlist>(detail) ?: return
+        items += resultBean
+        list.multiTypeAdapter.notifyDataSetChanged()
     }
 }
