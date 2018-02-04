@@ -87,6 +87,12 @@ class BaseMusicPlayer(
      * try to play [music]
      * if this music is playing , do nothing
      * else will force to play this music from start , even it is pausing
+     *
+     * if you want set a playlist to music player , you can use [BaseMusicPlayer.playlistProvider] to
+     * order the playlist you want to play
+     * example:
+     *      musicPlayer.playlistProvider.setPlaylist(musicList)
+     *      musicPlayer.play(music)
      */
     fun play(music: Music) {
         log { music.toShortString() }
