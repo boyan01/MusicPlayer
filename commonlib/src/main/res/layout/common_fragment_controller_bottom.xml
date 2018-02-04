@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/common_height_bottom_controller"
     android:background="@color/common_background_dark"
-    android:foreground="?android:selectableItemBackground">
+    android:foreground="?android:selectableItemBackground"
+    tools:ignore="UnusedAttribute">
 
 
     <android.support.v7.widget.AppCompatImageView
@@ -63,7 +64,8 @@
         android:id="@+id/progressPlayPause"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:padding="4dp"
+        android:indeterminateTint="@color/common_color_icon_active"
+        android:padding="8dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/controllerPlaylist"
@@ -78,6 +80,7 @@
         android:padding="4dp"
         android:src="@drawable/common_ic_play_circle_outline_black_24dp"
         android:tint="@color/common_color_icon_active"
+        android:tooltipText="@string/common_pause"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/controllerPlaylist"
         app:layout_constraintTop_toTopOf="parent"
