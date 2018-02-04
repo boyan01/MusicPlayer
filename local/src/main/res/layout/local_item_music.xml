@@ -22,7 +22,8 @@
         android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_marginStart="16dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        tools:src="@drawable/common_image_placeholder_loading" />
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/popup_menu"
@@ -31,9 +32,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:tooltipText="@string/local_tips_more_options"
         android:background="?actionBarItemBackground"
         android:tint="@color/common_color_icon_active"
+        android:tooltipText="@string/local_tips_more_options"
         tools:ignore="UnusedAttribute" />
 
     <LinearLayout

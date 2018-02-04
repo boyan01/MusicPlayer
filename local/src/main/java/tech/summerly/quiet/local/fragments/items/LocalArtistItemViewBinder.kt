@@ -17,7 +17,8 @@ import tech.summerly.quiet.local.R
 /**
  * Created by summer on 17-12-24
  */
-internal class LocalArtistItemViewBinder : ItemViewBinder<Artist>() {
+internal class LocalArtistItemViewBinder(
+        private val onArtistClick: (Artist) -> Unit) : ItemViewBinder<Artist>() {
 
     override fun onBindViewHolder(holder: ViewHolder, item: Artist) = with(holder.itemView) {
         GlideApp.with(this)
@@ -34,6 +35,9 @@ internal class LocalArtistItemViewBinder : ItemViewBinder<Artist>() {
                     }
                 })
         title.text = item.name
+        setOnClickListener {
+            onArtistClick(item)
+        }
     }
 
     /**

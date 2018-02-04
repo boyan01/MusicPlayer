@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
@@ -20,10 +21,7 @@ import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
-import tech.summerly.quiet.local.LocalModule
-import tech.summerly.quiet.local.LocalMusicActivity
-import tech.summerly.quiet.local.LocalMusicApi
-import tech.summerly.quiet.local.R
+import tech.summerly.quiet.local.*
 import tech.summerly.quiet.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.LocalArtistItemViewBinder
 import tech.summerly.quiet.local.fragments.items.LocalMusicItemViewBinder
@@ -50,14 +48,14 @@ abstract class BaseLocalFragment : BaseFragment() {
         Table.values().filter {
             isInterestedChange(it)
         }.forEach {
-            it.listenChange(this) { newVersion ->
-                log { "is database changed : ${newVersion > this.version}" }
-                if (newVersion > this.version) {
-                    fetchDataAndDisplay()
-                    this.version = newVersion
+                    it.listenChange(this) { newVersion ->
+                        log { "is database changed : ${newVersion > this.version}" }
+                        if (newVersion > this.version) {
+                            fetchDataAndDisplay()
+                            this.version = newVersion
+                        }
+                    }
                 }
-            }
-        }
     }
 
     /**
@@ -77,7 +75,7 @@ abstract class BaseLocalFragment : BaseFragment() {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = MultiTypeAdapter(mutableListOf<Any>()).also {
             it.register(Music::class.java, LocalMusicItemViewBinder(this::onMusicClicked))
-            it.register(Artist::class.java, LocalArtistItemViewBinder())
+            it.register(Artist::class.java, LocalArtistItemViewBinder(this::onArtistClick))
             it.register(CommonItemA::class.java,
                     CommonItemAViewBinder(this::onOverviewNavClick))
             it.register(LocalPlaylistHeaderViewBinder.PlaylistHeader::class.java,
@@ -151,6 +149,13 @@ abstract class BaseLocalFragment : BaseFragment() {
             getString(R.string.local_overview_nav_latest) -> {
 
             }
+        }
+    }
+
+    private fun onArtistClick(artist: Artist) {
+        launch(UI) {
+            val musics = LocalMusicApi.getLocalMusicApi().getMusicsByArtist(artist)
+            LocalMusicListActivity.start(artist.name, ArrayList(musics))
         }
     }
 

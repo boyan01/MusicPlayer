@@ -178,4 +178,12 @@ class LocalMusicApi private constructor(context: Context) {
         musicDao.insertMusicPlaylist(relations)
         Table.PlaylistMusic.postChange()
     }
+
+    suspend fun getMusicsByArtist(artist: Artist): List<Music> = async {
+        return@async musicDao.getMusicByArtist(artist.id).map {
+            val artists = musicDao.getArtistByMusic(it.id).map(mapper::convertToArtist)
+            val album = mapper.convertToAlbum(musicDao.getAlbum(it.albumId))
+            mapper.convertToMusic(it, artists, album)
+        }
+    }.await()
 }
