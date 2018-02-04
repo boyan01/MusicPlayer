@@ -42,5 +42,6 @@
     <string name="netease_download">下载</string>
     <string name="netease_action_search">搜索</string>
     <string name="netease_title_playlist_detail">歌单</string>
+    <string name="netease_unknown_artist">未知歌手</string>
 
 </resources>

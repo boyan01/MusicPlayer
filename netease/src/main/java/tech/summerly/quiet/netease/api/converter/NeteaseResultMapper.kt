@@ -1,6 +1,8 @@
 package tech.summerly.quiet.netease.api.converter
 
 import tech.summerly.quiet.commonlib.bean.*
+import tech.summerly.quiet.commonlib.utils.string
+import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.result.*
 
 /**
@@ -212,7 +214,7 @@ internal class NeteaseResultMapper {
     private fun convertToArtist(artistResult: PlaylistDetailResultBean.Artist) =
             Artist(
                     id = artistResult.id,
-                    name = artistResult.name,
+                    name = artistResult.name?: string(R.string.netease_unknown_artist),
                     picUri = null,
                     type = MusicType.NETEASE
             )
