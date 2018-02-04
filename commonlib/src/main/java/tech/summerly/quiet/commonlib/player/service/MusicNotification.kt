@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -12,6 +13,11 @@ import android.support.v4.app.NotificationCompat
 import android.support.v7.graphics.Palette
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.cancelChildren
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.dip
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.R
@@ -23,7 +29,8 @@ import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.commonlib.utils.toPictureUrl
+import java.util.concurrent.CancellationException
+import java.util.concurrent.TimeUnit
 
 
 private val currentIsPlaying: Boolean
@@ -111,6 +118,7 @@ internal object MusicNotification : NotificationHelper() {
     }
 }
 
+private val imageLoaderJob: Job = Job()
 /**
  * notify a music notification
  */
@@ -120,12 +128,43 @@ fun MusicPlayerService.notification() {
         stopForeground(true)
         return
     }
-    val uri = music.picUri?.toPictureUrl()
+
+    val uri = music.picUri
+
+    //to show an default image notification if uri is null
+    if (uri == null) {
+        val defaultBigIcon = BitmapFactory.decodeResource(resources, R.drawable.common_icon_notification_default)
+        notificationInternal(music, defaultBigIcon)
+        return
+    }
+    //load image from file
+    if (uri.startsWith("file:", true)) {
+        imageLoaderJob.cancelChildren()
+        launch(UI, parent = imageLoaderJob) {
+            val bitmap =
+                    try {
+                        async {
+                            GlideApp.with(this@notification).asBitmap().load(uri).submit(dip(100), dip(100))
+                                    .get(10, TimeUnit.SECONDS) //only wait 10 seconds
+                        }.await()
+                    } catch (cancellationException: CancellationException) {
+                        throw cancellationException
+                    } catch (e: Exception) {
+                        log { e }
+                        BitmapFactory.decodeResource(resources, R.drawable.common_icon_notification_default)
+                    }
+            notificationInternal(music, bitmap)
+        }
+        return
+    }
+
+    //load image from url
     GlideApp.with(this)
             .asBitmap()
+            .onlyRetrieveFromCache(true)
             .load(uri)
             .placeholder(R.drawable.common_icon_notification_default)
-            .into(object : SimpleTarget<Bitmap>(dip(50), dip(50)) {
+            .into(object : SimpleTarget<Bitmap>(dip(100), dip(100)) {
                 override fun onResourceReady(resource: Bitmap?, transition: Transition<in Bitmap>?) {
                     if (resource == null) {
                         log(LoggerLevel.ERROR) {

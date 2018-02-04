@@ -70,9 +70,6 @@ class MusicPlayerService : Service(), LifecycleOwner {
         playerManager.playerState.observe(this) {
             notification()
         }
-        playerManager.playingMusic.observe(this) {
-            notification()
-        }
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
