@@ -186,4 +186,18 @@ class LocalMusicApi private constructor(context: Context) {
             mapper.convertToMusic(it, artists, album)
         }
     }.await()
+
+    /**
+     * get all albums
+     */
+    fun getAlbums(): Deferred<List<Album>> {
+        return async { musicDao.getTotalAlbums().map(mapper::convertToAlbum) }
+    }
+
+    fun getMusicsByAlbum(album: Album): Deferred<List<Music>> = async {
+        musicDao.getMusicByAlbum(album.id).map {
+            val artists = musicDao.getArtistByMusic(it.id).map(mapper::convertToArtist)
+            mapper.convertToMusic(it, artists, album)
+        }
+    }
 }

@@ -87,4 +87,7 @@ internal interface MusicDao {
 
     @Insert
     fun insertPlaylist(playlist: PlaylistEntity): Long
+
+    @Query("select * from entity_album")
+    fun getTotalAlbums(): List<AlbumEntity>
 }

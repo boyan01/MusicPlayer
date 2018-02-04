@@ -8,13 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
-import tech.summerly.quiet.commonlib.bean.Artist
-import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.bean.MusicType
-import tech.summerly.quiet.commonlib.bean.Playlist
+import tech.summerly.quiet.commonlib.bean.*
 import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.player.musicPlayer
@@ -23,10 +21,7 @@ import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
 import tech.summerly.quiet.local.*
 import tech.summerly.quiet.local.database.database.Table
-import tech.summerly.quiet.local.fragments.items.LocalArtistItemViewBinder
-import tech.summerly.quiet.local.fragments.items.LocalMusicItemViewBinder
-import tech.summerly.quiet.local.fragments.items.LocalPlaylistHeaderViewBinder
-import tech.summerly.quiet.local.fragments.items.LocalPlaylistItemViewBinder
+import tech.summerly.quiet.local.fragments.items.*
 import kotlin.coroutines.experimental.CoroutineContext
 
 /**
@@ -75,7 +70,7 @@ abstract class BaseLocalFragment : BaseFragment() {
         recyclerView.layoutManager = layoutManager
         recyclerView.adapter = MultiTypeAdapter(mutableListOf<Any>()).also {
             it.register(Music::class.java, LocalMusicItemViewBinder(this::onMusicClicked))
-            it.register(Artist::class.java, LocalArtistItemViewBinder(this::onArtistClick))
+            it.register(LocalBigImageItem::class.java, LocalBigImageItemViewBinder(this::onBigImageItemClick))
             it.register(CommonItemA::class.java,
                     CommonItemAViewBinder(this::onOverviewNavClick))
             it.register(LocalPlaylistHeaderViewBinder.PlaylistHeader::class.java,
@@ -152,11 +147,18 @@ abstract class BaseLocalFragment : BaseFragment() {
         }
     }
 
-    private fun onArtistClick(artist: Artist) {
+    private fun onBigImageItemClick(item: LocalBigImageItem) {
         launch(UI) {
-            val musics = LocalMusicApi.getLocalMusicApi().getMusicsByArtist(artist)
-            LocalMusicListActivity.start(artist.name, ArrayList(musics))
+            val musics = when (item.data) {
+                is Artist -> {
+                    LocalMusicApi.getLocalMusicApi().getMusicsByArtist(item.data)
+                }
+                is Album -> {
+                    LocalMusicApi.getLocalMusicApi().getMusicsByAlbum(item.data).await()
+                }
+                else -> emptyList()
+            }
+            LocalMusicListActivity.start(item.title, ArrayList(musics))
         }
     }
-
 }

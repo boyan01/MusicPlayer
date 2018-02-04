@@ -15,6 +15,7 @@ import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.utils.popupMenu
+import tech.summerly.quiet.local.fragments.LocalAlbumFragment
 import tech.summerly.quiet.local.fragments.LocalArtistFragment
 import tech.summerly.quiet.local.fragments.LocalOverviewFragment
 import tech.summerly.quiet.local.fragments.LocalTotalFragment
@@ -59,7 +60,7 @@ class LocalMusicActivity : BaseActivity(), BottomControllerFragment.BottomContro
             0 -> LocalOverviewFragment()
             1 -> LocalTotalFragment()
             2 -> LocalArtistFragment()
-            3 -> LocalOverviewFragment()
+            3 -> LocalAlbumFragment()
             else -> Fragment()
         }.also {
             fragments[position] = it

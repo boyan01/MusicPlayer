@@ -11,9 +11,17 @@ import tech.summerly.quiet.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.LocalBigImageItem
 
 /**
- * Created by summer on 17-12-24
+ * Created by summer
  */
-class LocalArtistFragment : BaseLocalFragment() {
+internal class LocalAlbumFragment : BaseLocalFragment() {
+
+    override fun isInterestedChange(table: Table): Boolean {
+        return table == Table.Album
+    }
+
+    override suspend fun loadData(localMusicApi: LocalMusicApi): List<Any> {
+        return localMusicApi.getAlbums().await().map { LocalBigImageItem(it.name, it.picUri, it) }
+    }
 
     private val spaceDecoration get() = dip(4)
 
@@ -32,14 +40,6 @@ class LocalArtistFragment : BaseLocalFragment() {
         })
     }
 
-    override fun isInterestedChange(table: Table): Boolean {
-        return table == Table.Artist
-    }
-
-    override suspend fun loadData(localMusicApi: LocalMusicApi): List<Any> {
-        return localMusicApi.getArtists().await().map { LocalBigImageItem(it.name, it.picUri, it) }
-    }
-
-    override fun getSpanCount() = 2
+    override fun getSpanCount(): Int = 2
 
 }

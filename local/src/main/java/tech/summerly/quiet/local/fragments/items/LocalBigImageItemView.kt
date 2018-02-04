@@ -7,23 +7,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.request.target.BitmapImageViewTarget
-import kotlinx.android.synthetic.main.local_item_artist.view.*
+import kotlinx.android.synthetic.main.local_item_big_image.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.local.R
 
-/**
- * Created by summer on 17-12-24
- */
-internal class LocalArtistItemViewBinder(
-        private val onArtistClick: (Artist) -> Unit) : ItemViewBinder<Artist>() {
 
-    override fun onBindViewHolder(holder: ViewHolder, item: Artist) = with(holder.itemView) {
+internal class LocalBigImageItem(
+        val title: String,
+        val imageUri: String?,
+        val data: Any
+)
+
+
+internal class LocalBigImageItemViewBinder(
+        private val onItemClick: (LocalBigImageItem) -> Unit) : ItemViewBinder<LocalBigImageItem>() {
+    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
+        return ViewHolder(R.layout.local_item_big_image, parent, inflater)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, item: LocalBigImageItem) = with(holder.itemView) {
         GlideApp.with(this)
                 .asBitmap()
-                .load(item.getPictureUrl())
+                .load(item.imageUri?.toPictureUrl() ?: R.drawable.common_image_audience)
                 .fitCenter()
                 .override(getScreenWidth() / 3)
                 .into(object : BitmapImageViewTarget(image) {
@@ -34,15 +41,12 @@ internal class LocalArtistItemViewBinder(
                         }
                     }
                 })
-        title.text = item.name
+        title.text = item.title
         setOnClickListener {
-            onArtistClick(item)
+            onItemClick(item)
         }
     }
 
-    /**
-     * set
-     */
     private fun View.setPaletteColor(bitmap: Bitmap) = launch(UI) {
         val swatch = bitmap.generatePalette().await().getMuteSwatch()
         val background = swatch.rgb
@@ -51,10 +55,6 @@ internal class LocalArtistItemViewBinder(
         title.setTextColor(foreground)
         actionMore.drawable.setTint(foreground)
         (actionMore.background as RippleDrawable).setColor(ColorStateList.valueOf(foreground))
-    }
-
-    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
-        return ViewHolder(R.layout.local_item_artist, parent, inflater)
     }
 
 }
