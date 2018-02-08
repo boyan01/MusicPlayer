@@ -47,7 +47,6 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.facebook.stetho:stetho:1.5.0'
-
     //android support
     api "com.android.support:design:$android_support_version"
     api "com.android.support:support-v4:$android_support_version"
@@ -74,8 +73,8 @@ dependencies {
     api 'com.google.code.gson:gson:2.8.2'
 
     //co-routines
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.20"
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.20'
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     api "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     //video player
