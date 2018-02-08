@@ -65,14 +65,18 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/common_height_bottom_controller"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/common_item_a" />
 
     <fragment
+        android:id="@+id/fragmentBottomController"
         android:name="tech.summerly.quiet.commonlib.fragments.BottomControllerFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:tag="@string/common_tag_fragment_bottom_controller"
-        tools:layout="@layout/common_fragment_controller_bottom" />
+        tools:layout="@layout/common_fragment_controller_bottom"
+        tools:layout_height="0dp" />
 
 </LinearLayout>

@@ -9,6 +9,7 @@ import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.RecyclerView
+import android.view.ViewGroup
 import android.widget.ImageView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
@@ -21,10 +22,7 @@ import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.mvp.BaseView
-import tech.summerly.quiet.commonlib.utils.GlideApp
-import tech.summerly.quiet.commonlib.utils.asyncUI
-import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
-import tech.summerly.quiet.commonlib.utils.popupMenu
+import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 import tech.summerly.quiet.netease.api.result.LoginResultBean
@@ -292,4 +290,19 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
         }
     }
 
+    override fun hideBottomController() {
+        recycler.setPadding(0, 0, 0, getNavigationBarHeight())
+        fragmentBottomController.view?.let {
+            (it.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = 0
+        }
+        super.hideBottomController()
+    }
+
+    override fun showBottomController() {
+        recycler.setPadding(0, 0, 0, 0)
+        fragmentBottomController.view?.let {
+            (it.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin = getNavigationBarHeight()
+        }
+        super.showBottomController()
+    }
 }
