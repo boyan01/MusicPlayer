@@ -18,6 +18,7 @@ import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 import tech.summerly.quiet.netease.ui.items.*
 import tech.summerly.quiet.netease.utils.isLogin
+import java.util.*
 
 /**
  * activity for daily recommend 30 songs
@@ -49,7 +50,7 @@ class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.B
         //check if login
         if (!isLogin()) {
             if (alert(message = getString(R.string.netease_alert_need_login),
-                            negative = getString(R.string.netease_action_give_up))) {
+                    negative = getString(R.string.netease_action_give_up))) {
                 ARouter.getInstance().build("/netease/login")
                         .navigation(this@NeteaseDailyRecommendActivity, REQUEST_LOGIN)
             } else {
@@ -58,10 +59,14 @@ class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.B
             return@asyncUI
         }
         val songs = NeteaseCloudMusicApi().getDailyRecommend()
-        items.add(NeteaseDailyHeader("12"))
+        items.add(NeteaseDailyHeader(getToday()))
         items.add(NeteaseMusicHeader(songs.size))
         items.addAll(songs)
         recyclerList.multiTypeAdapter.notifyDataSetChanged()
+    }
+
+    private fun getToday(): String {
+        return Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString()
     }
 
     private fun onMusicClick(music: Music) {
