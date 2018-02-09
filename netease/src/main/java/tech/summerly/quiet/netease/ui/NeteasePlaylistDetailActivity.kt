@@ -117,6 +117,7 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
                 //when filter text is empty , we need to reset the RecyclerView
                 list.multiTypeAdapter.items = items
                 list.adapter.notifyDataSetChanged()
+                list.layoutManager.scrollToPosition(0)
                 scrollY = 0f
                 list.setPadding(list.paddingLeft, 0, list.paddingRight, list.paddingBottom)
             }
@@ -134,6 +135,7 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
         //reset toolbar to disTransparent
         toolbarPlaylist.background.alpha = 0xff
         //when scrollY is less than heightHeader, toolbar might be transparent when RecyclerView scrolling
+        list.layoutManager.scrollToPosition(0)
         scrollY = heightHeader.toFloat()
         //display filtered data
         list.multiTypeAdapter.items = data
@@ -171,8 +173,9 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
     }
 
     private fun setBackgroundColor(color: Int) {
+        val alpha = toolbarPlaylist.background?.alpha
         toolbarPlaylist.setBackgroundColor(color)
-        toolbarPlaylist.background.alpha = ((scrollY / heightHeader) * 0xff).toInt()
+        toolbarPlaylist.background.alpha = alpha ?: ((scrollY / heightHeader) * 0xff).toInt()
     }
 
     private val neteaseCloudMusicApi by lazy {

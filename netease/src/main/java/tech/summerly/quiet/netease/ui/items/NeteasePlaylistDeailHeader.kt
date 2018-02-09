@@ -26,7 +26,6 @@ class NeteasePlaylistDetailHeaderViewBinder(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, item: PlaylistDetailResultBean.Playlist): Unit = with(holder.itemView) {
-        setBackgroundColor(color(R.color.netease_color_primary))
         GlideApp.with(this).load(item.coverImgUrl.toPictureUrl())
                 .into(object : ImageViewTarget<Drawable>(image) {
                     override fun setResource(resource: Drawable?) {

@@ -9,14 +9,17 @@
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme.TranslucentNavigation" />
         <activity
             android:name=".ui.NeteaseFmActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme.TranslucentNavigation" />
         <activity
             android:name=".ui.NeteaseMainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme.TranslucentNavigation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,9 +28,11 @@
         </activity>
         <activity
             android:name=".ui.NeteaseDailyRecommendActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme" />
         <activity
             android:name=".ui.NeteasePlaylistDetailActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme" />
     </application>
 
