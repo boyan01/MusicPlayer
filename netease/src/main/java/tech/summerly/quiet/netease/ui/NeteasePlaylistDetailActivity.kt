@@ -1,11 +1,18 @@
 package tech.summerly.quiet.netease.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
+import android.transition.Fade
+import android.transition.TransitionManager
+import android.view.inputmethod.InputMethodManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.netease_activity_playlist_detail.*
 import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.delay
 import me.drakeet.multitype.MultiTypeAdapter
 import org.jetbrains.anko.dip
 import tech.summerly.quiet.commonlib.base.BaseActivity
@@ -22,6 +29,7 @@ import tech.summerly.quiet.netease.ui.items.NeteaseMusicHeader
 import tech.summerly.quiet.netease.ui.items.NeteaseMusicHeaderViewBinder
 import tech.summerly.quiet.netease.ui.items.NeteaseMusicItemViewBinder
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistDetailHeaderViewBinder
+
 
 /**
  * author: summerly
@@ -65,12 +73,94 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
                     toolbarPlaylist.background.alpha = alpha.toInt()
                 }
             }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
+                log { "state : $newState" }
+            }
         })
         imageBack.setOnClickListener {
             onBackPressed()
         }
         imageSearch.setOnClickListener {
-            log { "search" }
+            switchToSearchView(true)
+        }
+        imageClear.setOnClickListener {
+            if (searchView.text.isEmpty()) {
+                switchToSearchView(false)
+            } else {
+                searchView.setText("")
+            }
+        }
+        searchView.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable?) {
+                val text = s?.trim()
+                filterText(text)
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+            }
+        })
+    }
+
+    /**
+     * show filtered data
+     */
+    private fun filterText(text: CharSequence?) {
+        if (text == null || text.isEmpty()) {
+            if (list.multiTypeAdapter.items != items) {
+                //when filter text is empty , we need to reset the RecyclerView
+                list.multiTypeAdapter.items = items
+                list.adapter.notifyDataSetChanged()
+                scrollY = 0f
+                list.setPadding(list.paddingLeft, 0, list.paddingRight, list.paddingBottom)
+            }
+            return
+        }
+        val data = items
+                .filterIsInstance(Music::class.java)
+                .filter {
+                    it.title.contains(text, true)
+                            || it.artistAlbumString().contains(text, true)
+                }
+
+        // add a top padding for RecyclerView
+        list.setPadding(list.paddingLeft, dip(80), list.paddingRight, list.paddingBottom)
+        //reset toolbar to disTransparent
+        toolbarPlaylist.background.alpha = 0xff
+        //when scrollY is less than heightHeader, toolbar might be transparent when RecyclerView scrolling
+        scrollY = heightHeader.toFloat()
+        //display filtered data
+        list.multiTypeAdapter.items = data
+        list.adapter.notifyDataSetChanged()
+    }
+
+    /**
+     * to show or hide search view in toolbar
+     */
+    private fun switchToSearchView(show: Boolean) {
+        TransitionManager.beginDelayedTransition(toolbarPlaylist, Fade())
+        if (show) {
+            groupNormal.gone()
+            groupSearch.visible()
+            asyncUI {
+                //delay 0.5 seconds to waiting for transition animation complete
+                delay(500)
+                searchView.requestFocus()
+                val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputManager.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT)
+            }
+        } else {
+            groupSearch.gone()
+            searchView.setText("")
+            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(searchView.windowToken, 0)
+            groupNormal.visible()
         }
     }
 
@@ -116,5 +206,13 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
         val resultBean = Gson().fromJson<PlaylistDetailResultBean.Playlist>(detail) ?: return
         items += resultBean
         list.multiTypeAdapter.notifyDataSetChanged()
+    }
+
+    override fun onBackPressed() {
+        if (groupSearch.isVisible) {
+            switchToSearchView(false)
+            return
+        }
+        super.onBackPressed()
     }
 }
