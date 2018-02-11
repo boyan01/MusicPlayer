@@ -4,7 +4,7 @@
     <string name="netease_hint_password">密码</string>
     <string name="netease_action_login">点击登录</string>
 
-    <string name="netease_error_login_failed">登陆失败</string>
+    <string name="netease_error_login_failed_remote">登录失败:服务器</string>
     <string name="netease_error_empty_phone">手机号不能为空</string>
     <string name="netease_error_empty_password">密码不能为空</string>
     <string name="netease_hint_login_waitting">登陆中,请稍候</string>
@@ -45,5 +45,6 @@
     <string name="netease_unknown_artist">未知歌手</string>
     <string name="netease_back">返回</string>
     <string name="netease_action_clear">清空</string>
+    <string name="netease_error_login_failed_template">登录出错:%s</string>
 
 </resources>

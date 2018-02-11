@@ -13,6 +13,7 @@ import android.widget.EditText
 import android.widget.TextView
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.netease_activity_login.*
+import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.progressDialog
@@ -22,6 +23,7 @@ import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 import tech.summerly.quiet.netease.api.result.LoginResultBean
 import tech.summerly.quiet.netease.persistence.NeteasePreference
+import java.io.IOException
 
 /**
  * author : yangbin10
@@ -91,22 +93,27 @@ class LoginActivity : BaseActivity() {
             val phoneStr = inputPhone.text.toString().trim()
             val password = inputPassword.text.toString().trim()
             if (!isValidPhone(phoneStr) || !isValidPassword(password)) {
-                jobLogin = null
                 return@launch
             }
             progressDialog.show()
-            val loginResult = NeteaseCloudMusicApi(this@LoginActivity).login(phoneStr, password)
+            val loginResult: LoginResultBean
+            try {
+                loginResult = NeteaseCloudMusicApi(this@LoginActivity).login(phoneStr, password)
+            } catch (e: IOException) {
+                tilPhone.error = getString(R.string.netease_error_login_failed_template, e.message)
+                throw CancellationException()
+            }
             if (loginResult.code == 200) {
                 loginSuccess(loginResult.profile!!)
             } else {
-                inputPhone.error = getString(R.string.netease_error_login_failed)
+                tilPhone.error = getString(R.string.netease_error_login_failed_remote)
             }
             log { "login result $loginResult" }
-            jobLogin = null
         }.also {
             //bind progress dialog to login job.
             it.invokeOnCompletion {
                 progressDialog.dismiss()
+                jobLogin = null
             }
         }
     }
