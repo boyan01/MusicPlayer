@@ -1,6 +1,5 @@
 package tech.summerly.quiet.commonlib.utils
 
-import android.content.Context
 import android.content.res.Resources
 import android.view.View
 
@@ -27,13 +26,6 @@ fun View.invisible() {
 
 fun View.gone() {
     visibility = View.GONE
-}
-
-fun Context.getNavigationBarHeight(): Int {
-    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-    return if (resourceId > 0) {
-        resources.getDimensionPixelSize(resourceId)
-    } else 0
 }
 
 fun getScreenWidth(): Int {
