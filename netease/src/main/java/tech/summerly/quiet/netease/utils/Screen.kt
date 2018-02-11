@@ -21,9 +21,9 @@ fun getAppUsableScreenSize(context: Context = NeteaseModule): Point {
     }
 }
 
-fun getNavitionBarHeight(context: Context = NeteaseModule): Int {
-    val usable = getAppUsableScreenSize()
-    val real = getRealScreenSize()
+fun getNavigationBarHeight(context: Context = NeteaseModule): Int {
+    val usable = getAppUsableScreenSize(context)
+    val real = getRealScreenSize(context)
 
     //navigation bar on the right
     if (usable.x < real.x) {

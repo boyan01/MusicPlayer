@@ -22,7 +22,10 @@ import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.mvp.BaseView
-import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.commonlib.utils.GlideApp
+import tech.summerly.quiet.commonlib.utils.asyncUI
+import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
+import tech.summerly.quiet.commonlib.utils.popupMenu
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
 import tech.summerly.quiet.netease.api.result.LoginResultBean
@@ -31,6 +34,7 @@ import tech.summerly.quiet.netease.persistence.NeteasePreference
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeader
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeaderViewBinder
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistItemViewBinder
+import tech.summerly.quiet.netease.utils.getNavigationBarHeight
 import tech.summerly.quiet.netease.utils.logout
 
 /**
