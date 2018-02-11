@@ -12,7 +12,7 @@ import tech.summerly.quiet.local.fragments.items.LocalPlaylistHeaderViewBinder
 class LocalOverviewFragment : BaseLocalFragment() {
 
     override fun isInterestedChange(table: Table): Boolean {
-        return table == Table.Playlist
+        return table == Table.Playlist || table == Table.PlaylistMusic
     }
 
 
