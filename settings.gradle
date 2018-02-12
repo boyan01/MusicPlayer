@@ -1,1 +1,1 @@
-include ':app', ':commonlib', ':local', ':netease'
+include ':app', ':commonlib', ':local', ':netease', ':setting'
