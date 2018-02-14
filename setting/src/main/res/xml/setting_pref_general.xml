@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/setting_general">
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="key_night_mode"
+            android:title="@string/setting_night_mode"
+            android:visibility="gone" />
+
+        <SeekBarPreference
+            android:defaultValue="100"
+            android:key="key_volume"
+            android:max="100"
+            android:title="@string/setting_audio_volume" />
+    </PreferenceCategory>
+</PreferenceScreen>

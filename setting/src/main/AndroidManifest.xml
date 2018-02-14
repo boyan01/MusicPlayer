@@ -4,6 +4,7 @@
     <application>
         <activity
             android:name=".SettingMainActivity"
-            android:theme="@style/AppTheme" />
+            android:label="@string/setting_app_name"
+            android:theme="@style/SettingTheme" />
     </application>
 </manifest>

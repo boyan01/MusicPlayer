@@ -9,18 +9,17 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    if (isIndependentApk.toBoolean()) {
-        compileSdkVersion compile_sdk.toInteger()
-    }
+    compileSdkVersion compile_sdk.toInteger()
     defaultConfig {
-        applicationId "tech.summerly.quiet.setting"
+        if (isIndependentApk.toBoolean()) {
+            applicationId "tech.summerly.quiet.setting"
+        }
         minSdkVersion min_sdk.toInteger()
         targetSdkVersion target_sdk.toInteger()
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        resourcePrefix "setting"
     }
     buildTypes {
         release {
@@ -35,7 +34,10 @@ android {
             } else {
                 manifest.srcFile 'src/main/AndroidManifest.xml'
                 java {
-                    exclude 'debug/***'
+                    exclude "**/DebugPlayerActivity.class"
+                }
+                res {
+                    exclude "***/setting_activity_debug.xml"
                 }
             }
         }
