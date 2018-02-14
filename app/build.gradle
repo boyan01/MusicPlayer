@@ -58,6 +58,7 @@ dependencies {
     if (!isIndependentApk.toBoolean()) {
         implementation project(':netease')
         implementation project(':local')
+        implementation project(':setting')
     }
     implementation project(':commonlib')
     kapt 'com.alibaba:arouter-compiler:1.1.4'
