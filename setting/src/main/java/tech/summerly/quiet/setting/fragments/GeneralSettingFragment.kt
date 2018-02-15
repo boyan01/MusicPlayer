@@ -34,7 +34,7 @@ class GeneralSettingFragment : PreferenceFragment(), SharedPreferences.OnSharedP
             }
             "key_volume" -> {
                 val volume = sharedPreferences.getInt(key, 100)
-                CoreMediaPlayer.volume = volume.toFloat()
+                CoreMediaPlayer.volume = volume / 100F
             }
         }
 
