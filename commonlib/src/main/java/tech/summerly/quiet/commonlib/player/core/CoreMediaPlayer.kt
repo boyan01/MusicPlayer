@@ -3,6 +3,7 @@ package tech.summerly.quiet.commonlib.player.core
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
+import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.MediaPlayer
@@ -10,12 +11,12 @@ import android.media.MediaPlayer.*
 import android.os.Build
 import android.view.animation.LinearInterpolator
 import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.CoroutineExceptionHandler
 import kotlinx.coroutines.experimental.async
 import org.jetbrains.anko.coroutines.experimental.asReference
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.MusicUrlFetcher
 import tech.summerly.quiet.commonlib.utils.log
+import java.lang.ref.WeakReference
 import kotlin.coroutines.experimental.suspendCoroutine
 import kotlin.properties.Delegates
 
@@ -30,8 +31,22 @@ class CoreMediaPlayer {
 
     companion object {
 
-        var volume by Delegates.observable(100F) { property, oldValue, newValue ->
+        private val actions = ArrayList<WeakReference<VolumeChangeAction>>()
 
+        var volume by Delegates.observable(1f) { _, _, newValue ->
+            actions.forEach {
+                val action = it.get()
+                if (action == null) {
+                    actions.remove(it)
+                } else {
+                    action(newValue, newValue)
+                }
+            }
+        }
+
+        fun listenVolumeChange(action: VolumeChangeAction) {
+            actions.add(WeakReference(action))
+            action(volume, volume)
         }
     }
 
@@ -51,7 +66,16 @@ class CoreMediaPlayer {
 
     fun getState() = playerState
 
-    private val mediaPlayer = createMediaPlayer()
+    private val volumeChangeAction = { left: Float, right: Float ->
+        log { "set volume : $left , $right" }
+        mediaPlayer.setVolume(left, right)
+    }
+
+    private val mediaPlayer: MediaPlayer = createMediaPlayer()
+
+    init {
+        CoreMediaPlayer.listenVolumeChange(volumeChangeAction)
+    }
 
     var playing: Music? = null
         private set(value) {
@@ -70,7 +94,7 @@ class CoreMediaPlayer {
                 MEDIA_ERROR_TIMED_OUT -> "超时"
                 else -> "未知"
             }
-            log { "player error : $message" }
+            log { "player error : $message , $extra" }
             true
         }
         mediaPlayer.setOnCompletionListener {
@@ -82,24 +106,28 @@ class CoreMediaPlayer {
 
 
     @Synchronized
-    fun play(music: Music) = async(CommonPool + playExceptionHandler) {
+    fun play(music: Music) = async(CommonPool) {
         playing = music
-        mediaPlayer.stop()
-        mediaPlayer.reset()
-        @Suppress("DEPRECATION")
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        val ref = mediaPlayer.asReference()
-        playerState = PlayerState.Loading
-        val url = MusicUrlFetcher.getPlayableUrl(music) ?: error("can not get url")
-        log { "准备播放 : $url" }
-        ref().setDataSource(url)
-        ref().prepareAsyncAwait()
-        start()
-    }
-
-    private val playExceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        playerState = PlayerState.Idle
-        log { "player : error ${throwable.message}" }
+        try {
+            mediaPlayer.stop()
+            mediaPlayer.reset()
+            mediaPlayer.setAudioAttributes(AudioAttributes
+                    .Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setLegacyStreamType(AudioManager.STREAM_MUSIC)
+                    .build())
+            val ref = mediaPlayer.asReference()
+            playerState = PlayerState.Loading
+            val url = MusicUrlFetcher.getPlayableUrl(music) ?: error("can not get url for $music")
+            log { "准备播放 : $url" }
+            ref().setDataSource(url)
+            ref().prepareAsyncAwait()
+            start()
+        } catch (e: Exception) {
+            mediaPlayer.reset()
+            playerState = PlayerState.Idle
+            e.printStackTrace()
+        }
     }
 
     private suspend fun MediaPlayer.prepareAsyncAwait(): Unit = suspendCoroutine { cont ->
@@ -187,6 +215,8 @@ class CoreMediaPlayer {
 }
 
 typealias CorePlayerStateListener = (PlayerState) -> Unit
+
+private typealias VolumeChangeAction = (left: Float, right: Float) -> Unit
 
 enum class PlayerState {
     Idle,
