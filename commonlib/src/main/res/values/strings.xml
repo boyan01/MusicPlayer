@@ -11,4 +11,6 @@
     <string name="common_tag_fragment_playing_list">fragment_playing_list</string>
     <string name="common_tooltips_playing_list">当前播放列表</string>
     <string name="common_pause">暂停</string>
+    <string name="tips_action_more">更多选项</string>
+
 </resources>

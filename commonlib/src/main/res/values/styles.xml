@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- BbaseContexttion theme. -->
     <style name="CommonAppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
@@ -80,6 +80,22 @@
         <item name="android:textSize">5pt</item>
         <item name="android:textStyle">bold</item>
         <item name="android:typeface">monospace</item>
+    </style>
+
+    <style name="ActionOverflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tooltipText" tools:ignore="NewApi">
+            @string/tips_action_more
+        </item>
+        <item name="android:tint">@color/common_text_primary_dark_background</item>
+    </style>
+
+    <style name="RippleThemeDark">
+        <item name="colorControlHighlight">@color/common_background_dark</item>
+    </style>
+
+    <style name="ActionOverflow.Dark">
+        <item name="android:theme">@style/RippleThemeDark</item>
+        <item name="android:tint">@color/common_text_primary_dark_background</item>
     </style>
 
 </resources>
