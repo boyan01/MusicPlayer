@@ -17,7 +17,6 @@ android {
         targetSdkVersion target_sdk.toInteger()
         versionCode app_version_code.toInteger()
         versionName app_version_name
-        resourcePrefix "common"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
