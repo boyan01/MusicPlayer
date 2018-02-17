@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.view.Gravity
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.local_activity_main.*
 import kotlinx.android.synthetic.main.local_main_header_tab.*
 import org.jetbrains.anko.startActivity
@@ -41,6 +42,8 @@ class LocalMusicActivity : BaseActivity(), BottomControllerFragment.BottomContro
                 val id = it.itemId
                 if (id == R.id.local_menu_main_scan) {
                     startActivity<LocalMusicScannerActivity>()
+                } else if (id == R.id.local_music_menu_setting) {
+                    ARouter.getInstance().build("/setting/main").navigation()
                 }
                 true
             }

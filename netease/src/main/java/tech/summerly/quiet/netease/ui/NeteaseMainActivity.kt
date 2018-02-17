@@ -118,7 +118,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
                         loadData()
                     }
                     R.id.netease_menu_main_setting -> {
-                        //TODO goto setting
+                        ARouter.getInstance().build("/setting/main").navigation()
                     }
                 }
                 true
