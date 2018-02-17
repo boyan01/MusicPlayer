@@ -35,6 +35,7 @@ android {
                 manifest.srcFile 'src/main/AndroidManifest.xml'
                 java {
                     exclude "**/DebugPlayerActivity.class"
+                    exclude 'debug/**'
                 }
                 res {
                     exclude "***/setting_activity_debug.xml"
