@@ -1,21 +1,23 @@
 package tech.summerly.quiet.netease.api
 
 import android.content.Context
+import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.coroutines.experimental.CancellationException
 import okhttp3.Cache
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicUri
 import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
+import tech.summerly.quiet.commonlib.service.NeteaseMusicService
 import tech.summerly.quiet.commonlib.utils.await
 import tech.summerly.quiet.commonlib.utils.md5
 import tech.summerly.quiet.netease.NeteaseModule
-import tech.summerly.quiet.netease.api.bean.MusicSearchResult
 import tech.summerly.quiet.netease.api.converter.Crypto
 import tech.summerly.quiet.netease.api.converter.NeteaseResultMapper
 import tech.summerly.quiet.netease.api.result.LoginResultBean
 import tech.summerly.quiet.netease.api.result.MusicUrlResultBean
 import tech.summerly.quiet.netease.api.result.PlaylistDetailResultBean
 import tech.summerly.quiet.netease.api.result.PlaylistResultBean
+import java.io.IOException
 
 /**
  * author : SUMMERLY
@@ -23,7 +25,22 @@ import tech.summerly.quiet.netease.api.result.PlaylistResultBean
  * time   : 2017/8/23
  * desc   :
  */
-class NeteaseCloudMusicApi(context: Context = NeteaseModule) {
+@Route(path = "/netease/api")
+class NeteaseCloudMusicApi : NeteaseMusicService {
+
+    override fun init(context: Context?) {
+
+    }
+
+    companion object {
+
+        @Deprecated("")
+        operator fun invoke(context: Context): NeteaseCloudMusicApi {
+            return NeteaseCloudMusicApi()
+        }
+    }
+
+    private val context: Context = NeteaseModule
 
     private val neteaseService = CloudMusicServiceProvider()
             .provideCloudMusicService(PersistentCookieStore(context.applicationContext),
@@ -42,17 +59,37 @@ class NeteaseCloudMusicApi(context: Context = NeteaseModule) {
      *       1006: 歌词
      *       1009: 电台
      */
-    suspend fun searchMusic(keyword: String, offset: Int = 0, limit: Int = 30): MusicSearchResult {
-        val params = Crypto.encrypt("""
+    override suspend fun searchMusic(keyword: String, offset: Int, limit: Int): List<Music> {
+        val params = buildSearchParams(keyword, offset, limit, 1)
+        val (result, code) = neteaseService.searchMusic(params).await()
+        if (code == 200) {
+            return result.songs?.map { mapper.convertToMusic(it) } ?: emptyList()
+        } else {
+            throw IOException("remote service error code : $code")
+        }
+    }
+
+    /**
+     * 搜索服务
+     * type: 1: 单曲
+     *       10: 专辑
+     *       100: 歌手
+     *       1000: 歌单
+     *       1002: 用户
+     *       1004: MV
+     *       1006: 歌词
+     *       1009: 电台
+     */
+    private fun buildSearchParams(keyword: String, offset: Int, limit: Int, type: Int = 1): Map<String, String> {
+        return Crypto.encrypt("""
             {
                 "csrf_token" : "",
                 "limit" : $limit ,
-                "type" : 1 ,
+                "type" : $type ,
                 "s" : "$keyword",
                 "offset" : $offset
             }
         """.trimIndent())
-        TODO()
     }
 
     suspend fun getMusicDetail(id: Long): Music {

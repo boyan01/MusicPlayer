@@ -23,4 +23,6 @@
     <dimen name="common_status_bar_height">24dp</dimen>
 
     <dimen name="common_height_bottom_controller">56dp</dimen>
+
+    <dimen name="toolbarHeight">56dp</dimen>
 </resources>

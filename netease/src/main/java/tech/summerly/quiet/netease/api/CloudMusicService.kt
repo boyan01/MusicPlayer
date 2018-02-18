@@ -15,7 +15,7 @@ interface CloudMusicService {
 
     @FormUrlEncoded
     @POST("/weapi/search/get")
-    fun searchMusic(@FieldMap request: Map<String, String>): Call<MusicSearchResultBean>
+    fun searchMusic(@FieldMap request: Map<String, String>): Deferred<MusicSearchResultBean>
 
     @FormUrlEncoded
     @POST("/weapi/v3/song/detail")

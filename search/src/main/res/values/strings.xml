@@ -1,0 +1,12 @@
+<resources>
+    <string name="search_app_name">search</string>
+    <string name="search_voice">语音搜索</string>
+    <string name="search_hint">搜索音乐</string>
+    <string name="search_clear_all_history">清除所有记录</string>
+    <string name="search_remove_history">移除此记录</string>
+    <string name="search_tab_song">单曲</string>
+    <string name="search_tab_album">专辑</string>
+    <string name="search_tab_artist">歌手</string>
+    <string name="search_clear_input">清空输入</string>
+    <string name="search_retry">重试</string>
+</resources>

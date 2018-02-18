@@ -127,6 +127,9 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
                 menu.menu.removeItem(R.id.netease_menu_main_logout)
             }
         }
+        imageSearch.setOnClickListener {
+            ARouter.getInstance().build("/search/main").navigation()
+        }
         loadData()
     }
 

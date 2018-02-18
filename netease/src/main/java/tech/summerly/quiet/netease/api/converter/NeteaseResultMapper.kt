@@ -173,35 +173,36 @@ internal class NeteaseResultMapper {
     }
 
 
+    fun convertToMusic(songsBean: MusicSearchResultBean.SongsBean): Music = with(songsBean) {
+
+        return Music(
+                id = songsBean.id,
+                title = songsBean.name,
+                picUri = artists?.getOrNull(0)?.picUrl,
+                artist = songsBean.artists?.map {
+                    Artist(
+                            id = it.id,
+                            name = it.name,
+                            picUri = null,
+                            type = MusicType.NETEASE
+                    )
+                } ?: emptyList(),
+                album = songsBean.album.let {
+                    Album(
+                            id = it?.id ?: 0L,
+                            name = it?.name ?: "unknown",
+                            picUri = null,
+                            type = MusicType.NETEASE
+                    )
+                },
+                playUri = mutableListOf(MusicUri.NORMAL_QUALITY),
+                type = MusicType.NETEASE,
+                mvId = songsBean.mvid,
+                duration = songsBean.duration
+        )
+    }
+
     //
-//    fun convertToMusic(songsBean: MusicSearchResultBean.SongsBean): Music {
-//        return Music(
-//                id = songsBean.id,
-//                title = songsBean.name,
-//                url = null,
-//                artist = songsBean.artists?.map {
-//                    Artist(
-//                            id = it.id,
-//                            name = it.name,
-//                            picUrl = null,
-//                            type = MusicType.NETEASE
-//                    )
-//                } ?: emptyList(),
-//                picUrl = null,
-//                album = songsBean.album.let {
-//                    Album(
-//                            id = it?.id ?: 0L,
-//                            name = it?.name ?: "unknown",
-//                            picUrl = null,
-//                            type = MusicType.NETEASE
-//                    )
-//                },
-//                type = MusicType.NETEASE,
-//                mvId = songsBean.mvid,
-//                duration = songsBean.duration.toInt()
-//        )
-//    }
-//
 //    fun convertToArtist(artistResult: RecommendSongResultBean.Artist) =
 //            Artist(
 //                    id = artistResult.id,
@@ -214,7 +215,7 @@ internal class NeteaseResultMapper {
     private fun convertToArtist(artistResult: PlaylistDetailResultBean.Artist) =
             Artist(
                     id = artistResult.id,
-                    name = artistResult.name?: string(R.string.netease_unknown_artist),
+                    name = artistResult.name ?: string(R.string.netease_unknown_artist),
                     picUri = null,
                     type = MusicType.NETEASE
             )
@@ -226,6 +227,7 @@ internal class NeteaseResultMapper {
                     picUri = albumResult?.picUrl,
                     type = MusicType.NETEASE
             )
+
 //
 //    private fun convertToAlbum(albumResult: RecommendSongResultBean.Album): Album {
 //        return Album(

@@ -7,7 +7,7 @@ package tech.summerly.quiet.netease.api.result
  * desc   :
  */
 data class MusicSearchResultBean(val result: ResultBean,
-                                 val code: Long) {
+                                 val code: Int) {
     data class ResultBean(val songs: List<SongsBean>?,
                           val songCount: Int)
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    tools:layout_gravity="center_vertical">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginStart="16dp"
+        android:textColor="@color/common_text_primary"
+        android:textSize="15sp"
+        tools:text="2002年的第一场雪" />
+
+    <android.support.v7.widget.AppCompatImageView
+        style="@style/ActionOverflow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:src="@drawable/common_ic_close_black_24dp"
+        android:tint="@color/common_color_icon_active"
+        android:tooltipText="@string/search_remove_history"
+        tools:ignore="UnusedAttribute" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:foreground="@color/common_color_divider" />
+</FrameLayout>

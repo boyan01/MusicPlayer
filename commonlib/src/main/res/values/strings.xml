@@ -12,5 +12,7 @@
     <string name="common_tooltips_playing_list">当前播放列表</string>
     <string name="common_pause">暂停</string>
     <string name="tips_action_more">更多选项</string>
-
+    <string name="tips_action_back">返回</string>
+    <string name="tips_action_menu">菜单</string>
+    <string name="tips_action_cancel">取消</string>
 </resources>

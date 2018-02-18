@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.TabLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/tabLayout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/searchResultTabHeight"
+    android:layout_gravity="start"
+    app:tabGravity="fill"
+    app:tabIndicatorColor="@color/common_color_primary"
+    app:tabMode="fixed">
+
+    <android.support.design.widget.TabItem
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_tab_song" />
+
+    <android.support.design.widget.TabItem
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_tab_album" />
+
+    <android.support.design.widget.TabItem
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_tab_artist" />
+
+</android.support.design.widget.TabLayout>

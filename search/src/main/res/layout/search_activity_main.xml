@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical"
+    tools:layout_marginTop="24dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/toolbarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbarHeight"
+        android:background="?colorPrimary"
+        tools:ignore="UnusedAttribute">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/buttonBack"
+            style="@style/ActionOverflow.Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_arrow_back_black_24dp"
+            android:tooltipText="@string/tips_action_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/editQuery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/common_text_secondary_dark_background"
+            android:hint="@string/search_hint"
+            android:lines="1"
+            android:paddingEnd="24dp"
+            android:paddingStart="4dp"
+            android:singleLine="true"
+            android:textColor="@color/common_text_primary_dark_background"
+            android:textColorHint="@color/common_text_secondary_dark_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/buttonIndicator"
+            app:layout_constraintStart_toEndOf="@id/buttonBack"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/buttonClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/common_ic_close_black_24dp"
+            android:theme="@style/RippleThemeDark"
+            android:tint="@color/common_text_primary_dark_background"
+            android:tooltipText="@string/search_clear_input"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/editQuery"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/buttonIndicator"
+            style="@style/ActionOverflow.Dark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search_ic_keyboard_voice_black_24dp"
+            android:tooltipText="@string/search_voice"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <FrameLayout
+        android:id="@+id/layoutContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+
+    <fragment
+        android:name="tech.summerly.quiet.commonlib.fragments.BottomControllerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_height_bottom_controller"
+        android:tag="@string/common_tag_fragment_bottom_controller"
+        tools:layout="@layout/common_fragment_controller_bottom" />
+
+</LinearLayout>
