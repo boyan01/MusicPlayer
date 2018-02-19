@@ -83,6 +83,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:tooltipText="@string/tips_action_more"
+        android:tint="@color/common_color_icon_active"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
