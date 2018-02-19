@@ -5,7 +5,9 @@
         android:name="debug.DebugAppContext"
         android:theme="@style/SearchAppTheme">
 
-        <activity android:name=".SearchMainActivity">
+        <activity
+            android:name=".SearchMainActivity"
+            android:theme="@style/SearchAppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

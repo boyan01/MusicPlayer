@@ -98,4 +98,32 @@
         <item name="android:tint">@color/common_text_primary_dark_background</item>
     </style>
 
+
+
+    <style name="MusicTitleStyle" parent="@style/TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="MusicSubTitleStyle" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:ellipsize">end</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:lineSpacingExtra">0.0px</item>
+    </style>
+
+    <style name="MusicIndicator">
+        <item name="android:background">@drawable/border_music_indicator</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:scaleX">.9</item>
+        <item name="android:scaleY">.9</item>
+        <item name="android:textColor">?colorPrimary</item>
+        <item name="android:textSize">5pt</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+
 </resources>

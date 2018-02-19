@@ -108,7 +108,7 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             app:layoutManager="LinearLayoutManager"
-            tools:listitem="@layout/netease_item_music" />
+            tools:listitem="@layout/item_music" />
 
 
     </FrameLayout>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/netease_item_music_height"
+    android:layout_height="60dp"
     android:background="?android:selectableItemBackground">
 
     <android.support.v7.widget.AppCompatImageView
@@ -16,12 +16,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:background="@color/netease_color_primary"
+        tools:background="?colorPrimary"
         tools:visibility="visible" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textTitle"
-        style="@style/NeteaseMusicItemTitleStyle"
+        style="@style/MusicTitleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -36,7 +36,7 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/indicatorMV"
-        style="@style/NeteaseMusicItemIndicator"
+        style="@style/MusicIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -51,7 +51,7 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/indicatorQuality"
-        style="@style/NeteaseMusicItemIndicator"
+        style="@style/MusicIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -63,7 +63,7 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textSubTitle"
-        style="@style/NeteaseMusicItemSubTitleStyle"
+        style="@style/MusicSubTitleStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
@@ -79,10 +79,10 @@
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageMore"
-        style="@style/Widget.AppCompat.ActionButton.Overflow"
+        style="@style/ActionOverflow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:tooltipText="@string/netease_tips_action_more"
+        android:tooltipText="@string/tips_action_more"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"

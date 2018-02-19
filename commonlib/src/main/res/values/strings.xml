@@ -15,4 +15,11 @@
     <string name="tips_action_back">返回</string>
     <string name="tips_action_menu">菜单</string>
     <string name="tips_action_cancel">取消</string>
+    <string name="action_add_to_next">添加到下一曲</string>
+    <string name="action_add_playlist">添加到播放列表</string>
+    <string name="action_download">下载</string>
+    <string name="action_comment">评论</string>
+    <string name="action_share">分享</string>
+    <string name="artist">歌手</string>
+    <string name="album">专辑</string>
 </resources>

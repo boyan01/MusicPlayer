@@ -2,6 +2,8 @@
     package="tech.summerly.quiet.search">
 
     <application>
-        <activity android:name=".SearchMainActivity" />
+        <activity
+            android:name=".SearchMainActivity"
+            android:theme="@style/SearchAppTheme" />
     </application>
 </manifest>

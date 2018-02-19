@@ -34,7 +34,7 @@ class NeteaseCloudMusicApi : NeteaseMusicService {
 
     companion object {
 
-        @Deprecated("")
+        @Deprecated("", ReplaceWith("NeteaseCloudMusicApi()", "tech.summerly.quiet.netease.api.NeteaseCloudMusicApi"))
         operator fun invoke(context: Context): NeteaseCloudMusicApi {
             return NeteaseCloudMusicApi()
         }

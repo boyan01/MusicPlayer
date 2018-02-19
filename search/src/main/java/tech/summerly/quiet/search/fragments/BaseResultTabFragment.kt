@@ -8,6 +8,10 @@ import kotlinx.android.synthetic.main.search_fragment_result_tab.view.*
 import kotlinx.coroutines.experimental.Job
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
+import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.items.MusicItemViewBinder
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.search.R
 import java.io.IOException
@@ -41,9 +45,14 @@ internal abstract class BaseResultTabFragment : BaseFragment() {
             startQueryAsync()
         }
         recycler.adapter = MultiTypeAdapter(items).also {
-
+            it.register(Music::class.java, MusicItemViewBinder(this@BaseResultTabFragment::onMusicClick))
         }
         startQueryAsync()
+    }
+
+    private fun onMusicClick(music: Music) {
+        log { "$music has been clicked" }
+        MusicPlayerManager.musicPlayer(MusicType.NETEASE).play(music)
     }
 
     /**
@@ -89,9 +98,7 @@ internal abstract class BaseResultTabFragment : BaseFragment() {
     }
 
     protected fun showItems(items: List<Any>) = runWithRoot {
-
-        log { "$items" }
-//        recycler.multiTypeAdapter.setItemsByDiff(items)
+        recycler.multiTypeAdapter.setItemsByDiff(items)
     }
 
     override fun onDestroy() {
