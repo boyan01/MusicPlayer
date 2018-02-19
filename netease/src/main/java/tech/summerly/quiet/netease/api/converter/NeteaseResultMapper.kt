@@ -174,16 +174,16 @@ internal class NeteaseResultMapper {
 
 
     fun convertToMusic(songsBean: MusicSearchResultBean.SongsBean): Music = with(songsBean) {
-
+        //netease search api do not deliver image url
         return Music(
                 id = songsBean.id,
                 title = songsBean.name,
-                picUri = artists?.getOrNull(0)?.picUrl,
+                picUri = artists?.getOrNull(0)?.img1v1Url,
                 artist = songsBean.artists?.map {
                     Artist(
                             id = it.id,
                             name = it.name,
-                            picUri = null,
+                            picUri = it.img1v1Url,
                             type = MusicType.NETEASE
                     )
                 } ?: emptyList(),
