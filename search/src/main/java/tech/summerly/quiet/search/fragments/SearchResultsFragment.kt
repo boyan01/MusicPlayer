@@ -8,7 +8,6 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.search_content_result_tabs.view.*
 import kotlinx.android.synthetic.main.search_fragment_results.view.*
 import tech.summerly.quiet.commonlib.base.BaseFragment
@@ -35,13 +34,12 @@ internal class SearchResultsFragment : BaseFragment() {
     private val query: String get() = arguments?.getString(KEY_QUERY_TEXT) ?: ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        ARouter.getInstance().navigation(String::class.java)
         return inflater.inflate(R.layout.search_fragment_results, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentManager?.let { pager.adapter = SectionsPagerAdapter(it) }
+        pager.adapter = SectionsPagerAdapter(childFragmentManager)
         pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(pager))
     }
