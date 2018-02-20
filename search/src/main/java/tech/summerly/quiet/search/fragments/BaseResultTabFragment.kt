@@ -11,25 +11,36 @@ import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.items.MusicItemViewBinder
+import tech.summerly.quiet.commonlib.objects.PortionList
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.search.R
+import tech.summerly.quiet.search.utils.LoadMoreDelegate
 import java.io.IOException
 
 /**
  * Created by summer on 18-2-18
  */
-internal abstract class BaseResultTabFragment : BaseFragment() {
+internal abstract class BaseResultTabFragment : BaseFragment(), LoadMoreDelegate.OnLoadMoreListener {
+
 
     companion object {
-
         const val KEY_QUERY_TEXT = SearchResultsFragment.KEY_QUERY_TEXT
-
     }
 
-    private val items = ArrayList<Any>()
+    override val canLoadMore: Boolean
+        get() = !isLoading && !isCompleted
+
+
+    private val items = PortionList(ArrayList(), 0, 0)
 
     private var job: Job? = null
+
+    //is loading data from server
+    private val isLoading: Boolean get() = job != null
+
+    //has been load all portion of search result
+    private val isCompleted: Boolean  get() = items.size >= items.total
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.search_fragment_result_tab, container, false)
@@ -48,6 +59,7 @@ internal abstract class BaseResultTabFragment : BaseFragment() {
             it.register(Music::class.java, MusicItemViewBinder(this@BaseResultTabFragment::onMusicClick))
         }
         startQueryAsync()
+        LoadMoreDelegate(this@BaseResultTabFragment).attach(recycler)
     }
 
     private fun onMusicClick(music: Music) {
@@ -60,6 +72,10 @@ internal abstract class BaseResultTabFragment : BaseFragment() {
      */
     private fun startQueryAsync() {
         val text = arguments?.getString(KEY_QUERY_TEXT)?.trim()
+
+        if (isLoading) {
+            return
+        }
         //first to check text
         if (text == null || text.isEmpty()) {
             setError()
@@ -77,7 +93,11 @@ internal abstract class BaseResultTabFragment : BaseFragment() {
         }
     }
 
-    abstract suspend fun startQuery(text: String)
+    override fun loadMore() {
+        startQueryAsync()
+    }
+
+    abstract suspend fun startQuery(text: String, offset: Int = items.size)
 
     private fun setLoading() = runWithRoot {
         progressBar.visible()
@@ -92,13 +112,19 @@ internal abstract class BaseResultTabFragment : BaseFragment() {
     }
 
     private fun setError(msg: String? = null) = runWithRoot {
+        log { "search error : $msg" }
         progressBar.gone()
         imageError.visible()
         buttonRetry.visible()
     }
 
-    protected fun showItems(items: List<Any>) = runWithRoot {
-        recycler.multiTypeAdapter.setItemsByDiff(items)
+    protected fun showItems(newPortion: PortionList<*>) = runWithRoot {
+        //first to check portion's legality
+        if (newPortion.offset != items.size) {
+            return@runWithRoot
+        }
+        items.mix(newPortion)
+        recycler.multiTypeAdapter.notifyDataSetChanged()
     }
 
     override fun onDestroy() {

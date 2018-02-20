@@ -7,6 +7,7 @@ import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicUri
 import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
+import tech.summerly.quiet.commonlib.objects.PortionList
 import tech.summerly.quiet.commonlib.utils.await
 import tech.summerly.quiet.commonlib.utils.md5
 import tech.summerly.quiet.service.netease.converter.Crypto
@@ -34,21 +35,16 @@ class NeteaseCloudMusicApi {
     private val mapper = NeteaseResultMapper()
 
     /**
-     * 搜索服务
-     * type: 1: 单曲
-     *       10: 专辑
-     *       100: 歌手
-     *       1000: 歌单
-     *       1002: 用户
-     *       1004: MV
-     *       1006: 歌词
-     *       1009: 电台
+     * search music by keyword
+     * @param offset fetch service musics by skip [offset]
+     * @param limit max number musics fetch at once
      */
-    suspend fun searchMusic(keyword: String, offset: Int = 0, limit: Int = 30): List<Music> {
+    suspend fun searchMusic(keyword: String, offset: Int = 0, limit: Int = 30): PortionList<Music> {
         val params = buildSearchParams(keyword, offset, limit, 1)
         val (result, code) = neteaseService.searchMusic(params).await()
         if (code == 200) {
-            return result.songs?.map { mapper.convertToMusic(it) } ?: emptyList()
+            val data = result.songs?.map { mapper.convertToMusic(it) } ?: emptyList()
+            return PortionList(data.toMutableList(), result.songCount, offset)
         } else {
             throw IOException("remote service error code : $code")
         }
