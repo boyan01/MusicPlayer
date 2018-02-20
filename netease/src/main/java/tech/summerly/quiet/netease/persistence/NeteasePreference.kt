@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import tech.summerly.quiet.commonlib.utils.edit
 import tech.summerly.quiet.commonlib.utils.fromJson
 import tech.summerly.quiet.netease.NeteaseModule
-import tech.summerly.quiet.netease.api.result.LoginResultBean
+import tech.summerly.quiet.service.netease.result.LoginResultBean
 
 internal object NeteasePreference {
 

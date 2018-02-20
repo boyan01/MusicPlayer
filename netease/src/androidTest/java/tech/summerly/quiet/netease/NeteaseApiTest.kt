@@ -6,7 +6,7 @@ import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
 import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 
 /**
  * author: summerly

@@ -2,8 +2,7 @@ package tech.summerly.quiet.search.utils
 
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
-import com.alibaba.android.arouter.launcher.ARouter
-import tech.summerly.quiet.commonlib.service.NeteaseMusicService
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 
 
 fun FragmentManager.inTransaction(transaction: FragmentTransaction.() -> Unit) {
@@ -16,7 +15,7 @@ fun FragmentManager.inTransaction(transaction: FragmentTransaction.() -> Unit) {
 }
 
 
-val neteaseMusicService: NeteaseMusicService?
-    get() = ARouter.getInstance().build("/netease/api").navigation() as NeteaseMusicService?
+val neteaseMusicService: NeteaseCloudMusicApi
+    get() = NeteaseCloudMusicApi()
 
 

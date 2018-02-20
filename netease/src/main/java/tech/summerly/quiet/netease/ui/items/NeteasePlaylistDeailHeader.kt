@@ -10,7 +10,7 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.R
-import tech.summerly.quiet.netease.api.result.PlaylistDetailResultBean
+import tech.summerly.quiet.service.netease.result.PlaylistDetailResultBean
 
 /**
  * author: summerly

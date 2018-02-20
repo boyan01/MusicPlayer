@@ -8,7 +8,7 @@ import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.ItemViewBinder
 import tech.summerly.quiet.commonlib.utils.toPictureUrl
 import tech.summerly.quiet.netease.R
-import tech.summerly.quiet.netease.api.result.PlaylistResultBean
+import tech.summerly.quiet.service.netease.result.PlaylistResultBean
 
 /**
  * Created by summer on 18-1-12

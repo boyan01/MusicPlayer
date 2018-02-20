@@ -20,9 +20,9 @@ import org.jetbrains.anko.progressDialog
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.netease.R
-import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
-import tech.summerly.quiet.netease.api.result.LoginResultBean
 import tech.summerly.quiet.netease.persistence.NeteasePreference
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
+import tech.summerly.quiet.service.netease.result.LoginResultBean
 import java.io.IOException
 
 /**
@@ -98,7 +98,7 @@ class LoginActivity : BaseActivity() {
             progressDialog.show()
             val loginResult: LoginResultBean
             try {
-                loginResult = NeteaseCloudMusicApi(this@LoginActivity).login(phoneStr, password)
+                loginResult = NeteaseCloudMusicApi().login(phoneStr, password)
             } catch (e: IOException) {
                 tilPhone.error = getString(R.string.netease_error_login_failed_template, e.message)
                 throw CancellationException()

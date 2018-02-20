@@ -8,8 +8,7 @@ import tech.summerly.quiet.commonlib.player.MusicPlaylistProvider
 import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.netease.NeteaseModule
-import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 
 class NeteaseFmPlaylistProvider(
         current: Music?,
@@ -21,7 +20,7 @@ class NeteaseFmPlaylistProvider(
         //do nothing
     }
 
-    private val neteaseApi = NeteaseCloudMusicApi(NeteaseModule)
+    private val neteaseApi = NeteaseCloudMusicApi()
 
     override fun setPlaylist(musics: List<Music>) {
         //do nothing , because do not need it

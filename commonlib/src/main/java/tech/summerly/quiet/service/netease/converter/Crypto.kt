@@ -1,4 +1,4 @@
-package tech.summerly.quiet.netease.api.converter
+package tech.summerly.quiet.service.netease.converter
 
 import android.util.Base64
 import com.google.gson.Gson

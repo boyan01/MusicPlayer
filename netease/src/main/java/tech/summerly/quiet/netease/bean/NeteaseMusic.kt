@@ -1,8 +1,7 @@
 package tech.summerly.quiet.netease.bean
 
 import tech.summerly.quiet.commonlib.bean.*
-import tech.summerly.quiet.netease.NeteaseModule
-import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 
 /**
  * author : yangbin10
@@ -20,7 +19,7 @@ class NeteaseMusic(id: Long, title: String, artist: List<Artist>, album: Album, 
         if (uris.isNotEmpty()) {
             return uris[0].uri
         }
-        val datum = NeteaseCloudMusicApi(NeteaseModule).getMusicUrl(id) ?: error("can not get url")
+        val datum = NeteaseCloudMusicApi().getMusicUrl(id) ?: error("can not get url")
         val url = datum.url ?: error("can not get url")
         playUri.clear()
         playUri.add(MusicUri(datum.bitrate, url,

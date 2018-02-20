@@ -15,7 +15,7 @@ import tech.summerly.quiet.commonlib.utils.alert
 import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.netease.R
-import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 import tech.summerly.quiet.netease.ui.items.*
 import tech.summerly.quiet.netease.utils.isLogin
 import java.util.*

@@ -20,8 +20,7 @@ internal class MusicsResultTabFragment : BaseResultTabFragment() {
     }
 
     override suspend fun startQuery(text: String) {
-        val service = neteaseMusicService ?: return
-        val results = service.searchMusic(text)
+        val results = neteaseMusicService.searchMusic(text)
         showItems(results)
     }
 }

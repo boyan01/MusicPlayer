@@ -1,22 +1,20 @@
-package tech.summerly.quiet.netease.api
+package tech.summerly.quiet.service.netease
 
 import android.content.Context
-import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.coroutines.experimental.CancellationException
 import okhttp3.Cache
+import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicUri
 import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
-import tech.summerly.quiet.commonlib.service.NeteaseMusicService
 import tech.summerly.quiet.commonlib.utils.await
 import tech.summerly.quiet.commonlib.utils.md5
-import tech.summerly.quiet.netease.NeteaseModule
-import tech.summerly.quiet.netease.api.converter.Crypto
-import tech.summerly.quiet.netease.api.converter.NeteaseResultMapper
-import tech.summerly.quiet.netease.api.result.LoginResultBean
-import tech.summerly.quiet.netease.api.result.MusicUrlResultBean
-import tech.summerly.quiet.netease.api.result.PlaylistDetailResultBean
-import tech.summerly.quiet.netease.api.result.PlaylistResultBean
+import tech.summerly.quiet.service.netease.converter.Crypto
+import tech.summerly.quiet.service.netease.converter.NeteaseResultMapper
+import tech.summerly.quiet.service.netease.result.LoginResultBean
+import tech.summerly.quiet.service.netease.result.MusicUrlResultBean
+import tech.summerly.quiet.service.netease.result.PlaylistDetailResultBean
+import tech.summerly.quiet.service.netease.result.PlaylistResultBean
 import java.io.IOException
 
 /**
@@ -25,22 +23,9 @@ import java.io.IOException
  * time   : 2017/8/23
  * desc   :
  */
-@Route(path = "/netease/api")
-class NeteaseCloudMusicApi : NeteaseMusicService {
+class NeteaseCloudMusicApi {
 
-    override fun init(context: Context?) {
-
-    }
-
-    companion object {
-
-        @Deprecated("", ReplaceWith("NeteaseCloudMusicApi()", "tech.summerly.quiet.netease.api.NeteaseCloudMusicApi"))
-        operator fun invoke(context: Context): NeteaseCloudMusicApi {
-            return NeteaseCloudMusicApi()
-        }
-    }
-
-    private val context: Context = NeteaseModule
+    private val context: Context get() = LibModule
 
     private val neteaseService = CloudMusicServiceProvider()
             .provideCloudMusicService(PersistentCookieStore(context.applicationContext),
@@ -59,7 +44,7 @@ class NeteaseCloudMusicApi : NeteaseMusicService {
      *       1006: 歌词
      *       1009: 电台
      */
-    override suspend fun searchMusic(keyword: String, offset: Int, limit: Int): List<Music> {
+    suspend fun searchMusic(keyword: String, offset: Int = 0, limit: Int = 30): List<Music> {
         val params = buildSearchParams(keyword, offset, limit, 1)
         val (result, code) = neteaseService.searchMusic(params).await()
         if (code == 200) {

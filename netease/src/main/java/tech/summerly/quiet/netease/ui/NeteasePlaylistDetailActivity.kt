@@ -23,8 +23,8 @@ import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.NeteaseModule
 import tech.summerly.quiet.netease.R
-import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
-import tech.summerly.quiet.netease.api.result.PlaylistDetailResultBean
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
+import tech.summerly.quiet.service.netease.result.PlaylistDetailResultBean
 import tech.summerly.quiet.netease.ui.items.NeteaseMusicHeader
 import tech.summerly.quiet.netease.ui.items.NeteaseMusicHeaderViewBinder
 import tech.summerly.quiet.netease.ui.items.NeteaseMusicItemViewBinder

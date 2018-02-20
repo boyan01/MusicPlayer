@@ -1,4 +1,4 @@
-package tech.summerly.quiet.netease.api.result
+package tech.summerly.quiet.service.netease.result
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

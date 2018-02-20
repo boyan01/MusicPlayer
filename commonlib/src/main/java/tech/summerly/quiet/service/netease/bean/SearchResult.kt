@@ -1,4 +1,4 @@
-package tech.summerly.quiet.netease.api.bean
+package tech.summerly.quiet.service.netease.bean
 
 import tech.summerly.quiet.commonlib.bean.Music
 

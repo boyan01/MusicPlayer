@@ -4,8 +4,7 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicUri
 import tech.summerly.quiet.commonlib.player.MusicUrlGetter
 import tech.summerly.quiet.commonlib.utils.retryNull
-import tech.summerly.quiet.netease.NeteaseModule
-import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 
 
 /**
@@ -23,7 +22,7 @@ internal object NeteaseMusicUrlGetter : MusicUrlGetter {
             return uris[0].uri
         }
         val datum = retryNull {
-            NeteaseCloudMusicApi(NeteaseModule).getMusicUrl(id)
+            NeteaseCloudMusicApi().getMusicUrl(id)
         } ?: return null
         val url = datum.url ?: return null
         playUri.clear()

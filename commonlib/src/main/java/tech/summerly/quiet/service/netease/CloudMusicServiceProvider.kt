@@ -1,4 +1,4 @@
-package tech.summerly.quiet.netease.api
+package tech.summerly.quiet.service.netease
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import okhttp3.*

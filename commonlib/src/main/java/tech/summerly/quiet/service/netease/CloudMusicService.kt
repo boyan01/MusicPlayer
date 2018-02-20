@@ -1,9 +1,9 @@
-package tech.summerly.quiet.netease.api
+package tech.summerly.quiet.service.netease
 
 import kotlinx.coroutines.experimental.Deferred
 import retrofit2.Call
 import retrofit2.http.*
-import tech.summerly.quiet.netease.api.result.*
+import tech.summerly.quiet.service.netease.result.*
 
 /**
  * author : SUMMERLY
@@ -11,7 +11,7 @@ import tech.summerly.quiet.netease.api.result.*
  * time   : 2017/8/22
  * desc   : 网易云音乐的API,使用 Retrofit2
  */
-interface CloudMusicService {
+internal interface CloudMusicService {
 
     @FormUrlEncoded
     @POST("/weapi/search/get")

@@ -27,15 +27,15 @@ import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.popupMenu
 import tech.summerly.quiet.netease.R
-import tech.summerly.quiet.netease.api.NeteaseCloudMusicApi
-import tech.summerly.quiet.netease.api.result.LoginResultBean
-import tech.summerly.quiet.netease.api.result.PlaylistResultBean
 import tech.summerly.quiet.netease.persistence.NeteasePreference
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeader
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeaderViewBinder
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistItemViewBinder
 import tech.summerly.quiet.netease.utils.getNavigationBarHeight
 import tech.summerly.quiet.netease.utils.logout
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
+import tech.summerly.quiet.service.netease.result.LoginResultBean
+import tech.summerly.quiet.service.netease.result.PlaylistResultBean
 
 /**
  * Created by summer on 17-12-30
@@ -155,7 +155,7 @@ class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.B
         }
         setLogin(user)
         val id = user.userId
-        val playlists = NeteaseCloudMusicApi(this@NeteaseMainActivity)
+        val playlists = NeteaseCloudMusicApi()
                 .getUserPlaylists(id)
         playlistCreate.clear()
         playlistCreate.addAll(playlists.filter { it.userId == id })
