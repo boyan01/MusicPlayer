@@ -29,6 +29,8 @@ internal class SearchResultsFragment : BaseFragment() {
                 it.arguments = bundle
             }
         }
+
+        private const val COUNT_PAGE = 3
     }
 
     private val query: String get() = arguments?.getString(KEY_QUERY_TEXT) ?: ""
@@ -42,6 +44,7 @@ internal class SearchResultsFragment : BaseFragment() {
         pager.adapter = SectionsPagerAdapter(childFragmentManager)
         pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(pager))
+        pager.offscreenPageLimit = COUNT_PAGE
     }
 
     private inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
@@ -59,7 +62,7 @@ internal class SearchResultsFragment : BaseFragment() {
 
 
         // display four fragment: overview , total , artist , album
-        override fun getCount(): Int = 3
+        override fun getCount(): Int = COUNT_PAGE
 
     }
 
