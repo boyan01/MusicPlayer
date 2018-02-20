@@ -23,4 +23,5 @@
     <string name="artist">歌手</string>
     <string name="album">专辑</string>
     <string name="artist_unknow">未知</string>
+    <string name="unimplemented_view">未实现的界面</string>
 </resources>

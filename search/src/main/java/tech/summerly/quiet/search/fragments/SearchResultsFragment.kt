@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.search_content_result_tabs.view.*
 import kotlinx.android.synthetic.main.search_fragment_results.view.*
 import tech.summerly.quiet.commonlib.base.BaseFragment
+import tech.summerly.quiet.commonlib.fragments.UnimplementedFragment
 import tech.summerly.quiet.search.R
 
 /**
@@ -53,9 +54,9 @@ internal class SearchResultsFragment : BaseFragment() {
 
         override fun getItem(position: Int): Fragment? = fragments[position] ?: when (position) {
             0 -> MusicsResultTabFragment.newInstance(query)
-            1 -> Fragment()
-            2 -> Fragment()
-            else -> Fragment()
+            1 -> UnimplementedFragment()
+            2 -> UnimplementedFragment()
+            else -> UnimplementedFragment()
         }.also {
             fragments[position] = it
         }
