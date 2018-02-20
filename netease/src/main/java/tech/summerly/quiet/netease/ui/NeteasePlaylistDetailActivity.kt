@@ -23,12 +23,12 @@ import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.NeteaseModule
 import tech.summerly.quiet.netease.R
-import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
-import tech.summerly.quiet.service.netease.result.PlaylistDetailResultBean
 import tech.summerly.quiet.netease.ui.items.NeteaseMusicHeader
 import tech.summerly.quiet.netease.ui.items.NeteaseMusicHeaderViewBinder
 import tech.summerly.quiet.netease.ui.items.NeteaseMusicItemViewBinder
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistDetailHeaderViewBinder
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
+import tech.summerly.quiet.service.netease.result.PlaylistDetailResultBean
 
 
 /**
@@ -153,6 +153,9 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
             asyncUI {
                 //delay 0.5 seconds to waiting for transition animation complete
                 delay(500)
+                if (!searchView.isVisible){
+                    return@asyncUI
+                }
                 searchView.requestFocus()
                 val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputManager.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT)
