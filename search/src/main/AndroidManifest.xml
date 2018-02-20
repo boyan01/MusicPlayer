@@ -4,6 +4,7 @@
     <application>
         <activity
             android:name=".SearchMainActivity"
-            android:theme="@style/SearchAppTheme" />
+            android:theme="@style/SearchAppTheme"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 </manifest>

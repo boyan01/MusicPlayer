@@ -1,9 +1,12 @@
 package tech.summerly.quiet.search
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.search_activity_main.*
 import org.jetbrains.anko.toast
@@ -66,6 +69,12 @@ class SearchMainActivity : BaseActivity(), BottomControllerFragment.BottomContro
             }
 
         })
+        editQuery.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_NONE) {
+                startQuery()
+            }
+            false
+        }
     }
 
     private fun startQuery(text: String = editQuery.text.toString().trim()) {
@@ -74,6 +83,8 @@ class SearchMainActivity : BaseActivity(), BottomControllerFragment.BottomContro
             //do nothing
             return
         }
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(editQuery.windowToken, 0)
         val fragment = SearchResultsFragment.newInstance(text)
         supportFragmentManager.inTransaction {
             replace(R.id.layoutContainer, fragment)
