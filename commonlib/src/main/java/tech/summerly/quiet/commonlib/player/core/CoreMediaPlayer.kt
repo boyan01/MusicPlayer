@@ -3,11 +3,9 @@ package tech.summerly.quiet.commonlib.player.core
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
-import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
-import android.media.MediaPlayer
-import android.media.MediaPlayer.*
+import android.net.Uri
 import android.os.Build
 import android.view.animation.LinearInterpolator
 import kotlinx.coroutines.experimental.CommonPool
@@ -16,9 +14,14 @@ import org.jetbrains.anko.coroutines.experimental.asReference
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.MusicUrlFetcher
 import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.streamcache.CachedDataSource
+import tech.summerly.streamcache.DataSource
+import tv.danmaku.ijk.media.player.IMediaPlayer.*
+import tv.danmaku.ijk.media.player.misc.IMediaDataSource
 import java.lang.ref.WeakReference
 import kotlin.coroutines.experimental.suspendCoroutine
 import kotlin.properties.Delegates
+import tv.danmaku.ijk.media.player.IjkMediaPlayer as MediaPlayer
 
 /**
  * author : summerly
@@ -50,7 +53,7 @@ class CoreMediaPlayer {
         }
     }
 
-    val position: Long get() = mediaPlayer.currentPosition.toLong()
+    val position: Long get() = mediaPlayer.currentPosition
 
     private val onMediaPlayerStateChangeListenerList = ArrayList<CorePlayerStateListener>()
 
@@ -111,16 +114,18 @@ class CoreMediaPlayer {
         try {
             mediaPlayer.stop()
             mediaPlayer.reset()
-            mediaPlayer.setAudioAttributes(AudioAttributes
-                    .Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setLegacyStreamType(AudioManager.STREAM_MUSIC)
-                    .build())
+//            mediaPlayer.setAudioAttributes(AudioAttributes
+//                    .Builder()
+//                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+//                    .setLegacyStreamType(AudioManager.STREAM_MUSIC)
+//                    .build())
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
             val ref = mediaPlayer.asReference()
             playerState = PlayerState.Loading
             val url = MusicUrlFetcher.getPlayableUrl(music) ?: error("can not get url for $music")
             log { "准备播放 : $url" }
-            ref().setDataSource(url)
+            val dataSource = CachedDataSource(Uri.parse(url), cacheNameGenerator)
+            ref().setDataSource(MediaDataSource(dataSource))
             ref().prepareAsyncAwait()
             start()
         } catch (e: Exception) {
@@ -128,6 +133,10 @@ class CoreMediaPlayer {
             playerState = PlayerState.Idle
             e.printStackTrace()
         }
+    }
+
+    private val cacheNameGenerator: (String) -> String = { url: String ->
+        url.substringAfterLast('/')
     }
 
     private suspend fun MediaPlayer.prepareAsyncAwait(): Unit = suspendCoroutine { cont ->
@@ -158,7 +167,7 @@ class CoreMediaPlayer {
 
 
     fun seekTo(position: Long) {
-        mediaPlayer.seekTo(position.toInt())
+        mediaPlayer.seekTo(position)
     }
 
     fun release() {
@@ -213,6 +222,8 @@ class CoreMediaPlayer {
     val duration: Long get() = mediaPlayer.duration.toLong()
 
 }
+
+private class MediaDataSource(dataSource: DataSource) : DataSource by dataSource, IMediaDataSource
 
 typealias CorePlayerStateListener = (PlayerState) -> Unit
 

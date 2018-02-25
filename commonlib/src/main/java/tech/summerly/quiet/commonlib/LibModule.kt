@@ -11,6 +11,7 @@ import tech.summerly.quiet.commonlib.player.MusicPlaylistProviderFactory
 import tech.summerly.quiet.commonlib.player.SimplePlaylistProvider
 import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
+import tech.summerly.streamcache.StreamCacheUtil
 
 /**
  * Created by summer on 17-12-17.
@@ -27,6 +28,9 @@ internal object LibModule : BaseModule() {
             ARouter.openLog()
         }
         ARouter.init(applicationContext as Application?)
+
+        StreamCacheUtil.init(this
+        )
         val simplePlaylistFactory = object : MusicPlaylistProviderFactory() {
             override fun createMusicPlaylistProvider(current: Music?, playMode: PlayMode, musicList: ArrayList<Music>, playerStateListener: BasePlayerDataListener): MusicPlaylistProvider {
                 return SimplePlaylistProvider(current, playMode, musicList, playerStateListener)
