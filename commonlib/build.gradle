@@ -77,10 +77,10 @@ dependencies {
     api "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     //video player
-    api 'tv.danmaku.ijk.media:ijkplayer-java:0.8.4'
-    api 'tv.danmaku.ijk.media:ijkplayer-armv7a:0.8.4'
-    api 'tv.danmaku.ijk.media:ijkplayer-x86:0.8.4'
-    api 'tv.danmaku.ijk.media:ijkplayer-arm64:0.8.4'
+    api "tv.danmaku.ijk.media:ijkplayer-java:$ijk_version"
+    api "tv.danmaku.ijk.media:ijkplayer-armv7a:$ijk_version"
+    api "tv.danmaku.ijk.media:ijkplayer-x86:$ijk_version"
+    api "tv.danmaku.ijk.media:ijkplayer-arm64:$ijk_version"
 
     //recycler view ext
     api 'me.drakeet.multitype:multitype:3.4.0'
@@ -105,4 +105,6 @@ dependencies {
     //media cache
     implementation files('libs/android_video_cache.aar')
     implementation 'org.slf4j:slf4j-android:1.7.21'
+    implementation 'tech.summerly:streamcache:1.1'
+
 }
