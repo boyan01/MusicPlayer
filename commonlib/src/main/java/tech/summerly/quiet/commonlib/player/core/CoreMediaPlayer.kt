@@ -9,15 +9,23 @@ import android.net.Uri
 import android.os.Build
 import android.view.animation.LinearInterpolator
 import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.coroutines.experimental.asReference
+import org.jetbrains.anko.toast
+import tech.summerly.quiet.commonlib.LibModule
+import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.player.MusicUrlFetcher
+import tech.summerly.quiet.commonlib.player.getPlayableUri
 import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.commonlib.utils.string
 import tech.summerly.streamcache.CachedDataSource
 import tech.summerly.streamcache.DataSource
+import tech.summerly.streamcache.DirectDataSource
 import tv.danmaku.ijk.media.player.IMediaPlayer.*
 import tv.danmaku.ijk.media.player.misc.IMediaDataSource
+import java.io.IOException
 import java.lang.ref.WeakReference
 import kotlin.coroutines.experimental.suspendCoroutine
 import kotlin.properties.Delegates
@@ -122,15 +130,23 @@ class CoreMediaPlayer {
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
             val ref = mediaPlayer.asReference()
             playerState = PlayerState.Loading
-            val url = MusicUrlFetcher.getPlayableUrl(music) ?: error("can not get url for $music")
+            val url = music.getPlayableUri()
+                    ?: throw IOException(string(R.string.can_not_find_music_url))
             log { "准备播放 : $url" }
-            val dataSource = CachedDataSource(Uri.parse(url), cacheNameGenerator)
+            val dataSource = if (url.startsWith("file", true)) {
+                DirectDataSource(Uri.parse(url))
+            } else {
+                CachedDataSource(Uri.parse(url), cacheNameGenerator)
+            }
             ref().setDataSource(MediaDataSource(dataSource))
             ref().prepareAsyncAwait()
             start()
         } catch (e: Exception) {
             mediaPlayer.reset()
             playerState = PlayerState.Idle
+            launch(UI) {
+                LibModule.toast(e.localizedMessage)
+            }
             e.printStackTrace()
         }
     }

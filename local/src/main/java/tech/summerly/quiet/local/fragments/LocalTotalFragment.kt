@@ -6,8 +6,8 @@ import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.observe
-import tech.summerly.quiet.local.LocalMusicApi
-import tech.summerly.quiet.local.database.database.Table
+import tech.summerly.quiet.service.local.LocalMusicApi
+import tech.summerly.quiet.service.local.database.database.Table
 
 
 /**

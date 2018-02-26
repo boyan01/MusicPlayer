@@ -5,12 +5,12 @@ import kotlinx.coroutines.experimental.yield
 import org.jetbrains.anko.coroutines.experimental.asReference
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.local.LocalModule
-import tech.summerly.quiet.local.LocalMusicApi
 import tech.summerly.quiet.local.scanner.persistence.ScannerSetting
-import tech.summerly.quiet.local.utils.LocalMusicUrlGetter
 import tech.summerly.quiet.local.utils.MusicConverter
+import tech.summerly.quiet.service.local.LocalMusicApi
 import java.io.File
 import java.io.FileFilter
+import java.net.URI
 
 /**
  * author : summerly
@@ -36,11 +36,28 @@ internal class LocalMusicScannerPresenter(
     private val filters = preference.getAllFilterFolder()
 
 
+    private fun Music.getFilePath(): String? {
+        if (playUri.isEmpty()) {
+            return null
+        }
+        val uri = playUri[0].uri
+        if (uri.startsWith("file:", true)) {
+            val file = File(URI(uri))
+            return if (file.exists()) {
+                file.path
+            } else {
+                null
+            }
+        }
+        return null
+    }
+
+
     override fun scan(path: String) = launch {
         //在开始扫描之前, 需要移除处于待过虑名单中的音乐
         val localMusicApi = LocalMusicApi.getLocalMusicApi()
         localMusicApi.getTotalMusics().forEach {
-            val musicPath = LocalMusicUrlGetter.getPlayableUrl(it)
+            val musicPath = it.getFilePath()
             if (musicPath == null) {
                 localMusicApi.deleteMusic(it)
                 return@launch

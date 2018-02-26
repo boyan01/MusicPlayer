@@ -2,8 +2,6 @@ package tech.summerly.quiet.commonlib.bean
 
 import android.os.Parcel
 import android.os.Parcelable
-import java.io.File
-import java.net.URI
 
 
 /**
@@ -53,30 +51,6 @@ open class Music(
         parcel.writeLong(duration)
         parcel.writeTypedList(playUri)
     }
-
-    /**
-     * try to get an player url for music
-     * this url could be file'path (local file) , http url (net resource)
-     */
-    open suspend fun getPlayableUrl(): String {
-        if (playUri.isEmpty()) {
-            error("no playable url!")
-        }
-        val uri = playUri[0].uri
-        if (uri.startsWith("file:", true)) {
-            val file = File(URI(uri))
-            if (file.exists()) {
-                return file.path
-            } else {
-                error("no playable url!")
-            }
-        }
-        if (uri.startsWith("http:", true)) {
-            return uri
-        }
-        error("no playable url!")
-    }
-
 
     override fun describeContents(): Int {
         return 0

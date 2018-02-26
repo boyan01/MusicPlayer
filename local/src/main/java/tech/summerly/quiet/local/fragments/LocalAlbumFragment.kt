@@ -6,8 +6,8 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import org.jetbrains.anko.support.v4.dip
-import tech.summerly.quiet.local.LocalMusicApi
-import tech.summerly.quiet.local.database.database.Table
+import tech.summerly.quiet.service.local.LocalMusicApi
+import tech.summerly.quiet.service.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.LocalBigImageItem
 
 /**

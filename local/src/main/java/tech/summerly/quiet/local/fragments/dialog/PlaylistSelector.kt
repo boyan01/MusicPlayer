@@ -16,9 +16,9 @@ import tech.summerly.quiet.commonlib.bean.Playlist
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
 import tech.summerly.quiet.local.LocalModule
-import tech.summerly.quiet.local.LocalMusicApi
+import tech.summerly.quiet.service.local.LocalMusicApi
 import tech.summerly.quiet.local.R
-import tech.summerly.quiet.local.database.database.Table
+import tech.summerly.quiet.service.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.LocalPlaylistItemViewBinder
 import tech.summerly.quiet.local.utils.showPlaylistCreatorDialog
 

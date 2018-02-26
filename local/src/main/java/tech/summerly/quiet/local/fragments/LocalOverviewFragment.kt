@@ -1,9 +1,9 @@
 package tech.summerly.quiet.local.fragments
 
 import tech.summerly.quiet.commonlib.items.CommonItemA
-import tech.summerly.quiet.local.LocalMusicApi
+import tech.summerly.quiet.service.local.LocalMusicApi
 import tech.summerly.quiet.local.R
-import tech.summerly.quiet.local.database.database.Table
+import tech.summerly.quiet.service.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.LocalPlaylistHeaderViewBinder
 
 /**

@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
@@ -20,8 +19,9 @@ import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
 import tech.summerly.quiet.local.*
-import tech.summerly.quiet.local.database.database.Table
+import tech.summerly.quiet.service.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.*
+import tech.summerly.quiet.service.local.LocalMusicApi
 import kotlin.coroutines.experimental.CoroutineContext
 
 /**

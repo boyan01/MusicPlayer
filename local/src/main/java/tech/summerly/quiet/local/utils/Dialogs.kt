@@ -8,8 +8,8 @@ import org.jetbrains.anko.toast
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.utils.alert
 import tech.summerly.quiet.commonlib.utils.inputDialog
-import tech.summerly.quiet.local.LocalMusicApi
 import tech.summerly.quiet.local.R
+import tech.summerly.quiet.service.local.LocalMusicApi
 
 
 fun Context.showPlaylistCreatorDialog() {
