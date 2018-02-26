@@ -30,7 +30,7 @@ import java.io.IOException
  * date   : 2017/12/21
  */
 @Route(path = "/netease/login")
-class LoginActivity : BaseActivity() {
+internal class LoginActivity : BaseActivity() {
 
     private var jobLogin: Job? = null
 

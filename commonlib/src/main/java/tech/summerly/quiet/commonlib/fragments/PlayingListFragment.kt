@@ -24,6 +24,10 @@ import tech.summerly.quiet.commonlib.utils.observeFilterNull
  */
 class PlayingListFragment : BottomSheetDialogFragment() {
 
+    companion object {
+        const val TAG = "PlayingListFragment"
+    }
+
     private val musicList: List<Music>
         get() = musicPlayer.playlistProvider.musicList
 

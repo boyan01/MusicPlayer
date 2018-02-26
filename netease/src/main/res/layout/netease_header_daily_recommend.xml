@@ -21,7 +21,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="32dp"
         android:padding="2dp"
-        android:tint="@color/common_text_primary_dark_background"
+        android:tint="@color/color_text_primary_dark_background"
         android:translationY="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
         android:layout_height="40dp"
         android:minWidth="42dp"
         android:gravity="center"
-        android:textColor="@color/common_text_primary_dark_background"
+        android:textColor="@color/color_text_primary_dark_background"
         android:textSize="30sp"
         android:textStyle="bold"
         android:typeface="serif"
@@ -55,7 +55,7 @@
         app:layout_constraintBottom_toBottomOf="@id/textTips"
         app:layout_constraintStart_toStartOf="@id/imageToday"
         app:layout_constraintTop_toTopOf="@id/textTips"
-        app:tint="@color/common_text_secondary_dark_background" />
+        app:tint="@color/color_text_secondary_dark_background" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textTips"
@@ -65,7 +65,7 @@
         android:layout_marginStart="4dp"
         android:background="@color/common_transparentSecondaryDark"
         android:text="@string/netease_tips_daily_recommend_description"
-        android:textColor="@color/common_text_secondary_dark_background"
+        android:textColor="@color/color_text_secondary_dark_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageIconTips"
         app:layout_constraintTop_toBottomOf="@id/textDay"

@@ -26,6 +26,7 @@
             android:name=".ui.NeteasePlaylistDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme" />
+        <activity android:name=".ui.MusicPlayerActivity" />
     </application>
 
 </manifest>

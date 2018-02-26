@@ -18,18 +18,18 @@
 
     <style name="NeteaseLoginTextLayout">
         <!-- Hint color and label color in FALSE state -->
-        <item name="android:textColorHint">@color/common_text_primary_dark_background</item>
+        <item name="android:textColorHint">@color/color_text_primary_dark_background</item>
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
-        <item name="colorAccent">@color/common_text_primary_dark_background</item>
-        <item name="colorControlNormal">@color/common_text_primary_dark_background</item>
-        <item name="colorControlActivated">@color/common_text_primary_dark_background</item>
+        <item name="colorAccent">@color/color_text_primary_dark_background</item>
+        <item name="colorControlNormal">@color/color_text_primary_dark_background</item>
+        <item name="colorControlActivated">@color/color_text_primary_dark_background</item>
     </style>
 
     <style name="NeteaseAppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:windowActionBarOverlay">true</item>
         <!-- Support library compatibility -->
         <item name="windowActionBarOverlay">true</item>
-        <item name="actionMenuTextColor">@color/common_text_primary_dark_background</item>
+        <item name="actionMenuTextColor">@color/color_text_primary_dark_background</item>
     </style>
 
     <style name="NeteaseAppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -64,7 +64,7 @@
         <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:padding">8dp</item>
-        <item name="android:tint">@color/common_text_primary_dark_background</item>
+        <item name="android:tint">@color/color_text_primary_dark_background</item>
     </style>
 
     <style name="NeteaseActionOverflow" parent="ActionOverflow" />

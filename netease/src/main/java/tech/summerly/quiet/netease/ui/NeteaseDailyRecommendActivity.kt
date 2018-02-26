@@ -15,16 +15,16 @@ import tech.summerly.quiet.commonlib.utils.alert
 import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.netease.R
-import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 import tech.summerly.quiet.netease.ui.items.*
 import tech.summerly.quiet.netease.utils.isLogin
+import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 import java.util.*
 
 /**
  * activity for daily recommend 30 songs
  */
 @Route(path = "/netease/daily")
-class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
+internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
 
     companion object {
         private const val REQUEST_LOGIN = 101

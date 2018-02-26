@@ -18,7 +18,7 @@
         android:background="@color/netease_color_primary"
         app:navigationIcon="@drawable/netease_ic_arrow_back_white_24dp"
         app:title="@string/netease_title_daily_recommend"
-        app:titleTextColor="@color/common_text_primary_dark_background" />
+        app:titleTextColor="@color/color_text_primary_dark_background" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerList"

@@ -70,7 +70,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:lines="1"
-                android:textColor="@color/common_text_primary_dark_background"
+                android:textColor="@color/color_text_primary_dark_background"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +85,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:lines="1"
-                android:textColor="@color/common_text_primary_dark_background"
+                android:textColor="@color/color_text_primary_dark_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textMusicName"
@@ -131,7 +131,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
-                android:textColor="@color/common_text_primary_dark_background"
+                android:textColor="@color/color_text_primary_dark_background"
                 android:textSize="12sp"
                 tools:ignore="HardcodedText"
                 tools:text="01:53" />
@@ -141,7 +141,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:thumbTint="@color/common_text_primary_dark_background"
+                android:thumbTint="@color/color_text_primary_dark_background"
                 tools:progress="54" />
 
             <TextView
@@ -149,7 +149,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="00:00"
-                android:textColor="@color/common_text_primary_dark_background"
+                android:textColor="@color/color_text_primary_dark_background"
                 android:textSize="12sp"
                 tools:ignore="HardcodedText"
                 tools:text="01:53" />

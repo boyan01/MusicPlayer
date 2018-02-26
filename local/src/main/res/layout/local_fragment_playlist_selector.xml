@@ -16,7 +16,7 @@
         android:paddingEnd="16dp"
         android:paddingStart="16dp"
         android:text="@string/local_title_playlist_selector"
-        android:textColor="@color/common_text_primary_dark_background"
+        android:textColor="@color/color_text_primary_dark_background"
         android:textAppearance="@style/CommonAppTheme.Title" />
 
 
@@ -27,11 +27,11 @@
         android:layout_margin="16dp"
         android:contentDescription="@string/local_description_create_playlist"
         android:src="@drawable/local_ic_add_black_24dp"
-        android:tint="@color/common_background"
+        android:tint="@color/background"
         app:fabSize="mini"
         app:layout_anchor="@id/header"
         app:layout_anchorGravity="end|bottom"
-        app:rippleColor="@color/common_background" />
+        app:rippleColor="@color/background" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listPlaylist"

@@ -14,7 +14,7 @@ import tech.summerly.quiet.commonlib.player.state.plus
 import tech.summerly.quiet.commonlib.utils.log
 import java.util.concurrent.TimeUnit
 
-typealias OnPositionChange = (position: Long) -> Unit
+internal typealias OnPositionChange = (current: Long, total: Long) -> Unit
 typealias OnError = (Throwable) -> Unit
 
 class BaseMusicPlayer(
@@ -122,13 +122,13 @@ class BaseMusicPlayer(
             val musicPlaying = current
             while (corePlayer.isPlaying && musicPlaying == current) {
                 delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
-                onPositionChange(corePlayer.position)
+                onPositionChange(corePlayer.position, corePlayer.duration)
             }
         }
     }
 
     fun seekTo(position: Long) {
         corePlayer.seekTo(position)
-        onPositionChange(position)
+        onPositionChange(position,corePlayer.duration)
     }
 }

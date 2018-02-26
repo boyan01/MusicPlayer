@@ -68,7 +68,7 @@ open class MusicItemViewBinder(
             textSubTitle.setTextColor(color(R.color.common_textDisable))
         } else {
             textTitle.setTextColor(color(R.color.common_text_primary))
-            textSubTitle.setTextColor(color(R.color.common_text_secondary))
+            textSubTitle.setTextColor(color(R.color.color_text_secondary))
         }
     }
 

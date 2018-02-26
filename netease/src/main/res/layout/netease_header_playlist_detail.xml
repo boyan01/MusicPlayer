@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="20dp"
-        android:textColor="@color/common_text_primary_dark_background"
+        android:textColor="@color/color_text_primary_dark_background"
         app:layout_constraintBottom_toBottomOf="@id/image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/image"

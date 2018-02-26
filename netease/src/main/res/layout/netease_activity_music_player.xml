@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playerContainer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="?background">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:foreground="@drawable/netease_gradient_fm_mask"
+        android:src="?colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/common_transparentSecondaryDark"
+        android:elevation="4dp"
+        android:theme="@style/CommonAppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
+        app:popupTheme="@style/CommonAppTheme.PopupOverlay"
+        app:title="播放中的歌曲" />
+
+
+    <!-- this is music's artwork -->
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/artWork"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:foreground="@color/color_image_mask"
+        android:padding="32dp"
+        android:scaleType="centerCrop"
+        android:src="?colorPrimaryDark"
+        app:layout_constraintBottom_toTopOf="@+id/lyric"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent=".8"
+        tools:layout_editor_absoluteX="41dp" />
+
+
+    <!-- this is lyric?? -->
+    <tech.summerly.quiet.commonlib.view.lyric.CommonLyricView
+        android:id="@+id/lyric"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_weight="1"
+        app:commonLyricEmptyText="@string/netease_no_lyric"
+        app:commonLyricLineSpacing="4dp"
+        app:commonLyricNormalTextColor="@color/color_text_secondary_dark_background"
+        app:commonLyricPlayingTextColor="@color/color_text_primary_dark_background"
+        app:commonLyricTextSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/actionShare"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/artWork"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <!-- 以下为进度条 -->
+    <LinearLayout
+        android:id="@+id/progressLayout"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/controllerPauseOrPlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteX="8dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textCurrentPosition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/netease_player_time_stamp_zero"
+            android:textColor="@color/color_text_secondary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+            app:layout_constraintEnd_toStartOf="@+id/progressBar"
+            app:layout_constraintTop_toTopOf="@+id/progressBar" />
+
+        <android.support.v7.widget.AppCompatSeekBar
+            android:id="@+id/progressBar"
+            android:layout_width="0dp"
+            android:layout_height="17dp"
+            android:layout_weight="1"
+            android:progressTint="@color/color_primary_light"
+            android:thumbTint="?colorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/barrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.7"
+            tools:layout_editor_absoluteY="71dp"
+            tools:progress="50" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/netease_player_time_stamp_zero"
+            android:textColor="@color/color_text_secondary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBar"
+            app:layout_constraintStart_toEndOf="@+id/progressBar"
+            app:layout_constraintTop_toTopOf="@+id/progressBar" />
+
+    </LinearLayout>
+
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/actionLike"
+        style="@style/ActionOverflow.Dark"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_favorite_border_red_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/actionAdd"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/actionAdd" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/actionAdd"
+        style="@style/ActionOverflow.Dark"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/netease_ic_playlist_add_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/actionShare"
+        app:layout_constraintLeft_toRightOf="@+id/actionLike"
+        app:layout_constraintRight_toLeftOf="@+id/actionShare" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/actionShare"
+        style="@style/ActionOverflow.Dark"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/netease_ic_share_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/actionPlaylist"
+        app:layout_constraintLeft_toRightOf="@+id/actionAdd"
+        app:layout_constraintRight_toLeftOf="@+id/actionPlaylist" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/actionPlaylist"
+        style="@style/ActionOverflow.Dark"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginBottom="8dp"
+        android:background="?selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/common_ic_playlist_play_black_24dp"
+        app:layout_constraintBottom_toTopOf="@+id/progressLayout"
+        app:layout_constraintLeft_toRightOf="@+id/actionShare"
+        app:layout_constraintRight_toRightOf="parent" />
+
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/controllerSkipPrevious"
+        style="@style/ActionOverflow.Dark"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/common_ic_skip_previous_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/controllerPauseOrPlay"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/controllerPauseOrPlay"
+        app:layout_constraintTop_toTopOf="@+id/controllerPauseOrPlay"
+        app:layout_constraintVertical_bias="0.535" />
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/controllerPauseOrPlay"
+        style="@style/ActionOverflow.Dark"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/common_ic_play_arrow_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <android.support.v7.widget.AppCompatImageButton
+        android:id="@+id/controllerSkipNext"
+        style="@style/ActionOverflow.Dark"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/common_ic_skip_next_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/controllerPauseOrPlay"
+        app:layout_constraintLeft_toRightOf="@+id/controllerPauseOrPlay"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/controllerPauseOrPlay" />
+
+</android.support.constraint.ConstraintLayout>

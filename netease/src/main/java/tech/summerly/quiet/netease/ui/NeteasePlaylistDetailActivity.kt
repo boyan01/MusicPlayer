@@ -39,7 +39,7 @@ import tech.summerly.quiet.service.netease.result.PlaylistDetailResultBean
  * email: yangbinyhbn@gmail.com
  */
 @Route(path = "/netease/playlist_detail")
-class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
+internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
 
     companion object {
         const val KEY_PLAYLIST_ID = "playlist_id"

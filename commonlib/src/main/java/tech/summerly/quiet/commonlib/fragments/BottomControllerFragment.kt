@@ -85,7 +85,7 @@ open class BottomControllerFragment : BaseFragment() {
                 ARouter.getInstance().build("/netease/fm").navigation()
             }
             else -> {
-                //todo
+                ARouter.getInstance().build("/netease/player").navigation()
             }
         }
     }

@@ -14,14 +14,14 @@ H459.68A24.9,24.9,0,0,1,484.5,25.32V827.68A24.9,24.9,0,0,1,459.68,852.5Z"
         android:strokeWidth="1" />
     <path
         android:name="camera"
-        android:fillColor="@color/common_text_secondary"
+        android:fillColor="@color/color_text_secondary"
         android:pathData="M465.5,826A12.5,12.5,0,1,1,453,813.5,12.5,12.5,0,0,1,465.5,826Z"
         android:strokeColor="#000"
         android:strokeMiterLimit="10"
         android:strokeWidth="1" />
     <path
         android:name="screen"
-        android:fillColor="@color/common_background"
+        android:fillColor="@color/background"
         android:pathData="M450.75,804H33.25A19.25,19.25,0,0,1,14,784.75V32.25A19.25,19.25,0,0,1,33.25,13h417.5A19.25,19.25,0,0,1,470,32.25v752.5A19.25,19.25,0,0,1,450.75,804Z" />
 
     <path

@@ -46,7 +46,7 @@
         android:layout_marginStart="4dp"
         android:lines="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/common_text_secondary"
+        android:textColor="@color/color_text_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttonLink"
         app:layout_constraintStart_toEndOf="@id/title"

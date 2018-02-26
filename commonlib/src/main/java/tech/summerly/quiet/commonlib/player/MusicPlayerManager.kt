@@ -17,7 +17,7 @@ object MusicPlayerManager : BasePlayerDataListener {
 
     private val internalPlayingMusic = MutableLiveData<Music>()
     private val internalMusicChange = MutableLiveData<Pair<Music?, Music?>>()
-    private val internalPosition = MutableLiveData<Long>()
+    private val internalPosition = MutableLiveData<Pair<Long, Long>>()
     private val internalPlayerState = WithDefaultLiveData(PlayerState.Idle)
     private val internalPlayMode = WithDefaultLiveData(PlayMode.Sequence)
     private val internalPlaylist = MutableLiveData<List<Music>>()
@@ -30,8 +30,8 @@ object MusicPlayerManager : BasePlayerDataListener {
         internalPlayerState.postValue(state)
     }
 
-    private val onPositionChange = { position: Long ->
-        internalPosition.postValue(position)
+    private val onPositionChange = { current: Long, total: Long ->
+        internalPosition.postValue(current to total)
     }
 
     private val errorLogger = { throwable: Throwable ->
@@ -65,7 +65,7 @@ object MusicPlayerManager : BasePlayerDataListener {
 
     val musicChange: LiveData<Pair<Music?, Music?>> = internalMusicChange
     val playingMusic: LiveData<Music> get() = internalPlayingMusic
-    val position: LiveData<Long> get() = internalPosition
+    val position: LiveData<Pair<Long, Long>> get() = internalPosition
     val playerState: LiveData<PlayerState> get() = internalPlayerState
     val playMode: LiveData<PlayMode> get() = internalPlayMode
     val playlist: LiveData<List<Music>> get() = internalPlaylist

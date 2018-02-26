@@ -21,7 +21,7 @@ import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
  * activity of personal fm radio
  */
 @Route(path = "/netease/fm")
-class NeteaseFmActivity : BaseActivity() {
+internal class NeteaseFmActivity : BaseActivity() {
 
     private val musicPlayer: BaseMusicPlayer
         get() = MusicPlayerManager.musicPlayer(MusicType.NETEASE_FM)
@@ -66,12 +66,12 @@ class NeteaseFmActivity : BaseActivity() {
                 }
             }
         }
-        playerManager.position.observeFilterNull(this) {
-            lyricView.scrollLyricTo(it.toInt())
+        playerManager.position.observeFilterNull(this) { (current, total) ->
+            lyricView.scrollLyricTo(current.toInt())
             if (isSeekBarTracking) { //do not change seekBar progress when user is tracking touch
                 return@observeFilterNull
             }
-            val progress = it.toInt()
+            val progress = current.toInt()
             textCurrentPosition.text = progress.toMusicTimeStamp()
             seekBar.progress = progress
         }
@@ -98,7 +98,7 @@ class NeteaseFmActivity : BaseActivity() {
 
     private fun initView() {
         toolbar.inflateMenu(R.menu.netease_menu_fm_player)
-        toolbar.overflowIcon?.setTint(color(R.color.common_text_primary_dark_background))
+        toolbar.overflowIcon?.setTint(color(R.color.color_text_primary_dark_background))
 //        navigationViewPlaceHolder.layoutParams.height = getNavigationBarHeight()
     }
 

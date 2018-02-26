@@ -41,7 +41,7 @@ import tech.summerly.quiet.service.netease.result.PlaylistResultBean
  * Created by summer on 17-12-30
  */
 @Route(path = "/netease/main")
-class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.BottomControllerContainer {
+internal class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.BottomControllerContainer {
 
     companion object {
         private const val REQUEST_LOGIN = 101

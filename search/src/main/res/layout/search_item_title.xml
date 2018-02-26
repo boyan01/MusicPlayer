@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="36dp"
-    android:background="@color/common_background">
+    android:background="@color/background">
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textTitle"
@@ -12,7 +12,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="24dp"
         android:layout_marginStart="16dp"
-        android:textColor="@color/common_text_secondary"
+        android:textColor="@color/color_text_secondary"
         tools:text="搜索历史" />
 
 

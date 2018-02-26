@@ -145,7 +145,7 @@ class CoreMediaPlayer {
             mediaPlayer.reset()
             playerState = PlayerState.Idle
             launch(UI) {
-                LibModule.toast(e.localizedMessage)
+                LibModule.toast(e.message ?: "播放失败")
             }
             e.printStackTrace()
         }
@@ -235,7 +235,7 @@ class CoreMediaPlayer {
 
     }
 
-    val duration: Long get() = mediaPlayer.duration.toLong()
+    val duration: Long get() = mediaPlayer.duration
 
 }
 

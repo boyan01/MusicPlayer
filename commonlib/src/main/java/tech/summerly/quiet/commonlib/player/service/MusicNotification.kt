@@ -69,7 +69,7 @@ internal object MusicNotification : NotificationHelper() {
                         if (isFav) {
                             it.addAction(R.drawable.common_ic_favorite_red_24dp, "fav", buildPlaybackAction(0, type))
                         } else {
-                            it.addAction(R.drawable.common_ic_favorite_border_red_24dp, "fav", buildPlaybackAction(0, type))
+                            it.addAction(R.drawable.ic_favorite_border_red_24dp, "fav", buildPlaybackAction(0, type))
                         }
                     } else {
                         it.addAction(R.drawable.common_ic_skip_previous_black_24dp, "prev", buildPlaybackAction(0, type))
