@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_music.view.*
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.*
 
 /**
@@ -19,10 +20,19 @@ import tech.summerly.quiet.commonlib.utils.*
 open class MusicItemViewBinder(
         private val onMusicClick: (Music) -> Unit
 ) : ItemViewBinder<Music>() {
+
+    private val currentPlaying
+        get() = musicPlayer.current
+
     override fun onBindViewHolder(holder: ViewHolder, item: Music): Unit = with(holder.itemView) {
         val canPlay = item.playUri.isNotEmpty()
         setOnClickListener {
             onMusicClick(item)
+        }
+        if (item == currentPlaying) {
+            indicatorPlaying.visible()
+        } else {
+            indicatorPlaying.invisible()
         }
         setPlayable(canPlay)
         checkMv(item)

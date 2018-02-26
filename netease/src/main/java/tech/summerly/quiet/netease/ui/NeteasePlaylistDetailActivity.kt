@@ -19,6 +19,7 @@ import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.NeteaseModule
@@ -32,6 +33,8 @@ import tech.summerly.quiet.service.netease.result.PlaylistDetailResultBean
 
 
 /**
+ *
+ * 网易云音乐歌单详情界面,显示歌单内的所有歌曲.
  * author: summerly
  * email: yangbinyhbn@gmail.com
  */
@@ -49,8 +52,23 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
         setContentView(R.layout.netease_activity_playlist_detail)
         initView()
         loadData()
+        MusicPlayerManager.musicChange.observeFilterNull(this) { (old, new) ->
+            if (old != null) {
+                val index = items.indexOf(old)
+                if (index != -1) {
+                    list.adapter.notifyItemChanged(index)
+                }
+            }
+            if (new != null) {
+                val index = items.indexOf(new)
+                if (index != -1){
+                    list.adapter.notifyItemChanged(index)
+                }
+            }
+        }
     }
 
+    //计算RecyclerView向上滑动的距离,以实现ToolBar的透明度改变.
     private var scrollY = 0f
 
     private var heightHeader = NeteaseModule.dip(220)
@@ -153,7 +171,7 @@ class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.B
             asyncUI {
                 //delay 0.5 seconds to waiting for transition animation complete
                 delay(500)
-                if (!searchView.isVisible){
+                if (!searchView.isVisible) {
                     return@asyncUI
                 }
                 searchView.requestFocus()
