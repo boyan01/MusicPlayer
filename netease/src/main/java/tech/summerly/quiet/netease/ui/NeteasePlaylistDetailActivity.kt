@@ -2,6 +2,7 @@ package tech.summerly.quiet.netease.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,7 +14,9 @@ import com.google.gson.Gson
 import kotlinx.android.synthetic.main.netease_activity_playlist_detail.*
 import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
+import org.jetbrains.anko.coroutines.experimental.asReference
 import org.jetbrains.anko.dip
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
@@ -52,26 +55,17 @@ internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerF
         setContentView(R.layout.netease_activity_playlist_detail)
         initView()
         loadData()
-        MusicPlayerManager.musicChange.observeFilterNull(this) { (old, new) ->
-            if (old != null) {
-                val index = items.indexOf(old)
-                if (index != -1) {
-                    list.adapter.notifyItemChanged(index)
-                }
-            }
-            if (new != null) {
-                val index = items.indexOf(new)
-                if (index != -1){
-                    list.adapter.notifyItemChanged(index)
-                }
-            }
-        }
+        listenEvent()
     }
 
     //计算RecyclerView向上滑动的距离,以实现ToolBar的透明度改变.
     private var scrollY = 0f
 
     private var heightHeader = NeteaseModule.dip(220)
+
+    private var isScrollByFindPosition = false
+
+    private var isNeedShowIndicatorFindLocation = false
 
     private fun initView() {
         list.adapter = MultiTypeAdapter(items).also {
@@ -81,7 +75,8 @@ internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerF
             it.register(Music::class.java,
                     NeteaseMusicItemViewBinder(this::onMusicClick))
         }
-        list.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+        val scrollListener = object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 scrollY += dy
                 if (scrollY > heightHeader) {
@@ -90,12 +85,42 @@ internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerF
                     val alpha = (scrollY / heightHeader) * 0xff
                     toolbarPlaylist.background.alpha = alpha.toInt()
                 }
+
+                if (!isNeedShowIndicatorFindLocation) {
+                    return
+                }
+                val position = findCurrentPlayingMusic() ?: return
+                val holder = recyclerView.findViewHolderForAdapterPosition(position)
+                if (holder == null) {
+                    indicatorMyLocation.show()
+                } else {
+                    indicatorMyLocation.hide()
+                }
             }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-                log { "state : $newState" }
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (isNeedShowIndicatorFindLocation && newState == RecyclerView.SCROLL_STATE_IDLE && isScrollByFindPosition) {
+                    //找到当前音乐的ItemView并播放一个渐变动画
+                    val index = findCurrentPlayingMusic() ?: return
+                    val view = recyclerView.findViewHolderForAdapterPosition(index)?.itemView?.asReference()
+                            ?: return
+                    launch(UI) {
+                        view().isPressed = true
+                        delay(1000)
+                        view().isPressed = false
+                    }
+                    isScrollByFindPosition = false
+                }
             }
-        })
+        }
+        list.addOnScrollListener(scrollListener)
+        indicatorMyLocation.setOnClickListener {
+            val index = findCurrentPlayingMusic() ?: return@setOnClickListener
+            isScrollByFindPosition = true
+            val scroller = CenterSmoothScroller(this)
+            scroller.targetPosition = index
+            list.layoutManager.startSmoothScroll(scroller)
+        }
         imageBack.setOnClickListener {
             onBackPressed()
         }
@@ -124,6 +149,15 @@ internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerF
 
             }
         })
+    }
+
+    private fun findCurrentPlayingMusic(): Int? {
+        val current = musicPlayer.current ?: return null
+        val index = items.indexOf(current)
+        if (index == -1) {
+            return null
+        }
+        return index
     }
 
     /**
@@ -218,7 +252,40 @@ internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerF
             items += playlist
             items += NeteaseMusicHeader(musics.size)
             items.addAll(musics)
+            checkPlayingMusicIsInList()
             list.multiTypeAdapter.notifyDataSetChanged()
+        }
+    }
+
+    private fun listenEvent() {
+        MusicPlayerManager.musicChange.observeFilterNull(this) { (old, new) ->
+            if (old != null) {
+                val index = items.indexOf(old)
+                if (index != -1) {
+                    list.adapter.notifyItemChanged(index)
+                }
+            }
+            if (new != null) {
+                val index = items.indexOf(new)
+                if (index != -1) {
+                    list.adapter.notifyItemChanged(index)
+                }
+            }
+            checkPlayingMusicIsInList()
+        }
+    }
+
+
+    /**
+     * 检查当前播放的音乐是否存在与此列表中
+     */
+    private fun checkPlayingMusicIsInList() {
+        val current = musicPlayer.current
+        if (current != null && items.contains(current)) {
+            isNeedShowIndicatorFindLocation = true
+        } else {
+            isNeedShowIndicatorFindLocation = false
+            indicatorMyLocation.hide()
         }
     }
 
@@ -238,5 +305,11 @@ internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerF
             return
         }
         super.onBackPressed()
+    }
+
+    private class CenterSmoothScroller(context: Context) : LinearSmoothScroller(context) {
+        override fun calculateDtToFit(viewStart: Int, viewEnd: Int, boxStart: Int, boxEnd: Int, snapPreference: Int): Int {
+            return (boxStart + (boxEnd - boxStart) / 2) - (viewStart + (viewEnd - viewStart) / 2)
+        }
     }
 }

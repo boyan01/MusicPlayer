@@ -30,7 +30,7 @@
     <color name="common_color_icon_active">#ffffff</color>
     <color name="common_colorIconInactive">#808080</color>
 
-    <color name="common_transparentSecondary">#4e000000</color>
+    <color name="color_transparent_secondary">#4e000000</color>
 
     <color name="common_color_indicator">@color/color_text_secondary</color>
 

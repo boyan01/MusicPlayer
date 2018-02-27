@@ -22,7 +22,7 @@ android {
         resourcePrefix "netease"
 
         if (isIndependentApk.toBoolean()) {
-            applicationId "tech.summerly.quiet.netease"
+            applicationId "tech.summerly.quiet"
         }
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

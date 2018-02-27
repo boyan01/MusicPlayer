@@ -26,7 +26,7 @@
     <color name="common_backgroundLight">#ffffff</color>
 
     <color name="common_transparent">#00000000</color>
-    <color name="common_transparentSecondary">#4effffff</color>
+    <color name="color_transparent_secondary">#4effffff</color>
     <color name="common_transparentSecondaryDark">#4e000000</color>
 
     <!-- colorImageMask用来作为image的遮罩，让夜间模式下的imageView不会太过刺眼-->
