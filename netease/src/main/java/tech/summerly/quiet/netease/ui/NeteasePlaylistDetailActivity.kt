@@ -2,6 +2,7 @@ package tech.summerly.quiet.netease.ui
 
 import android.content.Context
 import android.os.Bundle
+import android.os.SystemClock
 import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
@@ -66,6 +67,8 @@ internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerF
     private var isScrollByFindPosition = false
 
     private var isNeedShowIndicatorFindLocation = false
+
+    private val mTitleHits = LongArray(2)
 
     private fun initView() {
         list.adapter = MultiTypeAdapter(items).also {
@@ -149,6 +152,14 @@ internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerF
 
             }
         })
+        toolbarPlaylist.setOnClickListener {
+            //double hit scroll to first
+            System.arraycopy(mTitleHits, 1, mTitleHits, 0, mTitleHits.size - 1)
+            mTitleHits[mTitleHits.size - 1] = SystemClock.uptimeMillis()
+            if (mTitleHits[0] > SystemClock.uptimeMillis() - 500) {
+                list.smoothScrollToPosition(0)
+            }
+        }
     }
 
     private fun findCurrentPlayingMusic(): Int? {
