@@ -292,7 +292,7 @@ internal class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerF
                 startActivity<NeteaseDailyRecommendActivity>()
             }
             getString(R.string.netease_nav_title_latest) -> {
-
+                ARouter.getInstance().build("/netease/record").navigation()
             }
         }
     }

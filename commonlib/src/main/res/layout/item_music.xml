@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:background="?colorPrimary"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textTitle"

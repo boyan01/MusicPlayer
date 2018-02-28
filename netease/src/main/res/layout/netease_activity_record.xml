@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_toolbar_height_with_status_bar"
+        android:background="?colorPrimary"
+        android:paddingTop="@dimen/common_status_bar_height"
+        app:navigationIcon="@drawable/netease_ic_arrow_back_white_24dp"
+        app:title="@string/netease_record"
+        app:titleTextColor="@color/color_text_primary_dark_background" />
+
+    <android.support.design.widget.TabLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="start"
+        app:tabGravity="fill"
+        app:tabMode="fixed">
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/netease_week" />
+
+        <android.support.design.widget.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/netease_all" />
+
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <fragment
+        android:name="tech.summerly.quiet.commonlib.fragments.BottomControllerFragment"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/common_height_bottom_controller"
+        android:tag="@string/common_tag_fragment_bottom_controller"
+        tools:layout="@layout/common_fragment_controller_bottom" />
+</LinearLayout>

@@ -6,8 +6,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:label="@string/netease_app_name"
-        android:name="debug.DebugAppContext">
+        android:name="debug.DebugAppContext"
+        android:label="@string/netease_app_name">
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true"
@@ -38,6 +38,9 @@
             android:theme="@style/NeteaseAppTheme" />
 
         <activity android:name=".ui.MusicPlayerActivity" />
+        <activity
+            android:name=".ui.NeteaseRecordActivity"
+            android:theme="@style/NeteaseAppTheme" />
     </application>
 
 </manifest>

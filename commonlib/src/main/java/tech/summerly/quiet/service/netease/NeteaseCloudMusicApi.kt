@@ -6,6 +6,7 @@ import okhttp3.Cache
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicUri
+import tech.summerly.quiet.commonlib.bean.Record
 import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
 import tech.summerly.quiet.commonlib.objects.PortionList
 import tech.summerly.quiet.commonlib.utils.await
@@ -216,5 +217,27 @@ class NeteaseCloudMusicApi {
         return playlistDetailBean.playlist to
                 (playlistDetailBean.playlist.tracks?.map { mapper.convertToMusic(it) }
                         ?: emptyList())
+    }
+
+    /**
+     * 获取用户播放记录
+     *
+     * @param type 0 : 所有记录; 1:一周的记录
+     */
+    suspend fun getUserRecord(id: Long, type: Int): List<Record> {
+        val encrypt = Crypto.encrypt("""
+            {
+                "type":$type,
+                "uid":"$id",
+                "csrf_token":""
+            }
+            """.trimIndent())
+        val (data, code) = neteaseService.record(encrypt).await()
+        if (code == 301) {
+            error("please login first!")
+        }
+        return data.map {
+            Record(it.playCount, it.score, mapper.convertToMusic(it.song))
+        }
     }
 }

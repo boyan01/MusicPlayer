@@ -1,5 +1,6 @@
 package tech.summerly.quiet.commonlib.player
 
+import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import tech.summerly.quiet.commonlib.bean.Music
@@ -10,6 +11,7 @@ import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.commonlib.utils.observeFilterNull
 import tech.summerly.quiet.commonlib.utils.observeForeverFilterNull
 
 object MusicPlayerManager : BasePlayerDataListener {
@@ -88,4 +90,13 @@ object MusicPlayerManager : BasePlayerDataListener {
 
 val musicPlayer: BaseMusicPlayer
     get() = MusicPlayerManager.musicPlayer()
+
+fun LifecycleOwner.listenMusicChangePosition(items: List<*>,
+                                             predicate: (any: Any?, music: Music?) -> Boolean = { any, music -> any == music },
+                                             change: (from: Int, to: Int) -> Unit) =
+        MusicPlayerManager.musicChange.observeFilterNull(this) { (old, new) ->
+            val from = items.indexOfFirst { predicate(it, old) }
+            val to = items.indexOfFirst { predicate(it, new) }
+            change(from, to)
+        }
 

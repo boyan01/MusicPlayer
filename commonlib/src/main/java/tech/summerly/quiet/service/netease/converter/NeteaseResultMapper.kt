@@ -202,6 +202,22 @@ internal class NeteaseResultMapper {
         )
     }
 
+    fun convertToMusic(song: RecordResultBean.Record.SongBean): Music = with(song) {
+        return@with Music(
+                id = id,
+                title = name,
+                picUri = null,
+                artist = ar.map { Artist(it.id, it.name, null, MusicType.NETEASE) },
+                album = Album(al.id, al.name, al.pic_str, MusicType.NETEASE),
+                playUri = mutableListOf(MusicUri.NORMAL_QUALITY),
+                type = MusicType.NETEASE,
+                mvId = mv,
+                duration = dt
+
+        )
+    }
+
+
     //
 //    fun convertToArtist(artistResult: RecommendSongResultBean.Artist) =
 //            Artist(

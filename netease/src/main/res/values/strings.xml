@@ -48,5 +48,8 @@
     <string name="netease_error_login_failed_template">登录出错:%s</string>
     <string name="netease_player_time_stamp_zero">00:00</string>
     <string name="netease_no_lyric">无歌词</string>
+    <string name="netease_all">所有</string>
+    <string name="netease_week">一周</string>
+    <string name="netease_record">播放记录统计</string>
 
 </resources>

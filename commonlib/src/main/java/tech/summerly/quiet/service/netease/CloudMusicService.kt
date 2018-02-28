@@ -80,4 +80,8 @@ internal interface CloudMusicService {
     @FormUrlEncoded
     @POST("/weapi/radio/trash/add?alg=RT&time=25")
     fun fmTrash(@Query("songId") id: Long, @FieldMap request: Map<String, String>): Call<CommonResultBean>
+
+    @FormUrlEncoded
+    @POST("/weapi/v1/play/record")
+    fun record(@FieldMap request: Map<String, String>): Deferred<RecordResultBean>
 }

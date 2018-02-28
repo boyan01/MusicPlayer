@@ -24,7 +24,7 @@ open class MusicItemViewBinder(
     private val currentPlaying
         get() = musicPlayer.current
 
-    override fun onBindViewHolder(holder: ViewHolder, item: Music): Unit = with(holder.itemView) {
+    public override fun onBindViewHolder(holder: ViewHolder, item: Music): Unit = with(holder.itemView) {
         val canPlay = item.playUri.isNotEmpty()
         setOnClickListener {
             onMusicClick(item)
@@ -105,7 +105,7 @@ open class MusicItemViewBinder(
         }
     }
 
-    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
+    public override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
         return ViewHolder(R.layout.item_music, parent, inflater)
     }
 
