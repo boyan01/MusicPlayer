@@ -1,7 +1,6 @@
 package tech.summerly.quiet.commonlib.fragments.items
 
 import android.annotation.SuppressLint
-import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.common_item_playing_music.view.*
@@ -43,10 +42,10 @@ internal class PlayingMusicItemViewBinder : ItemViewBinder<Music>() {
         buttonClear.setOnClickListener {
             asyncUI {
                 if (item == current) {
-                    musicPlayer.corePlayer.stop()
-                    musicPlayer.playlistProvider.current = musicPlayer.playlistProvider.getNextMusic()
+                    musicPlayer.exit()
+                    musicPlayer.playlist.current = musicPlayer.playlist.getNextMusic()
                 }
-                musicPlayer.playlistProvider.remove(item)
+                musicPlayer.playlist.remove(item)
                 adapter.notifyItemRemoved(holder.adapterPosition)
             }
         }

@@ -55,18 +55,18 @@ internal class NeteaseFmActivity : BaseActivity() {
         playerManager.playerState.observe(this) {
             when (it) {
                 PlayerState.Playing -> {
-                    textDuration.text = musicPlayer.corePlayer.duration.toMusicTimeStamp()
+                    textDuration.text = musicPlayer.duration.toMusicTimeStamp()
                     buttonPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
                 }
                 PlayerState.Pausing ->
                     buttonPlay.setImageResource(R.drawable.common_ic_play_circle_outline_black_24dp)
-                PlayerState.Loading -> Unit
+                PlayerState.Preparing -> Unit
                 else -> {
 
                 }
             }
         }
-        playerManager.position.observeFilterNull(this) { (current, total) ->
+        playerManager.position.observeFilterNull(this) { (current, _) ->
             lyricView.scrollLyricTo(current.toInt())
             if (isSeekBarTracking) { //do not change seekBar progress when user is tracking touch
                 return@observeFilterNull
@@ -86,8 +86,8 @@ internal class NeteaseFmActivity : BaseActivity() {
     }
 
     private fun playMusicIfNecessary() {
-        if (musicPlayer.corePlayer.getState() == PlayerState.Playing
-                || musicPlayer.corePlayer.getState() == PlayerState.Loading) {
+        if (musicPlayer.getState() == PlayerState.Playing
+                || musicPlayer.getState() == PlayerState.Preparing) {
             return
         }
         if (!intent.getBooleanExtra("play", false)) {

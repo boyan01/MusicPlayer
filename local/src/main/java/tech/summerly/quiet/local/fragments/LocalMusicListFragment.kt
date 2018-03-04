@@ -9,7 +9,7 @@ import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
-import tech.summerly.quiet.commonlib.player.musicPlayer
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.fragments.items.LocalMusicItemViewBinder
@@ -55,9 +55,9 @@ internal class LocalMusicListFragment : BaseFragment() {
 
 
     private fun onMusicClick(music: Music) = runWithRoot {
-        musicPlayer.setType(MusicType.LOCAL)
+        val musicPlayer = MusicPlayerManager.musicPlayer(MusicType.LOCAL)
         val musicList = list.multiTypeAdapter.items.filterIsInstance(Music::class.java)
-        musicPlayer.playlistProvider.setPlaylist(musicList)
+        musicPlayer.playlist.setMusicLists(musicList)
         musicPlayer.play(music)
     }
 

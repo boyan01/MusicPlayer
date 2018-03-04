@@ -45,7 +45,7 @@ open class BottomControllerFragment : BaseFragment() {
 
     private fun listenEvent(root: View) = with(root) {
         setOnClickListener { view ->
-            playerManager.playingMusic.value?.let {
+            playerManager.musicPlayer().current?.let {
                 onControllerClick(view, it)
             }
         }
@@ -65,11 +65,11 @@ open class BottomControllerFragment : BaseFragment() {
         controllerPauseOrPlay.visible()
         when (state) {
             PlayerState.Playing -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
-            PlayerState.Loading -> {
+            PlayerState.Preparing -> {
                 controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
                 // delay 500ms to display load progress bar
                 handler?.postDelayed({
-                    if (!isDetached && view != null && musicPlayer.corePlayer.getState() == PlayerState.Loading) {
+                    if (!isDetached && view != null && musicPlayer.getState() == PlayerState.Preparing) {
                         progressPlayPause.visible()
                         controllerPauseOrPlay.gone()
                     }

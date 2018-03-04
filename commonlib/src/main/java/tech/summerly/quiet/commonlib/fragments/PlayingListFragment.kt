@@ -29,7 +29,7 @@ class PlayingListFragment : BottomSheetDialogFragment() {
     }
 
     private val musicList: List<Music>
-        get() = musicPlayer.playlistProvider.musicList
+        get() = musicPlayer.playlist.musicList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,14 +96,14 @@ class PlayingListFragment : BottomSheetDialogFragment() {
 
     private fun View.setEvent() {
         containerPlayMode.setOnClickListener {
-            musicPlayer.playlistProvider.playMode = PlayMode.next(musicPlayer.playlistProvider.playMode)
+            musicPlayer.playlist.playMode = PlayMode.next(musicPlayer.playlist.playMode)
         }
         indicatorPlayMode.setOnClickListener {
-            musicPlayer.playlistProvider.playMode = PlayMode.next(musicPlayer.playlistProvider.playMode)
+            musicPlayer.playlist.playMode = PlayMode.next(musicPlayer.playlist.playMode)
         }
         buttonClearAll.setOnClickListener {
-            musicPlayer.corePlayer.stop()
-            musicPlayer.playlistProvider.clear()
+            musicPlayer.playlist.clear()
+            musicPlayer.exit()
             dismiss()
         }
     }

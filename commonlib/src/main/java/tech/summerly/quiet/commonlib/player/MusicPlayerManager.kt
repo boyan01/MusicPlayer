@@ -6,15 +6,16 @@ import android.arch.lifecycle.MutableLiveData
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.core.PlayerState
+import tech.summerly.quiet.commonlib.player.playlist.Playlist
+import tech.summerly.quiet.commonlib.player.playlist.PlaylistPlayer
 import tech.summerly.quiet.commonlib.player.service.MusicPlayerService
-import tech.summerly.quiet.commonlib.player.state.BasePlayerDataListener
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.observeFilterNull
 import tech.summerly.quiet.commonlib.utils.observeForeverFilterNull
 
-object MusicPlayerManager : BasePlayerDataListener {
+object MusicPlayerManager : Playlist.StateChangeListener {
 
 
     private val internalPlayingMusic = MutableLiveData<Music>()
@@ -36,25 +37,27 @@ object MusicPlayerManager : BasePlayerDataListener {
         internalPosition.postValue(current to total)
     }
 
-    private val errorLogger = { throwable: Throwable ->
-        throwable.printStackTrace()
+    override fun onMusicChange(old: Music?, new: Music?) {
+        internalPlayingMusic.postValue(new)
+        internalMusicChange.postValue(old to new)
+        log { "change: $old to $new" }
     }
 
-    private var musicPlayer: BaseMusicPlayer = newMusicPlayer()
+    override fun onPlayModeChange(playMode: PlayMode) {
+        internalPlayMode.postValue(playMode)
+    }
 
-    fun musicPlayer(type: MusicType? = null): BaseMusicPlayer {
-        val musicPlayer = musicPlayer
-        type?.let { musicPlayer.setType(it) }
+    override fun onMusicListChange(musicList: List<Music>) {
+        internalPlaylist.postValue(musicList)
+    }
+
+    private val player: PlaylistPlayer = PlaylistPlayer(
+            onPlayerStateChange, onPositionChange)
+
+    fun musicPlayer(type: MusicType? = null): PlaylistPlayer {
+        val musicPlayer = player
+        musicPlayer.switchPlaylist()
         return musicPlayer
-    }
-
-    /**
-     * create a new [BaseMusicPlayer] when [musicPlayer] is not available
-     */
-    private fun newMusicPlayer(): BaseMusicPlayer {
-        return BaseMusicPlayer(
-                onPlayerStateChange, MusicPlayerManager, onPositionChange, errorLogger
-        )
     }
 
     init {
@@ -66,29 +69,16 @@ object MusicPlayerManager : BasePlayerDataListener {
     }
 
     val musicChange: LiveData<Pair<Music?, Music?>> = internalMusicChange
+    @Deprecated("使用 musicChange 来监听歌曲变化")
     val playingMusic: LiveData<Music> get() = internalPlayingMusic
     val position: LiveData<Pair<Long, Long>> get() = internalPosition
     val playerState: LiveData<PlayerState> get() = internalPlayerState
     val playMode: LiveData<PlayMode> get() = internalPlayMode
     val playlist: LiveData<List<Music>> get() = internalPlaylist
 
-    override fun onCurrentMusicUpdated(old: Music?, new: Music?) {
-        internalPlayingMusic.postValue(new)
-        internalMusicChange.postValue(old to new)
-        log { "change: $old to $new" }
-    }
-
-    override fun onPlayModeUpdated(playMode: PlayMode) {
-        internalPlayMode.postValue(playMode)
-    }
-
-    override fun onPlaylistUpdated(playlist: List<Music>) {
-        internalPlaylist.postValue(playlist)
-    }
-
 }
 
-val musicPlayer: BaseMusicPlayer
+val musicPlayer: PlaylistPlayer
     get() = MusicPlayerManager.musicPlayer()
 
 fun LifecycleOwner.listenMusicChangePosition(items: List<*>,
@@ -100,3 +90,5 @@ fun LifecycleOwner.listenMusicChangePosition(items: List<*>,
             change(from, to)
         }
 
+@Deprecated("这是重构移除的组件！", replaceWith = ReplaceWith("PlaylistPlayer", imports = ["tech.summerly.quiet.commonlib.player.playlist.PlaylistPlayer"]))
+typealias BaseMusicPlayer = PlaylistPlayer

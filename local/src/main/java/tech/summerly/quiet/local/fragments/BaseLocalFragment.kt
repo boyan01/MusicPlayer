@@ -14,14 +14,17 @@ import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.*
 import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
-import tech.summerly.quiet.commonlib.player.musicPlayer
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
-import tech.summerly.quiet.local.*
-import tech.summerly.quiet.service.local.database.database.Table
+import tech.summerly.quiet.local.LocalModule
+import tech.summerly.quiet.local.LocalMusicActivity
+import tech.summerly.quiet.local.LocalMusicListActivity
+import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.fragments.items.*
 import tech.summerly.quiet.service.local.LocalMusicApi
+import tech.summerly.quiet.service.local.database.database.Table
 import kotlin.coroutines.experimental.CoroutineContext
 
 /**
@@ -43,14 +46,14 @@ abstract class BaseLocalFragment : BaseFragment() {
         Table.values().filter {
             isInterestedChange(it)
         }.forEach {
-                    it.listenChange(this) { newVersion ->
-                        log { "is database changed : ${newVersion > this.version}" }
-                        if (newVersion > this.version) {
-                            fetchDataAndDisplay()
-                            this.version = newVersion
-                        }
-                    }
+            it.listenChange(this) { newVersion ->
+                log { "is database changed : ${newVersion > this.version}" }
+                if (newVersion > this.version) {
+                    fetchDataAndDisplay()
+                    this.version = newVersion
                 }
+            }
+        }
     }
 
     /**
@@ -124,11 +127,12 @@ abstract class BaseLocalFragment : BaseFragment() {
         log { "playlist : $playlist" }
     }
 
+    private val musicPlayer get() = MusicPlayerManager.musicPlayer(MusicType.LOCAL)
+
     protected open fun onMusicClicked(music: Music) = runWithRoot {
         this as? RecyclerView ?: return@runWithRoot
-        musicPlayer.setType(MusicType.LOCAL)
         val items = multiTypeAdapter.items.filterIsInstance(Music::class.java)
-        musicPlayer.playlistProvider.setPlaylist(items)
+        musicPlayer.playlist.setMusicLists(items)
         musicPlayer.play(music)
     }
 

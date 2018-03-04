@@ -123,7 +123,7 @@ private val imageLoaderJob: Job = Job()
  * notify a music notification
  */
 fun MusicPlayerService.notification() {
-    val music = MusicPlayerManager.musicPlayer().corePlayer.playing
+    val music = MusicPlayerManager.musicPlayer().current
     if (music == null) {//remove notification if current playing is null.
         stopForeground(true)
         return
