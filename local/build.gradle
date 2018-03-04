@@ -19,6 +19,7 @@ android {
         versionCode 1
         versionName "1.0"
         resourcePrefix "local"
+        multiDexEnabled true
 
         if (isIndependentApk.toBoolean()) {
             applicationId "tech.summerly.quiet.local"

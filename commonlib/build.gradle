@@ -18,6 +18,7 @@ android {
         versionCode app_version_code.toInteger()
         versionName app_version_name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -49,11 +50,13 @@ dependencies {
 
     api 'androidx.core:core-ktx:0.2'
     //android support
+    api "com.android.support:support-annotations:$android_support_version"
+    api "com.android.support:support-compat:$android_support_version"
     api "com.android.support:design:$android_support_version"
     api "com.android.support:support-v4:$android_support_version"
     api "com.android.support:palette-v7:$android_support_version"
     api "com.android.support:recyclerview-v7:$android_support_version"
-    api 'me.drakeet.multitype:multitype:3.4.0'
+    api 'me.drakeet.multitype:multitype:3.4.4'
     api 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
 
     //Architecture Components
