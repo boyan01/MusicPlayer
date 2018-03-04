@@ -46,6 +46,8 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.facebook.stetho:stetho:1.5.0'
+
+    api 'androidx.core:core-ktx:0.2'
     //android support
     api "com.android.support:design:$android_support_version"
     api "com.android.support:support-v4:$android_support_version"
@@ -103,8 +105,6 @@ dependencies {
     kapt 'com.alibaba:arouter-compiler:1.1.4'
 
     //media cache
-    implementation files('libs/android_video_cache.aar')
-    implementation 'org.slf4j:slf4j-android:1.7.21'
-    implementation 'tech.summerly:streamcache:1.1'
+    implementation "tech.summerly:streamcache:1.1.2"
 
 }

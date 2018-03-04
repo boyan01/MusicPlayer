@@ -29,8 +29,7 @@ internal object LibModule : BaseModule() {
         }
         ARouter.init(applicationContext as Application?)
 
-        StreamCacheUtil.init(this
-        )
+        StreamCacheUtil.init(this)
         val simplePlaylistFactory = object : MusicPlaylistProviderFactory() {
             override fun createMusicPlaylistProvider(current: Music?, playMode: PlayMode, musicList: ArrayList<Music>, playerStateListener: BasePlayerDataListener): MusicPlaylistProvider {
                 return SimplePlaylistProvider(current, playMode, musicList, playerStateListener)

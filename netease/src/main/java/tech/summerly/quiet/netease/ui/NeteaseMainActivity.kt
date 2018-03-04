@@ -22,10 +22,7 @@ import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.mvp.BaseView
-import tech.summerly.quiet.commonlib.utils.GlideApp
-import tech.summerly.quiet.commonlib.utils.asyncUI
-import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
-import tech.summerly.quiet.commonlib.utils.popupMenu
+import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.persistence.NeteasePreference
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeader
@@ -73,8 +70,7 @@ internal class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerF
         recycler.adapter = MultiTypeAdapter(items)
         recycler.multiTypeAdapter.register(CommonItemA::class.java, object : CommonItemAViewBinder(this::onNavItemClicked) {
             override fun onCreateViewHolder(image: AppCompatImageView, title: AppCompatTextView) {
-                @Suppress("DEPRECATION")
-                image.setColorFilter(resources.getColor(R.color.netease_color_primary))
+                image.setColorFilter(color(R.color.netease_color_primary))
             }
         })
         recycler.multiTypeAdapter.register(NeteasePlaylistHeader::class.java,
@@ -128,7 +124,7 @@ internal class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerF
             }
         }
         imageSearch.setOnClickListener {
-            ARouter.getInstance().build("/search/main").navigation()
+            ARouter.getInstance().build("/search/main").withInt("theme",R.style.NeteaseAppTheme).navigation()
         }
         loadData()
     }
