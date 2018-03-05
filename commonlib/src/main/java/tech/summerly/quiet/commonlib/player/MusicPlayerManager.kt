@@ -55,9 +55,15 @@ object MusicPlayerManager : Playlist.StateChangeListener {
             onPlayerStateChange, onPositionChange)
 
     fun musicPlayer(type: MusicType? = null): PlaylistPlayer {
-        val musicPlayer = player
-        musicPlayer.switchPlaylist()
-        return musicPlayer
+        if (type == null) {//不作任何处理，直接返回 player
+            return player
+        }
+        val t = when (type) {
+            MusicType.NETEASE_FM -> Playlist.TYPE_FM
+            MusicType.LOCAL, MusicType.NETEASE -> Playlist.TYPE_NORMAL
+        }
+        player.switchPlaylist(t)
+        return player
     }
 
     init {
@@ -70,7 +76,8 @@ object MusicPlayerManager : Playlist.StateChangeListener {
 
     val musicChange: LiveData<Pair<Music?, Music?>> = internalMusicChange
     @Deprecated("使用 musicChange 来监听歌曲变化")
-    val playingMusic: LiveData<Music> get() = internalPlayingMusic
+    val playingMusic: LiveData<Music>
+        get() = internalPlayingMusic
     val position: LiveData<Pair<Long, Long>> get() = internalPosition
     val playerState: LiveData<PlayerState> get() = internalPlayerState
     val playMode: LiveData<PlayMode> get() = internalPlayMode

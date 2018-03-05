@@ -35,6 +35,7 @@ class PlaylistPlayer internal constructor(
         if (playlist.type == type) {
             return
         }
+        mediaPlayer.stop()
         playlist = Playlist.newInstance(type)
         PlaylistStorage.saveType(type)
     }

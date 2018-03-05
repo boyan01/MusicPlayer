@@ -32,6 +32,7 @@ class SearchMainActivity : BaseActivity(), BottomControllerFragment.BottomContro
 
     private val voiceClickListener = { _: View ->
         toast("the function is not implemented")
+        Unit
     }
 
     private val queryClickListener = { _: View ->

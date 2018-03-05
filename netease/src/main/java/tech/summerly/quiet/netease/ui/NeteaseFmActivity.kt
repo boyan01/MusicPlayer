@@ -10,9 +10,9 @@ import org.jetbrains.anko.act
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
-import tech.summerly.quiet.commonlib.player.BaseMusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
+import tech.summerly.quiet.commonlib.player.playlist.PlaylistPlayer
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
@@ -23,7 +23,7 @@ import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 @Route(path = "/netease/fm")
 internal class NeteaseFmActivity : BaseActivity() {
 
-    private val musicPlayer: BaseMusicPlayer
+    private val musicPlayer: PlaylistPlayer
         get() = MusicPlayerManager.musicPlayer(MusicType.NETEASE_FM)
 
     private val playerManager: MusicPlayerManager
