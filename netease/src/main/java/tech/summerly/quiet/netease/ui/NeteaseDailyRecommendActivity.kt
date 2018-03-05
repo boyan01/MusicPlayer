@@ -10,7 +10,7 @@ import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
-import tech.summerly.quiet.commonlib.player.musicPlayer
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.alert
 import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
@@ -50,7 +50,7 @@ internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerF
         //check if login
         if (!isLogin()) {
             if (alert(message = getString(R.string.netease_alert_need_login),
-                    negative = getString(R.string.netease_action_give_up))) {
+                            negative = getString(R.string.netease_action_give_up))) {
                 ARouter.getInstance().build("/netease/login")
                         .navigation(this@NeteaseDailyRecommendActivity, REQUEST_LOGIN)
             } else {
@@ -70,8 +70,8 @@ internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerF
     }
 
     private fun onMusicClick(music: Music) {
-        musicPlayer.setType(MusicType.NETEASE)
-        musicPlayer.playlistProvider.setPlaylist(items.filterIsInstance(Music::class.java))
+        val musicPlayer = MusicPlayerManager.musicPlayer(MusicType.NETEASE)
+        musicPlayer.playlist.setMusicLists(items.filterIsInstance(Music::class.java))
         musicPlayer.play(music)
     }
 

@@ -233,8 +233,8 @@ internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerF
     }
 
     private fun onMusicClick(music: Music) {
-        musicPlayer.setType(MusicType.NETEASE)
-        musicPlayer.playlistProvider.setPlaylist(items.filterIsInstance(Music::class.java))
+        val musicPlayer = MusicPlayerManager.musicPlayer(MusicType.NETEASE)
+        musicPlayer.playlist.setMusicLists(items.filterIsInstance(Music::class.java))
         musicPlayer.play(music)
     }
 

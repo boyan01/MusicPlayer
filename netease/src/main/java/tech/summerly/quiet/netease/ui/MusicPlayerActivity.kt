@@ -97,7 +97,7 @@ internal class MusicPlayerActivity : BaseActivity() {
             when (state) {
                 PlayerState.Playing -> {
                     controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
-                    textDuration.text = musicPlayer.corePlayer.duration.toMusicTimeStamp()
+                    textDuration.text = musicPlayer.duration.toMusicTimeStamp()
                 }
                 else -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_play_arrow_black_24dp)
             }
