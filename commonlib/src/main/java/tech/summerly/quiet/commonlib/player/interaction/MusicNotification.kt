@@ -1,24 +1,14 @@
-package tech.summerly.quiet.commonlib.player.service
+package tech.summerly.quiet.commonlib.player.interaction
 
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.support.v4.app.NotificationCompat
+import android.support.v4.app.TaskStackBuilder
 import android.support.v7.graphics.Palette
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.cancelChildren
-import kotlinx.coroutines.experimental.launch
-import org.jetbrains.anko.dip
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
@@ -26,15 +16,6 @@ import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.notification.NotificationHelper
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.utils.GlideApp
-import tech.summerly.quiet.commonlib.utils.LoggerLevel
-import tech.summerly.quiet.commonlib.utils.log
-import java.util.concurrent.CancellationException
-import java.util.concurrent.TimeUnit
-
-
-private val currentIsPlaying: Boolean
-    get() = MusicPlayerManager.playerState.value == PlayerState.Playing
 
 
 internal object MusicNotification : NotificationHelper() {
@@ -81,7 +62,17 @@ internal object MusicNotification : NotificationHelper() {
                         "pauseOrPlay", buildPlaybackAction(1, type))
                 .addAction(R.drawable.common_ic_skip_next_black_24dp, "next", buildPlaybackAction(2, type))
                 .addAction(R.drawable.common_ic_close_black_24dp, "close", buildPlaybackAction(3, type))
+                .setContentIntent(buildContentIntent(type))
                 .build()
+    }
+
+    private fun buildContentIntent(type: MusicType): PendingIntent? {
+        val stackBuilder = TaskStackBuilder.create(context)
+        val intent = Intent(context, PendingIntentProxyActivity::class.java)
+        intent.putExtra(PendingIntentProxyActivity.KEY_ACTION, PendingIntentProxyActivity.ACTION_TO_PLAYER)
+        intent.putExtra(PendingIntentProxyActivity.KEY_TYPE, type.name)
+        stackBuilder.addNextIntent(intent)
+        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     private fun buildPlaybackAction(which: Int, type: MusicType): PendingIntent {
@@ -114,84 +105,8 @@ internal object MusicNotification : NotificationHelper() {
     }
 
     operator fun invoke(music: Music, artwork: Bitmap): Notification = with(music) {
+        val currentIsPlaying: Boolean = MusicPlayerManager.musicPlayer().getState() == PlayerState.Playing
         createNotification(type, title, artistAlbumString(), artwork, isFavorite, currentIsPlaying)
     }
 }
 
-private val imageLoaderJob: Job = Job()
-/**
- * notify a music notification
- */
-fun MusicPlayerService.notification() {
-    val music = MusicPlayerManager.musicPlayer().current
-    if (music == null) {//remove notification if current playing is null.
-        stopForeground(true)
-        return
-    }
-
-    val uri = music.picUri
-
-    //to show an default image notification if uri is null
-    if (uri == null) {
-        val defaultBigIcon = BitmapFactory.decodeResource(resources, R.drawable.common_icon_notification_default)
-        notificationInternal(music, defaultBigIcon)
-        return
-    }
-    //load image from file
-    if (uri.startsWith("file:", true)) {
-        imageLoaderJob.cancelChildren()
-        launch(UI, parent = imageLoaderJob) {
-            val bitmap =
-                    try {
-                        async {
-                            GlideApp.with(this@notification).asBitmap().load(uri).submit(dip(100), dip(100))
-                                    .get(10, TimeUnit.SECONDS) //only wait 10 seconds
-                        }.await()
-                    } catch (cancellationException: CancellationException) {
-                        throw cancellationException
-                    } catch (e: Exception) {
-                        log { e }
-                        BitmapFactory.decodeResource(resources, R.drawable.common_icon_notification_default)
-                    }
-            notificationInternal(music, bitmap)
-        }
-        return
-    }
-
-    //load image from url
-    GlideApp.with(this)
-            .asBitmap()
-            .onlyRetrieveFromCache(true)
-            .load(uri)
-            .placeholder(R.drawable.common_icon_notification_default)
-            .into(object : SimpleTarget<Bitmap>(dip(100), dip(100)) {
-                override fun onResourceReady(resource: Bitmap?, transition: Transition<in Bitmap>?) {
-                    if (resource == null) {
-                        log(LoggerLevel.ERROR) {
-                            "on resource ready is invoked , " +
-                                    "but resource bitmap is still null!"
-                        }
-                        return
-                    }
-                    notificationInternal(music, resource)
-                }
-
-                override fun onLoadStarted(placeholder: Drawable?) {
-                    if (placeholder == null) {
-                        log(LoggerLevel.ERROR) { "notification place holder bitmap is null!!" }
-                        return
-                    }
-                    if (placeholder is BitmapDrawable) {
-                        notificationInternal(music, placeholder.bitmap)
-                    }
-                }
-            })
-}
-
-private fun MusicPlayerService.notificationInternal(music: Music, bitmap: Bitmap) {
-    val notification = MusicNotification(music, bitmap)
-    startForeground(NotificationHelper.ID_NOTIFICATION_PLAY_SERVICE, notification)
-//    if (currentIsPlaying) {
-//        stopForeground(false)
-//    }
-}

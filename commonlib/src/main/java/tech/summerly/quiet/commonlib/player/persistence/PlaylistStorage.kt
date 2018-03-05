@@ -55,6 +55,9 @@ internal object PlaylistStorage {
         }
     }
 
+    /**
+     * 从配置文件中读取上一次保存的[Playlist]信息
+     */
     fun resotrePlaylist(): Playlist {
         val type = preference.getInt(KEY_TYPE, Playlist.TYPE_DEFAULT)
         return when (type) {

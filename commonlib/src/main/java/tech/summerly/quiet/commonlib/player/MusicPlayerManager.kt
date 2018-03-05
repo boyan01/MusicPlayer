@@ -6,9 +6,9 @@ import android.arch.lifecycle.MutableLiveData
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.core.PlayerState
+import tech.summerly.quiet.commonlib.player.interaction.MusicPlayerService
 import tech.summerly.quiet.commonlib.player.playlist.Playlist
 import tech.summerly.quiet.commonlib.player.playlist.PlaylistPlayer
-import tech.summerly.quiet.commonlib.player.service.MusicPlayerService
 import tech.summerly.quiet.commonlib.player.state.PlayMode
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.log
