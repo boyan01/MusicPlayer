@@ -5,21 +5,12 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.media.AudioFocusRequest
 import android.media.AudioManager
-import android.net.Uri
 import android.os.Build
 import android.view.animation.LinearInterpolator
 import org.jetbrains.anko.coroutines.experimental.asReference
-import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.player.getPlayableUri
 import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.commonlib.utils.string
-import tech.summerly.streamcache.CachedDataSource
-import tech.summerly.streamcache.DataSource
-import tech.summerly.streamcache.DirectDataSource
 import tv.danmaku.ijk.media.player.IMediaPlayer
-import tv.danmaku.ijk.media.player.misc.IMediaDataSource
-import java.io.IOException
 import kotlin.coroutines.experimental.suspendCoroutine
 import kotlin.properties.Delegates
 import tv.danmaku.ijk.media.player.IjkMediaPlayer as MediaPlayer
@@ -67,23 +58,12 @@ class CoreMediaPlayer(
         stop()
         reset()
         val ref = internalMediaPlayer.asReference()
-        val url = music.getPlayableUri()
-                ?: throw IOException(string(R.string.can_not_find_music_url))
-        val dataSource = if (url.startsWith("file", true)) {
-            DirectDataSource(Uri.parse(url))
-        } else {
-            CachedDataSource(Uri.parse(url), cacheNameGenerator)
-        }
-        ref().setDataSource(MediaDataSource(dataSource))
+        ref().setDataSource(MediaDataSource(music))
         state = PlayerState.Preparing
         ref().prepareAsyncAwait()
         start()
     }
 
-
-    private val cacheNameGenerator: (String) -> String = { url: String ->
-        url.substringAfterLast('/')
-    }
 
     fun seekTo(position: Long) {
         try {
@@ -142,8 +122,6 @@ class CoreMediaPlayer(
         }
         prepareAsync()
     }
-
-    private class MediaDataSource(dataSource: DataSource) : DataSource by dataSource, IMediaDataSource
 
 
     /**
