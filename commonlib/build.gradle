@@ -60,7 +60,7 @@ dependencies {
     api 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
 
     //Architecture Components
-    api "android.arch.lifecycle:extensions:$architecture_version"
+    api "android.arch.lifecycle:extensions:1.1.0"
     testApi "android.arch.core:core-testing:$architecture_version"
     api "android.arch.persistence.room:runtime:$architecture_version"
     kapt "android.arch.persistence.room:compiler:$architecture_version"
@@ -88,7 +88,7 @@ dependencies {
     api "tv.danmaku.ijk.media:ijkplayer-arm64:$ijk_version"
 
     //recycler view ext
-    api 'me.drakeet.multitype:multitype:3.4.0'
+    api 'me.drakeet.multitype:multitype:3.4.4'
 
     //image
     api 'com.github.bumptech.glide:glide:4.4.0'
