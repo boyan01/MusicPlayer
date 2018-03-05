@@ -2,7 +2,6 @@
 
 package tech.summerly.quiet.commonlib.items
 
-import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.PopupMenu
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -21,6 +20,13 @@ open class MusicItemViewBinder(
         private val onMusicClick: (Music) -> Unit
 ) : ItemViewBinder<Music>() {
 
+    protected open val isShowPlayingIndicator = true
+    protected open val isShowMoreActionButton = true
+    protected open val isShowQualityIndicator = true
+    protected open val isShowMvIndicator = true
+    protected open val isShowArtworkImage = true
+    protected open val isLongClickReaction = false
+
     private val currentPlaying
         get() = musicPlayer.current
 
@@ -29,37 +35,66 @@ open class MusicItemViewBinder(
         setOnClickListener {
             onMusicClick(item)
         }
-        if (item == currentPlaying) {
-            indicatorPlaying.visible()
-        } else {
-            indicatorPlaying.invisible()
-        }
+
+        showPlayingIndicator(item)
         setPlayable(canPlay)
-        checkMv(item)
-        checkQuality(item)
         textTitle.text = item.title
         textSubTitle.text = item.artistAlbumString()
-        imageMore.setOnClickListener {
-            val menu = popupMenu(it, R.menu.popup_music_item) {
-                onMorePopupMenuClick(it, item)
-                true
-            }
-            onMorePopupMenuShow(menu)
+        showMvIndictor(item)
+        showQualityIndicator(item)
+        showMoreActionButton(item)
+        showArtworkImage(item.picUri)
+
+        if (isLongClickReaction) {
+            setOnLongClickListener { showPopupMenu(it, item);true }
+        } else {
+            setOnLongClickListener(null)
         }
-        displayMusicImage(image, item.picUri)
         //textTitle'width need be recalculate
         textTitle.requestLayout()
     }
 
+    private fun View.showPlayingIndicator(music: Music) {
+        if (isShowPlayingIndicator && music == currentPlaying) {
+            indicatorPlaying.visible()
+        } else {
+            indicatorPlaying.invisible()
+        }
+    }
 
-    private fun View.displayMusicImage(imageView: AppCompatImageView, uri: String?) {
+    private fun View.showMoreActionButton(music: Music) {
+        if (!isShowMoreActionButton) {
+            imageMore.gone()
+            imageMore.setOnClickListener(null)
+        } else {
+            imageMore.visible()
+            imageMore.setOnClickListener { showPopupMenu(it, music) }
+        }
+    }
+
+    //弹出一个菜单选项
+    private fun showPopupMenu(anchor: View, music: Music) {
+        val menu = popupMenu(anchor, R.menu.popup_music_item) {
+            onMorePopupMenuClick(it, music)
+            true
+        }
+        onMorePopupMenuShow(menu)
+    }
+
+
+    private fun View.showArtworkImage(uri: String?) {
+        if (!isShowArtworkImage) {
+            image.gone()
+            return
+        }
         //todo 省流量模式
+        image.visible()
         val isOnlyLoadFromCache = true && !isWifi()
         GlideApp.with(this).asBitmap()
                 .onlyRetrieveFromCache(isOnlyLoadFromCache)
                 .load(uri)
                 .placeholder(R.drawable.common_image_placeholder_loading)
-                .into(imageView)
+                .into(image)
     }
 
     private fun View.setPlayable(canPlay: Boolean) {
@@ -80,9 +115,9 @@ open class MusicItemViewBinder(
 
     }
 
-    private inline fun View.checkQuality(music: Music) {
+    private inline fun View.showQualityIndicator(music: Music) {
         val quality = music.getHighestQuality()
-        if (quality.isNullOrEmpty()) {
+        if (!isShowQualityIndicator || quality.isNullOrEmpty()) {
             indicatorQuality.gone()
         } else {
             indicatorQuality.visible()
@@ -93,8 +128,8 @@ open class MusicItemViewBinder(
     /**
      * check mv availability
      */
-    private inline fun View.checkMv(music: Music) {
-        if (music.mvId == 0L) {
+    private inline fun View.showMvIndictor(music: Music) {
+        if (!isShowMvIndicator || music.mvId == 0L) {
             indicatorMV.gone()
             indicatorMV.setOnClickListener(null)
         } else {
