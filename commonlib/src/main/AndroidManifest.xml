@@ -6,6 +6,5 @@
 
     <application>
         <service android:name=".player.interaction.MusicPlayerService" />
-        <activity android:name=".player.interaction.PendingIntentProxyActivity" />
     </application>
 </manifest>

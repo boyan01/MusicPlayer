@@ -9,6 +9,8 @@ import android.graphics.Color
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.TaskStackBuilder
 import android.support.v7.graphics.Palette
+import com.alibaba.android.arouter.core.LogisticsCenter
+import com.alibaba.android.arouter.launcher.ARouter
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
@@ -16,6 +18,8 @@ import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.notification.NotificationHelper
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
+import tech.summerly.quiet.commonlib.utils.LoggerLevel
+import tech.summerly.quiet.commonlib.utils.log
 
 
 internal object MusicNotification : NotificationHelper() {
@@ -68,10 +72,26 @@ internal object MusicNotification : NotificationHelper() {
 
     private fun buildContentIntent(type: MusicType): PendingIntent? {
         val stackBuilder = TaskStackBuilder.create(context)
-        val intent = Intent(context, PendingIntentProxyActivity::class.java)
-        intent.putExtra(PendingIntentProxyActivity.KEY_ACTION, PendingIntentProxyActivity.ACTION_TO_PLAYER)
-        intent.putExtra(PendingIntentProxyActivity.KEY_TYPE, type.name)
-        stackBuilder.addNextIntent(intent)
+        val pm = ARouter.getInstance().build("/netease/main")
+        try {
+            LogisticsCenter.completion(pm)
+            stackBuilder.addNextIntent(Intent(context, pm.destination))
+        } catch (e: Exception) {
+            log(LoggerLevel.ERROR) { e.printStackTrace(); " /netease/main do not match！" }
+        }
+        val pp = when (type) {
+            MusicType.NETEASE_FM -> ARouter.getInstance().build("/netease/fm")
+            MusicType.NETEASE, MusicType.LOCAL -> ARouter.getInstance().build("/netease/player")
+        }
+        try {
+            LogisticsCenter.completion(pp)
+            stackBuilder.addNextIntent(Intent(context, pp.destination))
+        } catch (e: Exception) {
+            log(LoggerLevel.ERROR) { e.printStackTrace();"player for $type do not match！" }
+        }
+        if (stackBuilder.intentCount <= 0) {
+            return null
+        }
         return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
