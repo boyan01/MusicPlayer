@@ -9,14 +9,19 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.search_activity_main.*
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.toast
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.utils.gone
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.visible
+import tech.summerly.quiet.search.fragments.SearchDefaultFragment
 import tech.summerly.quiet.search.fragments.SearchResultsFragment
+import tech.summerly.quiet.search.fragments.items.History
+import tech.summerly.quiet.search.utils.getHistory
 import tech.summerly.quiet.search.utils.inTransaction
+import tech.summerly.quiet.search.utils.saveHistory
 
 /**
  * Created by summer on 18-2-17
@@ -76,19 +81,34 @@ class SearchMainActivity : BaseActivity(), BottomControllerFragment.BottomContro
             }
             false
         }
+        supportFragmentManager.inTransaction {
+            replace(R.id.layoutContainer, SearchDefaultFragment())
+        }
     }
 
-    private fun startQuery(text: String = editQuery.text.toString().trim()) {
+    fun startQuery(text: String = editQuery.text.toString().trim()) {
         log { "查询:$text" }
         if (text.isEmpty()) {
             //do nothing
             return
+        }
+        if (text != editQuery.text.toString()) {
+            editQuery.setText(text)
         }
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(editQuery.windowToken, 0)
         val fragment = SearchResultsFragment.newInstance(text)
         supportFragmentManager.inTransaction {
             replace(R.id.layoutContainer, fragment)
+        }
+        launch {
+            val histories = getHistory().toMutableList()
+            val history = histories.find { it.text == text }
+            if (history != null) {
+                histories.remove(history)
+            }
+            histories.add(0, History(text, System.currentTimeMillis()))
+            saveHistory(histories.toTypedArray())
         }
     }
 }
