@@ -11,6 +11,7 @@
         <activity
             android:name=".ui.NeteaseFmActivity"
             android:exported="true"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme.TranslucentNavigation" />
         <activity
@@ -26,7 +27,9 @@
             android:name=".ui.NeteasePlaylistDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme" />
-        <activity android:name=".ui.MusicPlayerActivity" />
+        <activity
+            android:name=".ui.MusicPlayerActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.NeteaseRecordActivity"
             android:theme="@style/NeteaseAppTheme" />

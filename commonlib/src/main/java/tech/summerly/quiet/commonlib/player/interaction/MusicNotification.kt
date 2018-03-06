@@ -72,13 +72,6 @@ internal object MusicNotification : NotificationHelper() {
 
     private fun buildContentIntent(type: MusicType): PendingIntent? {
         val stackBuilder = TaskStackBuilder.create(context)
-        val pm = ARouter.getInstance().build("/netease/main")
-        try {
-            LogisticsCenter.completion(pm)
-            stackBuilder.addNextIntent(Intent(context, pm.destination))
-        } catch (e: Exception) {
-            log(LoggerLevel.ERROR) { e.printStackTrace(); " /netease/main do not match！" }
-        }
         val pp = when (type) {
             MusicType.NETEASE_FM -> ARouter.getInstance().build("/netease/fm")
             MusicType.NETEASE, MusicType.LOCAL -> ARouter.getInstance().build("/netease/player")
