@@ -1,18 +1,12 @@
 package tech.summerly.quiet.netease.ui
 
-import android.app.ActivityManager
-import android.app.TaskStackBuilder
-import android.content.Intent
 import android.os.Bundle
 import android.widget.SeekBar
-import androidx.content.systemService
-import com.alibaba.android.arouter.core.LogisticsCenter
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.netease_activity_music_player.*
-import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.component.activities.NoIsolatedActivity
 import tech.summerly.quiet.commonlib.fragments.PlayingListFragment
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
@@ -24,7 +18,9 @@ import tech.summerly.quiet.netease.R
  * Created by summer on 18-2-26
  */
 @Route(path = "/netease/player")
-internal class MusicPlayerActivity : BaseActivity() {
+internal class MusicPlayerActivity : NoIsolatedActivity() {
+
+    override val parentPath: String = "/netease/main"
 
     private val current: Music?
         get() {
@@ -119,23 +115,4 @@ internal class MusicPlayerActivity : BaseActivity() {
             progressBar.progress = current.toInt()
         }
     }
-
-    override fun onBackPressed() {
-        val tasks = systemService<ActivityManager>().appTasks
-        if (tasks.size != 0 && tasks[0].taskInfo.numActivities == 1) { // only current acitivty is running
-            try {
-                val pm = ARouter.getInstance().build("/netease/main")
-                LogisticsCenter.completion(pm)
-                TaskStackBuilder.create(this)
-                        .addNextIntent(Intent(this, pm.destination))
-                        .startActivities()
-            } catch (e: Exception) {
-                log(LoggerLevel.ERROR) { e.printStackTrace(); " /netease/main do not match！" }
-                super.onBackPressed()
-            }
-        } else {
-            super.onBackPressed()
-        }
-    }
-
 }

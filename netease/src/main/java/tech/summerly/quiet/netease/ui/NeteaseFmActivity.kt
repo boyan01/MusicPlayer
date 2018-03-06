@@ -1,21 +1,15 @@
 package tech.summerly.quiet.netease.ui
 
-import android.app.ActivityManager
-import android.app.TaskStackBuilder
-import android.content.Intent
 import android.os.Bundle
 import android.transition.TransitionManager
 import android.widget.SeekBar
-import androidx.content.systemService
-import com.alibaba.android.arouter.core.LogisticsCenter
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.netease_activity_fm.*
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.act
-import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.component.activities.NoIsolatedActivity
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.player.playlist.PlaylistPlayer
@@ -27,7 +21,9 @@ import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
  * activity of personal fm radio
  */
 @Route(path = "/netease/fm")
-internal class NeteaseFmActivity : BaseActivity() {
+internal class NeteaseFmActivity : NoIsolatedActivity() {
+
+    override val parentPath: String = "/netease/main"
 
     private val musicPlayer: PlaylistPlayer
         get() = MusicPlayerManager.musicPlayer(MusicType.NETEASE_FM)
@@ -200,24 +196,6 @@ internal class NeteaseFmActivity : BaseActivity() {
 
     private fun markPlayingAsDislike() {
 
-    }
-
-    override fun onBackPressed() {
-        val tasks = systemService<ActivityManager>().appTasks
-        if (tasks.size != 0 && tasks[0].taskInfo.numActivities == 1) { // only current acitivty is running
-            try {
-                val pm = ARouter.getInstance().build("/netease/main")
-                LogisticsCenter.completion(pm)
-                TaskStackBuilder.create(this)
-                        .addNextIntent(Intent(this, pm.destination))
-                        .startActivities()
-            } catch (e: Exception) {
-                log(LoggerLevel.ERROR) { e.printStackTrace(); " /netease/main do not match！" }
-                super.onBackPressed()
-            }
-        } else {
-            super.onBackPressed()
-        }
     }
 
 }
