@@ -23,6 +23,7 @@ import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.mvp.BaseView
 import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.constraints.Search
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.persistence.NeteasePreference
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeader
@@ -124,7 +125,7 @@ internal class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerF
             }
         }
         imageSearch.setOnClickListener {
-            ARouter.getInstance().build("/search/main").withInt("theme",R.style.NeteaseAppTheme).navigation()
+            ARouter.getInstance().build(Search.ACTIVITY_SEARCH_MAIN).withInt("theme", R.style.NeteaseAppTheme).navigation()
         }
         loadData()
     }

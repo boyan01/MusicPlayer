@@ -16,6 +16,7 @@ import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.utils.gone
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.visible
+import tech.summerly.quiet.constraints.Search
 import tech.summerly.quiet.search.fragments.SearchDefaultFragment
 import tech.summerly.quiet.search.fragments.SearchResultsFragment
 import tech.summerly.quiet.search.fragments.items.History
@@ -26,7 +27,7 @@ import tech.summerly.quiet.search.utils.saveHistory
 /**
  * Created by summer on 18-2-17
  */
-@Route(path = "/search/main")
+@Route(path = Search.ACTIVITY_SEARCH_MAIN)
 class SearchMainActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
 
     override fun onCreate(savedInstanceState: Bundle?) {

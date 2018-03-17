@@ -19,6 +19,7 @@ import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.progressDialog
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.constraints.Netease
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.persistence.NeteasePreference
 import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
@@ -29,7 +30,7 @@ import java.io.IOException
  * author : yangbin10
  * date   : 2017/12/21
  */
-@Route(path = "/netease/login")
+@Route(path = Netease.ACTIVITY_NETEASE_LOGIN)
 internal class LoginActivity : BaseActivity() {
 
     private var jobLogin: Job? = null

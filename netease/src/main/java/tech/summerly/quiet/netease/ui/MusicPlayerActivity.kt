@@ -12,12 +12,13 @@ import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.constraints.Netease
 import tech.summerly.quiet.netease.R
 
 /**
  * Created by summer on 18-2-26
  */
-@Route(path = "/netease/player")
+@Route(path = Netease.ACTIVITY_NETASE_PLAYER)
 internal class MusicPlayerActivity : NoIsolatedActivity() {
 
     override val parentPath: String = "/netease/main"

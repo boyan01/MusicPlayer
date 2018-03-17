@@ -16,6 +16,7 @@ import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.utils.popupMenu
+import tech.summerly.quiet.constraints.Local
 import tech.summerly.quiet.local.fragments.LocalAlbumFragment
 import tech.summerly.quiet.local.fragments.LocalArtistFragment
 import tech.summerly.quiet.local.fragments.LocalOverviewFragment
@@ -25,7 +26,7 @@ import tech.summerly.quiet.local.scanner.LocalMusicScannerActivity
 /**
  * Created by summer on 17-12-21
  */
-@Route(path = "/local/main")
+@Route(path = Local.PATH_LOCAL_MAIN)
 class LocalMusicActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
 
     override fun onCreate(savedInstanceState: Bundle?) {
