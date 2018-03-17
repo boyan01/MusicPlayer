@@ -57,7 +57,7 @@ dependencies {
     api "com.android.support:palette-v7:$android_support_version"
     api "com.android.support:recyclerview-v7:$android_support_version"
     api 'me.drakeet.multitype:multitype:3.4.4'
-    api 'com.android.support.constraint:constraint-layout:1.1.0-beta4'
+    api 'com.android.support.constraint:constraint-layout:1.1.0-beta5'
 
     //Architecture Components
     api "android.arch.lifecycle:extensions:1.1.0"
