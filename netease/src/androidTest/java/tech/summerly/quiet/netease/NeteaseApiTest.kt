@@ -1,6 +1,5 @@
 package tech.summerly.quiet.netease
 
-import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Test
@@ -15,7 +14,7 @@ import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 @RunWith(AndroidJUnit4::class)
 class NeteaseApiTest {
 
-    private val neteaseApi = NeteaseCloudMusicApi(InstrumentationRegistry.getTargetContext())
+    private val neteaseApi = NeteaseCloudMusicApi()
 
     @Test
     fun getMusicDetail() {

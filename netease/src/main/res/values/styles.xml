@@ -47,27 +47,6 @@
         <item name="android:lineSpacingExtra">0.0px</item>
     </style>
 
-    <style name="NeteaseMusicItemIndicator">
-        <item name="android:background">@drawable/netease_border_music_indicator</item>
-        <item name="android:gravity">center</item>
-        <item name="android:paddingStart">4dp</item>
-        <item name="android:paddingEnd">4dp</item>
-        <item name="android:scaleX">.9</item>
-        <item name="android:scaleY">.9</item>
-        <item name="android:textColor">@color/netease_color_primary</item>
-        <item name="android:textSize">5pt</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:typeface">monospace</item>
-    </style>
-
-    <style name="NeteasePlaylistDetailNavButton" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:layout_width">40dp</item>
-        <item name="android:layout_height">40dp</item>
-        <item name="android:padding">8dp</item>
-        <item name="android:tint">@color/color_text_primary_dark_background</item>
-    </style>
-
-    <style name="NeteaseActionOverflow" parent="ActionOverflow" />
 
     <style name="NeteaseActionOverflow.Dark" parent="ActionOverflow.Dark" />
 

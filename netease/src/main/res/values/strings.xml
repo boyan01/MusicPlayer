@@ -36,15 +36,8 @@
     <string name="netease_alert_need_login">使用此功能需要登陆,是否跳转到登陆界面</string>
     <string name="netease_action_give_up">算了</string>
     <string name="netease_title_daily_recommend">@string/netease_nav_title_daily</string>
-    <string name="netease_comment">评论</string>
-    <string name="netease_collect">收藏</string>
-    <string name="netease_share">分享</string>
-    <string name="netease_download">下载</string>
     <string name="netease_action_search">搜索</string>
-    <string name="netease_title_playlist_detail">歌单</string>
-    <string name="netease_unknown_artist">未知歌手</string>
-    <string name="netease_back">返回</string>
-    <string name="netease_action_clear">清空</string>
+
     <string name="netease_error_login_failed_template">登录出错:%s</string>
     <string name="netease_player_time_stamp_zero">00:00</string>
     <string name="netease_no_lyric">无歌词</string>

@@ -15,7 +15,9 @@ import tech.summerly.quiet.commonlib.utils.alert
 import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.netease.R
-import tech.summerly.quiet.netease.ui.items.*
+import tech.summerly.quiet.netease.ui.items.NeteaseDailyHeader
+import tech.summerly.quiet.netease.ui.items.NeteaseDailyHeaderViewBinder
+import tech.summerly.quiet.netease.ui.items.NeteaseMusicItemViewBinder
 import tech.summerly.quiet.netease.utils.isLogin
 import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 import java.util.*
@@ -37,7 +39,6 @@ internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerF
         setContentView(R.layout.netease_activity_daily_recommend)
         recyclerList.adapter = MultiTypeAdapter(items).also {
             it.register(NeteaseDailyHeader::class.java, NeteaseDailyHeaderViewBinder())
-            it.register(NeteaseMusicHeader::class.java, NeteaseMusicHeaderViewBinder())
             it.register(Music::class.java, NeteaseMusicItemViewBinder(this::onMusicClick))
         }
         toolbar.setNavigationOnClickListener {
@@ -60,7 +61,6 @@ internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerF
         }
         val songs = NeteaseCloudMusicApi().getDailyRecommend()
         items.add(NeteaseDailyHeader(getToday()))
-        items.add(NeteaseMusicHeader(songs.size))
         items.addAll(songs)
         recyclerList.multiTypeAdapter.notifyDataSetChanged()
     }
