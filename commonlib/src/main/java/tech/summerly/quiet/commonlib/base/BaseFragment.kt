@@ -22,4 +22,14 @@ open class BaseFragment : Fragment() {
     protected fun runWithRoot(run: View.() -> Unit) {
         rootView?.run()
     }
+
+    protected open fun closeSelf() {
+        fragmentManager?.apply {
+            val transaction = beginTransaction()
+            transaction.remove(this@BaseFragment)
+            transaction.commit()
+            popBackStack()
+        }
+    }
+
 }

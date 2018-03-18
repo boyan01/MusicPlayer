@@ -48,7 +48,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/pd_ic_folder_open_black_24dp"
-        android:tooltipText="@string/collect"
+        android:tooltipText="@string/pd_collect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/buttonComment"
         app:layout_constraintStart_toStartOf="parent" />
@@ -57,7 +57,7 @@
         android:id="@+id/buttonComment"
         style="@style/PDHeaderNavButton"
         android:src="@drawable/pd_ic_comment_black_24dp"
-        android:tooltipText="@string/comment"
+        android:tooltipText="@string/pd_comment"
         app:layout_constraintBottom_toBottomOf="@id/buttonCollection"
         app:layout_constraintEnd_toStartOf="@id/buttonShare"
         app:layout_constraintStart_toEndOf="@id/buttonCollection" />
@@ -67,7 +67,7 @@
         android:id="@+id/buttonShare"
         style="@style/PDHeaderNavButton"
         android:src="@drawable/pd_ic_share_black_24dp"
-        android:tooltipText="@string/share"
+        android:tooltipText="@string/pd_share"
         app:layout_constraintBottom_toBottomOf="@id/buttonCollection"
         app:layout_constraintEnd_toStartOf="@id/buttonDownload"
         app:layout_constraintStart_toEndOf="@id/buttonComment" />
@@ -77,7 +77,7 @@
         android:id="@+id/buttonDownload"
         style="@style/PDHeaderNavButton"
         android:src="@drawable/pd_ic_file_download_black_24dp"
-        android:tooltipText="@string/download"
+        android:tooltipText="@string/pd_download"
         app:layout_constraintBottom_toBottomOf="@id/buttonCollection"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/buttonShare" />

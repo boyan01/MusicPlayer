@@ -1,4 +1,4 @@
-package tech.summerlly.quiet.playlistdetail
+package tech.summerly.quiet.playlistdetail
 
 import android.content.Context
 import android.os.Bundle
@@ -12,9 +12,6 @@ import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
 import org.jetbrains.anko.coroutines.experimental.asReference
-import tech.summerlly.quiet.playlistdetail.items.MusicHeader
-import tech.summerlly.quiet.playlistdetail.items.MusicHeaderViewBinder
-import tech.summerlly.quiet.playlistdetail.items.NeteaseHeaderViewBinder
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.component.activities.NoIsolatedActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
@@ -22,12 +19,12 @@ import tech.summerly.quiet.commonlib.items.MusicItemViewBinder
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.musicPlayer
-import tech.summerly.quiet.commonlib.utils.asyncUI
-import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.commonlib.utils.observeFilterNull
-import tech.summerly.quiet.commonlib.utils.setItems2
+import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.constraints.Netease
 import tech.summerly.quiet.constraints.PlaylistDetail
+import tech.summerly.quiet.playlistdetail.items.MusicHeader
+import tech.summerly.quiet.playlistdetail.items.MusicHeaderViewBinder
+import tech.summerly.quiet.playlistdetail.items.NeteaseHeaderViewBinder
 
 /**
  * author: summerly
@@ -121,7 +118,11 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
             onBackPressed()
         }
         imageSearch.setOnClickListener {
-            //todo show a search fragment...
+            val searchFragment = PlaylistInternalSearchFragment(ArrayList<Music>().also { adapter.items.filterIsInstanceTo(it) })
+            supportFragmentManager.intransaction {
+                replace(android.R.id.content, searchFragment)
+                addToBackStack("search")
+            }
         }
         toolbarPlaylist.setOnClickListener {
             //double hit scroll to first
@@ -194,7 +195,7 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
         adapter.setItems2(items)
     }
 
-    private val onMusicClick = fun(music: Music) {
+    val onMusicClick = fun(music: Music) {
         val musicPlayer = MusicPlayerManager.musicPlayer(music.type)
         musicPlayer.playlist.setMusicLists(adapter.items.filterIsInstance(Music::class.java))
         musicPlayer.play(music)

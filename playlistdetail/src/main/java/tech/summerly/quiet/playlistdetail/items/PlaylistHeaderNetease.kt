@@ -1,4 +1,4 @@
-package tech.summerlly.quiet.playlistdetail.items
+package tech.summerly.quiet.playlistdetail.items
 
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
@@ -8,9 +8,9 @@ import com.bumptech.glide.request.target.ImageViewTarget
 import kotlinx.android.synthetic.main.pd_header_playlist_netease.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import tech.summerlly.quiet.playlistdetail.R
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
 import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.playlistdetail.R
 
 
 internal class NeteaseHeaderViewBinder(

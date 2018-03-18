@@ -1,10 +1,10 @@
-package tech.summerlly.quiet.playlistdetail.items
+package tech.summerly.quiet.playlistdetail.items
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.pd_header_music.view.*
-import tech.summerlly.quiet.playlistdetail.R
 import tech.summerly.quiet.commonlib.utils.ItemViewBinder
+import tech.summerly.quiet.playlistdetail.R
 
 
 /**

@@ -1,4 +1,4 @@
-package tech.summerlly.quiet.playlistdetail;
+package tech.summerly.quiet.playlistdetail;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
