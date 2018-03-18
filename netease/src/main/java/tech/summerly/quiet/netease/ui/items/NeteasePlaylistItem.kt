@@ -7,7 +7,9 @@ import kotlinx.android.synthetic.main.netease_item_playlist.view.*
 import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.ItemViewBinder
 import tech.summerly.quiet.commonlib.utils.toPictureUrl
+import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.netease.R
+import tech.summerly.quiet.netease.utils.NeteasePlaylistDetailProvider
 import tech.summerly.quiet.service.netease.result.PlaylistResultBean
 
 /**
@@ -21,10 +23,9 @@ internal class NeteasePlaylistItemViewBinder : ItemViewBinder<PlaylistResultBean
                 .load(item.coverImgUrl.toPictureUrl())
                 .placeholder(R.drawable.common_image_placeholder_loading).into(imageCover)
         setOnClickListener {
-            ARouter.getInstance().build("/netease/playlist_detail")
-                    .withLong("playlist_id", item.id)
-                    .withObject("playlist_detail", item)
-                    .navigation(context)
+            ARouter.getInstance().build(PlaylistDetail.ACTIVITY_PLAYLIST_DEAILT)
+                    .withParcelable(PlaylistDetail.PARAM_PLAYLIST_PROVIDER, NeteasePlaylistDetailProvider(item))
+                    .navigation()
         }
         imageAction.setOnClickListener {
 

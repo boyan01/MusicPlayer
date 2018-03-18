@@ -7,9 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
-import me.drakeet.multitype.ItemViewBinder as JItemViewBinder
 import me.drakeet.multitype.MultiTypeAdapter
+import me.drakeet.multitype.ItemViewBinder as JItemViewBinder
 
 /**
  * Created by summer on 17-12-17
@@ -60,4 +61,38 @@ fun MultiTypeAdapter.setItemsByDiff(items: List<Any>, detectMove: Boolean = fals
             result.dispatchUpdatesTo(this@setItemsByDiff)
         }
     }
+}
+
+
+fun MultiTypeAdapter.setItems2(items: List<*>,
+                               detectDiff: Boolean = true,
+                               detectMove: Boolean = false,
+                               isContentsTheSame: (old: Any?, new: Any?) -> Boolean = { old, new -> old == new }) {
+    if (!detectDiff) {
+        this.items = items
+        notifyDataSetChanged()
+        return
+    }
+    async {
+        val old = this@setItems2.items
+        val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return old[oldItemPosition] == items[newItemPosition]
+            }
+
+            override fun getOldListSize(): Int = old.size
+
+            override fun getNewListSize(): Int = items.size
+
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                return isContentsTheSame(old[oldItemPosition], items[newItemPosition])
+            }
+
+        }, detectMove)
+        asyncUI {
+            this@setItems2.items = items
+            diffResult.dispatchUpdatesTo(this@setItems2)
+        }
+    }
+
 }

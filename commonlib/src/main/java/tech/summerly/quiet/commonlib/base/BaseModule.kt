@@ -14,6 +14,8 @@ abstract class BaseModule : ContextWrapper(null), ComponentCallbacks2 {
 
     companion object {
 
+        const val CLASS_NAME_LIB = "tech.summerly.quiet.commonlib.LibModule"
+
         /**
          * initial a module for class name
          * module class music be Kotlin object class

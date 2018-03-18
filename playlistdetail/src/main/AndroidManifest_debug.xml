@@ -1,2 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tech.summerlly.quiet.playlistdetail" />
+    package="tech.summerlly.quiet.playlistdetail">
+
+
+    <application
+        android:name="debug.DebugAppContext"
+        android:label="@string/pd_app_name">
+
+        <activity android:name=".PlaylistDetailActivity" />
+
+    </application>
+
+</manifest>

@@ -1,2 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tech.summerlly.quiet.playlistdetail" />
+    package="tech.summerlly.quiet.playlistdetail">
+
+    <application>
+        <activity
+            android:name=".PlaylistDetailActivity"
+            android:theme="@style/CommonAppTheme.NoActionBar.TranslucentStatus" />
+    </application>
+
+</manifest>

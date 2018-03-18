@@ -42,6 +42,7 @@ import tech.summerly.quiet.service.netease.result.PlaylistDetailResultBean
  * author: summerly
  * email: yangbinyhbn@gmail.com
  */
+@Deprecated("use playlist detail module instead")
 @Route(path = "/netease/playlist_detail")
 internal class NeteasePlaylistDetailActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
 

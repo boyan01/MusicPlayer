@@ -23,6 +23,8 @@ fun drawable(@DrawableRes id: Int, @ColorInt tint: Int = 0) = LibModule.getDrawa
     }
 }
 
+fun dimen(@DimenRes id: Int) = LibModule.resources.getDimension(id)
+
 fun Context.getAttrColor(@AttrRes id: Int): Int {
     val value = TypedValue()
     if (theme.resolveAttribute(id, value, true)) {

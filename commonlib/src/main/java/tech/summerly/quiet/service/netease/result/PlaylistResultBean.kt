@@ -12,7 +12,7 @@ data class PlaylistResultBean(val more: Boolean?,
 
     data class PlaylistBean(
             //            val subscribers: List<Any?>,
-//                            val subscribed: Boolean,
+            val subscribed: Boolean,
 //                            val creator: CreatorBean,
 //                            var artists: Any?,
 //                            var tracks: Any?,
@@ -41,7 +41,6 @@ data class PlaylistResultBean(val more: Boolean?,
             val userId: Long,
             val name: String,
             val id: Long)
-
 
 
 //        data class CreatorBean(val defaultAvatar: Boolean,

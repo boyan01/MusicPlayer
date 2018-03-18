@@ -23,6 +23,7 @@ import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.mvp.BaseView
 import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.constraints.Netease
 import tech.summerly.quiet.constraints.Search
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.persistence.NeteasePreference
@@ -38,7 +39,7 @@ import tech.summerly.quiet.service.netease.result.PlaylistResultBean
 /**
  * Created by summer on 17-12-30
  */
-@Route(path = "/netease/main")
+@Route(path = Netease.ACTIVITY_NETEASE_MAIN)
 internal class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerFragment.BottomControllerContainer {
 
     companion object {

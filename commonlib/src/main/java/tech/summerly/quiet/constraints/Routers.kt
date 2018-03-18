@@ -34,12 +34,28 @@ object Netease {
     const val ACTIVITY_NETEASE_LOGIN = "/netease/login"
 
 
-    const val ACTIVITY_NETASE_PLAYER = "/netease/player"
+    const val ACTIVITY_NETEASE_PLAYER = "/netease/player"
+
+
+    const val ACTIVITY_NETEASE_MAIN = "/netease/main"
 
 }
 
 object Setting {
 
     const val ACTIVITY_SETTING_MAIN = "/setting/main"
+
+}
+
+object PlaylistDetail {
+
+    const val PARAM_PLAYLIST_PROVIDER = "param_playlist_provider"
+
+    /**
+     * 歌单详情 activity
+     *
+     * 需要传入一个 PlaylistProivder，其 key 为 [PARAM_PLAYLIST_PROVIDER]
+     */
+    const val ACTIVITY_PLAYLIST_DEAILT = "/playlistdetail/main"
 
 }

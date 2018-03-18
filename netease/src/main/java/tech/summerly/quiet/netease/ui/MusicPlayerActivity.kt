@@ -18,7 +18,7 @@ import tech.summerly.quiet.netease.R
 /**
  * Created by summer on 18-2-26
  */
-@Route(path = Netease.ACTIVITY_NETASE_PLAYER)
+@Route(path = Netease.ACTIVITY_NETEASE_PLAYER)
 internal class MusicPlayerActivity : NoIsolatedActivity() {
 
     override val parentPath: String = "/netease/main"
