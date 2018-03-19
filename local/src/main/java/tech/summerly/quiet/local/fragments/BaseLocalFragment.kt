@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
@@ -22,10 +21,10 @@ import tech.summerly.quiet.commonlib.utils.setItemsByDiff
 import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.local.LocalModule
 import tech.summerly.quiet.local.LocalMusicActivity
-import tech.summerly.quiet.local.LocalMusicListActivity
 import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.fragments.items.*
 import tech.summerly.quiet.local.utils.AlbumDetailProvider
+import tech.summerly.quiet.local.utils.ArtistDetailProvider
 import tech.summerly.quiet.service.local.LocalMusicApi
 import tech.summerly.quiet.service.local.database.database.Table
 import kotlin.coroutines.experimental.CoroutineContext
@@ -155,21 +154,19 @@ abstract class BaseLocalFragment : BaseFragment() {
     }
 
     private fun onBigImageItemClick(item: LocalBigImageItem) {
-        launch(UI) {
-            val musics = when (item.data) {
-                is Artist -> {
-                    LocalMusicApi.getLocalMusicApi().getMusicsByArtist(item.data)
-                }
-                is Album -> {
-                    ARouter.getInstance()
-                            .build(PlaylistDetail.ACTIVITY_PLAYLIST_DETAIL)
-                            .withParcelable(PlaylistDetail.PARAM_PLAYLIST_PROVIDER, AlbumDetailProvider(item.data))
-                            .navigation()
-                    return@launch
-                }
-                else -> emptyList()
+        when (item.data) {
+            is Artist -> {
+                ARouter.getInstance()
+                        .build(PlaylistDetail.ACTIVITY_PLAYLIST_DETAIL)
+                        .withParcelable(PlaylistDetail.PARAM_PLAYLIST_PROVIDER, ArtistDetailProvider(item.data))
+                        .navigation()
             }
-            LocalMusicListActivity.start(item.title, ArrayList(musics))
+            is Album -> {
+                ARouter.getInstance()
+                        .build(PlaylistDetail.ACTIVITY_PLAYLIST_DETAIL)
+                        .withParcelable(PlaylistDetail.PARAM_PLAYLIST_PROVIDER, AlbumDetailProvider(item.data))
+                        .navigation()
+            }
         }
     }
 }

@@ -28,7 +28,7 @@ data class Artist(
             }
         }
 
-        @JvmStatic
+        @JvmField
         val CREATOR = object : Parcelable.Creator<Artist> {
             override fun createFromParcel(parcel: Parcel): Artist {
                 return Artist(parcel)
