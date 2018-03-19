@@ -3,8 +3,10 @@ package tech.summerly.quiet.playlistdetail
 import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
+import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
+import androidx.view.updateLayoutParams
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.pd_activity_playlist_deatil.*
 import kotlinx.coroutines.experimental.delay
@@ -12,6 +14,7 @@ import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
 import org.jetbrains.anko.coroutines.experimental.asReference
+import org.jetbrains.anko.dimen
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.component.activities.NoIsolatedActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
@@ -41,6 +44,8 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
 
     override val parentPath: String = Netease.ACTIVITY_NETEASE_MAIN
 
+    private var description: PlaylistProvider.Description? = null
+
     private val mScrollListener = object : RecyclerView.OnScrollListener() {
 
 
@@ -49,23 +54,26 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
         private var heightHeader = 500
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            scrollY += dy
-            if (scrollY > heightHeader) {
-                toolbarPlaylist.background.alpha = 0xff
-            } else {
-                val alpha = (scrollY / heightHeader) * 0xff
-                toolbarPlaylist.background.alpha = alpha.toInt()
-            }
 
-            if (!isNeedShowIndicatorFindLocation) {
-                return
+            if (isNeedShowIndicatorFindLocation) {
+                val position = findCurrentPlayingMusic() ?: return
+                val holder = recyclerView.findViewHolderForAdapterPosition(position)
+                if (holder == null) {
+                    indicatorMyLocation.show()
+                } else {
+                    indicatorMyLocation.hide()
+                }
             }
-            val position = findCurrentPlayingMusic() ?: return
-            val holder = recyclerView.findViewHolderForAdapterPosition(position)
-            if (holder == null) {
-                indicatorMyLocation.show()
-            } else {
-                indicatorMyLocation.hide()
+            scrollY += dy
+            if (description != null) {
+                //只有 description 不为空时,才显示一个详情信息的Header在最上面
+                //所有当 description 为空时,就不再对Toolbar进行透明化处理了.
+                if (scrollY > heightHeader) {
+                    toolbarPlaylist.background.alpha = 0xff
+                } else {
+                    val alpha = (scrollY / heightHeader) * 0xff
+                    toolbarPlaylist.background.alpha = alpha.toInt()
+                }
             }
         }
 
@@ -180,9 +188,20 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
                 ?: error("缺少参数")
         val result = Items()
 
+        //加载标题
+        textTitle.text = playlistProvider.title
+
         //加载头部
-        result += playlistProvider.getDescription()
-        showPlaylists(ArrayList(result))
+        description = playlistProvider.getDescription()
+        if (description == null) {
+            toolbarPlaylist.setBackgroundColor(getAttrColor(R.attr.colorPrimary))
+            list.updateLayoutParams<CoordinatorLayout.LayoutParams> {
+                topMargin = dimen(R.dimen.common_toolbar_height_with_status_bar)
+            }
+        } else {
+            result += description
+            showPlaylists(ArrayList(result))
+        }
 
         //加载歌曲列表
         val list = playlistProvider.getMusicList()
