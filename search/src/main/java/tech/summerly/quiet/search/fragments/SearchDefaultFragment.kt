@@ -58,7 +58,7 @@ internal class SearchDefaultFragment : BaseFragment() {
         items.remove(hisotry)
         recyclerView.multiTypeAdapter.notifyItemRemoved(position)
         asyncUI {
-            saveHistory(items.filterIsInstance(History::class.java).toTypedArray())
+            saveHistory(items.filterIsInstance(History::class.java))
         }
     }
 }

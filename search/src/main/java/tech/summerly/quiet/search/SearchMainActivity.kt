@@ -109,7 +109,7 @@ class SearchMainActivity : BaseActivity(), BottomControllerFragment.BottomContro
                 histories.remove(history)
             }
             histories.add(0, History(text, System.currentTimeMillis()))
-            saveHistory(histories.toTypedArray())
+            saveHistory(histories)
         }
     }
 }
