@@ -10,7 +10,6 @@ internal class DebugAppContext : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        BaseModule(this, "tech.summerly.quiet.commonlib.LibModule")
-        BaseModule(this, "tech.summerly.quiet.setting.SettingModule")
+        BaseModule.init(this)
     }
 }

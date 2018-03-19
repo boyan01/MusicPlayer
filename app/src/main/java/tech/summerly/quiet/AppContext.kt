@@ -9,12 +9,8 @@ import tech.summerly.quiet.commonlib.base.BaseModule
  */
 class AppContext : Application() {
 
-    private val modules = ArrayList<BaseModule>()
-
     override fun onCreate() {
         super.onCreate()
-        modules.add(BaseModule(this, "tech.summerly.quiet.commonlib.LibModule"))
-        modules.add(BaseModule(this, "tech.summerly.quiet.netease.NeteaseModule"))
-        modules.add(BaseModule(this, "tech.summerly.quiet.local.LocalModule"))
+        BaseModule.init(this)
     }
 }

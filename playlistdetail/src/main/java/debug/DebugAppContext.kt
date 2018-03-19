@@ -12,7 +12,7 @@ class DebugAppContext : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        BaseModule(this, BaseModule.CLASS_NAME_LIB)
+        BaseModule.init(this)
     }
 
 }
