@@ -110,7 +110,4 @@ dependencies {
     //media cache
     implementation "tech.summerly:streamcache:1.1.2"
 
-    //database
-    api 'com.snappydb:snappydb-lib:0.5.2'
-    api 'com.esotericsoftware.kryo:kryo:2.24.0'
 }
