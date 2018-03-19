@@ -56,6 +56,6 @@ object PlaylistDetail {
      *
      * 需要传入一个 PlaylistProivder，其 key 为 [PARAM_PLAYLIST_PROVIDER]
      */
-    const val ACTIVITY_PLAYLIST_DEAILT = "/playlistdetail/main"
+    const val ACTIVITY_PLAYLIST_DETAIL = "/playlistdetail/main"
 
 }

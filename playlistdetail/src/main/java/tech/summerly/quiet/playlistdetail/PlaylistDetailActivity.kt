@@ -30,7 +30,7 @@ import tech.summerly.quiet.playlistdetail.items.NeteaseHeaderViewBinder
  * author: summerly
  * email: yangbinyhbn@gmail.com
  */
-@Route(path = PlaylistDetail.ACTIVITY_PLAYLIST_DEAILT)
+@Route(path = PlaylistDetail.ACTIVITY_PLAYLIST_DETAIL)
 class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.BottomControllerContainer {
 
     companion object {

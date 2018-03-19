@@ -1,5 +1,6 @@
 package tech.summerly.quiet.commonlib.model
 
+import android.os.Parcel
 import android.os.Parcelable
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
@@ -37,4 +38,50 @@ interface PlaylistProvider : Parcelable {
         //type
         val type: MusicType
     }
+
+
+    class SimpleDescription(
+            override val id: Long,
+            override val name: String,
+            override val coverImgUrl: String,
+            override val subscribed: Boolean,
+            override val trackCount: Int,
+            override val createTime: Long,
+            override val playCount: Long,
+            override val type: MusicType
+    ) : PlaylistProvider.Description, Parcelable {
+
+        constructor(source: Parcel) : this(
+                source.readLong(),
+                source.readString(),
+                source.readString(),
+                1 == source.readInt(),
+                source.readInt(),
+                source.readLong(),
+                source.readLong(),
+                MusicType.values()[source.readInt()]
+        )
+
+        override fun describeContents() = 0
+
+        override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+            writeLong(id)
+            writeString(name)
+            writeString(coverImgUrl)
+            writeInt((if (subscribed) 1 else 0))
+            writeInt(trackCount)
+            writeLong(createTime)
+            writeLong(playCount)
+            writeInt(type.ordinal)
+        }
+
+        companion object {
+            @JvmField
+            val CREATOR: Parcelable.Creator<SimpleDescription> = object : Parcelable.Creator<SimpleDescription> {
+                override fun createFromParcel(source: Parcel): SimpleDescription = SimpleDescription(source)
+                override fun newArray(size: Int): Array<SimpleDescription?> = arrayOfNulls(size)
+            }
+        }
+    }
+
 }

@@ -23,7 +23,7 @@ internal class NeteasePlaylistItemViewBinder : ItemViewBinder<PlaylistResultBean
                 .load(item.coverImgUrl.toPictureUrl())
                 .placeholder(R.drawable.common_image_placeholder_loading).into(imageCover)
         setOnClickListener {
-            ARouter.getInstance().build(PlaylistDetail.ACTIVITY_PLAYLIST_DEAILT)
+            ARouter.getInstance().build(PlaylistDetail.ACTIVITY_PLAYLIST_DETAIL)
                     .withParcelable(PlaylistDetail.PARAM_PLAYLIST_PROVIDER, NeteasePlaylistDetailProvider(item))
                     .navigation()
         }
