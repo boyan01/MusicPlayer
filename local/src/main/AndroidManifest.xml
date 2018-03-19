@@ -13,8 +13,5 @@
             android:exported="true"
             android:label=""
             android:theme="@style/LocalAppTheme" />
-        <activity
-            android:name=".LocalMusicListActivity"
-            android:theme="@style/LocalAppTheme" />
     </application>
 </manifest>

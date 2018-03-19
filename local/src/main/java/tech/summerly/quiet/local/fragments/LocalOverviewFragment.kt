@@ -1,10 +1,10 @@
 package tech.summerly.quiet.local.fragments
 
 import tech.summerly.quiet.commonlib.items.CommonItemA
-import tech.summerly.quiet.service.local.LocalMusicApi
 import tech.summerly.quiet.local.R
-import tech.summerly.quiet.service.local.database.database.Table
 import tech.summerly.quiet.local.fragments.items.LocalPlaylistHeaderViewBinder
+import tech.summerly.quiet.service.local.LocalMusicApi
+import tech.summerly.quiet.service.local.database.database.Table
 
 /**
  * provide an overview for LocalMusic : LocalFavMusic , LocalMusicMonitor
@@ -27,7 +27,7 @@ class LocalOverviewFragment : BaseLocalFragment() {
     }
     private val header = LocalPlaylistHeaderViewBinder.PlaylistHeader()
 
-    suspend override fun loadData(localMusicApi: LocalMusicApi): List<Any> {
+    override suspend fun loadData(localMusicApi: LocalMusicApi): List<Any> {
         return navItems + header + localMusicApi.getPlaylists().await()
     }
 }
