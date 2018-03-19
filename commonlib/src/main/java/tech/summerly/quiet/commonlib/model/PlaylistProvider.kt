@@ -2,23 +2,31 @@ package tech.summerly.quiet.commonlib.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.utils.string
 
 /**
  * 提供歌单信息
  *
  * 包括 ： 音乐列表、创建者....
- * TODO
  */
 interface PlaylistProvider : Parcelable {
 
     suspend fun getMusicList(): List<Music>
 
     /**
-     * 获取播放列表说明
+     * 播放列表说明
+     *
+     * 如果不想显示歌单的其他信息,直接返回 null 即可
      */
     suspend fun getDescription(): Description?
+
+    /**
+     * 歌曲列表详情 Activity 的 title ,显示在 Toolbar 中.
+     */
+    val title get() = string(R.string.default_playlist_title)
 
     interface Description {
         //id

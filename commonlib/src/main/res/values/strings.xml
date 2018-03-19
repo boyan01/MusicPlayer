@@ -26,4 +26,5 @@
     <string name="unimplemented_view">未实现的界面</string>
     <string name="can_not_find_music_url">无法获取音乐播放地址</string>
     <string name="retry">重试</string>
+    <string name="default_playlist_title">歌曲列表</string>
 </resources>
