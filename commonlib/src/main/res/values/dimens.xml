@@ -25,4 +25,8 @@
     <dimen name="common_height_bottom_controller">56dp</dimen>
 
     <dimen name="toolbarHeight">56dp</dimen>
+
+    <!-- 分割线的厚度 -->
+    <dimen name="divider_thick">1dp</dimen>
+
 </resources>

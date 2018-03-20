@@ -5,6 +5,6 @@
     android:id="@+id/recyclerView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:overScrollMode="never"
+    android:overScrollMode="ifContentScrolls"
     app:layoutManager="LinearLayoutManager"
     tools:listitem="@layout/search_item_history" />

@@ -9,4 +9,5 @@
     <string name="search_tab_artist">歌手</string>
     <string name="search_clear_input">清空输入</string>
     <string name="search_retry">重试</string>
+    <string name="search_hot_hint">搜索热词</string>
 </resources>

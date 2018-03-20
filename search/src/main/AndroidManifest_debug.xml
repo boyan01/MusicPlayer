@@ -15,5 +15,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="debug.DebugActivity" >
+
+        </activity>
+
     </application>
 </manifest>
