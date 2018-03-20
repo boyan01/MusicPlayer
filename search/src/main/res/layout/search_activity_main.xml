@@ -7,12 +7,14 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/toolbarLayout"
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbarHeight"
+        android:layout_height="?actionBarSize"
         android:background="?colorPrimary"
-        tools:ignore="UnusedAttribute">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:contentInsetEnd="8dp"
+        app:contentInsetStart="8dp"
+        app:contentInsetStartWithNavigation="0dp">
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/buttonBack"
@@ -23,56 +25,20 @@
             android:tooltipText="@string/tips_action_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UnusedAttribute" />
 
-
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/editQuery"
-            android:layout_width="0dp"
+        <android.support.v7.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/color_text_secondary_dark_background"
-            android:focusable="true"
-            android:focusedByDefault="true"
-            android:hint="@string/search_hint"
-            android:imeOptions="actionSearch"
-            android:lines="1"
-            android:paddingEnd="24dp"
-            android:paddingStart="4dp"
-            android:singleLine="true"
-            android:textColor="@color/color_text_primary_dark_background"
-            android:textColorHint="@color/color_text_secondary_dark_background"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/buttonIndicator"
-            app:layout_constraintStart_toEndOf="@id/buttonBack"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:closeIcon="@drawable/common_ic_close_black_24dp"
+            app:defaultQueryHint="@string/search_hint"
+            app:iconifiedByDefault="false"
+            app:searchIcon="@null"
+            app:voiceIcon="@drawable/search_ic_keyboard_voice_white_24dp" />
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/buttonClear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?selectableItemBackgroundBorderless"
-            android:src="@drawable/common_ic_close_black_24dp"
-            android:theme="@style/RippleThemeDark"
-            android:tint="@color/color_text_primary_dark_background"
-            android:tooltipText="@string/search_clear_input"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/editQuery"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/buttonIndicator"
-            style="@style/ActionOverflow.Dark"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/search_ic_keyboard_voice_black_24dp"
-            android:tooltipText="@string/search_voice"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.Toolbar>
 
 
     <FrameLayout
