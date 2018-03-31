@@ -81,10 +81,12 @@ internal class NeteaseFmActivity : NoIsolatedActivity() {
     }
 
     private fun showLyric(music: Music) = launch(UI) {
-        if (music.type != MusicType.NETEASE || music.type != MusicType.NETEASE_FM) {
+        if (music.type != MusicType.NETEASE && music.type != MusicType.NETEASE_FM) {
             return@launch
         }
-        lyricView.setLyricText(NeteaseCloudMusicApi().getLyric(music.id))
+        val lyric = NeteaseCloudMusicApi().getLyric(music.id)
+        log { lyric }
+        lyricView.setLyricText(lyric)
     }
 
     private fun playMusicIfNecessary() {
