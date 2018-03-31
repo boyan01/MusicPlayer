@@ -4,7 +4,8 @@ import android.app.Application
 import com.alibaba.android.arouter.launcher.ARouter
 import com.facebook.stetho.Stetho
 import tech.summerly.quiet.commonlib.base.BaseModule
-import tech.summerly.streamcache.StreamCacheUtil
+import tech.summerly.streamcache.CacheGlobalSetting
+import java.io.File
 
 /**
  * Created by summer on 17-12-17.
@@ -22,7 +23,7 @@ internal object LibModule : BaseModule() {
         }
         ARouter.init(applicationContext as Application?)
 
-        StreamCacheUtil.init(this)
+        CacheGlobalSetting.CACHE_PATH = File(externalCacheDir, "musics_cache").path
     }
 
 }
