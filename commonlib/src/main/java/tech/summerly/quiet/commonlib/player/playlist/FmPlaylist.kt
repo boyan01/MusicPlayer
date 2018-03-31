@@ -1,10 +1,16 @@
 package tech.summerly.quiet.commonlib.player.playlist
 
+import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
+import org.jetbrains.anko.toast
+import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.state.PlayMode
+import tech.summerly.quiet.commonlib.utils.asyncUI
+import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
+import java.io.IOException
 
 /**
  * Created by summer on 18-3-4
@@ -30,10 +36,15 @@ internal class FmPlaylist(current: Music?,
     }
 
     private suspend fun fetchMusicList() {
-        val musics = neteaseApi.getFmMusics()
-
-        musicList.clear()
-        musicList.addAll(musics)
+        try {
+            val musics = neteaseApi.getFmMusics()
+            musicList.clear()
+            musicList.addAll(musics)
+        } catch (e: IOException) {
+            log { e.printStackTrace();"获取下一首歌曲失败" }
+            asyncUI { LibModule.toast("io exception : ${e.message}") }
+            throw CancellationException()
+        }
         stateChangeListener.onMusicListChange(musicList)
     }
 

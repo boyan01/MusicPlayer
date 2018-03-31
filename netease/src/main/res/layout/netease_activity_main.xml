@@ -80,7 +80,7 @@
         android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingBottom="@dimen/common_height_bottom_controller"
-        app:layoutManager="LinearLayoutManager"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:listitem="@layout/common_item_a" />
 
     <fragment

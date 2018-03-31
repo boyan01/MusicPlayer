@@ -53,6 +53,7 @@ internal class CloudMusicServiceProvider {
                 .addInterceptor(HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 })
+                .retryOnConnectionFailure(true)
                 .cookieJar(object : CookieJar {
                     override fun saveFromResponse(url: HttpUrl, cookies: MutableList<Cookie>) {
                         cookies.forEach {

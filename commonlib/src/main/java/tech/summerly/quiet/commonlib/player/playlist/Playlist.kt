@@ -74,8 +74,10 @@ abstract class Playlist(
             stateChangeListener.onPlayModeChange(value)
         }
 
+    //attention 所有错误处理放在子类
     abstract suspend fun getNextMusic(music: Music? = current): Music?
 
+    //attention 所有错误处理放在子类
     abstract suspend fun getPreviousMusic(music: Music? = current): Music?
 
     /**

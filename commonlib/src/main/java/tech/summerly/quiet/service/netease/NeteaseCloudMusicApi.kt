@@ -133,7 +133,7 @@ class NeteaseCloudMusicApi {
         """.trimIndent())
         val personalFmDataResult = neteaseService.personalFm(params).await()
         if (personalFmDataResult.code != 200) {
-            throw CancellationException("fetch fm musics failed!")
+            throw IOException("fetch fm musics failed!")
         }
         return personalFmDataResult.data?.map {
             mapper.convertToMusic(it)
