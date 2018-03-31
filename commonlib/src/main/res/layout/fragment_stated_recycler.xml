@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,10 +9,10 @@
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager" />
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
 
-    <android.support.constraint.ConstraintLayout
+    <FrameLayout
         android:id="@+id/stateLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -20,34 +21,28 @@
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"
+            tools:visibility="gone" />
 
 
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/imageError"
-            android:layout_width="58dp"
-            android:layout_height="58dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/alert_dark_frame"
-            app:tint="?colorAccent" />
-
-        <android.support.v7.widget.AppCompatTextView
+        <android.support.v7.widget.AppCompatButton
             android:id="@+id/buttonRetry"
-            style="@style/CommonAppTheme.FlatButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="?colorPrimary"
             android:gravity="center"
             android:text="@string/retry"
-            android:textColor="?colorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imageError" />
-    </android.support.constraint.ConstraintLayout>
+            android:textColor="@color/color_text_primary_dark_background"
+            tools:visibility="gone" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textEmptyDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/empty_description" />
+
+    </FrameLayout>
 
 </FrameLayout>

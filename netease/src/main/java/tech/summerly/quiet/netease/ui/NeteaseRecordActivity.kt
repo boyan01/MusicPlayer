@@ -121,6 +121,11 @@ internal class NeteaseRecordActivity : BaseActivity(), BottomControllerFragment.
         override suspend fun loadData() {
             val list = NeteaseCloudMusicApi().getUserRecord(uid, type)
             items.addAll(list)
+            if (items.isEmpty()) {
+                setEmpty()
+            } else {
+                setComplete()
+            }
         }
 
         private fun onMusicItemClick(music: Music) {

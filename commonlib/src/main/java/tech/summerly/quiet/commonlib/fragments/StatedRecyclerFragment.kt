@@ -48,8 +48,7 @@ abstract class StatedRecyclerFragment : BaseFragment() {
         job = asyncUI {
             try {
                 loadData()
-                view?.recycler?.adapter?.notifyDataSetChanged()
-                setComplete()
+                adapter?.notifyDataSetChanged()
             } catch (e: Exception) {
                 e.printStackTrace()
                 setError(e.message)
@@ -59,26 +58,37 @@ abstract class StatedRecyclerFragment : BaseFragment() {
 
     protected abstract fun initRecyclerView(recyclerView: RecyclerView)
 
+    /**
+     * 在这里加载 recycler view adapter [adapter] 所需要的数据
+     *
+     * 需自己手动调用 [setComplete] 来清楚 loading 状态
+     */
     @UiThread
     protected abstract suspend fun loadData()
 
     fun setLoading() = runWithRoot {
         progressBar.visible()
-        imageError.gone()
         buttonRetry.gone()
+        textEmptyDescription.gone()
     }
 
     fun setComplete() = runWithRoot {
         progressBar.gone()
-        imageError.gone()
         buttonRetry.gone()
+        textEmptyDescription.gone()
     }
 
     fun setError(msg: String? = null) = runWithRoot {
         log { "search error : $msg" }
         progressBar.gone()
-        imageError.visible()
         buttonRetry.visible()
+        textEmptyDescription.gone()
+    }
+
+    fun setEmpty() = runWithRoot {
+        progressBar.gone()
+        buttonRetry.gone()
+        textEmptyDescription.visible()
     }
 
     override fun onDestroy() {
