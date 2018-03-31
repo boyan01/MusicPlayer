@@ -17,6 +17,8 @@ object Local {
     const val PATH_LOCAL_MAIN = "/$LOCAL/main"
 
 
+    const val FRAGMENT_LOCAL_MAIN = "/$LOCAL/fragment/main"
+
 }
 
 //搜索

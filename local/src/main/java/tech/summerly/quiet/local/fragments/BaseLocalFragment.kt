@@ -20,7 +20,7 @@ import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.setItemsByDiff
 import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.local.LocalModule
-import tech.summerly.quiet.local.LocalMusicActivity
+import tech.summerly.quiet.local.LocalMusicFragment
 import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.fragments.items.*
 import tech.summerly.quiet.local.utils.AlbumDetailProvider
@@ -139,11 +139,11 @@ abstract class BaseLocalFragment : BaseFragment() {
     }
 
     private fun onOverviewNavClick(nav: CommonItemA) {
-        val activity = this.activity as? LocalMusicActivity ?: return
+        val fragment = this.parentFragment as? LocalMusicFragment ?: return
         when (nav.title) {
-            getString(R.string.local_overview_nav_total) -> activity.setCurrentPage(1)
-            getString(R.string.local_overview_nav_artist) -> activity.setCurrentPage(2)
-            getString(R.string.local_overview_nav_album) -> activity.setCurrentPage(3)
+            getString(R.string.local_overview_nav_total) -> fragment.setCurrentPage(1)
+            getString(R.string.local_overview_nav_artist) -> fragment.setCurrentPage(2)
+            getString(R.string.local_overview_nav_album) -> fragment.setCurrentPage(3)
             getString(R.string.local_overview_nav_trend) -> {
 
             }

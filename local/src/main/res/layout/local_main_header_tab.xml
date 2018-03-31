@@ -10,7 +10,7 @@
     app:tabIndicatorColor="@color/common_color_primary"
     app:tabMode="fixed"
     app:tabTextAppearance="@style/LocalNavRadio.TextAppearance"
-    tools:showIn="@layout/local_activity_main">
+    tools:showIn="@layout/local_fragment_main">
 
     <android.support.design.widget.TabItem
         android:layout_width="wrap_content"

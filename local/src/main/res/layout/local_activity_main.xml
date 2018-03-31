@@ -1,48 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:layout_marginTop="24dp">
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/localToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@null"
-        app:contentInsetStart="8dp"
-        app:title="@null">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <include layout="@layout/local_main_header_tab" />
-            <!--<include layout="@layout/local_main_header_radio" />-->
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/imageMenu"
-                style="@style/Widget.AppCompat.ActionButton.Overflow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end" />
-        </FrameLayout>
-
-    </android.support.v7.widget.Toolbar>
-
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
+    <fragment
+        android:name="tech.summerly.quiet.local.LocalMusicFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:tag="local_main"
+        tools:layout="@layout/local_fragment_main" />
 
     <fragment
         android:name="tech.summerly.quiet.commonlib.fragments.BottomControllerFragment"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         android:tag="@string/common_tag_fragment_bottom_controller"
         tools:layout="@layout/common_fragment_controller_bottom" />
 </LinearLayout>
