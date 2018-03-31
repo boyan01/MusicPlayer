@@ -127,7 +127,7 @@ public class CommonLyricView extends View {
     /**
      * 用于监听手指的滑动来滚动歌词
      */
-    private GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector;
 
     //快速滑动时,抬起手指依然进行滑动
     private Scroller scroller;
@@ -178,12 +178,12 @@ public class CommonLyricView extends View {
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 
             @Override
-            public boolean onDown(MotionEvent e) {
+            public boolean onDown(MotionEvent event) {
                 //触摸屏幕时立即停止还在自己滚动的歌词
                 if (!scroller.isFinished()) {
                     scroller.forceFinished(true);
                 }
-                return false;
+                return true;
             }
 
             @Override
@@ -292,7 +292,8 @@ public class CommonLyricView extends View {
             return false;
         }
         super.onTouchEvent(event);
-        gestureDetector.onTouchEvent(event);
+        boolean b = gestureDetector.onTouchEvent(event);
+        Log.d(TAG, "onTouchEvent: is consume ? : " + b);
         //FIXME 不知道怎么操作才能不消耗点击事件且可以消耗掉滑动事件.
         //使用 return gestureDetector.onTouchEvent(event)没有用.
         return true;

@@ -2,6 +2,7 @@ package tech.summerly.quiet.netease.ui
 
 import android.os.Bundle
 import android.transition.TransitionManager
+import android.view.View
 import android.widget.SeekBar
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.netease_activity_fm.*
@@ -178,7 +179,7 @@ internal class NeteaseFmActivity : NoIsolatedActivity() {
             }
 
         })
-        playerInfo.setOnClickListener {
+        val switchLayout: (View) -> Unit = {
             TransitionManager.beginDelayedTransition(playerInfo)
             if (lyricView.isVisible) {
                 lyricView.invisible()
@@ -192,6 +193,11 @@ internal class NeteaseFmActivity : NoIsolatedActivity() {
                 textArtist.invisible()
             }
         }
+        playerInfo.setOnClickListener(switchLayout)
+        lyricView.setOnPlayIndicatorClickListener {
+            musicPlayer.seekTo(it.toLong())
+        }
+        lyricView.setOnClickListener(switchLayout)
     }
 
     private var isSeekBarTracking = false
