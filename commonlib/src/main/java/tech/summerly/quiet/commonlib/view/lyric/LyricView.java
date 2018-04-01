@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.RippleDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.Layout;
@@ -24,6 +26,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.EdgeEffect;
 import android.widget.Scroller;
 
 import java.io.ByteArrayInputStream;
@@ -32,6 +35,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import tech.summerly.quiet.commonlib.BuildConfig;
 import tech.summerly.quiet.commonlib.R;
 
 /**
@@ -39,9 +43,9 @@ import tech.summerly.quiet.commonlib.R;
  * Desc:
  */
 @SuppressWarnings("unused")
-public class CommonLyricView extends View {
+public class LyricView extends View {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = BuildConfig.DEBUG;
 
     private static final String TAG = "LyricView";
 
@@ -92,9 +96,7 @@ public class CommonLyricView extends View {
      */
     private volatile boolean isLyricAvailable;
 
-    /**
-     * TODO
-     */
+    //flag is scroll or fling animation
     private boolean isAnimating;
 
     private TextPaint textPaint;
@@ -136,24 +138,24 @@ public class CommonLyricView extends View {
 
     private OnClickListener onClickListener;
 
-    public CommonLyricView(Context context) {
+    public LyricView(Context context) {
         this(context, null);
     }
 
-    public CommonLyricView(Context context, @Nullable AttributeSet attrs) {
+    public LyricView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CommonLyricView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public LyricView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.CommonLyricView);
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.LyricView);
         if (typedArray != null) {
-            lyricTextSize = typedArray.getDimension(R.styleable.CommonLyricView_commonLyricTextSize, 16);
-            lyricNormalTextColor = typedArray.getColor(R.styleable.CommonLyricView_commonLyricNormalTextColor, Color.WHITE);
-            lyricPlayingTextColor = typedArray.getColor(R.styleable.CommonLyricView_commonLyricPlayingTextColor, Color.GRAY);
-            lyricLineSpacing = typedArray.getDimension(R.styleable.CommonLyricView_commonLyricLineSpacing, 0);
-            lyricEmptyText = typedArray.getString(R.styleable.CommonLyricView_commonLyricEmptyText);
-            lyricPlayIndicatorColor = typedArray.getColor(R.styleable.CommonLyricView_commonLyricPlayIndicatorColor, Color.DKGRAY);
+            lyricTextSize = typedArray.getDimensionPixelSize(R.styleable.LyricView_lyricTextSize, 16);
+            lyricNormalTextColor = typedArray.getColor(R.styleable.LyricView_lyricNormalTextColor, Color.WHITE);
+            lyricPlayingTextColor = typedArray.getColor(R.styleable.LyricView_lyricPlayingTextColor, Color.GRAY);
+            lyricLineSpacing = typedArray.getDimensionPixelSize(R.styleable.LyricView_lyricLineSpacing, 0);
+            lyricEmptyText = typedArray.getString(R.styleable.LyricView_lyricEmptyText);
+            lyricPlayIndicatorColor = typedArray.getColor(R.styleable.LyricView_lyricPlayIndicatorColor, Color.DKGRAY);
             typedArray.recycle();
         }
         if (lyricEmptyText == null) {
@@ -169,11 +171,13 @@ public class CommonLyricView extends View {
         dashPaint.setPathEffect(dashPathEffect);
         dashPaint.setStyle(Paint.Style.STROKE);
         dashPaint.setAntiAlias(true);
+        dashPaint.setColor(lyricPlayIndicatorColor);
         dashPath = new Path();
         dashPath.reset();
         isLyricAvailable = false;
         //noinspection deprecation
         playIndicator = getResources().getDrawable(R.drawable.common_ic_play_arrow_black_24dp);
+        playIndicator = new RippleDrawable(ColorStateList.valueOf(lyricPlayIndicatorColor), playIndicator, null);
         playIndicator.setColorFilter(lyricPlayIndicatorColor, PorterDuff.Mode.SRC_IN);
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 
@@ -195,6 +199,7 @@ public class CommonLyricView extends View {
                     if (onPlayIndicatorClickListener != null) {
                         onPlayIndicatorClickListener.onClick(lyric.getTimeStamp(centerLine));
                     }
+                    playIndicator.setHotspot(event.getX(), event.getY());
                     invalidate();
                     return true;
 
@@ -218,26 +223,33 @@ public class CommonLyricView extends View {
                 }
                 isScrolling = true;
                 offsetScroll += -distanceY;
-                if (offsetScroll < maxY() && offsetScroll > minY()) {
-                    invalidate();
-                    return true;
+                int maxY = maxY();
+                int minY = minY();
+                if (offsetScroll > maxY) {
+                    offsetScroll = maxY;
+                } else if (offsetScroll < minY) {
+                    offsetScroll = minY;
                 }
-                //如果这次滚动已经超出滚动范围,那么回退状态.
-                offsetScroll -= -distanceY;
+                invalidate();
                 return true;
             }
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-
+                int minY = minY();
+                int maxY = maxY();
+                if (DEBUG) {
+                    Log.d(TAG, "onFling: offsetScroll = " + offsetScroll + " velocityY = " + velocityY + " minY = " + minY + " maxY = " + maxY);
+                }
                 scroller.fling(
                         0,
                         (int) offsetScroll,//播放中歌词距中线偏移量
                         0,
                         (int) velocityY,//每秒的像素滚动速率
                         0, 0,
-                        minY(), maxY()
+                        minY, maxY
                 );
+                computeScroll();
                 return true;
             }
 
@@ -277,8 +289,8 @@ public class CommonLyricView extends View {
 
         //初始化一些绘制用到的且需要依据宽高来计算的数据,放在onDraw方法中会影响性能
         baseline = centerY - (textPaint.getFontMetrics().bottom + textPaint.getFontMetrics().top) / 2;
-        playIndicator.setBounds(0, centerY - sizePlayIndicator / 2,
-                sizePlayIndicator, centerY + sizePlayIndicator / 2);
+        playIndicator.setBounds(getPaddingLeft(), centerY - sizePlayIndicator / 2,
+                sizePlayIndicator + getPaddingLeft(), centerY + sizePlayIndicator / 2);
         timeStampWidth = textPaint.measureText("000:00");
         dashPath.reset();
         dashPath.moveTo(sizePlayIndicator + dip2px(8), centerY);
@@ -293,7 +305,6 @@ public class CommonLyricView extends View {
         }
         super.onTouchEvent(event);
         boolean b = gestureDetector.onTouchEvent(event);
-        Log.d(TAG, "onTouchEvent: is consume ? : " + b);
         //FIXME 不知道怎么操作才能不消耗点击事件且可以消耗掉滑动事件.
         //使用 return gestureDetector.onTouchEvent(event)没有用.
         return true;
@@ -358,6 +369,7 @@ public class CommonLyricView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         textPaint.setColor(lyricNormalTextColor);
+        textPaint.setTextSize(lyricTextSize);
         if (lyric == null) {
             drawStaticLayout(canvas, getEmptyStaticLayout(), getHeight() / 2);
             return;
@@ -395,7 +407,7 @@ public class CommonLyricView extends View {
                     centerY < dy + former.getHeight() + lyricLineSpacing / 2) {
                 centerLine = line;
             }
-            if (dy < 0) { //如果垂直偏移量超过了上界,则停止先前的歌词的绘制
+            if (dy < getPaddingTop()) { //如果垂直偏移量超过了上界,则停止先前的歌词的绘制
                 break;
             }
         }
@@ -410,7 +422,7 @@ public class CommonLyricView extends View {
                 centerLine = line;
             }
             dy += next.getHeight() + lyricLineSpacing;
-            if (dy > getHeight()) { //如果垂直偏移量超过了下界,则停止后面的歌词的绘制
+            if (dy > getHeight() - getPaddingBottom()) { //如果垂直偏移量超过了下界,则停止后面的歌词的绘制
                 break;
             }
         }
@@ -432,9 +444,10 @@ public class CommonLyricView extends View {
             Log.i(TAG, "onDraw: centerLine = " + centerLine);
         }
         textPaint.setColor(lyricPlayIndicatorColor);
+        textPaint.setTextSize(dip2px(13));
         //绘制右侧的时间指示
         final String timeStamp = lyric.getLyricEntry(centerLine).getTimeStamp();
-        canvas.drawText(timeStamp, getWidth() - timeStampWidth, baseline, textPaint);
+        canvas.drawText(timeStamp, getWidth() - timeStampWidth - getPaddingRight(), baseline, textPaint);
 
         //绘制左侧的播放按钮
         playIndicator.draw(canvas);
@@ -733,6 +746,7 @@ public class CommonLyricView extends View {
     public void setLyricPlayIndicatorColor(final int color) {
         lyricPlayIndicatorColor = color;
         playIndicator.setColorFilter(lyricPlayIndicatorColor, PorterDuff.Mode.SRC_IN);
+        dashPaint.setColor(lyricPlayIndicatorColor);
         invalidate();
     }
 

@@ -91,7 +91,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textMusicName"
                 tools:text="五月天" />
 
-            <tech.summerly.quiet.commonlib.view.lyric.CommonLyricView
+            <tech.summerly.quiet.commonlib.view.lyric.LyricView
                 android:id="@+id/lyricView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -100,14 +100,16 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:visibility="invisible"
-                app:commonLyricEmptyText="no lyric"
-                app:commonLyricLineSpacing="4dp"
-                app:commonLyricPlayIndicatorColor="@color/netease_color_primary"
-                app:commonLyricTextSize="15sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:lyricEmptyText="没有歌词"
+                app:lyricLineSpacing="8dp"
+                app:lyricNormalTextColor="@color/color_text_secondary_dark_background"
+                app:lyricPlayIndicatorColor="@color/color_text_primary_dark_background"
+                app:lyricPlayingTextColor="@color/color_text_primary_dark_background"
+                app:lyricTextSize="16sp"
                 tools:visibility="visible" />
 
         </android.support.constraint.ConstraintLayout>

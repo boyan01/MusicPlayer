@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <declare-styleable name="CommonLyricView">
-        <attr name="commonLyricTextSize" format="dimension" />
-        <attr name="commonLyricNormalTextColor" format="color" />
-        <attr name="commonLyricPlayingTextColor" format="color" />
-        <attr name="commonLyricLineSpacing" format="dimension" />
-        <attr name="commonLyricEmptyText" format="string" />
-        <attr name="commonLyricPlayIndicatorColor" format="color" />
+    <declare-styleable name="LyricView">
+        <attr name="lyricTextSize" format="dimension" />
+        <attr name="lyricNormalTextColor" format="color" />
+        <attr name="lyricPlayingTextColor" format="color" />
+        <attr name="lyricLineSpacing" format="dimension" />
+        <attr name="lyricEmptyText" format="string" />
+        <attr name="lyricPlayIndicatorColor" format="color" />
     </declare-styleable>
 </resources>

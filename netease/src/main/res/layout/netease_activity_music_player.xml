@@ -55,25 +55,25 @@
 
 
     <!-- this is lyric?? -->
-    <tech.summerly.quiet.commonlib.view.lyric.CommonLyricView
+    <tech.summerly.quiet.commonlib.view.lyric.LyricView
         android:id="@+id/lyric"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
-        app:commonLyricEmptyText="@string/netease_no_lyric"
-        app:commonLyricLineSpacing="4dp"
-        app:commonLyricNormalTextColor="@color/color_text_secondary_dark_background"
-        app:commonLyricPlayingTextColor="@color/color_text_primary_dark_background"
-        app:commonLyricTextSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/actionShare"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/artWork"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        app:lyricEmptyText="@string/netease_no_lyric"
+        app:lyricLineSpacing="4dp"
+        app:lyricNormalTextColor="@color/color_text_secondary_dark_background"
+        app:lyricPlayingTextColor="@color/color_text_primary_dark_background"
+        app:lyricTextSize="16sp" />
 
     <!-- 以下为进度条 -->
     <LinearLayout
