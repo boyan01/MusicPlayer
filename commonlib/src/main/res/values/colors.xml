@@ -38,6 +38,9 @@
     <color name="color_text_primary_dark_background">#ffffff</color>
     <color name="color_text_secondary_dark_background">#B2ffffff</color>
 
+    <color name="color_text_primary_inverse">@color/color_text_primary_dark_background</color>
+    <color name="color_text_secondary_inverse">@color/color_text_secondary_dark_background</color>
+
     <color name="common_color_indicator">#4CAF50</color>
 
 </resources>

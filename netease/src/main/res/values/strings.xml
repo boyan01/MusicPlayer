@@ -44,5 +44,9 @@
     <string name="netease_all">所有</string>
     <string name="netease_week">一周</string>
     <string name="netease_record">播放记录统计</string>
+    <string name="netease_dislike_music">dislike</string>
+    <string name="netease_like_music">like</string>
+    <string name="netease_play_next">下一首</string>
+    <string name="netease_play_pause">play/pause</string>
 
 </resources>

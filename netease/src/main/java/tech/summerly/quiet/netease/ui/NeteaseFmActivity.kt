@@ -158,7 +158,7 @@ internal class NeteaseFmActivity : NoIsolatedActivity() {
             musicPlayer.playNext()
         }
         buttonComment.setOnClickListener {
-
+            log { "click" }
         }
         toolbar.setNavigationOnClickListener {
             onBackPressed()

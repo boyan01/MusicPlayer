@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:foreground="@drawable/netease_gradient_fm_mask"
         android:scaleType="centerCrop"
-        tools:srcCompat="@color/common_color_primary_dark" />
+        app:srcCompat="?colorPrimary" />
 
     <View
         android:layout_width="match_parent"
@@ -23,6 +23,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
         android:orientation="vertical">
 
@@ -166,81 +167,81 @@
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/imageBackground"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="UnusedAttribute">
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/buttonDelete"
+                style="@style/ActionOverflow.Dark"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:background="?android:selectableItemBackgroundBorderless"
                 android:scaleType="center"
-                android:tint="#ffffff"
+                android:src="@drawable/netease_ic_delete_black_24dp"
+                android:tooltipText="@string/netease_dislike_music"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonLike"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/netease_ic_delete_black_24dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/buttonLike"
+                style="@style/ActionOverflow.Dark"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:background="?android:selectableItemBackgroundBorderless"
                 android:scaleType="center"
-                android:tint="#ffffff"
+                android:src="@drawable/common_ic_favorite_red_24dp"
+                android:tooltipText="@string/netease_like_music"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonPlay"
                 app:layout_constraintStart_toEndOf="@+id/buttonDelete"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/common_ic_favorite_red_24dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/buttonPlay"
+                style="@style/ActionOverflow.Dark"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:background="?android:selectableItemBackgroundBorderless"
-                android:clickable="true"
-                android:focusable="true"
+                android:background="?selectableItemBackgroundBorderless"
                 android:padding="4dp"
                 android:scaleType="centerCrop"
-                android:tint="#ffffff"
+                android:src="@drawable/common_ic_play_circle_outline_black_24dp"
+                android:tooltipText="@string/netease_play_pause"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonNext"
                 app:layout_constraintStart_toEndOf="@+id/buttonLike"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/common_ic_play_circle_outline_black_24dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/buttonNext"
+                style="@style/ActionOverflow.Dark"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:background="?android:selectableItemBackgroundBorderless"
                 android:padding="2dp"
                 android:scaleType="centerCrop"
-                android:tint="#ffffff"
+                android:src="@drawable/common_ic_skip_next_black_24dp"
+                android:tooltipText="@string/netease_play_next"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonComment"
                 app:layout_constraintStart_toEndOf="@+id/buttonPlay"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/common_ic_skip_next_black_24dp" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/buttonComment"
+                style="@style/ActionOverflow.Dark"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:background="?android:selectableItemBackgroundBorderless"
                 android:padding="3dp"
                 android:scaleType="center"
-                android:tint="#ffffff"
+                android:src="@drawable/netease_ic_comment_black_24dp"
+                android:tooltipText="@string/action_comment"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/buttonNext"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/netease_ic_comment_black_24dp" />
+                app:layout_constraintTop_toTopOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
