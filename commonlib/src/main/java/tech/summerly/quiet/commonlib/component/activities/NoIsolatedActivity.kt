@@ -25,7 +25,7 @@ abstract class NoIsolatedActivity : BaseActivity() {
 
     override fun onBackPressed() {
         val tasks = systemService<ActivityManager>().appTasks
-        if (tasks.size != 0 && tasks[0].taskInfo.numActivities == 1) { // only current acitivty is running
+        if (tasks.size != 0 && tasks[0].taskInfo.numActivities == 1) { // only current activity is running
             try {
                 val pm = ARouter.getInstance().build(parentPath)
                 LogisticsCenter.completion(pm)
