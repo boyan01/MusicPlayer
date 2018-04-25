@@ -22,7 +22,7 @@ class PlaylistPlayer internal constructor(
         private const val DURATION_UPDATE_PROGRESS = 200L
     }
 
-    var playlist: Playlist = PlaylistStorage.resotrePlaylist()
+    var playlist: Playlist = PlaylistStorage.restorePlaylist()
 
     @Deprecated("", ReplaceWith("playlist"))
     val playlistProvider
