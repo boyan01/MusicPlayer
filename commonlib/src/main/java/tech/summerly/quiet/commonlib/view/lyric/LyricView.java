@@ -26,7 +26,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.EdgeEffect;
 import android.widget.Scroller;
 
 import java.io.ByteArrayInputStream;
