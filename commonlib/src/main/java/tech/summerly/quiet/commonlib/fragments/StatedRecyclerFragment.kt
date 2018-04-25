@@ -27,7 +27,7 @@ abstract class StatedRecyclerFragment : BaseFragment() {
 
     final override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
         super.onViewCreated(view, savedInstanceState)
-        buttonRetry.setOnClickListenerSafely {
+        buttonRetry.setOnClickListener {
             if (job?.isActive == true) {
                 log { "job is active , but retry button has been clicked" }
                 job?.cancel()

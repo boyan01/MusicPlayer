@@ -1,4 +1,4 @@
-package tech.summerly.quiet.commonlib.cookie
+package tech.summerly.quiet.commonlib.utils.net.cookie
 
 import okhttp3.Cookie
 import okhttp3.HttpUrl

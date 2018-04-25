@@ -1,4 +1,4 @@
-package tech.summerly.quiet.commonlib.cookie;
+package tech.summerly.quiet.commonlib.utils.net.cookie;
 
 import android.content.Context;
 import android.content.SharedPreferences;

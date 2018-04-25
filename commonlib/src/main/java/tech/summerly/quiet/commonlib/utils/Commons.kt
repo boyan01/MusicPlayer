@@ -18,7 +18,7 @@ fun Number.toMusicTimeStamp(): String = with(toLong() / 1000) {
 
 @Route(path = "/service/json")
 class JsonServiceImpl : SerializationService {
-    @Suppress("OverridingDeprecatedMember")
+
     override fun <T : Any?> json2Object(input: String?, clazz: Class<T>?): T {
         error("未接入!")
     }

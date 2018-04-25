@@ -5,7 +5,7 @@ import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import tech.summerly.quiet.commonlib.cookie.CookieStore
+import tech.summerly.quiet.commonlib.utils.net.cookie.CookieStore
 import tech.summerly.quiet.commonlib.utils.randomUserAgent
 
 /**

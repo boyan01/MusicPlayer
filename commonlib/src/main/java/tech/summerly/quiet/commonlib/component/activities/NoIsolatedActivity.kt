@@ -3,7 +3,7 @@ package tech.summerly.quiet.commonlib.component.activities
 import android.app.ActivityManager
 import android.app.TaskStackBuilder
 import android.content.Intent
-import androidx.content.systemService
+import androidx.core.content.systemService
 import com.alibaba.android.arouter.core.LogisticsCenter
 import com.alibaba.android.arouter.launcher.ARouter
 import tech.summerly.quiet.commonlib.base.BaseActivity
@@ -11,7 +11,7 @@ import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
 
 /**
- * 当任务栈只有当前的 acitivty 时，按下返回键不会退出 app ，
+ * 当任务栈只有当前的 activity 时，按下返回键不会退出 app ，
  * 而是会打开 router 为 [parentPath] 的 activity
  */
 abstract class NoIsolatedActivity : BaseActivity() {

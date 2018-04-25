@@ -1,7 +1,7 @@
 package tech.summerly.quiet.netease.utils
 
 import okhttp3.HttpUrl
-import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
+import tech.summerly.quiet.commonlib.utils.net.cookie.PersistentCookieStore
 import tech.summerly.quiet.netease.NeteaseModule
 import tech.summerly.quiet.netease.persistence.NeteasePreference
 

@@ -1,13 +1,12 @@
 package tech.summerly.quiet.service.netease
 
 import android.content.Context
-import kotlinx.coroutines.experimental.CancellationException
 import okhttp3.Cache
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicUri
 import tech.summerly.quiet.commonlib.bean.Record
-import tech.summerly.quiet.commonlib.cookie.PersistentCookieStore
+import tech.summerly.quiet.commonlib.utils.net.cookie.PersistentCookieStore
 import tech.summerly.quiet.commonlib.objects.PortionList
 import tech.summerly.quiet.commonlib.utils.await
 import tech.summerly.quiet.commonlib.utils.md5

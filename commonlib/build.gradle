@@ -48,7 +48,7 @@ dependencies {
 
     implementation 'com.facebook.stetho:stetho:1.5.0'
 
-    api 'androidx.core:core-ktx:0.2'
+    api 'androidx.core:core-ktx:0.3'
     //android support
     api "com.android.support:support-annotations:$android_support_version"
     api "com.android.support:support-compat:$android_support_version"
@@ -57,7 +57,7 @@ dependencies {
     api "com.android.support:palette-v7:$android_support_version"
     api "com.android.support:recyclerview-v7:$android_support_version"
     api 'me.drakeet.multitype:multitype:3.4.4'
-    api 'com.android.support.constraint:constraint-layout:1.1.0-beta6'
+    api 'com.android.support.constraint:constraint-layout:1.1.0'
 
     //Architecture Components
     api "android.arch.lifecycle:extensions:1.1.1"
