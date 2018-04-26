@@ -61,7 +61,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            app:layoutManager="LinearLayoutManager"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             tools:listitem="@layout/item_music" />
 
 
@@ -73,8 +73,8 @@
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
             android:src="@drawable/pd_ic_my_location_black_24dp"
-            android:tint="?colorPrimaryDark"
-            app:backgroundTint="@color/color_transparent_secondary"
+            android:tint="@color/color_text_primary_inverse"
+            app:backgroundTint="?colorAccent"
             app:elevation="1dp"
             app:fabSize="mini"
             app:pressedTranslationZ="24dp"

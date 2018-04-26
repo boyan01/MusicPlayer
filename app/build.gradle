@@ -8,12 +8,12 @@ apply plugin: 'kotlin-kapt'
 
 android {
 
-    compileSdkVersion compile_sdk.toInteger()
+    compileSdkVersion compile_sdk
 
     defaultConfig {
         applicationId "tech.summerly.quiet"
         minSdkVersion min_sdk.toInteger()
-        targetSdkVersion target_sdk.toInteger()
+        targetSdkVersion target_sdk
         versionCode app_version_code.toInteger()
         versionName app_version_name
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"

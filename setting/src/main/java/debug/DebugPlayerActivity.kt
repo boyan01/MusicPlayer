@@ -10,8 +10,8 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.bean.MusicUri
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
-import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.requestPermission
+import tech.summerly.quiet.commonlib.utils.setOnClickListenerSafely
 import tech.summerly.quiet.setting.R
 
 /**
@@ -39,12 +39,10 @@ internal class DebugPlayerActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.setting_activity_debug)
 
-        button1.setOnClickListener {
-            asyncUI {
-                val b = requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                if (b) {
-                    player.play(music)
-                }
+        button1.setOnClickListenerSafely {
+            val b = requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+            if (b) {
+                player.play(music)
             }
         }
 

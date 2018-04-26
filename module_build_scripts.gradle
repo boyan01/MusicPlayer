@@ -13,11 +13,11 @@ apply plugin: 'kotlin-kapt'
 
 android {
 
-    compileSdkVersion compile_sdk.toInteger()
+    compileSdkVersion compile_sdk
 
     defaultConfig {
         minSdkVersion min_sdk.toInteger()
-        targetSdkVersion target_sdk.toInteger()
+        targetSdkVersion target_sdk
         versionCode 1
         versionName "1.0"
 

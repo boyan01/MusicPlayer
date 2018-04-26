@@ -2,7 +2,7 @@ package tech.summerly.quiet.setting.fragments
 
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceFragment
+import android.support.v7.preference.PreferenceFragmentCompat
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
 import tech.summerly.quiet.setting.R
 
@@ -10,10 +10,10 @@ import tech.summerly.quiet.setting.R
  * Created by summer on 18-2-13
  * General Setting
  */
-class GeneralSettingFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
+class GeneralSettingFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.setting_pref_general)
     }
 

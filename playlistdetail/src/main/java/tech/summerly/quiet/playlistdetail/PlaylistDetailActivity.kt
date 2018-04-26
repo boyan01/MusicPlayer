@@ -6,7 +6,7 @@ import android.os.SystemClock
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
-import androidx.view.updateLayoutParams
+import androidx.core.view.updateLayoutParams
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.pd_activity_playlist_deatil.*
 import kotlinx.coroutines.experimental.delay
@@ -79,7 +79,10 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
 
 
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-            if (isNeedShowIndicatorFindLocation && newState == RecyclerView.SCROLL_STATE_IDLE && isScrollByFindPosition) {
+            val needAnimation = isNeedShowIndicatorFindLocation
+                    && newState == RecyclerView.SCROLL_STATE_IDLE
+                    && isScrollByFindPosition
+            if (needAnimation) {
                 //找到当前音乐的ItemView并播放一个渐变动画
                 val index = findCurrentPlayingMusic() ?: return
                 val view = recyclerView.findViewHolderForAdapterPosition(index)?.itemView?.asReference()
