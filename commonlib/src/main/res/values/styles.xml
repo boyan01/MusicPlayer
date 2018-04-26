@@ -10,6 +10,12 @@
         <item name="android:windowAllowEnterTransitionOverlap">false</item>
         <item name="android:windowAllowReturnTransitionOverlap">false</item>
 
+        <item name="colorBackground">@color/background</item>
+        <item name="colorPrimaryLight">@color/color_primary_light</item>
+        <item name="colorTextPrimary">@color/common_text_primary</item>
+        <item name="colorTextPrimaryInverse">@color/color_text_primary_inverse</item>
+        <item name="colorTextSecondary">@color/color_text_secondary</item>
+        <item name="colorTextSecondaryInverse">@color/color_text_secondary_inverse</item>
         <!--<ititlename="colorControlHighlight">@color/common_colorRipple</item>-->
         <!--<ititlename="android:textColorPrimary">@color/common_textPrimary</item>-->
         <!--<ititlename="android:textColorSecondary">@color/common_textSecondary</item>-->
@@ -97,7 +103,6 @@
         <item name="android:theme">@style/RippleThemeDark</item>
         <item name="android:tint">@color/color_text_primary_dark_background</item>
     </style>
-
 
 
     <style name="MusicTitleStyle" parent="@style/TextAppearance.AppCompat.Body1">

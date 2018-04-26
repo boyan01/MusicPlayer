@@ -5,15 +5,14 @@ import android.support.v7.widget.SearchView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import androidx.content.systemService
 import kotlinx.android.synthetic.main.pd_fragment_internal_search.view.*
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.items.MusicItemViewBinder
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.color
 import tech.summerly.quiet.commonlib.utils.setItems2
+import tech.summerly.quiet.playlistdetail.items.MusicViewBinder
 
 /**
  * Created by summer on 18-3-18
@@ -24,23 +23,24 @@ class PlaylistInternalSearchFragment : BaseFragment() {
 
         private const val KEY_MUSIC_LIST = "musics"
 
-        operator fun invoke(musics: ArrayList<Music>) = PlaylistInternalSearchFragment().also {
+        fun getInstance(musics: ArrayList<Music>) = PlaylistInternalSearchFragment().also {
             it.arguments = Bundle().apply {
                 putParcelableArrayList(KEY_MUSIC_LIST, musics)
             }
         }
     }
 
+    private val adapter by lazy {
+        val adapter = MultiTypeAdapter()
+        adapter.register(Music::class.java, MusicViewBinder().withOnItemClickListener(onMusicClick))
+        adapter
+    }
 
-    private val adapter = MultiTypeAdapter()
-
-    private val items = ArrayList<Music>()
+    private val musicList = ArrayList<Music>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.getParcelableArrayList<Music>(KEY_MUSIC_LIST)?.let {
-            items.addAll(it)
-        }
+        musicList.addAll(getArgument(KEY_MUSIC_LIST))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -63,7 +63,6 @@ class PlaylistInternalSearchFragment : BaseFragment() {
                 filterText(newText)
                 return true
             }
-
         })
     }
 
@@ -74,11 +73,14 @@ class PlaylistInternalSearchFragment : BaseFragment() {
     }
 
     override fun onStop() {
-        activity?.systemService<InputMethodManager>()?.let {
-            val searchView = view?.searchView ?: return@let
-            it.hideSoftInputFromWindow(searchView.windowToken, 0)
-        }
+        view?.searchView?.clearFocus()
         super.onStop()
+    }
+
+    private val onMusicClick = fun(music: Music) {
+        val musicPlayer = MusicPlayerManager.musicPlayer(music.type)
+        musicPlayer.playlist.setMusicLists(musicList)
+        musicPlayer.play(music)
     }
 
     /**
@@ -93,22 +95,12 @@ class PlaylistInternalSearchFragment : BaseFragment() {
             }
             return
         }
-        val data = items
+        val data = musicList
                 .filter {
                     it.title.contains(text, true)
                             || it.artistAlbumString().contains(text, true)
                 }
         adapter.setItems2(data, detectDiff = false)
     }
-
-
-    private val onMusicClick = fun(music: Music) {
-        (activity as? PlaylistDetailActivity)?.onMusicClick?.invoke(music)
-    }
-
-    init {
-        adapter.register(Music::class.java, MusicItemViewBinder(onMusicClick))
-    }
-
 
 }

@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/background"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/item_music" />
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        tools:listitem="@layout/pd_item_music" />
 
 </android.support.v7.widget.LinearLayoutCompat>

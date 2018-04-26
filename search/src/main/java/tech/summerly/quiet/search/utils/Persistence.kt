@@ -2,7 +2,7 @@ package tech.summerly.quiet.search.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.content.edit
+import androidx.core.content.edit
 import tech.summerly.quiet.commonlib.utils.getObject
 import tech.summerly.quiet.commonlib.utils.putObject
 import tech.summerly.quiet.search.SearchModule

@@ -68,6 +68,8 @@ open class Music(
         override fun newArray(size: Int): Array<Music?> {
             return arrayOfNulls(size)
         }
+
+        const val ID_NONE = 0L
     }
 
     fun getHighestQuality(): String? {

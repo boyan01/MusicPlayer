@@ -28,5 +28,6 @@
 
     <!-- 分割线的厚度 -->
     <dimen name="divider_thick">1dp</dimen>
+    <dimen name="music_item_height">60dp</dimen>
 
 </resources>

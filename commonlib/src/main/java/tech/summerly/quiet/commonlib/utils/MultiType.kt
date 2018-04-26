@@ -38,6 +38,16 @@ abstract class ItemViewBinder<T> : me.drakeet.multitype.ItemViewBinder<T, ItemVi
     }
 }
 
+abstract class ItemViewBinder2<T> : ItemViewBinder<T>() {
+
+    protected abstract val layoutId: Int
+
+    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
+        return ViewHolder(layoutId, parent, inflater)
+    }
+
+}
+
 fun MultiTypeAdapter.setItemsByDiff(items: List<Any>, detectMove: Boolean = false) {
     @Suppress("UNCHECKED_CAST")//fuck type checker
     val old = this.items as MutableList<Any>

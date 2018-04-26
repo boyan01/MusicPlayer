@@ -53,6 +53,7 @@ abstract class BaseModule : ContextWrapper(null), ComponentCallbacks2 {
         }
 
 
+        @JvmStatic
         fun init(application: Application) {
             MODULE_LIST.forEach {
                 val module = invoke(application, it)

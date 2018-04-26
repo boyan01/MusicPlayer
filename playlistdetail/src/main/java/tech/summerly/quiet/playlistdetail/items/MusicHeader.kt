@@ -12,6 +12,7 @@ import tech.summerly.quiet.playlistdetail.R
  * date   : 2018/1/15
  */
 internal class MusicHeaderViewBinder : ItemViewBinder<MusicHeader>() {
+
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
         return ViewHolder(R.layout.pd_header_music, parent, inflater)
     }

@@ -9,4 +9,12 @@
         <attr name="lyricEmptyText" format="string" />
         <attr name="lyricPlayIndicatorColor" format="color" />
     </declare-styleable>
+
+    <attr name="colorBackground" format="color" />
+    <attr name="colorPrimaryLight" format="color" />
+    <attr name="colorTextPrimary" format="color" />
+    <attr name="colorTextPrimaryInverse" format="color" />
+    <attr name="colorTextSecondary" format="color" />
+    <attr name="colorTextSecondaryInverse" format="color" />
+
 </resources>

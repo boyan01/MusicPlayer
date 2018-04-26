@@ -12,7 +12,10 @@ import kotlinx.android.synthetic.main.fragment_stated_recycler.view.*
 import kotlinx.coroutines.experimental.Job
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.base.BaseFragment
-import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.commonlib.utils.asyncUI
+import tech.summerly.quiet.commonlib.utils.gone
+import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.commonlib.utils.visible
 
 /**
  * Created by summer on 18-2-27
@@ -25,13 +28,9 @@ abstract class StatedRecyclerFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_stated_recycler, container, false)
     }
 
-    final override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
         super.onViewCreated(view, savedInstanceState)
-        buttonRetry.setOnClickListenerSafely {
-            if (job?.isActive == true) {
-                log { "job is active , but retry button has been clicked" }
-                job?.cancel()
-            }
+        buttonRetry.setOnClickListener {
             loadDataInternal()
         }
         initRecyclerView(recycler)

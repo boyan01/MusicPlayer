@@ -3,6 +3,8 @@ package tech.summerly.quiet.commonlib.base
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
+import androidx.core.content.systemService
+import kotlin.reflect.KProperty
 
 /**
  * Created by summer on 17-12-17
@@ -30,6 +32,23 @@ open class BaseFragment : Fragment() {
             transaction.commit()
             popBackStack()
         }
+    }
+
+
+    protected operator fun <T> getValue(thisRef: Any?, kProperty: KProperty<*>): T {
+        return getArgument(kProperty.name)
+    }
+
+    protected fun <T> getArgument(key: String): T {
+        val bundle = arguments!!
+        @Suppress("UNCHECKED_CAST")
+        return bundle.get(key) as T
+    }
+
+
+    protected inline fun <reified T> doWithSystemService(run: T.() -> Unit) {
+        val service = context?.systemService<T>() ?: return
+        service.run()
     }
 
 }

@@ -1,24 +1,23 @@
 package tech.summerly.quiet.playlistdetail
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import android.os.SystemClock
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
+import androidx.core.animation.doOnEnd
 import androidx.core.view.updateLayoutParams
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.pd_activity_playlist_deatil.*
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.Items
 import me.drakeet.multitype.MultiTypeAdapter
-import org.jetbrains.anko.coroutines.experimental.asReference
+import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.dimen
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.component.activities.NoIsolatedActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
-import tech.summerly.quiet.commonlib.items.MusicItemViewBinder
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.musicPlayer
@@ -27,7 +26,8 @@ import tech.summerly.quiet.constraints.Netease
 import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.playlistdetail.items.MusicHeader
 import tech.summerly.quiet.playlistdetail.items.MusicHeaderViewBinder
-import tech.summerly.quiet.playlistdetail.items.NeteaseHeaderViewBinder
+import tech.summerly.quiet.playlistdetail.items.MusicViewBinder
+import tech.summerly.quiet.playlistdetail.items.PlaylistHeaderViewBinder
 
 /**
  * author: summerly
@@ -52,6 +52,8 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
         private var scrollY = 0f
 
         private var heightHeader = 500
+
+        private var animatorTargetFind: ValueAnimator? = null
 
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 
@@ -85,13 +87,24 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
             if (needAnimation) {
                 //找到当前音乐的ItemView并播放一个渐变动画
                 val index = findCurrentPlayingMusic() ?: return
-                val view = recyclerView.findViewHolderForAdapterPosition(index)?.itemView?.asReference()
+                val view = recyclerView.findViewHolderForAdapterPosition(index)?.itemView
                         ?: return
-                launch(UI) {
-                    view().isPressed = true
-                    delay(1000)
-                    view().isPressed = false
+                //end previous animation first
+                animatorTargetFind?.end()
+
+                val old = view.background
+                view.setBackgroundColor(getAttrColor(R.attr.colorPrimaryLight))
+
+                val animator = ValueAnimator.ofInt(0, 255, 0)
+                animator.duration = 1000
+                animatorTargetFind = animator
+                animator.addUpdateListener {
+                    view.background.alpha = it.animatedValue as Int
                 }
+                animator.doOnEnd {
+                    view.backgroundDrawable = old
+                }
+                animator.start()
                 isScrollByFindPosition = false
             }
         }
@@ -119,17 +132,18 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
 
     private fun setEvent() {
         list.adapter = adapter.also {
-            it.register(PlaylistProvider.Description::class.java, NeteaseHeaderViewBinder(setBackgroundColor))
+            it.register(PlaylistProvider.Description::class.java, PlaylistHeaderViewBinder(setBackgroundColor))
             it.register(MusicHeader::class.java, MusicHeaderViewBinder())
             it.register(Music::class.java,
-                    MusicItemViewBinder(onMusicClick))
+                    MusicViewBinder())
         }
         list.addOnScrollListener(mScrollListener)
         imageBack.setOnClickListener {
             onBackPressed()
         }
         imageSearch.setOnClickListener {
-            val searchFragment = PlaylistInternalSearchFragment(ArrayList<Music>().also { adapter.items.filterIsInstanceTo(it) })
+            val searchFragment = PlaylistInternalSearchFragment
+                    .getInstance(ArrayList<Music>().also { adapter.items.filterIsInstanceTo(it) })
             supportFragmentManager.intransaction {
                 replace(android.R.id.content, searchFragment)
                 addToBackStack("search")
@@ -215,12 +229,6 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
 
     private fun showPlaylists(items: List<*>) {
         adapter.setItems2(items)
-    }
-
-    val onMusicClick = fun(music: Music) {
-        val musicPlayer = MusicPlayerManager.musicPlayer(music.type)
-        musicPlayer.playlist.setMusicLists(adapter.items.filterIsInstance(Music::class.java))
-        musicPlayer.play(music)
     }
 
     private val setBackgroundColor = fun(color: Int) {
