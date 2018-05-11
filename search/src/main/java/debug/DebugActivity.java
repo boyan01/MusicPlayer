@@ -6,8 +6,6 @@ import android.transition.TransitionManager;
 import android.view.View;
 
 import tech.summerly.quiet.commonlib.base.BaseActivity;
-import tech.summerly.quiet.commonlib.utils.LoggerKt;
-import tech.summerly.quiet.commonlib.utils.LoggerLevel;
 import tech.summerly.quiet.search.R;
 import tech.summerly.quiet.search.fragments.items.SearchHotHintKt;
 import tech.summerly.quiet.search.utils.ChipsLayout;
@@ -38,7 +36,4 @@ public class DebugActivity extends BaseActivity {
         }
     }
 
-    private View getView(final ChipsLayout parent) {
-        return SearchHotHintKt.generateChipItem("匿藏", parent);
-    }
 }

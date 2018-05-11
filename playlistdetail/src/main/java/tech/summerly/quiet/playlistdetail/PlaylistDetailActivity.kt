@@ -162,19 +162,19 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
             isScrollByFindPosition = true
             val scroller = CenterSmoothScroller(this)
             scroller.targetPosition = index
-            list.layoutManager.startSmoothScroll(scroller)
+            list.layoutManager?.startSmoothScroll(scroller)
         }
         MusicPlayerManager.musicChange.observeFilterNull(this) { (old, new) ->
             if (old != null) {
                 val index = adapter.items.indexOf(old)
                 if (index != -1) {
-                    list.adapter.notifyItemChanged(index)
+                    adapter.notifyItemChanged(index)
                 }
             }
             if (new != null) {
                 val index = adapter.items.indexOf(new)
                 if (index != -1) {
-                    list.adapter.notifyItemChanged(index)
+                    adapter.notifyItemChanged(index)
                 }
             }
             checkPlayingMusicIsInList()

@@ -72,10 +72,11 @@ class PlayingListFragment : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
-        list.adapter = MultiTypeAdapter(musicList).also {
+        val adapter = MultiTypeAdapter(musicList).also {
             it.register(Music::class.java, PlayingMusicItemViewBinder())
         }
-        list.adapter.notifyDataSetChanged()
+        list.adapter = adapter
+        adapter.notifyDataSetChanged()
         setEvent()
     }
 

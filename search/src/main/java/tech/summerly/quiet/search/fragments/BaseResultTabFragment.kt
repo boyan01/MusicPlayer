@@ -6,15 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.search_fragment_result_tab.view.*
 import kotlinx.coroutines.experimental.Job
-import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
-import tech.summerly.quiet.commonlib.items.MusicItemViewBinder
 import tech.summerly.quiet.commonlib.objects.PortionList
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.search.R
+import tech.summerly.quiet.search.adapters.SearchResultAdapter
+import tech.summerly.quiet.search.model.SearchInterface
+import tech.summerly.quiet.search.repository.NeteaseRepository
 import tech.summerly.quiet.search.utils.LoadMoreDelegate
 import java.io.IOException
 
@@ -40,7 +41,7 @@ internal abstract class BaseResultTabFragment : BaseFragment(), LoadMoreDelegate
     private val isLoading: Boolean get() = job != null
 
     //has been load all portion of search result
-    private val isCompleted: Boolean  get() = items.size >= items.total
+    private val isCompleted: Boolean get() = items.size >= items.total
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.search_fragment_result_tab, container, false)
@@ -55,9 +56,7 @@ internal abstract class BaseResultTabFragment : BaseFragment(), LoadMoreDelegate
             }
             startQueryAsync()
         }
-        recycler.adapter = MultiTypeAdapter(items).also {
-            it.register(Music::class.java, MusicItemViewBinder(this@BaseResultTabFragment::onMusicClick))
-        }
+        recycler.adapter = SearchResultAdapter(items)
         startQueryAsync()
         LoadMoreDelegate(this@BaseResultTabFragment).attach(recycler)
     }
@@ -66,6 +65,8 @@ internal abstract class BaseResultTabFragment : BaseFragment(), LoadMoreDelegate
         log { "$music has been clicked" }
         MusicPlayerManager.musicPlayer(MusicType.NETEASE).play(music)
     }
+
+    protected fun search(): SearchInterface = NeteaseRepository()
 
     /**
      * start an async task to query from service
@@ -119,7 +120,7 @@ internal abstract class BaseResultTabFragment : BaseFragment(), LoadMoreDelegate
     }
 
     protected fun showItems(newPortion: PortionList<*>) = runWithRoot {
-        //first to check portion's legality
+        //first to check portion list legality
         if (newPortion.offset != items.size) {
             return@runWithRoot
         }

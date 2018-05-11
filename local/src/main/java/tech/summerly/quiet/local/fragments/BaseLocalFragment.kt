@@ -65,8 +65,8 @@ abstract class BaseLocalFragment : BaseFragment() {
     protected abstract fun isInterestedChange(table: Table): Boolean
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val recyclerView = RecyclerView(context)
-        val layoutManager = GridLayoutManager(context, getSpanCount())
+        val recyclerView = RecyclerView(requireContext())
+        val layoutManager = GridLayoutManager(requireContext(), getSpanCount())
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return 1

@@ -23,4 +23,12 @@ class PortionList<T : Any>(
         }
         data.addAll(new.data)
     }
+
+
+    fun <R : Any> map(transform: (T) -> R): PortionList<R> {
+        val new = ArrayList<R>()
+        data.mapTo(new, transform)
+        return PortionList(new, total, offset)
+    }
+
 }

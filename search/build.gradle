@@ -1,1 +1,8 @@
 apply from: '../module_build_scripts.gradle'
+
+android {
+    sourceSets {
+
+        resourcePrefix "search"
+    }
+}

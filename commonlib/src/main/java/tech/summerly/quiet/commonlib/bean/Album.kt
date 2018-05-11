@@ -2,6 +2,7 @@ package tech.summerly.quiet.commonlib.bean
 
 import android.os.Parcel
 import android.os.Parcelable
+import tech.summerly.quiet.commonlib.model.IAlbum
 
 
 data class Album(
@@ -9,7 +10,7 @@ data class Album(
         val name: String,
         val picUri: String?,
         val type: MusicType
-) : Parcelable {
+) : Parcelable, IAlbum {
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
             parcel.readString(),

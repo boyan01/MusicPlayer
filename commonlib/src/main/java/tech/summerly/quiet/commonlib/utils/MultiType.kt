@@ -27,7 +27,9 @@ val RecyclerView.multiTypeAdapter: MultiTypeAdapter
  */
 abstract class ItemViewBinder<T> : me.drakeet.multitype.ItemViewBinder<T, ItemViewBinder.ViewHolder>() {
 
-    abstract override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder
+    public abstract override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder
+
+    public abstract override fun onBindViewHolder(holder: ViewHolder, item: T)
 
     open class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         companion object {

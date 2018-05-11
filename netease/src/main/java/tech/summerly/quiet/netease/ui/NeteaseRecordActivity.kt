@@ -69,7 +69,7 @@ internal class NeteaseRecordActivity : BaseActivity(), BottomControllerFragment.
 
     }
 
-    class RecordFragment : StatedRecyclerFragment() {
+    class RecordFragment : StatedRecyclerFragment<Record>() {
 
         companion object {
 
@@ -118,14 +118,14 @@ internal class NeteaseRecordActivity : BaseActivity(), BottomControllerFragment.
             items.clear()
         }
 
-        override suspend fun loadData() {
-            val list = NeteaseCloudMusicApi().getUserRecord(uid, type)
-            items.addAll(list)
-            if (items.isEmpty()) {
-                setEmpty()
-            } else {
-                setComplete()
-            }
+        override suspend fun loadData(): List<Record> {
+            return NeteaseCloudMusicApi().getUserRecord(uid, type)
+        }
+
+        override fun onLoadSuccess(result: List<Record>) {
+            super.onLoadSuccess(result)
+            items.addAll(result)
+            adapter?.notifyDataSetChanged()
         }
 
         private fun onMusicItemClick(music: Music) {

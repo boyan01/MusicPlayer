@@ -20,7 +20,7 @@ import tech.summerly.quiet.commonlib.utils.visible
 /**
  * Created by summer on 18-2-27
  */
-abstract class StatedRecyclerFragment : BaseFragment() {
+abstract class StatedRecyclerFragment<T> : BaseFragment() {
 
     protected var job: Job? = null
 
@@ -46,11 +46,10 @@ abstract class StatedRecyclerFragment : BaseFragment() {
         setLoading()
         job = asyncUI {
             try {
-                loadData()
-                adapter?.notifyDataSetChanged()
+                val data = loadData()
+                onLoadSuccess(data)
             } catch (e: Exception) {
-                e.printStackTrace()
-                setError(e.message)
+                onLoadFailed(e)
             }
         }
     }
@@ -63,7 +62,17 @@ abstract class StatedRecyclerFragment : BaseFragment() {
      * 需自己手动调用 [setComplete] 来清楚 loading 状态
      */
     @UiThread
-    protected abstract suspend fun loadData()
+    protected abstract suspend fun loadData(): List<T>
+
+
+    protected open fun onLoadSuccess(result: List<T>) {
+        setComplete()
+    }
+
+    protected open fun onLoadFailed(e: Exception) {
+        log { e.printStackTrace() }
+        setError(e.message)
+    }
 
     fun setLoading() = runWithRoot {
         progressBar.visible()

@@ -4,7 +4,6 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 
 
 fun FragmentManager.inTransaction(transaction: FragmentTransaction.() -> Unit) {
@@ -15,10 +14,6 @@ fun FragmentManager.inTransaction(transaction: FragmentTransaction.() -> Unit) {
         t.commit()
     }
 }
-
-
-val neteaseMusicService: NeteaseCloudMusicApi
-    get() = NeteaseCloudMusicApi()
 
 
 class LoadMoreDelegate(private val onLoadMoreListener: OnLoadMoreListener) {

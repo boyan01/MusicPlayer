@@ -2,6 +2,7 @@ package tech.summerly.quiet.commonlib.bean
 
 import android.os.Parcel
 import android.os.Parcelable
+import tech.summerly.quiet.commonlib.model.IMusic
 
 
 /**
@@ -22,7 +23,7 @@ open class Music(
         @Deprecated("不可信")
         val duration: Long,
         val playUri: MutableList<MusicUri>
-) : Parcelable {
+) : Parcelable, IMusic {
 
     @Transient
     var isFavorite: Boolean = false
