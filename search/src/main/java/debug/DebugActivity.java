@@ -7,7 +7,6 @@ import android.view.View;
 
 import tech.summerly.quiet.commonlib.base.BaseActivity;
 import tech.summerly.quiet.search.R;
-import tech.summerly.quiet.search.fragments.items.SearchHotHintKt;
 import tech.summerly.quiet.search.utils.ChipsLayout;
 
 public class DebugActivity extends BaseActivity {
