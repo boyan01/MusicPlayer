@@ -6,6 +6,7 @@ package tech.summerly.quiet.search.adapters.items
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.alibaba.android.arouter.launcher.ARouter
+import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.search.BuildConfig
 import tech.summerly.quiet.search.R
@@ -37,6 +38,20 @@ private fun <T> getRemoteBinder(path: String): ItemViewBinder<T>? {
 abstract class SearchResultRemoteBinder<T : SearchResult>(path: String) : ItemViewBinder<T>() {
 
     protected val remoteBinder = getRemoteBinder<Any>(path)
+
+    fun setRemoteBinderAdapter(adapter: MultiTypeAdapter) {
+        if (remoteBinder == null) {
+            return
+        }
+        try {
+            val clazz = me.drakeet.multitype.ItemViewBinder::class.java
+            val field = clazz.getDeclaredField("adapter")
+            field.isAccessible = true
+            field.set(remoteBinder, adapter)
+        } catch (e: Exception) {
+            log { e.printStackTrace() }
+        }
+    }
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
         if (remoteBinder != null) {

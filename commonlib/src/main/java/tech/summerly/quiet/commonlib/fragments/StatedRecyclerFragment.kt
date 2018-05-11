@@ -39,7 +39,7 @@ abstract class StatedRecyclerFragment<T> : BaseFragment() {
 
     protected val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? get() = view?.recycler?.adapter
 
-    private fun loadDataInternal() {
+    protected fun loadDataInternal() {
         if (job?.isActive == true) {//do not to load data when job is running.
             return
         }

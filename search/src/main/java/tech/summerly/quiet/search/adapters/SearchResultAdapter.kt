@@ -11,23 +11,18 @@ import tech.summerly.quiet.search.model.SearchResult
 class SearchResultAdapter(items: List<*>) : MultiTypeAdapter(items) {
 
     init {
+        val musicItemBinder = SearchMusicItemBinder()
+        val artistItemBinder = SearchArtistItemBinder()
+        val albumItemBinder = SearchAlbumItemBinder()
 
-        @Suppress("UNCHECKED_CAST")
-        register(SearchResult::class.java)
-                .to(
-                        SearchMusicItemBinder() as ItemViewBinder<SearchResult, *>,
-                        SearchArtistItemBinder() as ItemViewBinder<SearchResult, *>,
-                        SearchAlbumItemBinder() as ItemViewBinder<SearchResult, *>,
-                        SearchNotImplementBinder()
-                )
-                .withLinker { _, t ->
-                    when (t) {
-                        is SearchResult.Music -> 0
-                        is SearchResult.Artist -> 1
-                        is SearchResult.Album -> 2
-                        else -> 3
-                    }
-                }
+        register(SearchResult.Music::class.java, musicItemBinder)
+        register(SearchResult.Artist::class.java, artistItemBinder)
+        register(SearchResult.Album::class.java, albumItemBinder)
+        register(SearchResult::class.java, SearchNotImplementBinder())
+
+        musicItemBinder.setRemoteBinderAdapter(this)
+        artistItemBinder.setRemoteBinderAdapter(this)
+        albumItemBinder.setRemoteBinderAdapter(this)
     }
 
 }
