@@ -13,10 +13,11 @@ import org.jetbrains.anko.dimen
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.player.PlayerType
+import tech.summerly.quiet.commonlib.player.PlayerType.FM
+import tech.summerly.quiet.commonlib.player.PlayerType.NORMAL
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.constraints.Player
 
@@ -24,9 +25,6 @@ import tech.summerly.quiet.constraints.Player
  * Created by summer on 17-12-17
  */
 open class BottomControllerFragment : BaseFragment() {
-
-    private val playerManager: MusicPlayerManager
-        get() = MusicPlayerManager
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -37,22 +35,20 @@ open class BottomControllerFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
-        playerManager.playerState.observeFilterNull(this) {
+        MusicPlayerManager.playerState.observeFilterNull(this) {
             setControllerState(it)
         }
-        playerManager.playingMusic.observe(this) {
+        MusicPlayerManager.playingMusic.observe(this) {
             updateMusicInfo(it)
         }
     }
 
     private fun listenEvent(root: View) = with(root) {
         setOnClickListener { view ->
-            playerManager.musicPlayer().current?.let {
-                onControllerClick(view, it)
-            }
+            onControllerClick(view, MusicPlayerManager.player.playlist.type)
         }
         controllerPauseOrPlay.setOnClickListener {
-            playerManager.musicPlayer().playPause()
+            MusicPlayerManager.player.playPause()
         }
         controllerPlaylist.setOnClickListener {
             activity?.supportFragmentManager?.let {
@@ -71,7 +67,8 @@ open class BottomControllerFragment : BaseFragment() {
                 controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
                 // delay 500ms to display load progress bar
                 handler?.postDelayed({
-                    if (!isDetached && view != null && musicPlayer.getState() == PlayerState.Preparing) {
+                    if (!isDetached && view != null
+                            && MusicPlayerManager.player.mediaPlayer.getPlayerState() == PlayerState.Preparing) {
                         progressPlayPause.visible()
                         controllerPauseOrPlay.gone()
                     }
@@ -81,9 +78,9 @@ open class BottomControllerFragment : BaseFragment() {
         }
     }
 
-    protected open fun onControllerClick(view: View, music: Music) {
-        when (music.type) {
-            MusicType.NETEASE_FM -> {
+    protected open fun onControllerClick(view: View, type: PlayerType) {
+        when (type) {
+            FM -> {
                 val fmPlayer = Player.FRAGMENT_FM_PLAYER_NORMAL
                 val fragment = ARouter.getInstance().build(fmPlayer).navigation() as Fragment?
                         ?: return
@@ -92,7 +89,7 @@ open class BottomControllerFragment : BaseFragment() {
                     addToBackStack(fmPlayer)
                 }
             }
-            else -> {
+            NORMAL -> {
                 ARouter.getInstance().build("/netease/player").navigation()
             }
         }

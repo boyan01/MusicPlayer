@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.local_item_music.view.*
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.player.musicPlayer
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.fragments.dialog.LocalPlaylistSelectorFragment
@@ -22,7 +22,7 @@ internal class LocalMusicItemViewBinder(
 
     //to check current music is playing , if true ,will set a playing indicator for this music
     private fun checkMusicIsPlaying(music: Music): Boolean {
-        return musicPlayer.current == music
+        return MusicPlayerManager.player.playlist.current == music
     }
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
@@ -42,7 +42,7 @@ internal class LocalMusicItemViewBinder(
             popupMenu(it, R.menu.local_popup_music_item) {
                 when (it.itemId) {
                     R.id.local_popup_music_add_to_next -> {
-                        musicPlayer.playlist.insertToNext(item)
+                        MusicPlayerManager.player.playlist.insertToNext(item)
                     }
                     R.id.local_popup_music_add_to_playlist -> {
                         LocalPlaylistSelectorFragment(arrayOf(item))

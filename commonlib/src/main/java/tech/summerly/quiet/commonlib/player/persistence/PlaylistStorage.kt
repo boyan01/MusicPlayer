@@ -8,7 +8,7 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.playlist.FmPlaylist
 import tech.summerly.quiet.commonlib.player.playlist.NormalPlaylist
 import tech.summerly.quiet.commonlib.player.playlist.Playlist
-import tech.summerly.quiet.commonlib.player.state.PlayMode
+import tech.summerly.quiet.commonlib.player.PlayMode
 import tech.summerly.quiet.commonlib.utils.edit
 import tech.summerly.quiet.commonlib.utils.fromJson
 

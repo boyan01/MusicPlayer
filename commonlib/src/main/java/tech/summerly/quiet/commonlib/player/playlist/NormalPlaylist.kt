@@ -1,7 +1,8 @@
 package tech.summerly.quiet.commonlib.player.playlist
 
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.player.state.PlayMode
+import tech.summerly.quiet.commonlib.player.PlayMode
+import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.utils.log
 
 /**
@@ -15,7 +16,7 @@ internal class NormalPlaylist(current: Music?,
 
     constructor() : this(null, PlayMode.Sequence, ArrayList())
 
-    override val type: Int = Playlist.TYPE_NORMAL
+    override val type: PlayerType = PlayerType.NORMAL
 
     private val shuffleMusicList = ArrayList<Music>()
 

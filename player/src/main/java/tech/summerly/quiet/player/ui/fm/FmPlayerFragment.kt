@@ -10,10 +10,9 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.player_content_fm_controller.*
 import kotlinx.android.synthetic.main.player_fragment_fm.view.*
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.player.playlist.PlaylistPlayer
+import tech.summerly.quiet.commonlib.player.MusicPlayer
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.commonlib.utils.image.PictureModel
 import tech.summerly.quiet.commonlib.utils.image.blur
@@ -27,7 +26,7 @@ class FmPlayerFragment : InsetsFragment() {
     //is user tracking the seekBar
     private var isSeekBarTracking = false
 
-    private val musicPlayer: PlaylistPlayer get() = MusicPlayerManager.musicPlayer(MusicType.NETEASE_FM)
+    private val player: MusicPlayer get() = MusicPlayerManager.player
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
@@ -49,10 +48,10 @@ class FmPlayerFragment : InsetsFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
         super.onViewCreated(view, savedInstanceState)
         buttonPlay.setOnClickListener {
-            musicPlayer.playPause()
+            player.playPause()
         }
         buttonNext.setOnClickListener {
-            musicPlayer.playNext()
+            player.playNext()
         }
         buttonLike.setOnClickListener {
 
@@ -70,7 +69,7 @@ class FmPlayerFragment : InsetsFragment() {
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    musicPlayer.seekTo(progress.toLong())
+                    player.mediaPlayer.seekTo(progress.toLong())
                 }
             }
 
@@ -91,15 +90,15 @@ class FmPlayerFragment : InsetsFragment() {
     }
 
     private fun playMusicIfNecessary() {
-        if (musicPlayer.getState() == PlayerState.Playing
-                || musicPlayer.getState() == PlayerState.Preparing) {
+        val state = player.mediaPlayer.getPlayerState()
+        if (state == PlayerState.Playing || state == PlayerState.Preparing) {
             return
         }
         //TODO
         if (true) {
             return
         }
-        musicPlayer.playPause()
+        player.playPause()
     }
 
     private val onMusicChange = fun(old: Music?, new: Music?) {

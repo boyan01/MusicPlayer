@@ -20,7 +20,6 @@ import tech.summerly.quiet.commonlib.component.activities.NoIsolatedActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.constraints.Netease
 import tech.summerly.quiet.constraints.PlaylistDetail
@@ -191,7 +190,7 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
      * 检查当前播放的音乐是否存在与此列表中
      */
     private fun checkPlayingMusicIsInList() {
-        val current = musicPlayer.current
+        val current = MusicPlayerManager.player.playlist.current
         if (current != null && adapter.items.contains(current)) {
             isNeedShowIndicatorFindLocation = true
         } else {
@@ -237,7 +236,7 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
     }
 
     private fun findCurrentPlayingMusic(): Int? {
-        val current = musicPlayer.current ?: return null
+        val current = MusicPlayerManager.player.playlist.current ?: return null
         val index = adapter.items.indexOf(current)
         if (index == -1) {
             return null

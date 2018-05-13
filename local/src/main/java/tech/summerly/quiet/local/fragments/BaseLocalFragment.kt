@@ -11,7 +11,10 @@ import kotlinx.coroutines.experimental.Job
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
-import tech.summerly.quiet.commonlib.bean.*
+import tech.summerly.quiet.commonlib.bean.Album
+import tech.summerly.quiet.commonlib.bean.Artist
+import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.bean.Playlist
 import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
@@ -129,13 +132,10 @@ abstract class BaseLocalFragment : BaseFragment() {
         log { "playlist : $playlist" }
     }
 
-    private val musicPlayer get() = MusicPlayerManager.musicPlayer(MusicType.LOCAL)
-
     protected open fun onMusicClicked(music: Music) = runWithRoot {
         this as? RecyclerView ?: return@runWithRoot
         val items = multiTypeAdapter.items.filterIsInstance(Music::class.java)
-        musicPlayer.playlist.setMusicLists(items)
-        musicPlayer.play(music)
+        MusicPlayerManager.play(items, music)
     }
 
     private fun onOverviewNavClick(nav: CommonItemA) {

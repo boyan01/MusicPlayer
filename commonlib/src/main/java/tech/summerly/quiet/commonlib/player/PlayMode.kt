@@ -1,4 +1,4 @@
-package tech.summerly.quiet.commonlib.player.state
+package tech.summerly.quiet.commonlib.player
 
 
 enum class PlayMode {
@@ -10,13 +10,6 @@ enum class PlayMode {
     Sequence;
 
     companion object {
-        fun next(current: PlayMode): PlayMode {
-            return when (current) {
-                Single -> Shuffle
-                Shuffle -> Sequence
-                Sequence -> Single
-            }
-        }
 
         /**
          * safely convert enum name to instance
@@ -28,5 +21,11 @@ enum class PlayMode {
             else -> Sequence
         }
 
+    }
+
+    fun next(): PlayMode = when (this) {
+        Single -> Shuffle
+        Shuffle -> Sequence
+        Sequence -> Single
     }
 }

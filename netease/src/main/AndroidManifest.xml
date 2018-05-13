@@ -9,12 +9,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme.TranslucentNavigation" />
         <activity
-            android:name=".ui.NeteaseFmActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/NeteaseAppTheme.TranslucentNavigation" />
-        <activity
             android:name=".ui.NeteaseMainActivity"
             android:exported="true"
             android:screenOrientation="portrait"

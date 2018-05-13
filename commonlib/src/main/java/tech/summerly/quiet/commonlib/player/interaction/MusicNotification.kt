@@ -16,7 +16,7 @@ import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.notification.NotificationHelper
-import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager.player
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
@@ -80,7 +80,7 @@ internal object MusicNotification : NotificationHelper() {
             LogisticsCenter.completion(pp)
             stackBuilder.addNextIntent(Intent(context, pp.destination))
         } catch (e: Exception) {
-            log(LoggerLevel.ERROR) { e.printStackTrace();"player for $type do not match！" }
+            log(LoggerLevel.ERROR) { e.printStackTrace();"MusicPlayer for $type do not match！" }
         }
         if (stackBuilder.intentCount <= 0) {
             return null
@@ -118,7 +118,7 @@ internal object MusicNotification : NotificationHelper() {
     }
 
     operator fun invoke(music: Music, artwork: Bitmap): Notification = with(music) {
-        val currentIsPlaying: Boolean = MusicPlayerManager.musicPlayer().getState() == PlayerState.Playing
+        val currentIsPlaying: Boolean = player.mediaPlayer.getPlayerState() == PlayerState.Playing
         createNotification(type, title, artistAlbumString(), artwork, isFavorite, currentIsPlaying)
     }
 }

@@ -13,8 +13,7 @@ import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.fragments.items.PlayingMusicItemViewBinder
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.player.musicPlayer
-import tech.summerly.quiet.commonlib.player.state.PlayMode
+import tech.summerly.quiet.commonlib.player.PlayMode
 import tech.summerly.quiet.commonlib.utils.observeFilterNull
 
 /**
@@ -29,7 +28,7 @@ class PlayingListFragment : BottomSheetDialogFragment() {
     }
 
     private val musicList: List<Music>
-        get() = musicPlayer.playlist.musicList
+        get() = MusicPlayerManager.player.playlist.musicList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,7 +86,7 @@ class PlayingListFragment : BottomSheetDialogFragment() {
 
     private fun scrollToCurrentPlaying() {
         val list = view?.list ?: return
-        val current = musicPlayer.current ?: return
+        val current = MusicPlayerManager.player.playlist.current ?: return
         val position = musicList.indexOf(current)
         if (position < 0 || position > musicList.size) {
             return
@@ -97,14 +96,14 @@ class PlayingListFragment : BottomSheetDialogFragment() {
 
     private fun View.setEvent() {
         containerPlayMode.setOnClickListener {
-            musicPlayer.playlist.playMode = PlayMode.next(musicPlayer.playlist.playMode)
+            MusicPlayerManager.player.playlist.playMode = MusicPlayerManager.player.playlist.playMode.next()
         }
         indicatorPlayMode.setOnClickListener {
-            musicPlayer.playlist.playMode = PlayMode.next(musicPlayer.playlist.playMode)
+            MusicPlayerManager.player.playlist.playMode = MusicPlayerManager.player.playlist.playMode.next()
         }
         buttonClearAll.setOnClickListener {
-            musicPlayer.playlist.clear()
-            musicPlayer.exit()
+            MusicPlayerManager.player.playlist.clear()
+            MusicPlayerManager.player.destroy()
             dismiss()
         }
     }

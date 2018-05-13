@@ -23,8 +23,9 @@ import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.notification.NotificationHelper
+import tech.summerly.quiet.commonlib.player.MusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.player.playlist.PlaylistPlayer
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager.player
 import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
@@ -63,7 +64,7 @@ class MusicPlayerService : Service(), LifecycleOwner {
                 context.startService(Intent(context, MusicPlayerService::class.java))
             } else {
                 log(LoggerLevel.DEBUG) {
-                    "wo do not need to start music player service ," +
+                    "wo do not need to start music MusicPlayer service ," +
                             "because it is already running..."
                 }
             }
@@ -73,11 +74,10 @@ class MusicPlayerService : Service(), LifecycleOwner {
     private val playerManager: MusicPlayerManager
         get() = MusicPlayerManager
 
-    private val musicPlayer: PlaylistPlayer
-        get() = MusicPlayerManager.musicPlayer()
+    private val musicPlayer get() = player
 
     private val currentPlaying: Music?
-        get() = musicPlayer.current
+        get() = musicPlayer.playlist.current
 
     override fun onCreate() {
         isRunning = true
@@ -106,7 +106,7 @@ class MusicPlayerService : Service(), LifecycleOwner {
             action_exit -> {
                 stopForeground(true)
                 MusicNotification.cancel(NotificationHelper.ID_NOTIFICATION_PLAY_SERVICE)
-                musicPlayer.exit()
+                musicPlayer.destroy()
                 stopSelf()
             }
             action_like -> {
@@ -119,8 +119,8 @@ class MusicPlayerService : Service(), LifecycleOwner {
         return super.onStartCommand(intent, flags, startId)
     }
 
-    // to holder the instance of player
-    private var instanceHolder: PlaylistPlayer? = null
+    // to holder the instance of MusicPlayer
+    private var instanceHolder: MusicPlayer? = null
 
     private fun bindPlayerToService() {
         instanceHolder = musicPlayer
@@ -129,7 +129,7 @@ class MusicPlayerService : Service(), LifecycleOwner {
     override fun onDestroy() {
         super.onDestroy()
         lifecycleRegister.markState(Lifecycle.State.DESTROYED)
-        musicPlayer.exit()
+        musicPlayer.destroy()
         isRunning = false
     }
 
@@ -141,7 +141,7 @@ class MusicPlayerService : Service(), LifecycleOwner {
      * notify a music notification
      */
     private fun notification() {
-        val music = MusicPlayerManager.musicPlayer().current
+        val music = musicPlayer.playlist.current
         if (music == null) {//remove notification if current playing is null.
             stopForeground(true)
             return

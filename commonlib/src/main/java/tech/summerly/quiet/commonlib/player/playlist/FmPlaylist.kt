@@ -6,7 +6,8 @@ import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import org.jetbrains.anko.toast
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.player.state.PlayMode
+import tech.summerly.quiet.commonlib.player.PlayMode
+import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
@@ -21,7 +22,7 @@ internal class FmPlaylist(current: Music?,
 
     constructor() : this(null, ArrayList())
 
-    override val type: Int = Playlist.TYPE_FM
+    override val type: PlayerType = PlayerType.FM
 
     override suspend fun getNextMusic(music: Music?): Music? = suspendCancellableCoroutine {
         val nextIndex = musicList.indexOf(current) + 1

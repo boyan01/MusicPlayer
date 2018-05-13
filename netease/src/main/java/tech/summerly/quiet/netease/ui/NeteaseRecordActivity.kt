@@ -129,7 +129,7 @@ internal class NeteaseRecordActivity : BaseActivity(), BottomControllerFragment.
         }
 
         private fun onMusicItemClick(music: Music) {
-            MusicPlayerManager.musicPlayer().play(music)
+            MusicPlayerManager.play(music)
         }
 
     }

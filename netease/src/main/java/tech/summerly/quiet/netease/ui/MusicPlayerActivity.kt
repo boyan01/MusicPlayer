@@ -8,9 +8,9 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.component.activities.NoIsolatedActivity
 import tech.summerly.quiet.commonlib.fragments.PlayingListFragment
+import tech.summerly.quiet.commonlib.player.MusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.constraints.Netease
 import tech.summerly.quiet.netease.R
@@ -21,11 +21,13 @@ import tech.summerly.quiet.netease.R
 @Route(path = Netease.ACTIVITY_NETEASE_PLAYER)
 internal class MusicPlayerActivity : NoIsolatedActivity() {
 
+    private val musicPlayer: MusicPlayer get() = MusicPlayerManager.player
+
     override val parentPath: String = "/netease/main"
 
     private val current: Music?
         get() {
-            val music = musicPlayer.current
+            val music = musicPlayer.playlist.current
             if (music?.type != MusicType.NETEASE || music.type != MusicType.LOCAL) {
                 finish()
                 return null
@@ -77,7 +79,7 @@ internal class MusicPlayerActivity : NoIsolatedActivity() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 isUserTracking = false
-                musicPlayer.seekTo(seekBar.progress.toLong())
+                musicPlayer.mediaPlayer.seekTo(seekBar.progress.toLong())
             }
         })
         toolbar.setNavigationOnClickListener {
@@ -100,7 +102,7 @@ internal class MusicPlayerActivity : NoIsolatedActivity() {
             when (state) {
                 PlayerState.Playing -> {
                     controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
-                    textDuration.text = musicPlayer.duration.toMusicTimeStamp()
+                    textDuration.text = musicPlayer.mediaPlayer.duration.toMusicTimeStamp()
                 }
                 else -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_play_arrow_black_24dp)
             }

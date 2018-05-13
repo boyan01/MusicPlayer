@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.player_fragment_fm_simple.view.*
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.utils.getPictureUrl
@@ -22,7 +21,7 @@ import tech.summerly.quiet.player.ui.InsetsFragment
 @Route(path = Player.FRAGMENT_FM_PLAYER_SIMPLE)
 class SimpleFmPlayerFragment : InsetsFragment() {
 
-    private val musicPlayer get() = MusicPlayerManager.musicPlayer(MusicType.NETEASE_FM)
+    private val musicPlayer get() = MusicPlayerManager.player
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)

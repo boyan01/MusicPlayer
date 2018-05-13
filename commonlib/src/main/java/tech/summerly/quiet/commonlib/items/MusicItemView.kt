@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_music.view.*
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.player.musicPlayer
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.*
 
 /**
@@ -28,7 +28,7 @@ open class MusicItemViewBinder(
     protected open val isLongClickReaction = false
 
     private val currentPlaying
-        get() = musicPlayer.current
+        get() = MusicPlayerManager.player.playlist.current
 
     public override fun onBindViewHolder(holder: ViewHolder, item: Music): Unit = with(holder.itemView) {
         val canPlay = item.playUri.isNotEmpty()

@@ -78,9 +78,7 @@ class PlaylistInternalSearchFragment : BaseFragment() {
     }
 
     private val onMusicClick = fun(music: Music) {
-        val musicPlayer = MusicPlayerManager.musicPlayer(music.type)
-        musicPlayer.playlist.setMusicLists(musicList)
-        musicPlayer.play(music)
+        MusicPlayerManager.play(musicList, music)
     }
 
     /**
