@@ -1,6 +1,7 @@
 package tech.summerly.quiet.commonlib.fragments
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.transition.TransitionManager
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.player.musicPlayer
 import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.constraints.Player
 
 /**
  * Created by summer on 17-12-17
@@ -82,7 +84,13 @@ open class BottomControllerFragment : BaseFragment() {
     protected open fun onControllerClick(view: View, music: Music) {
         when (music.type) {
             MusicType.NETEASE_FM -> {
-                ARouter.getInstance().build("/netease/fm").navigation()
+                val fmPlayer = Player.FRAGMENT_FM_PLAYER_NORMAL
+                val fragment = ARouter.getInstance().build(fmPlayer).navigation() as Fragment?
+                        ?: return
+                activity?.supportFragmentManager?.intransaction {
+                    replace(android.R.id.content, fragment, fmPlayer)
+                    addToBackStack(fmPlayer)
+                }
             }
             else -> {
                 ARouter.getInstance().build("/netease/player").navigation()

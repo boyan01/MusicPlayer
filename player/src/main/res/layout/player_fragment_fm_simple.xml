@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:clickable="true"
+    android:focusable="true">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/imageArtwork"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/player_fm_rounded_mask"
+        android:elevation="2dp"
+        android:outlineProvider="background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".384"
+        app:layout_constraintWidth_percent=".6" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+        app:layout_constraintBottom_toTopOf="@id/imageArtwork"
+        app:layout_constraintEnd_toEndOf="@id/imageArtwork"
+        app:layout_constraintStart_toStartOf="@id/imageArtwork"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="成名在望 - 五月天" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/buttonPlayPause"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:elevation="8dp"
+        android:src="@drawable/ic_play_arrow_black_24dp"
+        android:tint="?colorTextPrimaryInverse"
+        app:layout_constraintBottom_toBottomOf="@id/imageArtwork"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="@id/imageArtwork"
+        app:layout_constraintStart_toStartOf="@id/imageArtwork"
+        app:layout_constraintTop_toTopOf="@id/imageArtwork"
+        app:layout_constraintWidth_percent=".3" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/buttonLike"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/ic_favorite_border_red_24dp"
+        app:layout_constraintBottom_toTopOf="@id/buttonPlayNext"
+        app:layout_constraintEnd_toEndOf="@id/buttonPlayNext"
+        app:layout_constraintStart_toStartOf="@id/buttonPlayNext"
+        app:layout_constraintTop_toBottomOf="@id/imageArtwork"
+        app:layout_constraintVertical_bias=".6" />
+
+    <android.support.design.button.MaterialButton
+        android:id="@+id/buttonPlayNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:elevation="4dp"
+        android:gravity="center"
+        android:text="@string/player_play_next"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.MaterialButton"
+        android:textColor="?colorTextPrimaryInverse"
+        app:cornerRadius="16dp"
+        app:icon="@drawable/common_ic_skip_next_black_24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</android.support.constraint.ConstraintLayout>

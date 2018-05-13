@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fmPlayerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.NeteaseFmActivity">
+    android:layout_height="match_parent">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="@drawable/netease_gradient_fm_mask"
+        android:foreground="@drawable/player_gradient_fm_mask"
         android:scaleType="centerCrop"
         app:srcCompat="?colorPrimary" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="#4e000000" />
+        android:layout_height="0dp"
+        android:background="#4e000000"
+        app:layout_constraintBottom_toTopOf="@id/fmPlayerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:id="@+id/fmPlayerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
-        android:orientation="vertical"
-        tools:layout_marginTop="24dp">
+        android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?android:actionBarSize"
+            android:background="#4e000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/netease_ic_arrow_back_white_24dp"
-            app:popupTheme="@style/NeteaseAppTheme.PopupOverlay"
-            app:titleTextColor="#ffffff"
-            tools:title="私人FM" />
+            app:title="@string/player_personal_fm"
+            app:titleTextColor="?colorTextPrimaryInverse"
+            tools:navigationIcon="@drawable/ic_arrow_back_black_24dp" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/playerInfo"
@@ -145,7 +147,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:thumbTint="@color/color_text_primary_dark_background"
+                android:progressTint="?colorTextPrimaryInverse"
+                android:thumbTint="?colorTextPrimaryInverse"
                 tools:progress="54" />
 
             <TextView
@@ -159,93 +162,10 @@
                 tools:text="01:53" />
         </LinearLayout>
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageBackground"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="UnusedAttribute">
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/buttonDelete"
-                style="@style/ActionOverflow.Dark"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:scaleType="center"
-                android:src="@drawable/netease_ic_delete_black_24dp"
-                android:tooltipText="@string/netease_dislike_music"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonLike"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/buttonLike"
-                style="@style/ActionOverflow.Dark"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:scaleType="center"
-                android:src="@drawable/common_ic_favorite_red_24dp"
-                android:tooltipText="@string/netease_like_music"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonPlay"
-                app:layout_constraintStart_toEndOf="@+id/buttonDelete"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/buttonPlay"
-                style="@style/ActionOverflow.Dark"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:padding="4dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/common_ic_play_circle_outline_black_24dp"
-                android:tooltipText="@string/netease_play_pause"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonNext"
-                app:layout_constraintStart_toEndOf="@+id/buttonLike"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/buttonNext"
-                style="@style/ActionOverflow.Dark"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:padding="2dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/common_ic_skip_next_black_24dp"
-                android:tooltipText="@string/netease_play_next"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/buttonComment"
-                app:layout_constraintStart_toEndOf="@+id/buttonPlay"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/buttonComment"
-                style="@style/ActionOverflow.Dark"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:padding="3dp"
-                android:scaleType="center"
-                android:src="@drawable/netease_ic_comment_black_24dp"
-                android:tooltipText="@string/action_comment"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/buttonNext"
-                app:layout_constraintTop_toTopOf="parent" />
-        </android.support.constraint.ConstraintLayout>
+        <include layout="@layout/player_content_fm_controller" />
 
     </LinearLayout>
 
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

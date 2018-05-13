@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
 import androidx.core.content.systemService
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import kotlin.reflect.KProperty
 
 /**
@@ -34,6 +36,9 @@ open class BaseFragment : Fragment() {
         }
     }
 
+    protected fun withRoot(run: suspend View.() -> Unit) {
+        launch(UI) { rootView?.run() }
+    }
 
     protected operator fun <T> getValue(thisRef: Any?, kProperty: KProperty<*>): T {
         return getArgument(kProperty.name)

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <declare-styleable name="LyricView">
         <attr name="lyricTextSize" format="dimension" />
@@ -11,7 +11,7 @@
     </declare-styleable>
 
     <attr name="colorBackground" format="color" />
-    <attr name="colorPrimaryLight" format="color" />
+    <attr name="colorPrimaryLight" format="color" tools:override="true" />
     <attr name="colorTextPrimary" format="color" />
     <attr name="colorTextPrimaryInverse" format="color" />
     <attr name="colorTextSecondary" format="color" />

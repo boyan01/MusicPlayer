@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="player_dislike">不喜欢</string>
+    <string name="player_like_music">喜爱</string>
+    <string name="player_play">播放</string>
+    <string name="player_play_next">下一曲</string>
+    <string name="player_personal_fm">私人FM</string>
+</resources>

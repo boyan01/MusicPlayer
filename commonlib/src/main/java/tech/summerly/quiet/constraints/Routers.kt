@@ -61,3 +61,9 @@ object PlaylistDetail {
     const val ACTIVITY_PLAYLIST_DETAIL = "/playlistdetail/main"
 
 }
+
+object Player {
+    const val FRAGMENT_FM_PLAYER_NORMAL = "/player/normal_fm"
+    const val FRAGMENT_FM_PLAYER_SIMPLE = "/player/simple_fm"
+    const val FRAGMENT_MUSIC_PLAYER = "/player/music"
+}

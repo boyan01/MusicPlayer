@@ -92,9 +92,7 @@
     </style>
 
     <style name="ActionOverflow" parent="Widget.AppCompat.ActionButton.Overflow">
-        <item name="android:tooltipText" tools:ignore="NewApi">
-            @string/tips_action_more
-        </item>
+        <item name="android:tooltipText" tools:ignore="NewApi" />
         <item name="android:tint">@color/color_text_primary_dark_background</item>
     </style>
 

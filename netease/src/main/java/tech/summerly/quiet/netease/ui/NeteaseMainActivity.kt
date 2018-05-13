@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.DefaultItemAnimator
@@ -16,6 +17,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.netease_activity_main.*
 import kotlinx.android.synthetic.main.netease_header_playlist.view.*
 import me.drakeet.multitype.MultiTypeAdapter
+import org.jetbrains.anko.contentView
 import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
