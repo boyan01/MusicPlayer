@@ -20,18 +20,20 @@ abstract class BaseModule : ContextWrapper(null), ComponentCallbacks2 {
         private const val CLASS_NAME_LIB = "$PACKAGE_NAME.commonlib.LibModule"
         private const val CLASS_NAME_LOCAL = "$PACKAGE_NAME.local.LocalModule"
         private const val CLASS_NAME_NETEASE = "$PACKAGE_NAME.netease.NeteaseModule"
-        private const val CLASS_NAME_PLAYLIST_DETIAL = "$PACKAGE_NAME.playlistdetial.PDModule"
+        private const val CLASS_NAME_PLAYLIST_DETAIL = "$PACKAGE_NAME.playlistdetail.PDModule"
         private const val CLASS_NAME_SEARCH = "$PACKAGE_NAME.search.SearchModule"
         private const val CLASS_NAME_SETTING = "$PACKAGE_NAME.setting.SettingModule"
+        private const val CLASS_NAME_PLAYER = "$PACKAGE_NAME.player.PlayerModule"
 
 
         private val MODULE_LIST = arrayOf(
                 CLASS_NAME_LIB,
                 CLASS_NAME_LOCAL,
                 CLASS_NAME_NETEASE,
-                CLASS_NAME_PLAYLIST_DETIAL,
+                CLASS_NAME_PLAYLIST_DETAIL,
                 CLASS_NAME_SEARCH,
-                CLASS_NAME_SETTING
+                CLASS_NAME_SETTING,
+                CLASS_NAME_PLAYER
         )
 
         /**

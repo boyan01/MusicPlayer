@@ -1,6 +1,5 @@
 package tech.summerly.quiet.commonlib.notification
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,7 +12,6 @@ import tech.summerly.quiet.commonlib.R
  * author : yangbin10
  * date   : 2017/12/27
  */
-@SuppressLint("NewApi")//lint can not work fine in this class
 open class NotificationHelper {
     companion object {
         const val ID_PLAY_SERVICE = "music_play_service"

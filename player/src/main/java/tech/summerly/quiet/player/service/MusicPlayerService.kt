@@ -1,4 +1,4 @@
-package tech.summerly.quiet.commonlib.player.interaction
+package tech.summerly.quiet.player.service
 
 import android.app.Service
 import android.arch.lifecycle.Lifecycle
@@ -19,7 +19,6 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.cancelChildren
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.dip
-import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.notification.NotificationHelper
@@ -30,6 +29,7 @@ import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.observe
+import tech.summerly.quiet.player.PlayerModule
 import java.util.concurrent.CancellationException
 import java.util.concurrent.TimeUnit
 
@@ -59,7 +59,7 @@ class MusicPlayerService : Service(), LifecycleOwner {
 
         private var isRunning: Boolean = false
 
-        fun start(context: Context = LibModule) {
+        fun start(context: Context = PlayerModule) {
             if (!isRunning) {
                 context.startService(Intent(context, MusicPlayerService::class.java))
             } else {

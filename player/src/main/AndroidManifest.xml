@@ -1,2 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tech.summerly.quiet.player" />
+    package="tech.summerly.quiet.player">
+
+    <application>
+        <service android:name="tech.summerly.quiet.player.service.MusicPlayerService" />
+    </application>
+
+</manifest>
