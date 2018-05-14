@@ -43,7 +43,7 @@ object MusicPlayerManager {
     }
 
 
-    @Deprecated("", ReplaceWith("play(\"\", musics, music)", "tech.summerly.quiet.commonlib.player.MusicPlayerManager.play"))
+    @Deprecated("", ReplaceWith("MusicPlayerManager.play(\"\", musics, music)", "tech.summerly.quiet.commonlib.player.MusicPlayerManager"))
     fun play(musics: List<IMusic>, music: IMusic? = null) {
         play("", musics, music)
     }

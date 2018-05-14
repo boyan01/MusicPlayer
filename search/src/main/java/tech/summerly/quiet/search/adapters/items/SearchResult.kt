@@ -8,11 +8,12 @@ import android.view.ViewGroup
 import com.alibaba.android.arouter.launcher.ARouter
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.search.BuildConfig
 import tech.summerly.quiet.search.R
 import tech.summerly.quiet.search.model.SearchResult
 
-private const val PATH_MUSIC = "/items/music"
+private const val PATH_MUSIC = PlaylistDetail.ITEM_BINDER_MUSIC
 private const val PATH_ARTIST = "/items/artist"
 private const val PATH_ALBUM = "/items/album"
 

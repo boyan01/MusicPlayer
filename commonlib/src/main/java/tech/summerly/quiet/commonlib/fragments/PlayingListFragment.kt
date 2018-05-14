@@ -36,17 +36,17 @@ class PlayingListFragment : BottomSheetDialogFragment() {
             when (it) {
                 PlayMode.Sequence -> {
                     textPlayMode.text = getString(R.string.common_playmode_sequence)
-                    indicatorPlayMode.setImageResource(R.drawable.common_ic_repeat_black_24dp)
+                    indicatorPlayMode.setImageResource(R.drawable.ic_repeat_black_24dp)
                 }
 
                 PlayMode.Shuffle -> {
                     textPlayMode.text = getString(R.string.common_playmode_shuffle)
-                    indicatorPlayMode.setImageResource(R.drawable.common_ic_shuffle_black_24dp)
+                    indicatorPlayMode.setImageResource(R.drawable.ic_shuffle_black_24dp)
                 }
 
                 PlayMode.Single -> {
                     textPlayMode.text = getString(R.string.common_playmode_single)
-                    indicatorPlayMode.setImageResource(R.drawable.common_ic_repeat_one_black_24dp)
+                    indicatorPlayMode.setImageResource(R.drawable.ic_repeat_one_black_24dp)
                 }
             }
         }

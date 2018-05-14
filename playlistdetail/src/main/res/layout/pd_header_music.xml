@@ -14,7 +14,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/common_ic_play_circle_outline_black_24dp"
+        app:srcCompat="@drawable/ic_play_arrow_black_24dp"
         app:tint="@color/common_color_icon_active" />
 
     <android.support.v7.widget.AppCompatTextView

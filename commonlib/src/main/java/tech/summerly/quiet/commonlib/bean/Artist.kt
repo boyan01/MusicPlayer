@@ -2,7 +2,6 @@ package tech.summerly.quiet.commonlib.bean
 
 import android.os.Parcel
 import android.os.Parcelable
-import tech.summerly.quiet.commonlib.model.IAlbum
 import tech.summerly.quiet.commonlib.model.IArtist
 
 

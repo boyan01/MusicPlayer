@@ -10,13 +10,14 @@ import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.utils.ItemViewBinder
 import tech.summerly.quiet.commonlib.utils.alert
 import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
+import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.ui.items.NeteaseDailyHeader
 import tech.summerly.quiet.netease.ui.items.NeteaseDailyHeaderViewBinder
-import tech.summerly.quiet.netease.ui.items.NeteaseMusicItemViewBinder
 import tech.summerly.quiet.netease.utils.isLogin
 import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 import java.util.*
@@ -29,6 +30,8 @@ internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerF
 
     companion object {
         private const val REQUEST_LOGIN = 101
+
+        private const val PATH_BINDER_MUSIC = PlaylistDetail.ITEM_BINDER_MUSIC
     }
 
     private val items = ArrayList<Any>()
@@ -37,8 +40,9 @@ internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerF
         super.onCreate(savedInstanceState)
         setContentView(R.layout.netease_activity_daily_recommend)
         recyclerList.adapter = MultiTypeAdapter(items).also {
+            val detail = ARouter.getInstance().build(PATH_BINDER_MUSIC).navigation() as ItemViewBinder<Music>
             it.register(NeteaseDailyHeader::class.java, NeteaseDailyHeaderViewBinder())
-            it.register(Music::class.java, NeteaseMusicItemViewBinder(this::onMusicClick))
+            it.register(Music::class.java, detail)
         }
         toolbar.setNavigationOnClickListener {
             onBackPressed()
@@ -69,7 +73,7 @@ internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerF
     }
 
     private fun onMusicClick(music: Music) {
-        MusicPlayerManager.play(items.filterIsInstance(Music::class.java), music)
+        MusicPlayerManager.play("", items.filterIsInstance(Music::class.java), music)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

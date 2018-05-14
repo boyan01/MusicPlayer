@@ -101,10 +101,10 @@ internal class MusicPlayerActivity : NoIsolatedActivity() {
         playerState.observe(this@MusicPlayerActivity) { state ->
             when (state) {
                 PlayerState.Playing -> {
-                    controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
+                    controllerPauseOrPlay.setImageResource(R.drawable.ic_pause_black_24dp)
                     textDuration.text = musicPlayer.mediaPlayer.duration.toMusicTimeStamp()
                 }
-                else -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_play_arrow_black_24dp)
+                else -> controllerPauseOrPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp)
             }
         }
         position.observeFilterNull(this@MusicPlayerActivity) { (current, total) ->

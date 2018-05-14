@@ -30,7 +30,7 @@
                 style="@style/Widget.AppCompat.ActionButton.Overflow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/common_ic_repeat_black_24dp"
+                android:src="@drawable/ic_repeat_black_24dp"
                 android:tint="@color/color_text_primary_dark_background" />
 
             <android.support.v7.widget.AppCompatTextView

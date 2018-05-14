@@ -78,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="4dp"
-        android:src="@drawable/common_ic_play_circle_outline_black_24dp"
+        android:src="@drawable/ic_play_arrow_black_24dp"
         android:tint="@color/common_color_icon_active"
         android:tooltipText="@string/common_pause"
         app:layout_constraintBottom_toBottomOf="parent"

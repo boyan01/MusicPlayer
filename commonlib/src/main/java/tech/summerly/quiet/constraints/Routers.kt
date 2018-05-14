@@ -60,6 +60,8 @@ object PlaylistDetail {
      */
     const val ACTIVITY_PLAYLIST_DETAIL = "/playlistdetail/main"
 
+    const val ITEM_BINDER_MUSIC = "/items/music"
+
 }
 
 object Player {

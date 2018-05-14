@@ -62,7 +62,7 @@ internal object MusicNotification : NotificationHelper() {
                     it
                 }
                 .addAction(R.drawable.ic_pause_black_24dp.takeIf { isPlaying }
-                        ?: R.drawable.common_ic_play_arrow_black_24dp,
+                        ?: R.drawable.ic_play_arrow_black_24dp,
                         "pauseOrPlay", buildPlaybackAction(1, type))
                 .addAction(R.drawable.common_ic_skip_next_black_24dp, "next", buildPlaybackAction(2, type))
                 .addAction(R.drawable.common_ic_close_black_24dp, "close", buildPlaybackAction(3, type))

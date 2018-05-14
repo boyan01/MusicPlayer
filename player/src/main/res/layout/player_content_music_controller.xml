@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toStartOf="@id/buttonPlayPrevious"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/common_ic_shuffle_black_24dp"
+        app:srcCompat="@drawable/ic_shuffle_black_24dp"
         app:tint="@color/color_text_primary_inverse" />
 
     <android.support.v7.widget.AppCompatImageView

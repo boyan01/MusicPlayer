@@ -1,6 +1,5 @@
 package tech.summerly.quiet.search.adapters
 
-import me.drakeet.multitype.ItemViewBinder
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.search.adapters.items.SearchAlbumItemBinder
 import tech.summerly.quiet.search.adapters.items.SearchArtistItemBinder

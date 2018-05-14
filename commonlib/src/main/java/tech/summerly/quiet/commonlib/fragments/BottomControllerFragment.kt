@@ -62,9 +62,9 @@ open class BottomControllerFragment : BaseFragment() {
         progressPlayPause.invisible()
         controllerPauseOrPlay.visible()
         when (state) {
-            PlayerState.Playing -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
+            PlayerState.Playing -> controllerPauseOrPlay.setImageResource(R.drawable.ic_pause_black_24dp)
             PlayerState.Preparing -> {
-                controllerPauseOrPlay.setImageResource(R.drawable.common_ic_pause_circle_outline_black_24dp)
+                controllerPauseOrPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 // delay 500ms to display load progress bar
                 handler?.postDelayed({
                     if (!isDetached && view != null
@@ -74,7 +74,7 @@ open class BottomControllerFragment : BaseFragment() {
                     }
                 }, 500)
             }
-            else -> controllerPauseOrPlay.setImageResource(R.drawable.common_ic_play_circle_outline_black_24dp)
+            else -> controllerPauseOrPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp)
         }
     }
 

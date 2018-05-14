@@ -1,11 +1,8 @@
 package tech.summerly.quiet.search.fragments
 
 import android.support.v7.widget.RecyclerView
-import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.fragments.StatedRecyclerFragment
 import tech.summerly.quiet.commonlib.objects.PortionList
-import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.search.adapters.SearchResultAdapter

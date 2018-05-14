@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import kotlinx.coroutines.experimental.Job
 import org.jetbrains.anko.contentView
 import tech.summerly.quiet.commonlib.mvp.BaseView
-import tech.summerly.quiet.commonlib.utils.log
 
 /**
  *  Created by summer on 17-12-17

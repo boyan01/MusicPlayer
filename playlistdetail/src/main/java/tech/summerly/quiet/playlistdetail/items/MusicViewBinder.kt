@@ -11,10 +11,11 @@ import tech.summerly.quiet.commonlib.utils.ItemViewBinder2
 import tech.summerly.quiet.commonlib.utils.image.setImageUrl
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.popupMenu
+import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.playlistdetail.R
 
 
-@Route(path = "/items/music")
+@Route(path = PlaylistDetail.ITEM_BINDER_MUSIC)
 class MusicViewBinder : ItemViewBinder2<Music>(), IProvider {
 
 

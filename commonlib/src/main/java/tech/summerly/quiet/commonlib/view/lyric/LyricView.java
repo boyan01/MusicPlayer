@@ -175,7 +175,7 @@ public class LyricView extends View {
         dashPath.reset();
         isLyricAvailable = false;
         //noinspection deprecation
-        playIndicator = getResources().getDrawable(R.drawable.common_ic_play_arrow_black_24dp);
+        playIndicator = getResources().getDrawable(R.drawable.ic_play_arrow_black_24dp);
         playIndicator = new RippleDrawable(ColorStateList.valueOf(lyricPlayIndicatorColor), playIndicator, null);
         playIndicator.setColorFilter(lyricPlayIndicatorColor, PorterDuff.Mode.SRC_IN);
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
