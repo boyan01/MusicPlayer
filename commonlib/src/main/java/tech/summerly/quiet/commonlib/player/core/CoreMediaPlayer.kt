@@ -9,18 +9,16 @@ import android.os.Build
 import android.view.animation.LinearInterpolator
 import org.jetbrains.anko.coroutines.experimental.asReference
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.log
 import tv.danmaku.ijk.media.player.IMediaPlayer
 import kotlin.coroutines.experimental.suspendCoroutine
-import kotlin.properties.Delegates
 import tv.danmaku.ijk.media.player.IjkMediaPlayer as MediaPlayer
 
 /**
  * Created by summer on 18-3-4
  */
-class CoreMediaPlayer(
-        stateChange: (PlayerState) -> Unit
-) {
+class CoreMediaPlayer {
 
     companion object {
         var volume: Float = 1f
@@ -28,8 +26,14 @@ class CoreMediaPlayer(
 
     private val internalMediaPlayer: MediaPlayer = createMediaPlayer()
 
-    private var state by Delegates.observable(PlayerState.Idle) { _, _, newValue ->
-        stateChange(newValue)
+    private var state = PlayerState.Idle
+        set(value) {
+            field = value
+            MusicPlayerManager.internalPlayerState.postValue(value)
+        }
+
+    init {
+        state = PlayerState.Idle
     }
 
     private fun createMediaPlayer(): MediaPlayer {

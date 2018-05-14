@@ -19,7 +19,7 @@ class MusicPlayer {
             log { "set playlist $value" }
         }
 
-    val mediaPlayer: CoreMediaPlayer = CoreMediaPlayer { }
+    val mediaPlayer: CoreMediaPlayer = CoreMediaPlayer()
 
     var playMode: PlayMode = PlayMode.Sequence
         set(value) {

@@ -20,9 +20,7 @@ import tech.summerly.quiet.setting.R
 internal class DebugPlayerActivity : BaseActivity() {
 
 
-    private val player: CoreMediaPlayer = CoreMediaPlayer {
-
-    }
+    private val player: CoreMediaPlayer = CoreMediaPlayer()
 
     private val music = Music(
             0L,
