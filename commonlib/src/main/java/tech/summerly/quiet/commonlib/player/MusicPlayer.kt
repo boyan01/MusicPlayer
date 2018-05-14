@@ -31,6 +31,7 @@ class MusicPlayer {
         }
 
     init {
+        //再次赋值是为了发送事件
         playMode = PlayerPersistenceHelper.restorePlayMode()
         playlist = PlayerPersistenceHelper.restorePlaylist() ?: Playlist.empty()
     }
