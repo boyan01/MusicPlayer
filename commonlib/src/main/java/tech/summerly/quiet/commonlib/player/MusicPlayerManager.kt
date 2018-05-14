@@ -62,6 +62,10 @@ object MusicPlayerManager {
         }
     }
 
+    init {
+
+    }
+
 }
 
 

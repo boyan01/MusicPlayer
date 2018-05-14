@@ -1,6 +1,8 @@
 package tech.summerly.quiet.commonlib.player
 
 import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
@@ -8,8 +10,14 @@ import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.player.playlist.Playlist
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
+import java.util.concurrent.TimeUnit
 
 class MusicPlayer {
+
+    companion object {
+        const val DURATION_UPDATE_PROGRESS = 200L
+
+    }
 
     var playlist: Playlist = Playlist.empty()
         set(value) {
@@ -99,6 +107,30 @@ class MusicPlayer {
 
     private fun safeAsync(block: suspend () -> Unit) {
         async { block() }
+    }
+
+
+    init {
+
+        launch {
+            while (true) {
+                delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
+                try {
+                    if (playlist.current == null) {
+                        continue
+                    }
+                    if (mediaPlayer.getPlayerState() == PlayerState.Playing || mediaPlayer.getPlayerState() == PlayerState.Pausing) {
+                        MusicPlayerManager.internalPosition.postValue(mediaPlayer.position to mediaPlayer.duration)
+                    } else {
+                        MusicPlayerManager.internalPosition.postValue(0L
+                                to (playlist.current?.duration ?: 0))
+                    }
+                } catch (e: Exception) {
+                    //
+                }
+            }
+        }
+
     }
 
 }
