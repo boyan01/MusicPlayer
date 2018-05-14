@@ -1,5 +1,7 @@
 package tech.summerly.quiet.commonlib.model
 
-interface IAlbum {
+import java.io.Serializable
+
+interface IAlbum : Serializable {
 
 }

@@ -5,16 +5,34 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.player.persistence.PlaylistStorage
 import tech.summerly.quiet.commonlib.player.playlist.Playlist
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
 
 class MusicPlayer {
 
-    var playlist: Playlist = PlaylistStorage.restorePlaylist()
+    var playlist: Playlist = Playlist.empty()
+        set(value) {
+            field = value
+            value.active()
+            log { "set playlist $value" }
+        }
 
     val mediaPlayer: CoreMediaPlayer = CoreMediaPlayer { }
+
+    var playMode: PlayMode = PlayMode.Sequence
+        set(value) {
+            field = value
+            MusicPlayerManager.internalPlayMode.postValue(value)
+            async {
+                PlayerPersistenceHelper.savePlayMode(value)
+            }
+        }
+
+    init {
+        playMode = PlayerPersistenceHelper.restorePlayMode()
+        playlist = PlayerPersistenceHelper.restorePlaylist() ?: Playlist.empty()
+    }
 
     fun playNext() = safeAsync {
         val next = playlist.getNextMusic()
@@ -22,6 +40,7 @@ class MusicPlayer {
             log(LoggerLevel.WARN) { "next music is null" }
             return@safeAsync
         }
+        playlist.current = next
         mediaPlayer.play(next)
     }
 
@@ -49,6 +68,7 @@ class MusicPlayer {
             log(LoggerLevel.WARN) { "previous is null , op canceled!" }
             return@safeAsync
         }
+        playlist.current = previous
         mediaPlayer.play(previous)
     }
 
@@ -56,13 +76,22 @@ class MusicPlayer {
         //TODO
     }
 
+    /**
+     * @param music Must be in [playlist]
+     */
+    fun play(music: IMusic) = safeAsync {
+        music as Music
+        if (!playlist.musicList.contains(music)) {
+            playlist.insertToNext(music)
+        }
+        log { "try to play $music" }
+        playlist.current = music
+        mediaPlayer.play(music)
+    }
+
 
     private fun safeAsync(block: suspend () -> Unit) {
         async { block() }
-    }
-
-    fun play(music: IMusic) = safeAsync {
-        mediaPlayer.play(music as Music)
     }
 
 }

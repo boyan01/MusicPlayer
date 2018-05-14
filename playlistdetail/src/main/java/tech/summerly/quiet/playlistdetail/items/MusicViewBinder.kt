@@ -20,7 +20,7 @@ class MusicViewBinder : ItemViewBinder2<Music>(), IProvider {
 
     private val defaultMusicClickListener = fun(music: Music) {
         val musicList = adapter.items.filterIsInstance(Music::class.java)
-        MusicPlayerManager.play(musicList, music)
+        MusicPlayerManager.play("playlist detail", musicList, music)
     }
 
     private var onMusicClickListener = defaultMusicClickListener

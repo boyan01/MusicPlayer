@@ -2,6 +2,7 @@ package tech.summerly.quiet.commonlib.bean
 
 import android.os.Parcel
 import android.os.Parcelable
+import java.io.Serializable
 
 /**
  *
@@ -19,7 +20,7 @@ data class MusicUri(
          */
         val dateValid: Long,
         val md5: String? = null
-) : Parcelable {
+) : Parcelable, Serializable {
 
     constructor(parcel: Parcel) : this(
             parcel.readInt(),

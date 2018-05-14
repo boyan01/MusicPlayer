@@ -96,13 +96,13 @@ class PlayingListFragment : BottomSheetDialogFragment() {
 
     private fun View.setEvent() {
         containerPlayMode.setOnClickListener {
-            MusicPlayerManager.player.playlist.playMode = MusicPlayerManager.player.playlist.playMode.next()
+            MusicPlayerManager.player.playMode = MusicPlayerManager.player.playMode.next()
         }
         indicatorPlayMode.setOnClickListener {
-            MusicPlayerManager.player.playlist.playMode = MusicPlayerManager.player.playlist.playMode.next()
+            MusicPlayerManager.player.playMode = MusicPlayerManager.player.playMode.next()
         }
         buttonClearAll.setOnClickListener {
-            MusicPlayerManager.player.playlist.clear()
+            //TODO clear
             MusicPlayerManager.player.destroy()
             dismiss()
         }

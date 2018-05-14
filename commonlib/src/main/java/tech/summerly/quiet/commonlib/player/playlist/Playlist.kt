@@ -1,10 +1,14 @@
 package tech.summerly.quiet.commonlib.player.playlist
 
+import kotlinx.coroutines.experimental.async
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.player.persistence.PlaylistStorage
 import tech.summerly.quiet.commonlib.player.PlayMode
 import tech.summerly.quiet.commonlib.player.PlayerType
+import tech.summerly.quiet.commonlib.player.PlayerPersistenceHelper
+import tech.summerly.quiet.commonlib.utils.log
+import java.io.Serializable
 
 /**
  * Created by summer on 18-3-4
@@ -13,111 +17,109 @@ abstract class Playlist(
         current: Music?,
         playMode: PlayMode,
         musicList: MutableList<Music>
-) {
+) : Serializable {
+
 
     companion object {
 
-        const val TYPE_NORMAL = 1
+        fun empty(): Playlist = NormalPlaylist()
 
-        const val TYPE_FM = 2
-
-        const val TYPE_DEFAULT = TYPE_NORMAL
-
-        fun newInstance(type: Int = TYPE_DEFAULT): Playlist {
-            return when (type) {
-                TYPE_NORMAL -> NormalPlaylist()
-                TYPE_FM -> FmPlaylist()
-                else -> throw IllegalAccessError("type error : $type")
-            }
-        }
-
-        internal val stateChangeListener = object : StateChangeListener {
-            override fun onMusicChange(old: Music?, new: Music?) {
-                MusicPlayerManager.internalMusicChange.postValue(old to new)
-                MusicPlayerManager.internalPlayingMusic.postValue(new)
-                PlaylistStorage.saveCurrent(new)
-            }
-
-            override fun onPlayModeChange(playMode: PlayMode) {
-                MusicPlayerManager.internalPlayMode.postValue(playMode)
-                PlaylistStorage.savePlayMode(playMode)
-            }
-
-            override fun onMusicListChange(musicList: List<Music>) {
-                MusicPlayerManager.internalPlaylist.postValue(musicList)
-                PlaylistStorage.savePlaylist(musicList)
-            }
+        /**
+         * @param token     to identify a playlist
+         * @param musicList the music collection to play
+         */
+        fun normalPlaylist(musicList: List<IMusic>, token: String): Playlist {
+            val playlist = NormalPlaylist()
+            playlist.musicList = musicList.toMutableList() as MutableList<Music>
+            return playlist
         }
     }
 
     /**
      * the type of this playlist
-     *
-     * 取值有：[TYPE_FM] [TYPE_NORMAL]
      */
     abstract val type: PlayerType
+
+    val token: String = ""
 
     var musicList: MutableList<Music> = musicList
         set(value) {
             field.clear()
             field.addAll(value)
-            stateChangeListener.onMusicListChange(field)
+            onPlaylistChanged()
         }
 
     var current: Music? = current
         set(value) {
-            stateChangeListener.onMusicChange(field, value)
+            val old = field
             field = value
+            onPlayingMusicChanged(old, value)
         }
 
-    var playMode: PlayMode = playMode
-        set(value) {
-            field = value
-            stateChangeListener.onPlayModeChange(value)
-        }
+    @Transient
+    private var isActive: Boolean = false
 
-    //attention 所有错误处理放在子类
+    //attention please do not throw exception
     abstract suspend fun getNextMusic(music: Music? = current): Music?
 
-    //attention 所有错误处理放在子类
+    //attention please do not throw exception
     abstract suspend fun getPreviousMusic(music: Music? = current): Music?
 
+
+    /* call back */
+    protected fun onPlayingMusicChanged(from: IMusic?, to: IMusic?) {
+        log { "is active : $isActive ,change $from to $to" }
+        if (!isActive) {
+            return
+        }
+        to as Music?
+        from as Music?
+        MusicPlayerManager.internalPlayingMusic.postValue(to)
+        MusicPlayerManager.internalMusicChange.postValue(from to to)
+        onPlaylistChanged()
+    }
+
+
     /**
-     * 清空当前音乐列表
+     * call back of playlist data changed
+     * we need to refresh persistence data
      */
-    abstract fun clear()
+    protected fun onPlaylistChanged() {
+        if (!isActive) {
+            return
+        }
+        async {
+            PlayerPersistenceHelper.savePlaylist(this@Playlist)
+        }
+    }
+
+    /* operation for playlist */
+
+    /**
+     * remove a music item from [musicList]
+     */
+    open fun remove(music: IMusic?): Boolean {
+        music as Music?
+        return musicList.remove(music)
+    }
 
     /**
      * 添加[music]到当前播放的下一首
      */
-    abstract fun insertToNext(music: Music)
+    abstract fun insertToNext(music: IMusic)
 
-    /**
-     * 从当前音乐列表中移除[music]
-     */
-    fun remove(music: Music?) {
-        musicList.remove(music)
-        stateChangeListener.onMusicListChange(musicList)
+
+    override fun toString(): String {
+        return "token:$token, current :${current?.title} , list :${musicList}"
     }
 
-    fun setMusicLists(musicList: List<Music>) {
-        this.musicList.clear()
-        this.musicList.addAll(musicList)
-        stateChangeListener.onMusicListChange(musicList)
+    internal fun active() {
+        isActive = true
+        this.current = this.current
     }
 
-    init {
-        this.current = current
-        this.playMode = playMode
+    internal fun inActive() {
+        isActive = false
     }
 
-    internal interface StateChangeListener {
-
-        fun onMusicChange(old: Music?, new: Music?)
-
-        fun onPlayModeChange(playMode: PlayMode)
-
-        fun onMusicListChange(musicList: List<Music>)
-
-    }
 }

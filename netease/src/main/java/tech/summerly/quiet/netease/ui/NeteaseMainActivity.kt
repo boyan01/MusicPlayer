@@ -5,7 +5,7 @@ import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
+import android.support.v4.app.Fragment
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.DefaultItemAnimator
@@ -17,7 +17,6 @@ import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.netease_activity_main.*
 import kotlinx.android.synthetic.main.netease_header_playlist.view.*
 import me.drakeet.multitype.MultiTypeAdapter
-import org.jetbrains.anko.contentView
 import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
@@ -26,6 +25,7 @@ import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.mvp.BaseView
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.constraints.Netease
+import tech.summerly.quiet.constraints.Player
 import tech.summerly.quiet.constraints.Search
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.persistence.NeteasePreference
@@ -286,7 +286,13 @@ internal class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerF
 
             }
             getString(R.string.netease_nav_title_fm) -> {
-                ARouter.getInstance().build("/netease/fm").withBoolean("play", true).navigation()
+                val fmPlayer = Player.FRAGMENT_FM_PLAYER_NORMAL
+                val fragment = ARouter.getInstance().build(fmPlayer).navigation() as Fragment?
+                        ?: return
+                supportFragmentManager.intransaction {
+                    replace(android.R.id.content, fragment, fmPlayer)
+                    addToBackStack(fmPlayer)
+                }
             }
             getString(R.string.netease_nav_title_daily) -> {
                 startActivity<NeteaseDailyRecommendActivity>()

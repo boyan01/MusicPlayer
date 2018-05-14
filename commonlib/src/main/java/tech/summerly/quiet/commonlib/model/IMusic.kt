@@ -1,5 +1,7 @@
 package tech.summerly.quiet.commonlib.model
 
-interface IMusic {
+import java.io.Serializable
+
+interface IMusic : Serializable {
 
 }

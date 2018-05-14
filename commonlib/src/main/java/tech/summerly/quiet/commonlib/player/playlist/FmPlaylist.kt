@@ -6,6 +6,7 @@ import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import org.jetbrains.anko.toast
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.PlayMode
 import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.utils.asyncUI
@@ -46,15 +47,14 @@ internal class FmPlaylist(current: Music?,
             asyncUI { LibModule.toast("io exception : ${e.message}") }
             throw CancellationException()
         }
-        stateChangeListener.onMusicListChange(musicList)
+        onPlaylistChanged()
     }
 
 
     override suspend fun getPreviousMusic(music: Music?): Music? = null
 
-    override fun clear() {}
 
-    override fun insertToNext(music: Music) {}
+    override fun insertToNext(music: IMusic) {}
 
     private val neteaseApi = NeteaseCloudMusicApi()
 

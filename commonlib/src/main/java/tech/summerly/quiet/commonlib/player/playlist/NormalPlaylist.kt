@@ -1,6 +1,9 @@
 package tech.summerly.quiet.commonlib.player.playlist
 
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager.playMode
 import tech.summerly.quiet.commonlib.player.PlayMode
 import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.utils.log
@@ -29,7 +32,7 @@ internal class NormalPlaylist(current: Music?,
         if (current == null) {
             return musicList[0]
         }
-        return when (playMode) {
+        return when (MusicPlayerManager.player.playMode) {
             PlayMode.Single -> {
                 current
             }
@@ -57,7 +60,7 @@ internal class NormalPlaylist(current: Music?,
         }
     }
 
-    private fun ensureShuffleListGenerate() {
+    protected fun ensureShuffleListGenerate() {
         if (shuffleMusicList.size != musicList.size) {
             generateShuffleList()
         }
@@ -87,7 +90,7 @@ internal class NormalPlaylist(current: Music?,
         if (current == null) {
             return musicList[0]
         }
-        return when (playMode) {
+        return when (MusicPlayerManager.player.playMode) {
             PlayMode.Single -> {
                 current
             }
@@ -114,7 +117,8 @@ internal class NormalPlaylist(current: Music?,
         }
     }
 
-    override fun insertToNext(music: Music) {
+    override fun insertToNext(music: IMusic) {
+        music as Music
         if (musicList.isEmpty()) {
             musicList.add(music)
             return
@@ -133,13 +137,7 @@ internal class NormalPlaylist(current: Music?,
             val indexShuffle = shuffleMusicList.indexOf(current) + 1
             shuffleMusicList.add(indexShuffle, music)
         }
-        stateChangeListener.onMusicListChange(musicList)
-    }
-
-    override fun clear() {
-        musicList.clear()
-        current = null
-        stateChangeListener.onMusicListChange(musicList)
+        onPlaylistChanged()
     }
 
 }

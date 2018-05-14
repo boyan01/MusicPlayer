@@ -1,5 +1,7 @@
 package tech.summerly.quiet.commonlib.model
 
-interface IArtist{
+import java.io.Serializable
+
+interface IArtist : Serializable {
 
 }

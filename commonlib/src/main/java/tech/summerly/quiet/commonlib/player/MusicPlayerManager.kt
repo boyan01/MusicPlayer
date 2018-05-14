@@ -7,6 +7,7 @@ import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.player.playlist.NormalPlaylist
+import tech.summerly.quiet.commonlib.player.playlist.Playlist
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.observeFilterNull
 
@@ -43,6 +44,7 @@ object MusicPlayerManager {
     }
 
 
+    @Deprecated("")
     fun play(musics: List<IMusic>, music: IMusic? = null) {
         if (player.playlist.type == PlayerType.FM) {
             player.playlist = NormalPlaylist(music as Music?, PlayMode.Sequence, ArrayList(musics as List<Music>))
@@ -54,6 +56,20 @@ object MusicPlayerManager {
             player.playNext()
         } else {
             player.play(music)
+        }
+    }
+
+    fun play(token: String, list: List<IMusic>, music: IMusic? = null) {
+        if (player.playlist.token != token) {
+            player.playlist = Playlist.normalPlaylist(list, token)
+        }
+        if (list.isEmpty()) {
+            throw IllegalArgumentException("music list can not be empty!")
+        }
+        if (music != null) {
+            player.play(music)
+        } else {
+            player.playNext()
         }
     }
 
