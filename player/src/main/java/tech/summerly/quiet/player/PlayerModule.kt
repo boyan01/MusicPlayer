@@ -10,7 +10,7 @@ object PlayerModule : BaseModule() {
 
     override fun onCreate() {
         MusicPlayerManager.playerState.observeForever {
-            if (it != null || it != PlayerState.Idle){
+            if (it == PlayerState.Playing) {
                 onMusicPlaying()
             }
         }

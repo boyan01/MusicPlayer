@@ -124,7 +124,7 @@ class FmPlayerFragment : InsetsFragment() {
         }
     }
 
-    private val onPositionChange = fun(position: Long, total: Long) {
+    private fun onPositionChange(position: Long, total: Long) {
         if (isSeekBarTracking) {
             return
         }

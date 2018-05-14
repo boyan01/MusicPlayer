@@ -98,23 +98,21 @@
             <tech.summerly.quiet.commonlib.view.lyric.LyricView
                 android:id="@+id/lyricView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="16dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:visibility="invisible"
+                android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textArtist"
                 app:lyricEmptyText="没有歌词"
                 app:lyricLineSpacing="8dp"
                 app:lyricNormalTextColor="@color/color_text_secondary_dark_background"
                 app:lyricPlayIndicatorColor="@color/color_text_primary_dark_background"
                 app:lyricPlayingTextColor="@color/color_text_primary_dark_background"
-                app:lyricTextSize="16sp"
-                tools:visibility="visible" />
+                app:lyricTextSize="16sp" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -149,7 +147,9 @@
                 android:layout_weight="1"
                 android:progressTint="?colorTextPrimaryInverse"
                 android:thumbTint="?colorTextPrimaryInverse"
-                tools:progress="54" />
+                tools:max="100"
+                tools:progress="54"
+                tools:secondaryProgress="78" />
 
             <TextView
                 android:id="@+id/textDuration"
