@@ -16,8 +16,13 @@ class MusicPlayer {
             field.inActive()
             field = value
             value.active()
+            resetMediaPlayer()
             log { "set playlist $value" }
         }
+
+    private fun resetMediaPlayer() {
+        mediaPlayer.reset()
+    }
 
     val mediaPlayer: CoreMediaPlayer = CoreMediaPlayer()
 

@@ -23,10 +23,15 @@ import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.items.CommonItemA
 import tech.summerly.quiet.commonlib.items.CommonItemAViewBinder
 import tech.summerly.quiet.commonlib.mvp.BaseView
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager.player
+import tech.summerly.quiet.commonlib.player.PlayerType
+import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.constraints.Netease
 import tech.summerly.quiet.constraints.Player
 import tech.summerly.quiet.constraints.Search
+import tech.summerly.quiet.netease.NeteaseFmPlaylist
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.persistence.NeteasePreference
 import tech.summerly.quiet.netease.ui.items.NeteasePlaylistHeader
@@ -286,13 +291,7 @@ internal class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerF
 
             }
             getString(R.string.netease_nav_title_fm) -> {
-                val fmPlayer = Player.FRAGMENT_FM_PLAYER_NORMAL
-                val fragment = ARouter.getInstance().build(fmPlayer).navigation() as Fragment?
-                        ?: return
-                supportFragmentManager.intransaction {
-                    replace(android.R.id.content, fragment, fmPlayer)
-                    addToBackStack(fmPlayer)
-                }
+                navigationToFmPlayer()
             }
             getString(R.string.netease_nav_title_daily) -> {
                 startActivity<NeteaseDailyRecommendActivity>()
@@ -300,6 +299,35 @@ internal class NeteaseMainActivity : BaseActivity(), BaseView, BottomControllerF
             getString(R.string.netease_nav_title_latest) -> {
                 ARouter.getInstance().build("/netease/record").navigation()
             }
+        }
+    }
+
+    private fun navigationToFmPlayer() {
+        val musicPlayer = MusicPlayerManager.player
+        if (musicPlayer.playlist.token != NeteaseFmPlaylist.TOKEN) {
+            musicPlayer.playlist = NeteaseFmPlaylist()
+        }
+        val fragmentName = Player.FRAGMENT_FM_PLAYER_NORMAL
+        val fragment = ARouter.getInstance().build(fragmentName).navigation() as Fragment?
+                ?: return
+        supportFragmentManager.intransaction {
+            replace(android.R.id.content, fragment, fragmentName)
+            addToBackStack(fragmentName)
+        }
+        playFmMusic()
+    }
+
+    private fun playFmMusic() {
+        if (player.playlist.type != PlayerType.FM) {
+            return
+        }
+        val state = player.mediaPlayer.getPlayerState()
+        if (state == PlayerState.Playing || state == PlayerState.Preparing) {
+            return
+        } else if (state == PlayerState.Pausing) {
+            player.mediaPlayer.start()
+        } else {
+            player.playNext()
         }
     }
 

@@ -10,9 +10,10 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.player_content_fm_controller.*
 import kotlinx.android.synthetic.main.player_fragment_fm.view.*
 import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.player.MusicPlayer
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.player.PlayerType
+import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.utils.*
 import tech.summerly.quiet.commonlib.utils.image.PictureModel
 import tech.summerly.quiet.commonlib.utils.image.blur
@@ -84,24 +85,16 @@ class FmPlayerFragment : InsetsFragment() {
         Unit
     }
 
-    override fun onStart() {
-        super.onStart()
-        playMusicIfNecessary()
+    override fun onResume() {
+        super.onResume()
+        //close self if current play type isn't FM
+        if (player.playlist.type != PlayerType.FM) {
+            closeSelf()
+        }
     }
 
-    private fun playMusicIfNecessary() {
-        val state = player.mediaPlayer.getPlayerState()
-        if (state == PlayerState.Playing || state == PlayerState.Preparing) {
-            return
-        }
-        //TODO
-        if (true) {
-            return
-        }
-        player.playPause()
-    }
 
-    private val onMusicChange = fun(old: Music?, new: Music?) {
+    private val onMusicChange = fun(_: Music?, new: Music?) {
         if (new == null) {
             return
         }
