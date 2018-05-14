@@ -6,7 +6,6 @@ import android.arch.lifecycle.MutableLiveData
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.player.playlist.NormalPlaylist
 import tech.summerly.quiet.commonlib.player.playlist.Playlist
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.observeFilterNull
@@ -38,25 +37,15 @@ object MusicPlayerManager {
 
     fun play(music: IMusic) {
         if (player.playlist.type == PlayerType.FM) {
-            player.playlist = NormalPlaylist(music as Music, PlayMode.Sequence, ArrayList(listOf(music)))
+            player.playlist = Playlist.empty()
         }
         player.play(music)
     }
 
 
-    @Deprecated("")
+    @Deprecated("", ReplaceWith("play(\"\", musics, music)", "tech.summerly.quiet.commonlib.player.MusicPlayerManager.play"))
     fun play(musics: List<IMusic>, music: IMusic? = null) {
-        if (player.playlist.type == PlayerType.FM) {
-            player.playlist = NormalPlaylist(music as Music?, PlayMode.Sequence, ArrayList(musics as List<Music>))
-        }
-        if (musics.isEmpty()) {
-            throw IllegalArgumentException("musics can not be empty!")
-        }
-        if (music == null) {
-            player.playNext()
-        } else {
-            player.play(music)
-        }
+        play("", musics, music)
     }
 
     fun play(token: String, list: List<IMusic>, music: IMusic? = null) {

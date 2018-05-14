@@ -28,7 +28,7 @@ class PlayingListFragment : BottomSheetDialogFragment() {
     }
 
     private val musicList: List<Music>
-        get() = MusicPlayerManager.player.playlist.musicList
+        get() = MusicPlayerManager.player.playlist.musics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -7,7 +7,6 @@ import org.jetbrains.anko.toast
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
-import tech.summerly.quiet.commonlib.player.PlayMode
 import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.log
@@ -17,11 +16,10 @@ import java.io.IOException
 /**
  * Created by summer on 18-3-4
  */
-internal class FmPlaylist(current: Music?,
-                          musicList: ArrayList<Music>
-) : Playlist(current, PlayMode.Sequence, musicList) {
+internal class FmPlaylist(musicList: ArrayList<Music>
+) : Playlist("netease_fm", musicList) {
 
-    constructor() : this(null, ArrayList())
+    constructor() : this(ArrayList())
 
     override val type: PlayerType = PlayerType.FM
 

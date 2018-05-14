@@ -13,6 +13,7 @@ class MusicPlayer {
 
     var playlist: Playlist = Playlist.empty()
         set(value) {
+            field.inActive()
             field = value
             value.active()
             log { "set playlist $value" }
@@ -81,7 +82,7 @@ class MusicPlayer {
      */
     fun play(music: IMusic) = safeAsync {
         music as Music
-        if (!playlist.musicList.contains(music)) {
+        if (!playlist.musics.contains(music)) {
             playlist.insertToNext(music)
         }
         log { "try to play $music" }

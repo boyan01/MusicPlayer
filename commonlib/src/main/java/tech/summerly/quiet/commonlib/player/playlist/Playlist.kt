@@ -4,9 +4,8 @@ import kotlinx.coroutines.experimental.async
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.player.PlayMode
-import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.player.PlayerPersistenceHelper
+import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.utils.log
 import java.io.Serializable
 
@@ -14,42 +13,36 @@ import java.io.Serializable
  * Created by summer on 18-3-4
  */
 abstract class Playlist(
-        current: Music?,
-        playMode: PlayMode,
-        musicList: MutableList<Music>
+        val token: String,
+        protected val musicList: MutableList<Music>
 ) : Serializable {
 
 
     companion object {
 
-        fun empty(): Playlist = NormalPlaylist()
+        private val EMPTY = normalPlaylist(emptyList(), "EMPTY")
+
+        fun empty(): Playlist = EMPTY
 
         /**
          * @param token     to identify a playlist
          * @param musicList the music collection to play
          */
         fun normalPlaylist(musicList: List<IMusic>, token: String): Playlist {
-            val playlist = NormalPlaylist()
-            playlist.musicList = musicList.toMutableList() as MutableList<Music>
+            val playlist = NormalPlaylist(token, ArrayList(musicList) as ArrayList<Music>)
             return playlist
         }
     }
+
+    val musics get() = musicList.toList()
 
     /**
      * the type of this playlist
      */
     abstract val type: PlayerType
 
-    val token: String = ""
 
-    var musicList: MutableList<Music> = musicList
-        set(value) {
-            field.clear()
-            field.addAll(value)
-            onPlaylistChanged()
-        }
-
-    var current: Music? = current
+    var current: Music? = null
         set(value) {
             val old = field
             field = value
@@ -68,7 +61,7 @@ abstract class Playlist(
 
     /* call back */
     protected fun onPlayingMusicChanged(from: IMusic?, to: IMusic?) {
-        log { "is active : $isActive ,change $from to $to" }
+        log { "$token is active : $isActive ,change $from to $to" }
         if (!isActive) {
             return
         }
@@ -113,13 +106,15 @@ abstract class Playlist(
         return "token:$token, current :${current?.title} , list :${musicList}"
     }
 
-    internal fun active() {
+    open fun active() {
         isActive = true
         this.current = this.current
     }
 
-    internal fun inActive() {
+    open fun inActive() {
         isActive = false
+        current = null
+        musicList.clear()
     }
 
 }

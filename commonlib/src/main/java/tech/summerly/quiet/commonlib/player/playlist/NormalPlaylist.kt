@@ -12,12 +12,9 @@ import tech.summerly.quiet.commonlib.utils.log
  * Created by summer on 18-3-4
  */
 
-internal class NormalPlaylist(current: Music?,
-                              playMode: PlayMode,
+internal class NormalPlaylist(token: String,
                               musicList: ArrayList<Music>
-) : Playlist(current, playMode, musicList) {
-
-    constructor() : this(null, PlayMode.Sequence, ArrayList())
+) : Playlist(token, musicList) {
 
     override val type: PlayerType = PlayerType.NORMAL
 
@@ -60,7 +57,7 @@ internal class NormalPlaylist(current: Music?,
         }
     }
 
-    protected fun ensureShuffleListGenerate() {
+    private fun ensureShuffleListGenerate() {
         if (shuffleMusicList.size != musicList.size) {
             generateShuffleList()
         }
