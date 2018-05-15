@@ -16,6 +16,7 @@
         <item name="colorTextPrimaryInverse">@color/color_text_primary_inverse</item>
         <item name="colorTextSecondary">@color/color_text_secondary</item>
         <item name="colorTextSecondaryInverse">@color/color_text_secondary_inverse</item>
+        <item name="colorDivider">@color/common_color_divider</item>
 
         <item name="chipGroupStyle">@style/Widget.MaterialComponents.ChipGroup</item>
         <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Action</item>

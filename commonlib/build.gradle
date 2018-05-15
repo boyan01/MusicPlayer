@@ -71,7 +71,9 @@ dependencies {
     //serialization
     api 'com.google.code.gson:gson:2.8.2'
 
-    //co-routines
+    //kotlin
+    api "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
     api "org.jetbrains.anko:anko-coroutines:$anko_version"

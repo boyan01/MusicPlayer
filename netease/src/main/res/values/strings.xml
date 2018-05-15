@@ -48,5 +48,6 @@
     <string name="netease_like_music">like</string>
     <string name="netease_play_next">下一首</string>
     <string name="netease_play_pause">play/pause</string>
+    <string name="netease_play_count">%d次</string>
 
 </resources>

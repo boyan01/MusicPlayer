@@ -20,7 +20,7 @@ import tech.summerly.quiet.commonlib.player.listenMusicChangePosition
 import tech.summerly.quiet.commonlib.utils.multiTypeAdapter
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.persistence.NeteasePreference
-import tech.summerly.quiet.netease.ui.items.NeteaseRecordItemViewBinder
+import tech.summerly.quiet.netease.ui.items.RecordItemViewBinder
 import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 
 /**
@@ -75,6 +75,8 @@ internal class NeteaseRecordActivity : BaseActivity(), BottomControllerFragment.
 
             private const val KEY_TYPE = "type"
 
+            private const val PLAYER_TOKEN = "netease_record"
+
             /**
              * @param uid 用户id
              * @param type 0:所有记录 ， 1:一周记录
@@ -109,12 +111,12 @@ internal class NeteaseRecordActivity : BaseActivity(), BottomControllerFragment.
 
         private val type: Int get() = requireNotNull(arguments?.getInt(KEY_TYPE))
 
-        private val items = ArrayList<Any>()
+        private val items = ArrayList<Record>()
 
 
         override fun initRecyclerView(recyclerView: RecyclerView) {
             recyclerView.adapter = MultiTypeAdapter(items)
-            recyclerView.multiTypeAdapter.register(Record::class.java, NeteaseRecordItemViewBinder(this::onMusicItemClick))
+            recyclerView.multiTypeAdapter.register(Record::class.java, RecordItemViewBinder(this::onMusicItemClick))
             items.clear()
         }
 
@@ -129,7 +131,7 @@ internal class NeteaseRecordActivity : BaseActivity(), BottomControllerFragment.
         }
 
         private fun onMusicItemClick(music: Music) {
-            MusicPlayerManager.play(music)
+            MusicPlayerManager.play(PLAYER_TOKEN + type, items.map { it.music }, music)
         }
 
     }
