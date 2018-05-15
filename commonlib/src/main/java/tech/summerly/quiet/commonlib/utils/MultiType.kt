@@ -13,7 +13,6 @@ import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.R
-import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.declaredMemberFunctions
 import me.drakeet.multitype.ItemViewBinder as JItemViewBinder
 
