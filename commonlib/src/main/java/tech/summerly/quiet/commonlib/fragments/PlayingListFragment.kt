@@ -2,6 +2,7 @@ package tech.summerly.quiet.commonlib.fragments
 
 import android.os.Bundle
 import android.support.design.widget.BottomSheetDialogFragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,14 @@ class PlayingListFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "PlayingListFragment"
+
+        fun show(fragmentManager: FragmentManager, tag: String = TAG) {
+
+            val fragment = fragmentManager.findFragmentByTag(tag) as? PlayingListFragment
+                    ?: PlayingListFragment()
+            fragment.show(fragmentManager, tag)
+        }
+
     }
 
     private val musicList: List<Music>

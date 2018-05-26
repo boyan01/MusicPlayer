@@ -79,18 +79,30 @@ open class BottomControllerFragment : BaseFragment() {
     }
 
     protected open fun onControllerClick(view: View, type: PlayerType) {
+        val fragmentManager = activity?.supportFragmentManager
+        if (fragmentManager == null) {
+            log(LoggerLevel.ERROR) { "controller clicked , but do not attach to parent activity!!" }
+            return
+        }
         when (type) {
             FM -> {
                 val fmPlayer = Player.FRAGMENT_FM_PLAYER_NORMAL
                 val fragment = ARouter.getInstance().build(fmPlayer).navigation() as Fragment?
                         ?: return
-                activity?.supportFragmentManager?.intransaction {
+                fragmentManager.intransaction {
                     replace(android.R.id.content, fragment, fmPlayer)
                     addToBackStack(fmPlayer)
                 }
             }
             NORMAL -> {
-                ARouter.getInstance().build("/netease/player").navigation()
+//                ARouter.getInstance().build("/netease/player").navigation()
+                val path = Player.FRAGMENT_MUSIC_PLAYER
+                val fragment = fragmentManager.findFragmentByTag(path)
+                        ?: ARouter.getInstance().build(path).navigation() as Fragment? ?: return
+                fragmentManager.intransaction {
+                    replace(android.R.id.content, fragment, path)
+                    addToBackStack(path)
+                }
             }
         }
     }

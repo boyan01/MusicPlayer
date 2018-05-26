@@ -1,5 +1,7 @@
 package tech.summerly.quiet.commonlib.player
 
+import tech.summerly.quiet.commonlib.R
+
 
 enum class PlayMode {
     //随机播放
@@ -27,5 +29,11 @@ enum class PlayMode {
         Single -> Shuffle
         Shuffle -> Sequence
         Sequence -> Single
+    }
+
+    fun drawableRes(): Int = when (this) {
+        Single -> R.drawable.ic_repeat_one_black_24dp
+        Shuffle -> R.drawable.ic_shuffle_black_24dp
+        Sequence -> R.drawable.ic_repeat_black_24dp
     }
 }

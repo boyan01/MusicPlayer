@@ -22,7 +22,6 @@ object MusicPlayerManager {
 
 
     val musicChange: LiveData<Pair<Music?, Music?>> = internalMusicChange
-    @Deprecated("使用 musicChange 来监听歌曲变化")
     val playingMusic: LiveData<Music>
         get() = internalPlayingMusic
     val position: LiveData<Pair<Long, Long>> get() = internalPosition
