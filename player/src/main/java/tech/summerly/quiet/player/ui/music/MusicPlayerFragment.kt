@@ -8,6 +8,7 @@ import android.widget.SeekBar
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.player_content_music_controller.view.*
 import kotlinx.android.synthetic.main.player_fragment_music.view.*
+import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.fragments.PlayingListFragment
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
@@ -20,10 +21,9 @@ import tech.summerly.quiet.commonlib.utils.observeFilterNull
 import tech.summerly.quiet.commonlib.utils.toMusicTimeStamp
 import tech.summerly.quiet.constraints.Player
 import tech.summerly.quiet.player.R
-import tech.summerly.quiet.player.ui.InsetsFragment
 
 @Route(path = Player.FRAGMENT_MUSIC_PLAYER)
-class MusicPlayerFragment : InsetsFragment() {
+class MusicPlayerFragment : BaseFragment() {
 
 
     private var isUserTracking = false

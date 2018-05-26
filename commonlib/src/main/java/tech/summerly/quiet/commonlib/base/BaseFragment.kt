@@ -18,6 +18,8 @@ open class BaseFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rootView = view
+        //让 fragment 布局也支持 fitSystemWindows 属性
+        (activity as? BaseActivity)?.requestApplyInserts()
     }
 
     /**

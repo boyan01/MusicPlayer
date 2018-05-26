@@ -9,6 +9,7 @@ import android.widget.SeekBar
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.player_content_fm_controller.*
 import kotlinx.android.synthetic.main.player_fragment_fm.view.*
+import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.MusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
@@ -19,10 +20,9 @@ import tech.summerly.quiet.commonlib.utils.image.PictureModel
 import tech.summerly.quiet.commonlib.utils.image.blur
 import tech.summerly.quiet.constraints.Player
 import tech.summerly.quiet.player.R
-import tech.summerly.quiet.player.ui.InsetsFragment
 
 @Route(path = Player.FRAGMENT_FM_PLAYER_NORMAL)
-class FmPlayerFragment : InsetsFragment() {
+class FmPlayerFragment : BaseFragment() {
 
     //is user tracking the seekBar
     private var isSeekBarTracking = false
