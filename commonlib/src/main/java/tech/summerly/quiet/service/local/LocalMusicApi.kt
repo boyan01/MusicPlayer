@@ -24,6 +24,8 @@ class LocalMusicApi private constructor(context: Context) {
 
     companion object {
         fun getLocalMusicApi(context: Context = LibModule) = LocalMusicApi(context.applicationContext)
+
+        val instance by lazy { LocalMusicApi(LibModule) }
     }
 
     private val mapper = EntityMapper()

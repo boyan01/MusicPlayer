@@ -19,6 +19,7 @@ import me.drakeet.multitype.ItemViewBinder as JItemViewBinder
 /**
  * Created by summer on 17-12-17
  */
+@Deprecated("")
 val RecyclerView.multiTypeAdapter: MultiTypeAdapter
     get() = adapter as? MultiTypeAdapter
             ?: throw IllegalStateException("must set multiType adapter first!")
@@ -29,6 +30,7 @@ val RecyclerView.multiTypeAdapter: MultiTypeAdapter
  * time   : 2017/7/22
  * desc   : ItemViewBinder的Kotlin封装类
  */
+@Deprecated("")
 abstract class ItemViewBinder<T> : me.drakeet.multitype.ItemViewBinder<T, ItemViewBinder.ViewHolder>() {
 
     public abstract override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder
@@ -44,6 +46,7 @@ abstract class ItemViewBinder<T> : me.drakeet.multitype.ItemViewBinder<T, ItemVi
     }
 }
 
+@Deprecated("")
 abstract class ItemViewBinder2<T> : ItemViewBinder<T>() {
 
     protected abstract val layoutId: Int
@@ -54,6 +57,7 @@ abstract class ItemViewBinder2<T> : ItemViewBinder<T>() {
 
 }
 
+@Deprecated("")
 fun MultiTypeAdapter.setItemsByDiff(items: List<Any>, detectMove: Boolean = false) {
     @Suppress("UNCHECKED_CAST")//fuck type checker
     val old = this.items as MutableList<Any>
@@ -80,6 +84,7 @@ fun MultiTypeAdapter.setItemsByDiff(items: List<Any>, detectMove: Boolean = fals
 }
 
 
+@Deprecated("")
 fun MultiTypeAdapter.setItems2(items: List<*>,
                                detectDiff: Boolean = true,
                                detectMove: Boolean = false,
@@ -113,8 +118,10 @@ fun MultiTypeAdapter.setItems2(items: List<*>,
 
 }
 
+@Deprecated("")
 private val sUnImplementedItemViewBinder = UnImplementedItemViewBinder()
 
+@Deprecated("")
 class RemoteItemBinderWrapper<T>(
         private val binder: ItemViewBinder<T>?
 ) : ItemViewBinder<T>() {

@@ -5,32 +5,51 @@ import android.os.Bundle
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
-import org.jetbrains.anko.support.v4.dip
+import org.jetbrains.anko.dip
+import tech.summerly.quiet.commonlib.fragments.StatedRecyclerFragment
+import tech.summerly.quiet.commonlib.utils.support.TypedAdapter
+import tech.summerly.quiet.local.LocalModule
+import tech.summerly.quiet.local.fragments.items.LocalBigImageItem
+import tech.summerly.quiet.local.fragments.items.LocalBigImageItemViewBinder
 import tech.summerly.quiet.service.local.LocalMusicApi
 import tech.summerly.quiet.service.local.database.database.Table
-import tech.summerly.quiet.local.fragments.items.LocalBigImageItem
 
 /**
  * Created by summer
  */
-internal class LocalAlbumFragment : BaseLocalFragment() {
+internal class LocalAlbumFragment : StatedRecyclerFragment<LocalBigImageItem>() {
 
-    override fun isInterestedChange(table: Table): Boolean {
-        return table == Table.Album
+
+    private var version = 0L
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Table.Album.listenChange(this) { newVersion ->
+            if (newVersion > version) {
+                loadDataInternal()
+                version = newVersion
+            }
+        }
     }
 
-    override suspend fun loadData(localMusicApi: LocalMusicApi): List<Any> {
-        return localMusicApi.getAlbums().await().map { LocalBigImageItem(it.name, it.picUri, it) }
+    private val listAdapter by lazy {
+        TypedAdapter().withBinder(LocalBigImageItem::class, LocalBigImageItemViewBinder())
     }
 
-    private val spaceDecoration get() = dip(4)
+    override suspend fun loadData(): List<LocalBigImageItem> {
+        return LocalMusicApi.instance.getAlbums().await().map { LocalBigImageItem(it.name, it.picUri, it) }
+    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view as? RecyclerView ?: return
-        view.layoutManager = StaggeredGridLayoutManager(getSpanCount(),
-                StaggeredGridLayoutManager.VERTICAL)
-        view.addItemDecoration(object : RecyclerView.ItemDecoration() {
+    override fun onLoadSuccess(result: List<LocalBigImageItem>) {
+        super.onLoadSuccess(result)
+        listAdapter.submit(result)
+    }
+
+    private val spaceDecoration get() = LocalModule.dip(4)
+
+    override fun initRecyclerView(recyclerView: RecyclerView) {
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        recyclerView.addItemDecoration(object : RecyclerView.ItemDecoration() {
             override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                 outRect.left = spaceDecoration
                 outRect.right = spaceDecoration
@@ -38,8 +57,8 @@ internal class LocalAlbumFragment : BaseLocalFragment() {
                 outRect.top = spaceDecoration
             }
         })
+        recyclerView.adapter = listAdapter
     }
 
-    override fun getSpanCount(): Int = 2
 
 }

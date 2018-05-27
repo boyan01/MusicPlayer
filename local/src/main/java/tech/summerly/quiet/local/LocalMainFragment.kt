@@ -18,14 +18,14 @@ import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.utils.popupMenu
 import tech.summerly.quiet.constraints.Local
+import tech.summerly.quiet.constraints.Setting
 import tech.summerly.quiet.local.fragments.LocalAlbumFragment
 import tech.summerly.quiet.local.fragments.LocalArtistFragment
-import tech.summerly.quiet.local.fragments.LocalOverviewFragment
-import tech.summerly.quiet.local.fragments.LocalTotalFragment
+import tech.summerly.quiet.local.fragments.MusicListFragment
 import tech.summerly.quiet.local.scanner.LocalMusicScannerActivity
 
 @Route(path = Local.FRAGMENT_LOCAL_MAIN)
-class LocalMusicFragment : BaseFragment() {
+class LocalMainFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.local_fragment_main, container, false)
@@ -42,7 +42,7 @@ class LocalMusicFragment : BaseFragment() {
                 if (id == R.id.local_menu_main_scan) {
                     startActivity<LocalMusicScannerActivity>()
                 } else if (id == R.id.local_music_menu_setting) {
-                    ARouter.getInstance().build("/setting/main").navigation()
+                    ARouter.getInstance().build(Setting.ACTIVITY_SETTING_MAIN).navigation()
                 }
                 true
             }
@@ -58,19 +58,19 @@ class LocalMusicFragment : BaseFragment() {
 
         val fragments = Array<Fragment?>(count) { null }
 
-        override fun getItem(position: Int): Fragment? = fragments[position] ?: when (position) {
-            0 -> LocalOverviewFragment()
-            1 -> LocalTotalFragment()
-            2 -> LocalArtistFragment()
-            3 -> LocalAlbumFragment()
-            else -> Fragment()
-        }.also {
-            fragments[position] = it
-        }
+        override fun getItem(position: Int): Fragment? = fragments[position]
+                ?: when (position) {
+                    0 -> MusicListFragment()
+                    1 -> LocalArtistFragment()
+                    2 -> LocalAlbumFragment()
+                    else -> Fragment()
+                }.also {
+                    fragments[position] = it
+                }
 
 
         // display four fragment: overview , total , artist , album
-        override fun getCount(): Int = 4
+        override fun getCount(): Int = 3
 
     }
 }

@@ -15,11 +15,6 @@
     <android.support.design.widget.TabItem
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/local_nav_title_overview" />
-
-    <android.support.design.widget.TabItem
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/local_nav_title_total" />
 
     <android.support.design.widget.TabItem
