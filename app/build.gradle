@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+apply plugin: "androidx.navigation.safeargs"
+
 android {
 
     compileSdkVersion compile_sdk
@@ -45,15 +47,13 @@ kotlin {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    //Architecture Components
-    implementation 'android.arch.lifecycle:runtime:1.0.3'
-    annotationProcessor "android.arch.lifecycle:compiler:$architecture_version"
-    implementation "android.arch.persistence.room:runtime:$architecture_version"
-    implementation "android.arch.lifecycle:extensions:$architecture_version"
-    implementation "android.arch.lifecycle:reactivestreams:$architecture_version"
-    annotationProcessor "android.arch.persistence.room:compiler:$architecture_version"
-    kapt "android.arch.persistence.room:compiler:$architecture_version"
-    implementation "android.arch.persistence.room:rxjava2:$architecture_version"
+
+
+    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version" // use -ktx for Kotlin
+    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version" // use -ktx for Kotlin
+
+    // optional - Test helpers
+    androidTestImplementation "android.arch.navigation:navigation-testing-ktx:$nav_version" // use -ktx for Kotlin
 
     if (!isIndependentApk.toBoolean()) {
         implementation project(':netease')
@@ -67,6 +67,6 @@ dependencies {
     kapt 'com.alibaba:arouter-compiler:1.1.4'
 
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
