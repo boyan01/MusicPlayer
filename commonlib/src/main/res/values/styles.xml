@@ -1,5 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <style name="AppTheme" parent="CommonAppTheme.NoActionBar.TranslucentStatus">
+
+        <item name="android:windowTranslucentNavigation">true</item>
+
+    </style>
+
+
     <!-- BbaseContexttion theme. -->
     <style name="CommonAppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -20,6 +27,7 @@
 
         <item name="chipGroupStyle">@style/Widget.MaterialComponents.ChipGroup</item>
         <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Action</item>
+        <item name="navigationViewStyle">@style/Widget.Design.NavigationView</item>
         <!--<ititlename="colorControlHighlight">@color/common_colorRipple</item>-->
         <!--<ititlename="android:textColorPrimary">@color/common_textPrimary</item>-->
         <!--<ititlename="android:textColorSecondary">@color/common_textSecondary</item>-->

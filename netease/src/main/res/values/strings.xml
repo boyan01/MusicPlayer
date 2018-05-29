@@ -1,5 +1,5 @@
 <resources>
-    <string name="netease_app_name">Netease</string>
+    <string name="netease_app_name">网易云音乐</string>
     <string name="netease_hint_phone_number">输入网易云登陆的手机号</string>
     <string name="netease_hint_password">密码</string>
     <string name="netease_action_login">点击登录</string>

@@ -1,5 +1,5 @@
 <resources>
-    <string name="local_app_name">Local</string>
+    <string name="local_app_name">本地音乐</string>
     <string name="local_action_scanner_start">开始扫描</string>
     <string name="local_action_scanner_stop">停止扫描</string>
     <string name="local_music_scanner_setting">扫描设置</string>

@@ -8,14 +8,12 @@ import com.alibaba.android.arouter.facade.template.IProvider
 import tech.summerly.quiet.commonlib.utils.log
 import kotlin.reflect.KClass
 
-class TypedAdapter() : RecyclerView.Adapter<ViewHolder>() {
+class TypedAdapter constructor(list: List<Any>)  : RecyclerView.Adapter<ViewHolder>() {
 
 
-    constructor(items: List<Any>) : this() {
-        this.items = items
-    }
+    constructor():this(emptyList())
 
-    private var items: List<Any> = emptyList()
+    private var items: List<Any> = list
 
     private val pool = TypedBinderPool()
 
