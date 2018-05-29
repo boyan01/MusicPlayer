@@ -32,6 +32,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setContentView(R.layout.activity_main)
         navigationView.setNavigationItemSelectedListener(this)
         navigationView.setCheckedItem(R.id.nav_netease)
+        navigationView.menu.findItem(R.id.nav_netease)?.let {
+            onNavigationItemSelected(it)
+        }
     }
 
     override fun onStart() {
@@ -40,10 +43,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             it.setOnClickListener {
                 log { "netease user clicked" }
             }
-        }
-        navigationView.setCheckedItem(R.id.nav_netease)
-        navigationView.menu.findItem(R.id.nav_netease)?.let {
-            onNavigationItemSelected(it)
         }
     }
 
