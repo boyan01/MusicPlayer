@@ -62,7 +62,7 @@ class CoreMediaPlayer {
         stop()
         reset()
         val ref = internalMediaPlayer.asReference()
-        ref().setDataSource(MediaDataSource(music))
+        ref().setDataSource(music)
         state = PlayerState.Preparing
         ref().prepareAsyncAwait()
         start()
