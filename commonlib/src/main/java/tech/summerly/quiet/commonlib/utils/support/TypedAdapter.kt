@@ -1,6 +1,7 @@
 package tech.summerly.quiet.commonlib.utils.support
 
 import android.content.Context
+import android.support.annotation.LayoutRes
 import android.support.v4.util.SparseArrayCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
@@ -8,10 +9,10 @@ import com.alibaba.android.arouter.facade.template.IProvider
 import tech.summerly.quiet.commonlib.utils.log
 import kotlin.reflect.KClass
 
-class TypedAdapter constructor(list: List<Any>)  : RecyclerView.Adapter<ViewHolder>() {
+open class TypedAdapter constructor(list: List<Any>) : RecyclerView.Adapter<ViewHolder>() {
 
 
-    constructor():this(emptyList())
+    constructor() : this(emptyList())
 
     private var items: List<Any> = list
 
@@ -72,7 +73,7 @@ class TypedBinderPool {
     fun <T : Any> register(klass: KClass<T>, binder: TypedBinder<T>) {
         val index = typePool.indexOfValue(klass)
         if (index > 0) {
-            log {"$klass already register" }
+            log { "$klass already register" }
             return
         }
         typePool.put(typeAutoIncrement, klass)
@@ -119,5 +120,15 @@ abstract class TypedBinder<T : Any> : IProvider {
 
     abstract fun onBindViewHolder(holder: ViewHolder, item: T)
 
+}
+
+
+abstract class SimpleTypedBinder<T : Any> : TypedBinder<T>() {
+
+    abstract val layoutId: Int
+
+    override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
+        return ViewHolder.from(layoutId, parent)
+    }
 }
 

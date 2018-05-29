@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Quiet</string>
+    <string name="open_navigation_drawer">打开抽屉</string>
+    <string name="close_navigation_drawer">关闭导航抽屉</string>
 </resources>

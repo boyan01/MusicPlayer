@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context="tech.summerly.quiet.MainActivity"
+    android:id="@+id/drawerLayout"
     tools:openDrawer="start">
 
 

@@ -40,7 +40,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:title="@string/player_personal_fm"
             app:titleTextColor="?colorTextPrimaryInverse"
-            tools:navigationIcon="@drawable/ic_arrow_back_black_24dp" />
+            tools:navigationIcon="@drawable/ic_arrow_back_white_24dp" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/playerInfo"

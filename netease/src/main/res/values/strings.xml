@@ -49,5 +49,7 @@
     <string name="netease_play_next">下一首</string>
     <string name="netease_play_pause">play/pause</string>
     <string name="netease_play_count">%d次</string>
+    <string name="netease_sign_in">签到</string>
+    <string name="netease_signed">已签到</string>
 
 </resources>

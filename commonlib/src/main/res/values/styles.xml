@@ -28,6 +28,8 @@
         <item name="chipGroupStyle">@style/Widget.MaterialComponents.ChipGroup</item>
         <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Action</item>
         <item name="navigationViewStyle">@style/Widget.Design.NavigationView</item>
+        <item name="materialCardViewStyle">@style/Widget.MaterialComponents.CardView</item>
+        <item name="materialButtonStyle">@style/Widget.MaterialComponents.Button</item>
         <!--<ititlename="colorControlHighlight">@color/common_colorRipple</item>-->
         <!--<ititlename="android:textColorPrimary">@color/common_textPrimary</item>-->
         <!--<ititlename="android:textColorSecondary">@color/common_textSecondary</item>-->

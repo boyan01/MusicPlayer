@@ -63,7 +63,7 @@ class FmPlayerFragment : BaseFragment() {
         buttonComment.setOnClickListener {
 
         }
-        toolbar.navigationIcon = drawable(R.drawable.ic_arrow_back_black_24dp, context.getAttrColor(R.attr.colorTextPrimaryInverse))
+        toolbar.navigationIcon = drawable(R.drawable.ic_arrow_back_white_24dp, context.getAttrColor(R.attr.colorTextPrimaryInverse))
         toolbar.setNavigationOnClickListener {
             closeSelf()
         }
