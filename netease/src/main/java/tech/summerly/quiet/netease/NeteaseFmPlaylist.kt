@@ -25,8 +25,7 @@ class NeteaseFmPlaylist : Playlist(
 
     override val type: PlayerType = PlayerType.FM
 
-    @Transient
-    private val neteaseApi = NeteaseCloudMusicApi()
+    private val neteaseApi get() = NeteaseCloudMusicApi()
 
     override suspend fun getNextMusic(music: Music?): Music? = suspendCancellableCoroutine {
         val nextIndex = musicList.indexOf(current) + 1
