@@ -1,11 +1,26 @@
 package tech.summerly.quiet.netease.adapters.main
 
+import android.app.Activity
+import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat.startActivity
+import android.support.v7.app.AppCompatActivity
+import android.text.TextUtils.replace
 import android.view.View
+import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.netease_content_nav_item.view.*
 import kotlinx.android.synthetic.main.netease_item_navigation.view.*
+import org.jetbrains.anko.startActivity
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.player.PlayerType
+import tech.summerly.quiet.commonlib.player.core.PlayerState
+import tech.summerly.quiet.commonlib.utils.intransaction
 import tech.summerly.quiet.commonlib.utils.support.SimpleTypedBinder
 import tech.summerly.quiet.commonlib.utils.support.ViewHolder
+import tech.summerly.quiet.constraints.Player
+import tech.summerly.quiet.netease.NeteaseFmPlaylist
 import tech.summerly.quiet.netease.R
+import tech.summerly.quiet.netease.ui.NeteaseDailyRecommendActivity
+import tech.summerly.quiet.netease.ui.NeteaseRecordActivity
 
 
 internal object Navigation {
@@ -27,14 +42,55 @@ internal class NavigationViewBinder : SimpleTypedBinder<Navigation>() {
 
     override fun onBindViewHolder(holder: ViewHolder, item: Navigation) = with(holder.itemView) {
         navFm.setData(Navigation.fm)
+        navFm.setOnClickListener {
+            it.navigationToFmPlayer()
+        }
         navDaily.setData(Navigation.daily)
+        navDaily.setOnClickListener {
+            context.startActivity<NeteaseDailyRecommendActivity>()
+        }
         navDownload.setData(Navigation.download)
+        navDownload.setOnClickListener {
+            //todo
+        }
         navRecord.setData(Navigation.record)
+        navRecord.setOnClickListener {
+            context.startActivity<NeteaseRecordActivity>()
+        }
     }
 
     private fun View.setData(pair: Pair<Int, Int>) {
         text.setText(pair.first)
         image.setImageResource(pair.second)
+    }
+
+    private fun View.navigationToFmPlayer() {
+        val musicPlayer = MusicPlayerManager.player
+        if (musicPlayer.playlist.token != NeteaseFmPlaylist.TOKEN) {
+            musicPlayer.playlist = NeteaseFmPlaylist()
+        }
+        val fragmentName = Player.FRAGMENT_FM_PLAYER_NORMAL
+        val fragment = ARouter.getInstance().build(fragmentName).navigation() as Fragment?
+                ?: return
+        (context as AppCompatActivity).supportFragmentManager.intransaction {
+            replace(android.R.id.content, fragment, fragmentName)
+            addToBackStack(fragmentName)
+        }
+        playFmMusic()
+    }
+
+    private fun playFmMusic() {
+        if (MusicPlayerManager.player.playlist.type != PlayerType.FM) {
+            return
+        }
+        val state = MusicPlayerManager.player.mediaPlayer.getPlayerState()
+        if (state == PlayerState.Playing || state == PlayerState.Preparing) {
+            return
+        } else if (state == PlayerState.Pausing) {
+            MusicPlayerManager.player.mediaPlayer.start()
+        } else {
+            MusicPlayerManager.player.playNext()
+        }
     }
 
 }

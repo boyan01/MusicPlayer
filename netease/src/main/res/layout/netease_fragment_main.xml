@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?colorPrimary"
-        app:navigationIcon="@drawable/netease_ic_arrow_back_white_24dp" />
+        app:title="@string/netease_app_name"
+        app:titleTextColor="?colorTextPrimaryInverse" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"

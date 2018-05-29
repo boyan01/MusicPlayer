@@ -41,7 +41,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 log { "netease user clicked" }
             }
         }
-
+        navigationView.setCheckedItem(R.id.nav_netease)
+        navigationView.menu.findItem(R.id.nav_netease)?.let {
+            onNavigationItemSelected(it)
+        }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

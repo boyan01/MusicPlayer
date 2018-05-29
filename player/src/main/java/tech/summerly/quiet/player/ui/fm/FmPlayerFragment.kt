@@ -2,6 +2,7 @@ package tech.summerly.quiet.player.ui.fm
 
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

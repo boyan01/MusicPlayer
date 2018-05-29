@@ -54,6 +54,10 @@ open class TypedAdapter constructor(list: List<Any>) : RecyclerView.Adapter<View
         binder.onBindViewHolder(holder, items[position])
     }
 
+    fun getItem(adapterPosition: Int): Any {
+        return items[adapterPosition]
+    }
+
 }
 
 //type-binder pool to handle type and binder relationship

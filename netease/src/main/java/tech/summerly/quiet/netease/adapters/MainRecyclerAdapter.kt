@@ -24,14 +24,12 @@ internal class MainRecyclerAdapter() : TypedAdapter() {
     fun addCreatedPlaylists(playlists: List<Any>) {
         playlistCreated.clear()
         playlistCreated.addAll(playlists)
-        show()
     }
 
     //添加用户自己订阅的歌单数据
     fun addSubscribedPlaylists(playlists: List<Any>) {
         playlistCollected.clear()
         playlistCollected.addAll(playlists)
-        show()
     }
 
     fun show() {
@@ -40,7 +38,7 @@ internal class MainRecyclerAdapter() : TypedAdapter() {
             add(UserInfo())
             add(Navigation)
             add(PlaylistHeader.CREATED)
-            addAll(playlistCollected)
+            addAll(playlistCreated)
             add(PlaylistHeader.SUBSCRIPTION)
             addAll(playlistCollected)
         }
@@ -68,6 +66,7 @@ internal class MainRecyclerAdapter() : TypedAdapter() {
             PlaylistHeader.SUBSCRIPTION -> playlistCollected
         }
         items.addAll(index = index + 1, elements = playlists)
+        setList(ArrayList(items))
         notifyItemRangeInserted(index + 1, playlists.size)
     }
 
@@ -81,6 +80,7 @@ internal class MainRecyclerAdapter() : TypedAdapter() {
         }
         //remove [playlists]
         items.removeAll(playlists)
+        setList(ArrayList(items))
         //更新view
         notifyItemRangeRemoved(index + 1, playlists.size)
     }
@@ -88,7 +88,7 @@ internal class MainRecyclerAdapter() : TypedAdapter() {
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         recyclerView.itemAnimator = object : DefaultItemAnimator() {
             override fun onChangeStarting(item: RecyclerView.ViewHolder, oldItem: Boolean) {
-                val data = items[item.adapterPosition]
+                val data = getItem(item.adapterPosition)
                 if (item is PlaylistHeaderViewHolder && data is PlaylistHeader) {
                     item.animateIndicator(data.state)
                 }
