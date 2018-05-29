@@ -6,13 +6,20 @@
     android:fitsSystemWindows="true">
 
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?colorPrimary"
-        app:title="@string/netease_app_name"
-        app:titleTextColor="?colorTextPrimaryInverse" />
+        android:layout_height="?actionBarSize"
+        app:elevation="2dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?colorPrimary"
+            app:title="@string/netease_app_name"
+            app:titleTextColor="?colorTextPrimaryInverse" />
+    </android.support.design.widget.AppBarLayout>
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"

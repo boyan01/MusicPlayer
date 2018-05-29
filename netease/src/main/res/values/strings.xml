@@ -51,5 +51,7 @@
     <string name="netease_play_count">%d次</string>
     <string name="netease_sign_in">签到</string>
     <string name="netease_signed">已签到</string>
+    <string name="netease_not_login">未登录</string>
+    <string name="netease_to_login"><![CDATA[点击登录>]]></string>
 
 </resources>
