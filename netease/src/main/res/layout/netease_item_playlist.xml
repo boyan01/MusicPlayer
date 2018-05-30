@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
-    android:background="?android:selectableItemBackground">
+    android:layout_height="56dp"
+    android:background="?android:selectableItemBackground"
+    tools:showIn="@layout/netease_main_preview">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/imageCover"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:padding="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,8 +24,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:textColor="@color/common_text_primary"
-        android:textSize="16sp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+        android:textColor="?colorTextPrimary"
         app:layout_constraintBottom_toTopOf="@id/textSubTitle"
         app:layout_constraintEnd_toStartOf="@id/imageAction"
         app:layout_constraintStart_toEndOf="@+id/imageCover"

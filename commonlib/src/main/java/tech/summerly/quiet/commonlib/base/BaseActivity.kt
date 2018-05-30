@@ -25,9 +25,7 @@ open class BaseActivity : AppCompatActivity(), BaseView {
      */
     fun requestApplyInserts() {
         val content = findViewById<ViewGroup>(android.R.id.content) ?: return
-        content.forEach {
-            ViewCompat.requestApplyInsets(it)
-        }
+        ViewCompat.requestApplyInsets(content)
     }
 
 }

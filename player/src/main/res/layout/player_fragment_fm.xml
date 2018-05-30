@@ -26,7 +26,6 @@
         android:id="@+id/fmPlayerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent"
         android:fitsSystemWindows="true"
         android:orientation="vertical">
 
@@ -125,10 +124,7 @@
             android:layout_marginStart="8dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:padding="4dp"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/textCurrentPosition"

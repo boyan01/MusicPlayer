@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.view.WindowInsets
 import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.contentView
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.utils.intransaction
 import tech.summerly.quiet.commonlib.utils.log
@@ -35,13 +39,16 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         navigationView.menu.findItem(R.id.nav_netease)?.let {
             onNavigationItemSelected(it)
         }
+        //拦截NavigationView读取和消耗 WindowsInsets，已向Google报告Bug，以后再
+        //更改逻辑以适配底部控制栏。
+        navigationView.setOnApplyWindowInsetsListener(null)
     }
 
     override fun onStart() {
         super.onStart()
         navigationView.menu.findItem(R.id.nav_netease)?.actionView?.findViewById<View>(R.id.indicatorLayout)?.let {
             it.setOnClickListener {
-                log { "netease user clicked" }
+
             }
         }
     }

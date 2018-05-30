@@ -5,42 +5,42 @@
     android:id="@+id/headerContainer"
     android:layout_width="match_parent"
     android:layout_height="36dp"
-    android:background="@color/common_background_dark"
+    android:background="?android:selectableItemBackground"
     android:elevation="1px"
-    android:foreground="?android:selectableItemBackground">
+    tools:layout_gravity="center_vertical"
+    tools:showIn="@layout/netease_main_preview">
 
     <android.support.v7.widget.AppCompatImageView
         android:id="@+id/iconExpandIndicator"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/netease_ic_keyboard_arrow_right_black_24dp"
+        android:tint="?colorPrimary"
         android:transformPivotX="12dp"
         android:transformPivotY="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/netease_ic_keyboard_arrow_right_black_24dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="8dp"
-        android:foregroundTint="@color/common_text_primary"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:padding="4dp"
+        android:progressTint="?colorPrimary"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintBottom_toBottomOf="@+id/iconExpandIndicator"
+        app:layout_constraintStart_toStartOf="@+id/iconExpandIndicator"
+        app:layout_constraintTop_toTopOf="@+id/iconExpandIndicator"
+        app:layout_constraintEnd_toEndOf="@+id/iconExpandIndicator"
+        tools:visibility="invisible" />
 
     <TextView
         android:id="@+id/headerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
         android:textColor="@color/common_text_primary"
-        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iconExpandIndicator"
         app:layout_constraintTop_toTopOf="parent"
