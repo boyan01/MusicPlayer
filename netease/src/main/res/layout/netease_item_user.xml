@@ -14,7 +14,7 @@
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_margin="4dp"
-        app:cardCornerRadius="2dp"
-        app:cardElevation="1dp" />
+        android:layout_margin="6dp"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp" />
 </FrameLayout>

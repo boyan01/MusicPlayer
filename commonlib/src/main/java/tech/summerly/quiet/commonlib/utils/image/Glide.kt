@@ -3,17 +3,38 @@ package tech.summerly.quiet.commonlib.utils.image
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.widget.ImageView
+import com.bumptech.glide.request.target.BaseTarget
+import com.bumptech.glide.request.target.SizeReadyCallback
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.target.ViewTarget
+import com.bumptech.glide.request.transition.Transition
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.loadAndGet
 
-fun ImageView.setImageUrl(url: String) {
-    GlideApp.with(this).load(url).into(this)
+fun ImageView.setImageUrl(url: String, round: Boolean = false) {
+    GlideApp.with(this).load(url)
+            .let {
+                if (round) {
+                    it.circleCrop()
+                }
+                it
+            }
+            .into(this)
+}
+
+fun View.setImageBackground(url: String) {
+    GlideApp.with(this).load(url)
+            .into(object : ViewTarget<View, Drawable>(this) {
+                override fun onResourceReady(resource: Drawable?, transition: Transition<in Drawable>?) {
+                    background = resource
+                }
+            })
 }
 
 
