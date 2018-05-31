@@ -9,6 +9,9 @@ import android.view.ViewGroup
 open class ViewHolder(itemView: View)
     : RecyclerView.ViewHolder(itemView) {
 
+    constructor(layoutId: Int, parent: ViewGroup)
+            : this(LayoutInflater.from(parent.context).inflate(layoutId, parent, false))
+
     companion object {
 
         operator fun invoke(@LayoutRes layoutId: Int, parent: ViewGroup, inflater: LayoutInflater): ViewHolder {

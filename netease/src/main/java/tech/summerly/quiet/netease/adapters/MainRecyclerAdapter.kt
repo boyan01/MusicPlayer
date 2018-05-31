@@ -66,7 +66,7 @@ internal class MainRecyclerAdapter() : TypedAdapter() {
             PlaylistHeader.SUBSCRIPTION -> playlistCollected
         }
         items.addAll(index = index + 1, elements = playlists)
-        setList(ArrayList(items))
+        setList(ArrayList(items), notify = false)
         notifyItemRangeInserted(index + 1, playlists.size)
     }
 
@@ -80,7 +80,7 @@ internal class MainRecyclerAdapter() : TypedAdapter() {
         }
         //remove [playlists]
         items.removeAll(playlists)
-        setList(ArrayList(items))
+        setList(ArrayList(items), notify = false)
         //更新view
         notifyItemRangeRemoved(index + 1, playlists.size)
     }

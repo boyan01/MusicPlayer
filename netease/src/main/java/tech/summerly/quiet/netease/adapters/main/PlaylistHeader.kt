@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import kotlinx.android.synthetic.main.netease_header_playlist.view.*
-import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.commonlib.utils.invisible
+import tech.summerly.quiet.commonlib.utils.popupMenu
+import tech.summerly.quiet.commonlib.utils.string
 import tech.summerly.quiet.commonlib.utils.support.TypedBinder
 import tech.summerly.quiet.commonlib.utils.support.ViewHolder
+import tech.summerly.quiet.commonlib.utils.visible
 import tech.summerly.quiet.netease.R
 
 /**
@@ -47,7 +50,7 @@ internal class PlaylistHeaderViewBinder(
 
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        return ViewHolder.from(R.layout.netease_header_playlist, parent)
+        return PlaylistHeaderViewHolder(R.layout.netease_header_playlist, parent)
     }
 
 }
@@ -73,7 +76,8 @@ enum class PlaylistHeader(var state: Int) {
 }
 
 
-internal class PlaylistHeaderViewHolder(itemView: View) : ItemViewBinder.ViewHolder(itemView) {
+internal class PlaylistHeaderViewHolder(layoutId: Int, parent: ViewGroup) : ViewHolder(layoutId, parent) {
+
 
     companion object {
 
@@ -98,7 +102,7 @@ internal class PlaylistHeaderViewHolder(itemView: View) : ItemViewBinder.ViewHol
         if (rotation == r) {
             return
         }
-        animatorExpandIndicator?.end()
+        animatorExpandIndicator?.cancel()
         animatorExpandIndicator = ObjectAnimator.ofFloat(this, "rotation", rotation, r)
                 .setDuration(DURATION)
         animatorExpandIndicator?.start()

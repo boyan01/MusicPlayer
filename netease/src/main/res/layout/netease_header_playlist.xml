@@ -16,8 +16,8 @@
         android:layout_height="30dp"
         android:src="@drawable/netease_ic_keyboard_arrow_right_black_24dp"
         android:tint="?colorPrimary"
-        android:transformPivotX="12dp"
-        android:transformPivotY="12dp"
+        android:transformPivotX="15dp"
+        android:transformPivotY="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

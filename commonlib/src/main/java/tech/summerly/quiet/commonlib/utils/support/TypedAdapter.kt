@@ -26,9 +26,11 @@ open class TypedAdapter constructor(list: List<Any>) : RecyclerView.Adapter<View
         return this
     }
 
-    fun setList(list: List<Any>) {
+    fun setList(list: List<Any>, notify: Boolean = true) {
         this.items = list
-        notifyDataSetChanged()
+        if (notify) {
+            notifyDataSetChanged()
+        }
     }
 
     fun submit(list: List<Any>) {
