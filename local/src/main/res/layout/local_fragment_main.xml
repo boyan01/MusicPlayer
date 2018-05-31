@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@null"
-        app:contentInsetStart="8dp"
+        app:contentInsetStart="0dp"
+        app:contentInsetStartWithNavigation="0dp"
         app:title="@null">
 
         <FrameLayout
