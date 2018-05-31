@@ -24,6 +24,7 @@ import tech.summerly.quiet.constraints.Player
 /**
  * Created by summer on 17-12-17
  */
+@Deprecated("see more to play module")
 open class BottomControllerFragment : BaseFragment() {
 
 
@@ -131,7 +132,8 @@ open class BottomControllerFragment : BaseFragment() {
         }
 
         /**
-         * 隐藏当前界面的底部控制栏
+         * 隐藏当前界面的底部控制栏            find<View>(R.id.bottomPlayerContainer)
+
          */
         fun hideBottomController() {
             if (this !is AppCompatActivity) {

@@ -24,6 +24,8 @@
         <item name="colorTextSecondary">@color/color_text_secondary</item>
         <item name="colorTextSecondaryInverse">@color/color_text_secondary_inverse</item>
         <item name="colorDivider">@color/common_color_divider</item>
+        <item name="colorIconActive">@color/common_color_icon_active</item>
+        <item name="colorIconInactive">@color/common_colorIconInactive</item>
 
         <item name="chipGroupStyle">@style/Widget.MaterialComponents.ChipGroup</item>
         <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Action</item>

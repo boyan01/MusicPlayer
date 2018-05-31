@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.local_fragment_main.view.*
 import kotlinx.android.synthetic.main.local_main_header_tab.view.*
 import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.base.BaseFragment
+import tech.summerly.quiet.commonlib.component.callback.BottomControllerHost
 import tech.summerly.quiet.commonlib.utils.popupMenu
 import tech.summerly.quiet.constraints.Local
 import tech.summerly.quiet.constraints.Setting
@@ -26,7 +27,7 @@ import tech.summerly.quiet.local.fragments.MusicListFragment
 import tech.summerly.quiet.local.scanner.LocalMusicScannerActivity
 
 @Route(path = Local.FRAGMENT_LOCAL_MAIN)
-class LocalMainFragment : BaseFragment() {
+class LocalMainFragment : BaseFragment(), BottomControllerHost {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.local_fragment_main, container, false)
@@ -48,6 +49,11 @@ class LocalMainFragment : BaseFragment() {
                 true
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        initBottomController()
     }
 
     fun setCurrentPage(position: Int, smoothScroll: Boolean = true) {

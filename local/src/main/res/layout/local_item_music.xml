@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="?selectableItemBackground"
-    android:fitsSystemWindows="true">
+    android:background="?selectableItemBackground">
 
     <View
         android:id="@+id/now_playing_indicator"

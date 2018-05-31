@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -23,7 +22,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@color/common_color_primary" />
+            tools:src="?colorPrimary" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/musicTitle"
@@ -34,7 +33,7 @@
             android:layout_marginBottom="2dp"
             android:ellipsize="end"
             android:maxLines="1"
-            android:textColor="@color/common_text_primary"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
             app:layout_constraintBottom_toTopOf="@id/musicSubTitle"
             app:layout_constraintEnd_toStartOf="@+id/progressPlayPause"
             app:layout_constraintStart_toEndOf="@+id/artWork"
@@ -52,10 +51,7 @@
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:lines="1"
-            android:maxWidth="200dp"
-            android:maxLines="1"
-            android:textColor="@color/color_text_secondary"
-            android:textSize="12sp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/progressPlayPause"
             app:layout_constraintStart_toEndOf="@+id/artWork"
@@ -73,7 +69,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/controllerPlaylist"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/controllerPauseOrPlay"
@@ -82,12 +78,13 @@
             android:layout_height="wrap_content"
             android:padding="4dp"
             android:src="@drawable/ic_play_arrow_black_24dp"
-            android:tint="@color/common_color_icon_active"
-            android:tooltipText="@string/common_pause"
+            android:tint="?colorIconActive"
+            android:tooltipText="@string/player_play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/controllerPlaylist"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
+            tools:ignore="UnusedAttribute"
+            tools:visibility="visible" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/controllerPlaylist"
@@ -95,11 +92,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/common_ic_playlist_play_black_24dp"
-            android:tint="@color/common_color_icon_active"
-            android:tooltipText="@string/common_tooltips_playing_list"
+            android:tint="?colorIconActive"
+            android:tooltipText="@string/player_playing_list"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UnusedAttribute" />
 
     </android.support.constraint.ConstraintLayout>
 

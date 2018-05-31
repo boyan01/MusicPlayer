@@ -5,4 +5,6 @@
     <string name="player_play">播放</string>
     <string name="player_play_next">下一曲</string>
     <string name="player_personal_fm">私人FM</string>
+    <string name="player_pause">暂停</string>
+    <string name="player_playing_list">播放列表</string>
 </resources>

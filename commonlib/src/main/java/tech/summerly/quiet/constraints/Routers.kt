@@ -68,4 +68,6 @@ object Player {
     const val FRAGMENT_FM_PLAYER_NORMAL = "/player/normal_fm"
     const val FRAGMENT_FM_PLAYER_SIMPLE = "/player/simple_fm"
     const val FRAGMENT_MUSIC_PLAYER = "/player/music"
+
+    const val FRAGMENT_BOTTOM_CONTROLLER = "/player/bottom_controller"
 }
