@@ -4,12 +4,9 @@ package tech.summerly.quiet.commonlib.base
 
 import android.support.v4.view.ViewCompat
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.forEach
 import kotlinx.coroutines.experimental.Job
 import tech.summerly.quiet.commonlib.mvp.BaseView
-import tech.summerly.quiet.commonlib.utils.log
 
 /**
  *  Created by summer on 17-12-17

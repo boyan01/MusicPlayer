@@ -2,7 +2,6 @@ package tech.summerly.quiet.player.ui.fm
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.view.ViewCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +9,6 @@ import android.widget.SeekBar
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.player_content_fm_controller.*
 import kotlinx.android.synthetic.main.player_fragment_fm.view.*
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.player.MusicPlayer
@@ -24,7 +20,6 @@ import tech.summerly.quiet.commonlib.utils.image.PictureModel
 import tech.summerly.quiet.commonlib.utils.image.blur
 import tech.summerly.quiet.constraints.Player
 import tech.summerly.quiet.player.R
-import tech.summerly.quiet.player.R.id.*
 
 @Route(path = Player.FRAGMENT_FM_PLAYER_NORMAL)
 class FmPlayerFragment : BaseFragment() {
@@ -48,21 +43,9 @@ class FmPlayerFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.player_fragment_fm, container, false)
         view.setOnTouchListener { _, _ -> true }
-
-        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
-            log { "receive inserts event ~ " }
-            insets
-        }
         return view
     }
 
-    override fun onStart() {
-        super.onStart()
-        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
-            log { "receive inserts event ~ " }
-            insets
-        }
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
         super.onViewCreated(view, savedInstanceState)
