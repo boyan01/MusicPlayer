@@ -17,8 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?colorPrimary"
-            app:title="@string/netease_app_name"
-            app:titleTextColor="?colorTextPrimaryInverse" />
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
+            app:title="@string/netease_app_name" />
     </android.support.design.widget.AppBarLayout>
 
 

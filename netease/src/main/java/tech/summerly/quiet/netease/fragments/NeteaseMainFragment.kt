@@ -1,6 +1,7 @@
 package tech.summerly.quiet.netease.fragments
 
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,4 +47,6 @@ class NeteaseMainFragment : BaseFragment() {
         adapter.show()
         isLoading = false
     }
+
+    fun getToolbar(): Toolbar? = view?.toolbar
 }

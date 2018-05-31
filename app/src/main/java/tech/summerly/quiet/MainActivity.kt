@@ -4,17 +4,12 @@ import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
-import android.support.v4.view.ViewCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
-import android.view.WindowInsets
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.contentView
 import tech.summerly.quiet.commonlib.base.BaseActivity
-import tech.summerly.quiet.commonlib.utils.intransaction
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.local.LocalMainFragment
 import tech.summerly.quiet.netease.fragments.NeteaseMainFragment
@@ -31,14 +26,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     }
 
+    private var checkedFragment = TAG_FRAGMENT_NETEASE
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navigationView.setNavigationItemSelectedListener(this)
         navigationView.setCheckedItem(R.id.nav_netease)
-        navigationView.menu.findItem(R.id.nav_netease)?.let {
-            onNavigationItemSelected(it)
-        }
+
         //拦截NavigationView读取和消耗 WindowsInsets，已向Google报告Bug，以后再
         //更改逻辑以适配底部控制栏。
         navigationView.setOnApplyWindowInsetsListener(null)
@@ -46,6 +41,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onStart() {
         super.onStart()
+        checkToFragment(checkedFragment)
         navigationView.menu.findItem(R.id.nav_netease)?.actionView?.findViewById<View>(R.id.indicatorLayout)?.let {
             it.setOnClickListener {
 
@@ -56,15 +52,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_netease -> {
-                val fragment = supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_NETEASE)
-                        ?: NeteaseMainFragment()
-                checkToFragment(fragment, TAG_FRAGMENT_NETEASE)
+                checkToFragment(TAG_FRAGMENT_NETEASE)
                 return true
             }
             R.id.nav_local -> {
-                val fragment = supportFragmentManager.findFragmentByTag(TAG_FRAGMENT_LOCAL)
-                        ?: LocalMainFragment()
-                checkToFragment(fragment, TAG_FRAGMENT_LOCAL)
+                checkToFragment(TAG_FRAGMENT_LOCAL)
                 return true
             }
         }
@@ -79,17 +71,42 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    private fun checkToFragment(fragment: Fragment, tag: String) {
-        supportFragmentManager.intransaction {
-            replace(R.id.container, fragment, tag)
+    private fun checkToFragment(tag: String) {
+        checkedFragment = tag
+        val fragment = supportFragmentManager.findFragmentByTag(tag) ?: when (tag) {
+            TAG_FRAGMENT_NETEASE -> NeteaseMainFragment()
+            TAG_FRAGMENT_LOCAL -> LocalMainFragment()
+            else -> error("error tag checked")
         }
-        val toggle = ActionBarDrawerToggle(this, drawerLayout, fragment.getToolbar(),
-                R.string.open_navigation_drawer, R.string.close_navigation_drawer)
-        drawerLayout.addDrawerListener(toggle)
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, fragment, tag)
+                .commitNow()
+        val toolbar = fragment.toolbar()
+        if (toolbar == null) {
+            log { "toolbar == null" }
+        }
+        val toggle = getToggle(fragment.toolbar())
         toggle.syncState()
         drawerLayout.closeDrawer(GravityCompat.START)
     }
 
-    private fun Fragment.getToolbar(): Toolbar? = null
+    private var toggle: ActionBarDrawerToggle? = null
+
+    private fun getToggle(toolbar: Toolbar?): ActionBarDrawerToggle {
+        this.toggle?.let {
+            drawerLayout.removeDrawerListener(it)
+        }
+        val toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_navigation_drawer, R.string.close_navigation_drawer)
+        drawerLayout.addDrawerListener(toggle)
+        this.toggle = toggle
+        return toggle
+    }
+
+    private fun Fragment.toolbar(): Toolbar? = when (this) {
+        is NeteaseMainFragment -> getToolbar()
+        is LocalMainFragment -> getToolbar()
+        else -> null
+    }
 
 }
