@@ -1,12 +1,15 @@
 package tech.summerly.quiet.netease.adapters.main
 
 import com.alibaba.android.arouter.launcher.ARouter
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import kotlinx.android.synthetic.main.netease_item_playlist.view.*
+import org.jetbrains.anko.dip
 import tech.summerly.quiet.commonlib.utils.GlideApp
 import tech.summerly.quiet.commonlib.utils.support.SimpleTypedBinder
 import tech.summerly.quiet.commonlib.utils.support.ViewHolder
 import tech.summerly.quiet.commonlib.utils.toPictureUrl
 import tech.summerly.quiet.constraints.PlaylistDetail
+import tech.summerly.quiet.netease.NeteaseModule
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.utils.NeteasePlaylistDetailProvider
 import tech.summerly.quiet.service.netease.result.PlaylistResultBean
@@ -16,6 +19,7 @@ import tech.summerly.quiet.service.netease.result.PlaylistResultBean
  */
 internal class NeteasePlaylistItemViewBinder : SimpleTypedBinder<PlaylistResultBean.PlaylistBean>() {
 
+    private val mImageCornerRadius = NeteaseModule.dip(4)
 
     override val layoutId: Int
         get() = R.layout.netease_item_playlist
@@ -25,6 +29,7 @@ internal class NeteasePlaylistItemViewBinder : SimpleTypedBinder<PlaylistResultB
         textSubTitle.text = context.getString(R.string.netease_playlist_subtitle_template, item.trackCount)
         GlideApp.with(this)
                 .load(item.coverImgUrl.toPictureUrl())
+                .transform(RoundedCorners(mImageCornerRadius))
                 .placeholder(R.drawable.common_image_placeholder_loading).into(imageCover)
         setOnClickListener {
             ARouter.getInstance().build(PlaylistDetail.ACTIVITY_PLAYLIST_DETAIL)

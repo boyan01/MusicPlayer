@@ -36,10 +36,11 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textSubTitle"
-        style="@style/NeteaseMusicItemSubTitleStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        android:textColor="?colorTextSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/imageAction"
         app:layout_constraintStart_toStartOf="@id/textTitle"
@@ -62,7 +63,7 @@
         android:layout_width="0dp"
         android:layout_height="1px"
         android:layout_marginStart="8dp"
-        android:background="@color/common_color_divider"
+        android:background="?colorDivider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/imageCover" />

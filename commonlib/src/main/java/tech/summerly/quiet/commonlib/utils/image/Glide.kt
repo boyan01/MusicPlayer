@@ -15,6 +15,7 @@ import com.bumptech.glide.request.target.ViewTarget
 import com.bumptech.glide.request.transition.Transition
 import tech.summerly.quiet.commonlib.LibModule
 import tech.summerly.quiet.commonlib.utils.GlideApp
+import tech.summerly.quiet.commonlib.utils.GlideRequests
 import tech.summerly.quiet.commonlib.utils.loadAndGet
 
 fun ImageView.setImageUrl(url: String, round: Boolean = false) {
@@ -58,6 +59,33 @@ class PictureModel private constructor(internal val data: Any) {
             glide.circleCrop()
         }
         return glide.loadAndGet(data, width, height)!!
+    }
+
+    private fun getGlideRequests(context: Any): GlideRequests {
+        return when (context) {
+            is FragmentActivity -> GlideApp.with(context)
+            is View -> GlideApp.with(context)
+            is Fragment -> GlideApp.with(context)
+            is Activity -> GlideApp.with(context)
+            is Context -> GlideApp.with(context)
+            else -> throw IllegalArgumentException("context error")
+        }
+    }
+
+    fun load(context: Any) {
+        val request = getGlideRequests(context).asBitmap()
+        request.load(this.data)
+                .into(object : BaseTarget<Bitmap>() {
+                    override fun getSize(cb: SizeReadyCallback?) {
+
+                    }
+
+                    override fun removeCallback(cb: SizeReadyCallback?) {
+                    }
+
+                    override fun onResourceReady(resource: Bitmap?, transition: Transition<in Bitmap>?) {
+                    }
+                })
     }
 
     companion object {

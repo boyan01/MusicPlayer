@@ -5,8 +5,8 @@
     android:id="@+id/headerContainer"
     android:layout_width="match_parent"
     android:layout_height="36dp"
-    android:background="?android:selectableItemBackground"
-    android:elevation="1px"
+    android:background="#ededed"
+    android:foreground="?android:selectableItemBackground"
     tools:layout_gravity="center_vertical"
     tools:showIn="@layout/netease_main_preview">
 
@@ -14,8 +14,9 @@
         android:id="@+id/iconExpandIndicator"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:padding="4dp"
         android:src="@drawable/netease_ic_keyboard_arrow_right_black_24dp"
-        android:tint="?colorPrimary"
+        android:tint="?colorTextPrimary"
         android:transformPivotX="15dp"
         android:transformPivotY="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -30,9 +31,9 @@
         android:progressTint="?colorPrimary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/iconExpandIndicator"
+        app:layout_constraintEnd_toEndOf="@+id/iconExpandIndicator"
         app:layout_constraintStart_toStartOf="@+id/iconExpandIndicator"
         app:layout_constraintTop_toTopOf="@+id/iconExpandIndicator"
-        app:layout_constraintEnd_toEndOf="@+id/iconExpandIndicator"
         tools:visibility="invisible" />
 
     <TextView
@@ -40,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-        android:textColor="@color/common_text_primary"
+        android:textColor="?colorTextPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iconExpandIndicator"
         app:layout_constraintTop_toTopOf="parent"
@@ -48,12 +49,15 @@
 
     <android.support.v7.widget.AppCompatImageButton
         android:id="@+id/headerMore"
-        style="@style/Widget.AppCompat.ActionButton.Overflow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/ActionOverflow"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
         android:background="?android:selectableItemBackgroundBorderless"
-        android:src="@drawable/netease_ic_more_vert_black_24dp"
-        android:tint="@color/common_color_icon_active"
+        android:scaleX=".8"
+        android:scaleY=".8"
+        android:src="@drawable/netease_ic_settings_black_24dp"
+        android:tint="?colorIconActive"
         android:tooltipText="@string/netease_tips_action_more"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
