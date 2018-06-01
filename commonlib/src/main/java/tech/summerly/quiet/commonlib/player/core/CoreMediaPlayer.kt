@@ -22,6 +22,10 @@ class CoreMediaPlayer {
 
     companion object {
         var volume: Float = 1f
+            set(value) {
+                field = value
+                MusicPlayerManager.player.mediaPlayer.internalMediaPlayer.setVolume(value, value)
+            }
     }
 
     private val internalMediaPlayer: MediaPlayer = createMediaPlayer()
