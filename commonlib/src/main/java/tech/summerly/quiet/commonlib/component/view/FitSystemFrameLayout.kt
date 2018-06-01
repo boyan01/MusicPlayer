@@ -6,6 +6,9 @@ import android.support.v4.view.WindowInsetsCompat
 import android.util.AttributeSet
 import android.widget.FrameLayout
 
+/**
+ * 此 View 监听 WindowInsets 的分发并作出相应的变换，但是不消耗 WindowInsets
+ */
 class FitSystemFrameLayout @JvmOverloads constructor(
         context: Context?,
         attrs: AttributeSet? = null,
