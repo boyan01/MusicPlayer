@@ -73,11 +73,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     private fun checkToFragment(tag: String) {
         checkedFragment = tag
-        val fragment = supportFragmentManager.findFragmentByTag(tag) ?: when (tag) {
+        val fragment = (supportFragmentManager.findFragmentByTag(tag) ?: when (tag) {
             TAG_FRAGMENT_NETEASE -> NeteaseMainFragment()
             TAG_FRAGMENT_LOCAL -> LocalMainFragment()
             else -> error("error tag checked")
-        }
+        }) as Fragment
         supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.container, fragment, tag)
