@@ -100,7 +100,7 @@ internal class NeteaseRecordActivity : BaseActivity(), BottomControllerHost {
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
             listenMusicChangePosition(
-                    items,
+                    { items },
                     { any, music -> (any as? Record?)?.music == music }
             ) { from, to ->
                 if (from != -1) {

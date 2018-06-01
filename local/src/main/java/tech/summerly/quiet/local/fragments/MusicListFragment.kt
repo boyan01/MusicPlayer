@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.fragments.StatedRecyclerFragment
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.player.listenMusicChangePosition
 import tech.summerly.quiet.commonlib.utils.support.TypedAdapter
 import tech.summerly.quiet.local.fragments.binder.MusicItemBinder
 import tech.summerly.quiet.service.local.LocalMusicApi
@@ -29,6 +31,10 @@ class MusicListFragment : StatedRecyclerFragment<Music>() {
             if (newVersion > this.version) {
                 loadDataInternal()
             }
+        }
+        listenMusicChangePosition({ listAdapter.list }) { from, to ->
+            listAdapter.notifyItemChanged(from)
+            listAdapter.notifyItemChanged(to)
         }
     }
 

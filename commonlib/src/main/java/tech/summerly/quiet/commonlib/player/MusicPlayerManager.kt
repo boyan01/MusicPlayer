@@ -68,11 +68,11 @@ object MusicPlayerManager {
 }
 
 
-fun LifecycleOwner.listenMusicChangePosition(items: List<*>,
+fun LifecycleOwner.listenMusicChangePosition(items: () -> List<*>,
                                              predicate: (any: Any?, music: Music?) -> Boolean = { any, music -> any == music },
                                              change: (from: Int, to: Int) -> Unit) =
         MusicPlayerManager.musicChange.observeFilterNull(this) { (old, new) ->
-            val from = items.indexOfFirst { predicate(it, old) }
-            val to = items.indexOfFirst { predicate(it, new) }
+            val from = items().indexOfFirst { predicate(it, old) }
+            val to = items().indexOfFirst { predicate(it, new) }
             change(from, to)
         }
