@@ -35,10 +35,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setContentView(R.layout.activity_main)
         navigationView.setNavigationItemSelectedListener(this)
         navigationView.setCheckedItem(R.id.nav_netease)
-
-        //拦截NavigationView读取和消耗 WindowsInsets，已向Google报告Bug，以后再
-        //更改逻辑以适配底部控制栏。
-        navigationView.setOnApplyWindowInsetsListener(null)
     }
 
     override fun onStart() {
