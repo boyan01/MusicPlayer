@@ -47,6 +47,8 @@ object Setting {
 
     const val ACTIVITY_SETTING_MAIN = "/setting/main"
 
+    const val SETTING_PREFERENCE_PROVIDER = "/setting/preference_provider"
+
 }
 
 object PlaylistDetail {

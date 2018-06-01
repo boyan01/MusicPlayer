@@ -9,8 +9,11 @@ import android.os.Build
 import android.view.animation.LinearInterpolator
 import org.jetbrains.anko.coroutines.experimental.asReference
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.persistence.preference.PreferenceProvider
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.constraints.Setting
 import tv.danmaku.ijk.media.player.IMediaPlayer
 import kotlin.coroutines.experimental.suspendCoroutine
 import tv.danmaku.ijk.media.player.IjkMediaPlayer as MediaPlayer
@@ -21,7 +24,21 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer as MediaPlayer
 class CoreMediaPlayer {
 
     companion object {
-        var volume: Float = 1f
+
+        private fun getPreferenceVolume(): Float {
+            val preference = PreferenceProvider.with(Setting.SETTING_PREFERENCE_PROVIDER).getPreference()
+            var volume = preference.getInt("key_volume", -1)
+            if (volume == -1) {
+                log(LoggerLevel.ERROR) { "can not read app setting: key_volume" }
+                volume = 100
+            }
+            return volume / 100F
+        }
+
+        /**
+         * volume from 0 to 1
+         */
+        var volume: Float = getPreferenceVolume()
             set(value) {
                 field = value
                 MusicPlayerManager.player.mediaPlayer.internalMediaPlayer.setVolume(value, value)
@@ -56,7 +73,6 @@ class CoreMediaPlayer {
         mediaPlayer.setOnCompletionListener {
             state = PlayerState.Complete
         }
-        mediaPlayer.setVolume(CoreMediaPlayer.volume, CoreMediaPlayer.volume)
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
         return mediaPlayer
     }
@@ -69,6 +85,8 @@ class CoreMediaPlayer {
         ref().setDataSource(music)
         state = PlayerState.Preparing
         ref().prepareAsyncAwait()
+        //每播放一首新歌曲，都需要重置音量！！
+        ref().setVolume(CoreMediaPlayer.volume, CoreMediaPlayer.volume)
         start()
     }
 
