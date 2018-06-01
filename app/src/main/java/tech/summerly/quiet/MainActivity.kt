@@ -8,9 +8,11 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.utils.log
+import tech.summerly.quiet.constraints.Setting
 import tech.summerly.quiet.local.LocalMainFragment
 import tech.summerly.quiet.netease.fragments.NeteaseMainFragment
 
@@ -58,6 +60,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.nav_local -> {
                 checkToFragment(TAG_FRAGMENT_LOCAL)
                 return true
+            }
+            R.id.nav_settings -> {
+                ARouter.getInstance().build(Setting.ACTIVITY_SETTING_MAIN).navigation()
             }
         }
         return false
