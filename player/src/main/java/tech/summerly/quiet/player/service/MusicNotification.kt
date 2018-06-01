@@ -7,18 +7,13 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.support.v4.app.NotificationCompat
-import android.support.v4.app.TaskStackBuilder
 import android.support.v7.graphics.Palette
-import com.alibaba.android.arouter.core.LogisticsCenter
-import com.alibaba.android.arouter.launcher.ARouter
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.notification.NotificationHelper
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager.player
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.utils.LoggerLevel
-import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.player.PlayerModule
 
 
@@ -66,26 +61,13 @@ internal object MusicNotification : NotificationHelper() {
                         "pauseOrPlay", buildPlaybackAction(1, type))
                 .addAction(R.drawable.common_ic_skip_next_black_24dp, "next", buildPlaybackAction(2, type))
                 .addAction(R.drawable.common_ic_close_black_24dp, "close", buildPlaybackAction(3, type))
-                .setContentIntent(buildContentIntent(type))
+                .setContentIntent(buildContentIntent())
                 .build()
     }
 
-    private fun buildContentIntent(type: MusicType): PendingIntent? {
-        val stackBuilder = TaskStackBuilder.create(context)
-        val pp = when (type) {
-            MusicType.NETEASE_FM -> ARouter.getInstance().build("/netease/fm")
-            MusicType.NETEASE, MusicType.LOCAL -> ARouter.getInstance().build("/netease/player")
-        }
-        try {
-            LogisticsCenter.completion(pp)
-            stackBuilder.addNextIntent(Intent(context, pp.destination))
-        } catch (e: Exception) {
-            log(LoggerLevel.ERROR) { e.printStackTrace();"MusicPlayer for $type do not match！" }
-        }
-        if (stackBuilder.intentCount <= 0) {
-            return null
-        }
-        return stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
+    private fun buildContentIntent(): PendingIntent {
+        val intent = Intent(context, NotificationRouterActivity::class.java)
+        return PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     private fun buildPlaybackAction(which: Int, type: MusicType): PendingIntent {

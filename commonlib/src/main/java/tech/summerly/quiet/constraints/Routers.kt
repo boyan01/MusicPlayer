@@ -73,3 +73,8 @@ object Player {
 
     const val FRAGMENT_BOTTOM_CONTROLLER = "/player/bottom_controller"
 }
+
+
+object Main {
+    const val ACTIVITY_MAIN = "/main/main"
+}

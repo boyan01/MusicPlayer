@@ -1,5 +1,3 @@
-@file:Suppress("MemberVisibilityCanBePrivate")
-
 package tech.summerly.quiet.commonlib.base
 
 import android.support.v4.view.ViewCompat

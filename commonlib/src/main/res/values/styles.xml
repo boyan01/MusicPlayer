@@ -6,6 +6,13 @@
 
     </style>
 
+    <style name="AppTheme.Translucent">
+
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+
+    </style>
+
 
     <!-- BbaseContexttion theme. -->
     <style name="CommonAppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">

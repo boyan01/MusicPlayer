@@ -3,6 +3,10 @@
 
     <application>
         <service android:name="tech.summerly.quiet.player.service.MusicPlayerService" />
+
+        <activity
+            android:name=".service.NotificationRouterActivity"
+            android:theme="@style/AppTheme.Translucent" />
     </application>
 
 </manifest>
