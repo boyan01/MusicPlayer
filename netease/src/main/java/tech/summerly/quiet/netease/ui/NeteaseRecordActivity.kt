@@ -12,7 +12,7 @@ import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.Record
-import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
+import tech.summerly.quiet.commonlib.component.callback.BottomControllerHost
 import tech.summerly.quiet.commonlib.fragments.StatedRecyclerFragment
 import tech.summerly.quiet.commonlib.fragments.UnimplementedFragment
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
@@ -27,7 +27,7 @@ import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
  * Created by summer on 18-2-27
  */
 @Route(path = "/netease/record")
-internal class NeteaseRecordActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
+internal class NeteaseRecordActivity : BaseActivity(), BottomControllerHost {
 
     companion object {
 
@@ -46,6 +46,11 @@ internal class NeteaseRecordActivity : BaseActivity(), BottomControllerFragment.
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        initBottomController()
     }
 
     private val uid: Long
