@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.netease_fragment_main.view.*
 import tech.summerly.quiet.commonlib.base.BaseFragment
+import tech.summerly.quiet.commonlib.component.callback.BottomControllerHost
 import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.adapters.MainRecyclerAdapter
 import tech.summerly.quiet.netease.persistence.NeteasePreference
 import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 
-class NeteaseMainFragment : BaseFragment() {
+class NeteaseMainFragment : BaseFragment(), BottomControllerHost {
 
 
     private val adapter by lazy { MainRecyclerAdapter() }
@@ -31,6 +32,7 @@ class NeteaseMainFragment : BaseFragment() {
     override fun onStart() {
         super.onStart()
         loadNeteasePlaylists()
+        initBottomController()
     }
 
     private var isLoading = false
