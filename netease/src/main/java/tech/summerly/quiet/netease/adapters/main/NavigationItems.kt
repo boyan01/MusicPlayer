@@ -1,11 +1,10 @@
 package tech.summerly.quiet.netease.adapters.main
 
-import android.app.Activity
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.app.AppCompatActivity
-import android.text.TextUtils.replace
+import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageView
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.netease_content_nav_item.view.*
 import kotlinx.android.synthetic.main.netease_item_navigation.view.*
@@ -13,6 +12,7 @@ import org.jetbrains.anko.startActivity
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.player.core.PlayerState
+import tech.summerly.quiet.commonlib.utils.getAttrColor
 import tech.summerly.quiet.commonlib.utils.intransaction
 import tech.summerly.quiet.commonlib.utils.support.SimpleTypedBinder
 import tech.summerly.quiet.commonlib.utils.support.ViewHolder
@@ -59,9 +59,21 @@ internal class NavigationViewBinder : SimpleTypedBinder<Navigation>() {
         }
     }
 
+    //make image view foreground to match background
+    private fun ImageView.setInteractive() {
+//        setOnTouchListener { v, event ->
+//            when (event.action) {
+//                MotionEvent.ACTION_DOWN -> drawable.setTint(context.getAttrColor(R.attr.colorTextPrimaryInverse))
+//                MotionEvent.ACTION_UP -> drawable.setTint(context.getAttrColor(R.attr.colorPrimary))
+//            }
+//            false
+//        }
+    }
+
     private fun View.setData(pair: Pair<Int, Int>) {
         text.setText(pair.first)
         image.setImageResource(pair.second)
+        image.setInteractive()
     }
 
     private fun View.navigationToFmPlayer() {

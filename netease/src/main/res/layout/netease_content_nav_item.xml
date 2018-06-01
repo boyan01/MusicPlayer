@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="?selectableItemBackgroundBorderless"
     android:gravity="center_horizontal"
     android:orientation="vertical">
 
@@ -15,7 +15,7 @@
         android:background="@drawable/netease_bg_navigation_icon"
         android:padding="8dp"
         android:src="@drawable/netease_ic_radio_black_24dp"
-        android:tint="?colorPrimary" />
+        app:tint="@color/netease_navigation_tint" />
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/text"
