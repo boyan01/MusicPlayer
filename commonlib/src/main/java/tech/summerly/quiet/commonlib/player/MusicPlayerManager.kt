@@ -50,6 +50,8 @@ object MusicPlayerManager {
     fun play(token: String, list: List<IMusic>, music: IMusic? = null) {
         if (player.playlist.token != token) {
             player.playlist = Playlist.normalPlaylist(list, token)
+        } else {
+            player.playlist.resetMusicList(list)
         }
         if (list.isEmpty()) {
             throw IllegalArgumentException("music list can not be empty!")

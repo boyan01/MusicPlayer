@@ -96,6 +96,11 @@ abstract class Playlist(
         return musicList.remove(music)
     }
 
+    internal fun resetMusicList(musicList: List<IMusic>) {
+        this.musicList.clear()
+        this.musicList.addAll(musicList as List<Music>)
+    }
+
     /**
      * 添加[music]到当前播放的下一首
      */
