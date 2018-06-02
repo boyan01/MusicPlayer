@@ -370,7 +370,8 @@ public class LyricView extends View {
         textPaint.setColor(lyricNormalTextColor);
         textPaint.setTextSize(lyricTextSize);
         if (lyric == null) {
-            drawStaticLayout(canvas, getEmptyStaticLayout(), getHeight() / 2);
+            final StaticLayout emptyStaticLayout = getEmptyStaticLayout();
+            drawStaticLayout(canvas, emptyStaticLayout, (getHeight() - emptyStaticLayout.getHeight()) / 2);
             return;
         }
         if (!isLyricAvailable()) {
