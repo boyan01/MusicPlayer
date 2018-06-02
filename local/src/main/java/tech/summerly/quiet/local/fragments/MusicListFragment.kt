@@ -3,6 +3,7 @@ package tech.summerly.quiet.local.fragments
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.fragments.StatedRecyclerFragment
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
@@ -41,6 +42,7 @@ class MusicListFragment : StatedRecyclerFragment<Music>() {
     override fun initRecyclerView(recyclerView: RecyclerView) {
         recyclerView.layoutManager = LinearLayoutManager(recyclerView.context)
         recyclerView.adapter = listAdapter
+        (recyclerView.itemAnimator as SimpleItemAnimator?)?.supportsChangeAnimations = false
     }
 
     override suspend fun loadData(): List<Music> {

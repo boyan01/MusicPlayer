@@ -7,6 +7,7 @@ import android.os.SystemClock
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.LinearSmoothScroller
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SimpleItemAnimator
 import androidx.core.animation.doOnEnd
 import androidx.core.view.updateLayoutParams
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -142,6 +143,7 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
                     MusicViewBinder())
         }
         list.addOnScrollListener(mScrollListener)
+        (list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         imageBack.setOnClickListener {
             onBackPressed()
         }

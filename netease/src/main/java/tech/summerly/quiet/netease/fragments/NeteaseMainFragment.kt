@@ -1,6 +1,7 @@
 package tech.summerly.quiet.netease.fragments
 
 import android.os.Bundle
+import android.support.v7.widget.SimpleItemAnimator
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,7 @@ class NeteaseMainFragment : BaseFragment(), BottomControllerHost {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
         super.onViewCreated(view, savedInstanceState)
         recycler.adapter = adapter
+        (recycler.itemAnimator as SimpleItemAnimator?)?.supportsChangeAnimations = false
         adapter.show()
     }
 
