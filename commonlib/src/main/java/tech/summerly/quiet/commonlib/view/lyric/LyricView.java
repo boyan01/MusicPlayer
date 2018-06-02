@@ -496,7 +496,7 @@ public class LyricView extends View {
             }
             return;
         }
-        final int nextLine = findLineByTimeStamp(currentLine, millisecond);
+        final int nextLine = lyric.findIndexByTimeStamp(millisecond + lyricTimeStampOffset, currentLine);
         if (currentLine == nextLine) {
             //do nothing
             return;
