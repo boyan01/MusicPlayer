@@ -35,12 +35,6 @@ object Netease {
 
     const val ACTIVITY_NETEASE_LOGIN = "/netease/login"
 
-
-    const val ACTIVITY_NETEASE_PLAYER = "/netease/player"
-
-
-    const val ACTIVITY_NETEASE_MAIN = "/netease/main"
-
 }
 
 object Setting {

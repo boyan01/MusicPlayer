@@ -9,17 +9,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme.TranslucentNavigation" />
         <activity
-            android:name=".ui.NeteaseMainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".ui.NeteaseDailyRecommendActivity"
             android:screenOrientation="portrait"
             android:theme="@style/NeteaseAppTheme" />
-        <activity
-            android:name=".ui.MusicPlayerActivity"
-            android:launchMode="singleTask" />
         <activity
             android:name=".ui.NeteaseRecordActivity"
             android:theme="@style/AppTheme" />

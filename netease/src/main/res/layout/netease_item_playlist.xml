@@ -20,7 +20,6 @@
 
     <android.support.v7.widget.AppCompatTextView
         android:id="@+id/textTitle"
-        style="@style/NeteaseMusicItemTitleStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

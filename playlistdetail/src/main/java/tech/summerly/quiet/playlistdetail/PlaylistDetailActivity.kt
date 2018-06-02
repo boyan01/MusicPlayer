@@ -21,7 +21,7 @@ import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.*
-import tech.summerly.quiet.constraints.Netease
+import tech.summerly.quiet.constraints.Main
 import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.playlistdetail.items.MusicHeader
 import tech.summerly.quiet.playlistdetail.items.MusicHeaderViewBinder
@@ -41,7 +41,7 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
 
     }
 
-    override val parentPath: String = Netease.ACTIVITY_NETEASE_MAIN
+    override val parentPath: String = Main.ACTIVITY_MAIN
 
     private var description: PlaylistProvider.Description? = null
 
