@@ -3,11 +3,13 @@ package tech.summerly.quiet.commonlib.player
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.player.playlist.Playlist
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
+import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.observeFilterNull
 
 object MusicPlayerManager {
@@ -64,7 +66,22 @@ object MusicPlayerManager {
     }
 
     init {
+        playerState.observeForever(AutoPlayNext)
+    }
 
+}
+
+private object AutoPlayNext : Observer<PlayerState> {
+
+    override fun onChanged(t: PlayerState?) {
+        if (t == PlayerState.Complete) {
+            asyncUI {
+                val next = MusicPlayerManager.player.playlist.getNextMusic()
+                if (next != null) {
+                    MusicPlayerManager.player.playNext()
+                }
+            }
+        }
     }
 
 }
