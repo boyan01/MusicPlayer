@@ -17,7 +17,7 @@ import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.dimen
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.component.activities.NoIsolatedActivity
-import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
+import tech.summerly.quiet.commonlib.component.callback.BottomControllerHost
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.*
@@ -33,7 +33,7 @@ import tech.summerly.quiet.playlistdetail.items.PlaylistHeaderViewBinder
  * email: yangbinyhbn@gmail.com
  */
 @Route(path = PlaylistDetail.ACTIVITY_PLAYLIST_DETAIL)
-class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.BottomControllerContainer {
+class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
 
     companion object {
 
@@ -120,6 +120,11 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerFragment.Bo
         setContentView(R.layout.pd_activity_playlist_deatil)
         setEvent()
         loadData()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        initBottomController()
     }
 
     //记录toolbar的点击次数以实现双击回到顶部功能
