@@ -1,30 +1,38 @@
 # Quiet 
 A simple MusicPlayer.
 
-emmm.... 感觉kotlin用的还是挺爽的~~~
+__
 
-坑填的很慢 , 等把毕业设计写完之后估计能发个 preview release 吧~~ 
+Kotlin + 模块化 + 协程
 
-另外求一个设计 ...⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄.... <yangbinyhbn@gmail.com>
+## OverView
 
-## Local
+### player
+|                 normal                  |               fm                |               notfication                |
+| :-------------------------------------: | :-----------------------------: | :--------------------------------------: |
+| ![normal](./_preview/player_normal.png) | ![fm](./_preview/player_fm.png) | ![notfication](./_preview/player_nofication.png) |
 
- TODO
+### Local
 
-## Netease 
 
-| Login                                  | Main                                 | FmPlayer                               |
-| -------------------------------------- | ------------------------------------ | -------------------------------------- |
-| ![Login](./_preview/netease_login.png) | ![Main](./_preview/netease_main.png) | ![FmPlayer](./_preview/netease_fm.png) |
+|                main                |                albums                 |                 scanner                  |
+| :--------------------------------: | :-----------------------------------: | :--------------------------------------: |
+| ![main](./_preview/local_main.png) | ![albums](./_preview/local_album.png) | ![scanner](./_preview/local_scanner.png) |
 
-## Search Module
-| main                                  | opration                        |
-| ------------------------------------- | ------------------------------- |
+### Netease 
+
+| Login                                  | Main                                 |
+| -------------------------------------- | ------------------------------------ |
+| ![Login](./_preview/netease_login.png) | ![Main](./_preview/netease_main.png) |
+
+### Search Module
+|                 main                  |            opration             |
+| :-----------------------------------: | :-----------------------------: |
 | ![search](./_preview/search_main.png) | ![op](./_preview/search_op.gif) |
 
-## PlaylistDetail Module
-| main                              | filter                              |
-| --------------------------------- | ----------------------------------- |
+### PlaylistDetail Module
+|               main                |               filter                |
+| :-------------------------------: | :---------------------------------: |
 | ![search](./_preview/pd_main.gif) | ![filter](./_preview/pd_filter.gif) |
 
 
