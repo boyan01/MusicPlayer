@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/netease_menu_search"
+        android:icon="@drawable/netease_ic_search_light_24dp"
+        android:title="@string/netease_action_search"
+        app:showAsAction="always" />
+
     <item
         android:id="@+id/netease_menu_main_setting"
         android:title="@string/netease_menu_action_main_setting" />

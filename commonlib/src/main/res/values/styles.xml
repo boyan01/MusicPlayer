@@ -13,6 +13,16 @@
 
     </style>
 
+    <style name="Toolbar" parent="AppTheme">
+
+    </style>
+
+    <style name="Toolbar.Dark">
+        <item name="colorControlNormal">?colorTextPrimaryInverse</item>
+        <item name="colorBackground">?colorPrimary</item>
+        <item name="android:colorForeground">?colorTextPrimaryInverse</item>
+    </style>
+
 
     <!-- BbaseContexttion theme. -->
     <style name="CommonAppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
