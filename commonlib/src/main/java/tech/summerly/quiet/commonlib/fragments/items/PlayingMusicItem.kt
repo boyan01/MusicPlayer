@@ -19,7 +19,7 @@ import tech.summerly.quiet.commonlib.utils.visible
 internal class PlayingMusicItemViewBinder : ItemViewBinder<Music>() {
 
     private val current: Music?
-        get() = MusicPlayerManager.player.playlist.current
+        get() = MusicPlayerManager.player.playlist.current as Music?
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
         return ViewHolder(R.layout.common_item_playing_music, parent, inflater)
@@ -43,7 +43,7 @@ internal class PlayingMusicItemViewBinder : ItemViewBinder<Music>() {
             asyncUI {
                 if (item == current) {
                     MusicPlayerManager.player.destroy()
-                    MusicPlayerManager.player.playlist.current = MusicPlayerManager.player.playlist.getNextMusic()
+                    MusicPlayerManager.player.playlist.current = MusicPlayerManager.player.playlist.getNext()
                 }
                 MusicPlayerManager.player.playlist.remove(item)
                 adapter.notifyItemRemoved(holder.adapterPosition)

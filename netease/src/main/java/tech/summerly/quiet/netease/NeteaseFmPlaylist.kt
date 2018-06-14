@@ -4,16 +4,15 @@ import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import org.jetbrains.anko.toast
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.PlayerType
-import tech.summerly.quiet.commonlib.player.playlist.Playlist
+import tech.summerly.quiet.commonlib.player.playlist.Playlist2
 import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 import java.io.IOException
 
-class NeteaseFmPlaylist : Playlist(
+class NeteaseFmPlaylist : Playlist2<IMusic>(
         TOKEN, ArrayList()
 ) {
 
@@ -27,8 +26,9 @@ class NeteaseFmPlaylist : Playlist(
 
     private val neteaseApi get() = NeteaseCloudMusicApi()
 
-    override suspend fun getNextMusic(music: Music?): Music? = suspendCancellableCoroutine {
-        val nextIndex = musicList.indexOf(current) + 1
+    override suspend fun getNext(anchor: IMusic?): IMusic? = suspendCancellableCoroutine {
+        val musicList = mList
+        val nextIndex = musicList.indexOf(anchor) + 1
         if (nextIndex >= musicList.size) {
             launch {
                 fetchMusicList()
@@ -42,8 +42,8 @@ class NeteaseFmPlaylist : Playlist(
     private suspend fun fetchMusicList() {
         try {
             val musics = neteaseApi.getFmMusics()
-            musicList.clear()
-            musicList.addAll(musics)
+            mList.clear()
+            mList.addAll(musics)
         } catch (e: IOException) {
             log { e.printStackTrace();"获取下一首歌曲失败" }
             asyncUI { NeteaseModule.toast("io exception : ${e.message}") }
@@ -52,9 +52,9 @@ class NeteaseFmPlaylist : Playlist(
         onPlaylistChanged()
     }
 
-    override suspend fun getPreviousMusic(music: Music?): Music? = null
+    override suspend fun getPrevious(anchor: IMusic?): IMusic? = null
 
-    override fun insertToNext(music: IMusic) {
+    override fun insertToNext(next: IMusic) {
         //do nothing
     }
 }

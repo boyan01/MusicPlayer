@@ -1,53 +1,47 @@
 package tech.summerly.quiet.commonlib.player.playlist
 
-import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.player.MusicPlayerManager.playMode
 import tech.summerly.quiet.commonlib.player.PlayMode
 import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.utils.log
 
-/**
- * Created by summer on 18-3-4
- */
-
-internal class NormalPlaylist(token: String,
-                              musicList: ArrayList<Music>
-) : Playlist(token, musicList) {
+internal class NormalPlaylist2<T>(
+        token: String,
+        musicList: ArrayList<T>
+) : Playlist2<T>(token, musicList) {
 
     override val type: PlayerType = PlayerType.NORMAL
 
-    private val shuffleMusicList = ArrayList<Music>()
+    private val shuffleMusicList = ArrayList<T>()
 
 
-    override suspend fun getNextMusic(music: Music?): Music? {
-        if (musicList.isEmpty()) {
+    override suspend fun getNext(anchor: T?): T? {
+        if (mList.isEmpty()) {
             log { "empty playlist!" }
             return null
         }
-        if (current == null) {
-            return musicList[0]
+        if (anchor == null) {
+            return mList[0]
         }
         return when (MusicPlayerManager.player.playMode) {
             PlayMode.Single -> {
-                current
+                anchor
             }
             PlayMode.Sequence -> {
                 //if can not find ,index will be zero , it will right too
-                val index = current?.let { musicList.indexOf(it) + 1 } ?: 1
-                if (index == musicList.size) {
-                    musicList[0]
+                val index = mList.indexOf(anchor) + 1
+                if (index == mList.size) {
+                    mList[0]
                 } else {
-                    musicList[index]
+                    mList[index]
                 }
             }
             PlayMode.Shuffle -> {
                 ensureShuffleListGenerate()
-                val index = current?.let { shuffleMusicList.indexOf(it) } ?: -1
+                val index = shuffleMusicList.indexOf(anchor)
                 when (index) {
-                    -1 -> musicList[0]
-                    musicList.size - 1 -> {
+                    -1 -> mList[0]
+                    mList.size - 1 -> {
                         generateShuffleList()
                         shuffleMusicList[0]
                     }
@@ -57,14 +51,15 @@ internal class NormalPlaylist(token: String,
         }
     }
 
+
     private fun ensureShuffleListGenerate() {
-        if (shuffleMusicList.size != musicList.size) {
+        if (shuffleMusicList.size != mList.size) {
             generateShuffleList()
         }
     }
 
     private fun generateShuffleList() {
-        val list = ArrayList(musicList)
+        val list = ArrayList(mList)
         var position = list.size - 1
         while (position > 0) {
             //生成一个随机数
@@ -79,31 +74,32 @@ internal class NormalPlaylist(token: String,
         shuffleMusicList.addAll(list)
     }
 
-    override suspend fun getPreviousMusic(music: Music?): Music? {
-        if (musicList.isEmpty()) {
+
+    override suspend fun getPrevious(anchor: T?): T? {
+        if (mList.isEmpty()) {
             log { "try too play next with empty playlist!" }
             return null
         }
-        if (current == null) {
-            return musicList[0]
+        if (anchor == null) {
+            return mList[0]
         }
         return when (MusicPlayerManager.player.playMode) {
             PlayMode.Single -> {
-                current
+                anchor
             }
             PlayMode.Sequence -> {
-                val index = current?.let { musicList.indexOf(it) } ?: -1
+                val index = mList.indexOf(anchor)
                 when (index) {
-                    -1 -> musicList[0]
-                    0 -> musicList[musicList.size - 1]
-                    else -> musicList[index - 1]
+                    -1 -> mList[0]
+                    0 -> mList[mList.size - 1]
+                    else -> mList[index - 1]
                 }
             }
             PlayMode.Shuffle -> {
                 ensureShuffleListGenerate()
-                val index = current?.let { shuffleMusicList.indexOf(it) } ?: -1
+                val index = shuffleMusicList.indexOf(anchor)
                 when (index) {
-                    -1 -> musicList[0]
+                    -1 -> mList[0]
                     0 -> {
                         generateShuffleList()
                         shuffleMusicList[shuffleMusicList.size - 1]
@@ -114,27 +110,26 @@ internal class NormalPlaylist(token: String,
         }
     }
 
-    override fun insertToNext(music: IMusic) {
-        music as Music
-        if (musicList.isEmpty()) {
-            musicList.add(music)
+
+    override fun insertToNext(next: T) {
+        if (mList.isEmpty()) {
+            mList.add(next)
             return
         }
         //check if music is playing
-        if (current == music) {
+        if (current == next) {
             return
         }
         //remove if musicList contain this item
-        musicList.remove(music)
+        mList.remove(next)
 
-        val index = musicList.indexOf(current) + 1
-        musicList.add(index, music)
+        val index = mList.indexOf(current) + 1
+        mList.add(index, next)
 
-        if (playMode == PlayMode.Shuffle) {
+        if (MusicPlayerManager.playMode == PlayMode.Shuffle) {
             val indexShuffle = shuffleMusicList.indexOf(current) + 1
-            shuffleMusicList.add(indexShuffle, music)
+            shuffleMusicList.add(indexShuffle, next)
         }
         onPlaylistChanged()
     }
-
 }

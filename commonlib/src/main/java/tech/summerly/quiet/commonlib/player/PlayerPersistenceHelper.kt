@@ -1,6 +1,8 @@
 package tech.summerly.quiet.commonlib.player
 
-import tech.summerly.quiet.commonlib.player.playlist.Playlist
+import tech.summerly.quiet.commonlib.model.IMusic
+import tech.summerly.quiet.commonlib.player.playlist.Playlist2
+import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.persistence.PropertiesDatabase
 
 /**
@@ -17,21 +19,30 @@ internal object PlayerPersistenceHelper {
     private val dao = PropertiesDatabase.INSTANCE.objectsDao()
 
 
-    fun savePlaylist(playlist: Playlist?) {
+    fun savePlaylist(playlist: Playlist2<*>?) {
         dao[KEY_PLAY_LIST] = playlist
     }
 
     /**
      * 从配置文件中读取上一次保存的[Playlist]信息
      */
-    fun restorePlaylist(): Playlist? {
-        return dao[KEY_PLAY_LIST] as Playlist?
+    fun restorePlaylist(): Playlist2<IMusic>? {
+        return try {
+            dao[KEY_PLAY_LIST] as Playlist2<IMusic>?
+        } catch (e: Exception) {
+            log { e.printStackTrace();"restore playlist failed: ${e.message}" }
+            null
+        }
     }
 
     fun restorePlayMode(): PlayMode {
-        val name = dao[KEY_PLAY_MODE] as String?
-        name ?: return PlayMode.Sequence
-        return PlayMode.valueOf(name)
+        try {
+            val name = dao[KEY_PLAY_MODE] as String?
+            name ?: return PlayMode.Sequence
+            return PlayMode.valueOf(name)
+        } catch (e: Exception) {
+            return PlayMode.Sequence
+        }
     }
 
     fun savePlayMode(mode: PlayMode) {

@@ -9,6 +9,7 @@ import android.os.Build
 import android.view.animation.LinearInterpolator
 import org.jetbrains.anko.coroutines.experimental.asReference
 import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.persistence.preference.PreferenceProvider
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
@@ -26,8 +27,14 @@ class CoreMediaPlayer {
     companion object {
 
         private fun getPreferenceVolume(): Float {
-            val preference = PreferenceProvider.with(Setting.SETTING_PREFERENCE_PROVIDER).getPreference()
-            var volume = preference.getInt("key_volume", -1)
+            var volume = try {
+                val preference = PreferenceProvider.with(Setting.SETTING_PREFERENCE_PROVIDER).getPreference()
+                preference.getInt("key_volume", -1)
+            } catch (e: Exception) {
+                log { e.printStackTrace();e.message }
+                -1
+            }
+
             if (volume == -1) {
                 log(LoggerLevel.ERROR) { "can not read app setting: key_volume" }
                 volume = 100
@@ -78,7 +85,8 @@ class CoreMediaPlayer {
     }
 
 
-    suspend fun play(music: Music) {
+    suspend fun play(music: IMusic) {
+        music as Music
         stop()
         reset()
         val ref = internalMediaPlayer.asReference()

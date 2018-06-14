@@ -1,12 +1,13 @@
 package tech.summerly.quiet.commonlib
 
-import android.app.Activity
 import android.app.Application
-import android.os.Bundle
 import com.alibaba.android.arouter.launcher.ARouter
 import com.facebook.stetho.Stetho
 import tech.summerly.quiet.commonlib.base.BaseModule
 import tech.summerly.quiet.commonlib.component.activities.AppTask
+import tech.summerly.quiet.commonlib.player.MusicPlayerManager
+import tech.summerly.quiet.commonlib.player.PlayerPersistenceHelper
+import tech.summerly.quiet.commonlib.utils.observeForeverFilterNull
 import tech.summerly.streamcache.CacheGlobalSetting
 import java.io.File
 
@@ -28,6 +29,9 @@ internal object LibModule : BaseModule() {
 
         CacheGlobalSetting.CACHE_PATH = File(externalCacheDir, "musics_cache").path
         (baseContext as Application).registerActivityLifecycleCallbacks(AppTask.CallBack)
+        MusicPlayerManager.playMode.observeForeverFilterNull {
+            PlayerPersistenceHelper.savePlayMode(it)
+        }
     }
 
 }

@@ -7,7 +7,7 @@ import android.arch.lifecycle.Observer
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.player.playlist.Playlist
+import tech.summerly.quiet.commonlib.player.playlist.Playlist2
 import tech.summerly.quiet.commonlib.utils.WithDefaultLiveData
 import tech.summerly.quiet.commonlib.utils.asyncUI
 import tech.summerly.quiet.commonlib.utils.observeFilterNull
@@ -38,7 +38,7 @@ object MusicPlayerManager {
 
     fun play(music: IMusic) {
         if (player.playlist.type == PlayerType.FM) {
-            player.playlist = Playlist.empty()
+            player.playlist = Playlist2.empty()
         }
         player.play(music)
     }
@@ -51,9 +51,9 @@ object MusicPlayerManager {
 
     fun play(token: String, list: List<IMusic>, music: IMusic? = null) {
         if (player.playlist.token != token) {
-            player.playlist = Playlist.normalPlaylist(list, token)
+            player.playlist = Playlist2.normalPlaylist(list, token)
         } else {
-            player.playlist.resetMusicList(list)
+            player.playlist.reset(list)
         }
         if (list.isEmpty()) {
             throw IllegalArgumentException("music list can not be empty!")
@@ -76,7 +76,7 @@ private object AutoPlayNext : Observer<PlayerState> {
     override fun onChanged(t: PlayerState?) {
         if (t == PlayerState.Complete) {
             asyncUI {
-                val next = MusicPlayerManager.player.playlist.getNextMusic()
+                val next = MusicPlayerManager.player.playlist.getNext()
                 if (next != null) {
                     MusicPlayerManager.player.playNext()
                 }

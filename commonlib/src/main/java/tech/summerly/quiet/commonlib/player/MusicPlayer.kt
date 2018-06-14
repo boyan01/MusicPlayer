@@ -1,13 +1,12 @@
 package tech.summerly.quiet.commonlib.player
 
-import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
 import tech.summerly.quiet.commonlib.player.core.PlayerState
-import tech.summerly.quiet.commonlib.player.playlist.Playlist
+import tech.summerly.quiet.commonlib.player.playlist.Playlist2
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
 import java.util.concurrent.TimeUnit
@@ -19,7 +18,7 @@ class MusicPlayer {
 
     }
 
-    var playlist: Playlist = Playlist.empty()
+    var playlist: Playlist2<IMusic> = Playlist2.empty()
         set(value) {
             field.inActive()
             field = value
@@ -32,25 +31,22 @@ class MusicPlayer {
         mediaPlayer.reset()
     }
 
-    val mediaPlayer: CoreMediaPlayer = CoreMediaPlayer()
+    val mediaPlayer: CoreMediaPlayer by lazy { CoreMediaPlayer() }
 
     var playMode: PlayMode = PlayMode.Sequence
         set(value) {
             field = value
             MusicPlayerManager.internalPlayMode.postValue(value)
-            async {
-                PlayerPersistenceHelper.savePlayMode(value)
-            }
         }
 
     init {
         //再次赋值是为了发送事件
         playMode = PlayerPersistenceHelper.restorePlayMode()
-        playlist = PlayerPersistenceHelper.restorePlaylist() ?: Playlist.empty()
+        playlist = PlayerPersistenceHelper.restorePlaylist() ?: Playlist2.empty()
     }
 
     fun playNext() = safeAsync {
-        val next = playlist.getNextMusic()
+        val next = playlist.getNext()
         if (next == null) {
             log(LoggerLevel.WARN) { "next music is null" }
             return@safeAsync
@@ -69,7 +65,7 @@ class MusicPlayer {
             }
             PlayerState.Preparing -> Unit
             else -> {
-                val shouldBePlay = playlist.current ?: playlist.getNextMusic()
+                val shouldBePlay = playlist.current ?: playlist.getNext()
                 shouldBePlay?.let {
                     mediaPlayer.play(it)
                 }
@@ -78,7 +74,7 @@ class MusicPlayer {
     }
 
     fun playPrevious() = safeAsync {
-        val previous = playlist.getPreviousMusic()
+        val previous = playlist.getPrevious()
         if (previous == null) {
             log(LoggerLevel.WARN) { "previous is null , op canceled!" }
             return@safeAsync
@@ -96,7 +92,7 @@ class MusicPlayer {
      */
     fun play(music: IMusic) = safeAsync {
         music as Music
-        if (!playlist.musics.contains(music)) {
+        if (!playlist.list.contains(music)) {
             playlist.insertToNext(music)
         }
         log { "try to play $music" }
@@ -106,7 +102,7 @@ class MusicPlayer {
 
 
     private fun safeAsync(block: suspend () -> Unit) {
-        async { block() }
+        launch { block() }
     }
 
 
@@ -122,8 +118,8 @@ class MusicPlayer {
                     if (mediaPlayer.getPlayerState() == PlayerState.Playing || mediaPlayer.getPlayerState() == PlayerState.Pausing) {
                         MusicPlayerManager.internalPosition.postValue(mediaPlayer.position to mediaPlayer.duration)
                     } else {
-                        MusicPlayerManager.internalPosition.postValue(0L
-                                to (playlist.current?.duration ?: 0))
+                        val duration = (playlist.current as Music?)?.duration ?: 0
+                        MusicPlayerManager.internalPosition.postValue(0L to duration)
                     }
                 } catch (e: Exception) {
                     //
