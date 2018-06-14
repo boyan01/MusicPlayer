@@ -12,15 +12,5 @@
             android:name=".scanner.LocalMusicScannerActivity"
             android:exported="true"
             android:theme="@style/LocalAppTheme" />
-        <activity
-            android:name=".LocalMusicActivity"
-            android:exported="true"
-            android:label="@string/local_app_name"
-            android:theme="@style/LocalAppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 </manifest>

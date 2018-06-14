@@ -7,11 +7,6 @@
         <activity
             android:name=".scanner.LocalMusicScannerActivity"
             android:exported="true"
-            android:theme="@style/LocalAppTheme" />
-        <activity
-            android:name=".LocalMusicActivity"
-            android:exported="true"
-            android:label=""
-            android:theme="@style/LocalAppTheme" />
+            android:theme="@style/AppTheme" />
     </application>
 </manifest>

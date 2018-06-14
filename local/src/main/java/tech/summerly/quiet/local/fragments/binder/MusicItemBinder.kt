@@ -1,6 +1,5 @@
 package tech.summerly.quiet.local.fragments.binder
 
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.util.DiffUtil
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -14,7 +13,6 @@ import tech.summerly.quiet.commonlib.utils.support.TypedBinder
 import tech.summerly.quiet.commonlib.utils.support.ViewHolder
 import tech.summerly.quiet.local.R
 import tech.summerly.quiet.local.fragments.MusicListFragment
-import tech.summerly.quiet.local.fragments.dialog.LocalPlaylistSelectorFragment
 import tech.summerly.quiet.local.utils.showMusicDeleteDialog
 
 internal class MusicItemBinder : TypedBinder<Music>() {
@@ -49,11 +47,6 @@ internal class MusicItemBinder : TypedBinder<Music>() {
                 when (it.itemId) {
                     R.id.local_popup_music_add_to_next -> {
                         MusicPlayerManager.player.playlist.insertToNext(item)
-                    }
-                    R.id.local_popup_music_add_to_playlist -> {
-                        LocalPlaylistSelectorFragment(arrayOf(item))
-                                .show((context as AppCompatActivity).supportFragmentManager,
-                                        "local_playlist_selector_fragment")
                     }
                     R.id.local_popup_music_to_album -> {
 

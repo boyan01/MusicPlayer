@@ -6,10 +6,6 @@
         android:title="@string/local_action_add_to_next" />
 
     <item
-        android:id="@+id/local_popup_music_add_to_playlist"
-        android:title="@string/local_action_add_to_playlist" />
-
-    <item
         android:id="@+id/local_popup_music_to_album"
         android:title="@string/local_action_album" />
 

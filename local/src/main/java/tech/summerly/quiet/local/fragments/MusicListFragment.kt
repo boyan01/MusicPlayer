@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.fragments.StatedRecyclerFragment
-import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.listenMusicChangePosition
 import tech.summerly.quiet.commonlib.utils.support.TypedAdapter
 import tech.summerly.quiet.local.fragments.binder.MusicItemBinder
