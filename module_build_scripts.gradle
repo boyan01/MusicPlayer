@@ -50,6 +50,9 @@ android {
             }
         }
     }
+    packagingOptions {
+        exclude 'META-INF/main.kotlin_module'
+    }
 
     compileOptions {
         targetCompatibility 1.7
