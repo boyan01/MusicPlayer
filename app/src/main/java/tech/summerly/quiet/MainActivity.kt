@@ -15,7 +15,7 @@ import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.constraints.Main
 import tech.summerly.quiet.constraints.Setting
-import tech.summerly.quiet.local.LocalMainFragment
+import tech.summerly.quiet.local.ui.LocalMainFragment
 import tech.summerly.quiet.netease.fragments.NeteaseMainFragment
 
 /**

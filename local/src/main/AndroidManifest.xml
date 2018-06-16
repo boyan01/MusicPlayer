@@ -5,7 +5,7 @@
 
     <application>
         <activity
-            android:name=".scanner.LocalMusicScannerActivity"
+            android:name=".ui.LocalMusicScannerActivity"
             android:exported="true"
             android:theme="@style/AppTheme" />
     </application>

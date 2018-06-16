@@ -7,7 +7,7 @@ import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
-import tech.summerly.quiet.service.local.LocalMusicApi
+import tech.summerly.quiet.local.repository.LocalMusicApi
 
 /**
  * 本地专辑详情
