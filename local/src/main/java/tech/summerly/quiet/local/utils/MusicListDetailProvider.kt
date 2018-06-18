@@ -2,18 +2,18 @@ package tech.summerly.quiet.local.utils
 
 import android.os.Parcel
 import android.os.Parcelable
-import tech.summerly.quiet.commonlib.bean.Album
-import tech.summerly.quiet.commonlib.bean.Artist
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
 import tech.summerly.quiet.local.repository.database.LocalMusicDatabase
+import tech.summerly.quiet.local.repository.entity.AlbumEntity
+import tech.summerly.quiet.local.repository.entity.ArtistEntity
 
 /**
  * 本地专辑详情
  */
 
-private fun newAlbumDescrpition(album: Album) = PlaylistProvider.SimpleDescription(
+private fun newAlbumDescription(album: AlbumEntity) = PlaylistProvider.SimpleDescription(
         album.id,
         album.name,
         album.picUri ?: "",
@@ -25,19 +25,18 @@ private fun newAlbumDescrpition(album: Album) = PlaylistProvider.SimpleDescripti
 )
 
 internal class AlbumDetailProvider(
-        private val album: Album
+        private val album: AlbumEntity
 ) : PlaylistProvider, Parcelable {
-
     override suspend fun getMusicList(): List<IMusic> {
         return LocalMusicDatabase.instance.albumDao().musics(album.id)
     }
 
     override suspend fun getDescription(): PlaylistProvider.Description? {
-        return newAlbumDescrpition(album)
+        return newAlbumDescription(album)
     }
 
     constructor(source: Parcel) : this(
-            source.readParcelable<Album>(Album::class.java.classLoader)
+            source.readParcelable<AlbumEntity>(AlbumEntity::class.java.classLoader)
     )
 
     override fun describeContents() = 0
@@ -57,9 +56,8 @@ internal class AlbumDetailProvider(
 
 
 internal class ArtistDetailProvider(
-        private val artist: Artist
-) : PlaylistProvider {
-
+        private val artist: ArtistEntity
+) : PlaylistProvider, Parcelable {
     override suspend fun getMusicList(): List<IMusic> {
         return LocalMusicDatabase.instance.artistDao().musics(artist.id)
     }
@@ -72,7 +70,7 @@ internal class ArtistDetailProvider(
         get() = artist.name
 
     constructor(source: Parcel) : this(
-            source.readParcelable<Artist>(Artist::class.java.classLoader)
+            source.readParcelable<ArtistEntity>(ArtistEntity::class.java.classLoader)
     )
 
     override fun describeContents() = 0

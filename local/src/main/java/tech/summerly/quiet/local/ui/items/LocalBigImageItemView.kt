@@ -17,6 +17,8 @@ import tech.summerly.quiet.commonlib.utils.support.TypedBinder
 import tech.summerly.quiet.commonlib.utils.support.ViewHolder
 import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.local.R
+import tech.summerly.quiet.local.repository.entity.AlbumEntity
+import tech.summerly.quiet.local.repository.entity.ArtistEntity
 import tech.summerly.quiet.local.utils.AlbumDetailProvider
 import tech.summerly.quiet.local.utils.ArtistDetailProvider
 
@@ -51,13 +53,13 @@ internal class LocalBigImageItemViewBinder : TypedBinder<LocalBigImageItem>() {
         title.text = item.title
         setOnClickListener {
             when (item.data) {
-                is Artist -> {
+                is ArtistEntity -> {
                     ARouter.getInstance()
                             .build(PlaylistDetail.ACTIVITY_PLAYLIST_DETAIL)
                             .withParcelable(PlaylistDetail.PARAM_PLAYLIST_PROVIDER, ArtistDetailProvider(item.data))
                             .navigation()
                 }
-                is Album -> {
+                is AlbumEntity -> {
                     ARouter.getInstance()
                             .build(PlaylistDetail.ACTIVITY_PLAYLIST_DETAIL)
                             .withParcelable(PlaylistDetail.PARAM_PLAYLIST_PROVIDER, AlbumDetailProvider(item.data))
