@@ -25,19 +25,8 @@ class RemoteTypedBinderWrapper<T : Any>(
 
     }
 
-    fun setAdapter(adapter: MultiTypeAdapter) {
-        if (binder == null) {
-            return
-        }
-        try {
-            val clazz = me.drakeet.multitype.ItemViewBinder::class.java
-            val field = clazz.getDeclaredField("adapter")
-            field.isAccessible = true
-            field.set(binder, adapter)
-        } catch (e: Exception) {
-            log { e.printStackTrace() }
-        }
-
+    public override fun attachAdapter(adapter: TypedAdapter) {
+        super.attachAdapter(adapter)
     }
 
     /**

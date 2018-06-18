@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.pd_item_music.view.*
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.image.setImageUrl
@@ -23,7 +22,7 @@ class MusicViewBinder : TypedBinder<IMusic>() {
 
 
     private val defaultMusicClickListener = fun(music: IMusic) {
-        val musicList = adapter.list.filterIsInstance(Music::class.java)
+        val musicList = adapter.list.filterIsInstance(IMusic::class.java)
         MusicPlayerManager.play(PlaylistDetailActivity.TOKEN_PLAY, musicList, music)
     }
 

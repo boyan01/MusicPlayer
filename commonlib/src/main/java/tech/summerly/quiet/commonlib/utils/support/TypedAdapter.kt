@@ -143,7 +143,7 @@ abstract class TypedBinder<T : Any> : IProvider {
 
     private lateinit var _adapter: TypedAdapter
 
-    internal fun attachAdapter(adapter: TypedAdapter) {
+    open internal fun attachAdapter(adapter: TypedAdapter) {
         this._adapter = adapter
     }
 
