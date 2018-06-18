@@ -1,10 +1,8 @@
 package tech.summerly.quiet.local.repository.entity
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Index
-import android.arch.persistence.room.PrimaryKey
-import android.arch.persistence.room.TypeConverters
+import android.arch.persistence.room.*
 import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.model.IAlbum
 import tech.summerly.quiet.local.repository.converter.ArchTypeConverter
 
 /**
@@ -21,4 +19,10 @@ data class AlbumEntity(
         val name: String,
         val picUri: String?,
         val type: MusicType
-)
+) : IAlbum {
+
+    @Ignore
+    override fun name(): String {
+        return name
+    }
+}

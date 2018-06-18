@@ -7,12 +7,13 @@ import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import org.jetbrains.anko.dip
 import tech.summerly.quiet.commonlib.fragments.StatedRecyclerFragment
+import tech.summerly.quiet.commonlib.utils.observe
 import tech.summerly.quiet.commonlib.utils.support.TypedAdapter
+import tech.summerly.quiet.commonlib.utils.support.await
 import tech.summerly.quiet.local.LocalModule
 import tech.summerly.quiet.local.ui.items.LocalBigImageItem
 import tech.summerly.quiet.local.ui.items.LocalBigImageItemViewBinder
-import tech.summerly.quiet.local.repository.LocalMusicApi
-import tech.summerly.quiet.local.repository.database.Table
+import tech.summerly.quiet.local.viewmodel.LocalMusicViewModel
 
 /**
  * Created by summer
@@ -20,14 +21,18 @@ import tech.summerly.quiet.local.repository.database.Table
 internal class LocalAlbumFragment : StatedRecyclerFragment<LocalBigImageItem>() {
 
 
-    private var version = 0L
+    private val viewModel by lazy { LocalMusicViewModel.instance }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Table.Album.listenChange(this) { newVersion ->
-            if (newVersion > version) {
-                loadDataInternal()
-                version = newVersion
+        viewModel.allAlbum.observe(this) {
+            if (it == null) {
+                setLoading()
+            } else if (it.isEmpty()) {
+                setEmpty()
+            } else {
+                onLoadSuccess(it.map { LocalBigImageItem(it.name, it.picUri, it) })
+                setComplete()
             }
         }
     }
@@ -37,7 +42,8 @@ internal class LocalAlbumFragment : StatedRecyclerFragment<LocalBigImageItem>() 
     }
 
     override suspend fun loadData(): List<LocalBigImageItem> {
-        return LocalMusicApi.instance.getAlbums().await().map { LocalBigImageItem(it.name, it.picUri, it) }
+        return viewModel.allAlbum.await()?.map { LocalBigImageItem(it.name, it.picUri, it) }
+                ?: emptyList()
     }
 
     override fun onLoadSuccess(result: List<LocalBigImageItem>) {

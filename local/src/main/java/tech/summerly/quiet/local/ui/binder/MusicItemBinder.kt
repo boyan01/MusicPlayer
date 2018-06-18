@@ -39,7 +39,7 @@ internal class MusicItemBinder : TypedBinder<IMusic>() {
         now_playing_indicator.isVisible = item.isPlaying()
         setOnClickListener {
             MusicPlayerManager.play(MusicListFragment.TOKEN,
-                    getAdapter().list.filterIsInstance(Music::class.java),
+                    getAdapter().list.filterIsInstance(IMusic::class.java),
                     item)
         }
         popup_menu.setOnClickListener {

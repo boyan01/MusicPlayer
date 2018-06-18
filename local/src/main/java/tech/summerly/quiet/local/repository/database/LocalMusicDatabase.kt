@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
 import tech.summerly.quiet.local.LocalModule
+import tech.summerly.quiet.local.repository.dao.AlbumDao
 import tech.summerly.quiet.local.repository.dao.ArtistDao
 import tech.summerly.quiet.local.repository.dao.MusicDao
 import tech.summerly.quiet.local.repository.entity.*
@@ -29,6 +30,8 @@ internal abstract class LocalMusicDatabase : RoomDatabase() {
 
     abstract fun artistDao(): ArtistDao
 
+    abstract fun albumDao(): AlbumDao
+
     companion object {
 
         private const val DB_NAME = "local_music.db"
@@ -39,9 +42,6 @@ internal abstract class LocalMusicDatabase : RoomDatabase() {
                     .fallbackToDestructiveMigration()
                     .build()
         }
-
-        @Deprecated("use", ReplaceWith("instance", "tech.summerly.quiet.local.repository.database.LocalMusicDatabase.Companion.instance"))
-        fun getInstance(context: Context) = instance
 
     }
 }

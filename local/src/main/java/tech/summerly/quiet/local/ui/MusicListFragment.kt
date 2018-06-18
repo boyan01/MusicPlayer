@@ -4,38 +4,44 @@ import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.SimpleItemAnimator
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.fragments.StatedRecyclerFragment
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.listenMusicChangePosition
+import tech.summerly.quiet.commonlib.utils.observe
 import tech.summerly.quiet.commonlib.utils.support.TypedAdapter
+import tech.summerly.quiet.commonlib.utils.support.await
 import tech.summerly.quiet.local.ui.binder.MusicItemBinder
-import tech.summerly.quiet.local.repository.LocalMusicApi
-import tech.summerly.quiet.local.repository.database.Table
+import tech.summerly.quiet.local.viewmodel.LocalMusicViewModel
 
-class MusicListFragment : StatedRecyclerFragment<Music>() {
+class MusicListFragment : StatedRecyclerFragment<IMusic>() {
 
     companion object {
         const val TOKEN = "local_total"
     }
-
-    private var version = 0L
 
     private val listAdapter by lazy {
         TypedAdapter()
                 .withBinder(IMusic::class, MusicItemBinder())
     }
 
+    override val isLoadOnCreated: Boolean
+        get() = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Table.Music.listenChange(this) { newVersion ->
-            if (newVersion > this.version) {
-                loadDataInternal()
-            }
-        }
         listenMusicChangePosition({ listAdapter.list }) { from, to ->
             listAdapter.notifyItemChanged(from)
             listAdapter.notifyItemChanged(to)
+        }
+        LocalMusicViewModel.instance.allMusic.observe(this) {
+            if (it == null) {
+                setLoading()
+            } else if (it.isEmpty()) {
+                setEmpty()
+            } else {
+                onLoadSuccess(it)
+                setComplete()
+            }
         }
     }
 
@@ -45,11 +51,11 @@ class MusicListFragment : StatedRecyclerFragment<Music>() {
         (recyclerView.itemAnimator as SimpleItemAnimator?)?.supportsChangeAnimations = false
     }
 
-    override suspend fun loadData(): List<Music> {
-        return LocalMusicApi.instance.getTotalMusics()
+    override suspend fun loadData(): List<IMusic> {
+        return LocalMusicViewModel.instance.allMusic.await() ?: emptyList()
     }
 
-    override fun onLoadSuccess(result: List<Music>) {
+    override fun onLoadSuccess(result: List<IMusic>) {
         super.onLoadSuccess(result)
         listAdapter.submit(result)
     }

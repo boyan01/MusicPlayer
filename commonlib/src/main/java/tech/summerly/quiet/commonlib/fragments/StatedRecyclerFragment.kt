@@ -13,9 +13,7 @@ import kotlinx.coroutines.experimental.Job
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.utils.asyncUI
-import tech.summerly.quiet.commonlib.utils.gone
 import tech.summerly.quiet.commonlib.utils.log
-import tech.summerly.quiet.commonlib.utils.visible
 
 /**
  * Created by summer on 18-2-27
@@ -24,22 +22,26 @@ abstract class StatedRecyclerFragment<T> : BaseFragment() {
 
     protected var job: Job? = null
 
+    protected open val isLoadOnCreated = true
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_stated_recycler, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
         super.onViewCreated(view, savedInstanceState)
-        buttonRetry.setOnClickListener {
+        wrapper.setOnRetryButtonClick {
             loadDataInternal()
         }
-        initRecyclerView(recycler)
-        loadDataInternal()
+        initRecyclerView(wrapper.recyclerView)
+        if (isLoadOnCreated) {
+            loadDataInternal()
+        }
     }
 
-    protected val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? get() = view?.recycler?.adapter
+    protected val adapter: RecyclerView.Adapter<RecyclerView.ViewHolder>? get() = view?.wrapper?.recyclerView?.adapter
 
-    protected fun loadDataInternal() {
+    protected open fun loadDataInternal() {
         if (job?.isActive == true) {//do not to load data when job is running.
             return
         }
@@ -75,28 +77,20 @@ abstract class StatedRecyclerFragment<T> : BaseFragment() {
     }
 
     fun setLoading() = runWithRoot {
-        progressBar.visible()
-        buttonRetry.gone()
-        textEmptyDescription.gone()
+        wrapper.setLoading()
     }
 
     fun setComplete() = runWithRoot {
-        progressBar.gone()
-        buttonRetry.gone()
-        textEmptyDescription.gone()
+        wrapper.setComplete()
     }
 
     fun setError(msg: String? = null) = runWithRoot {
         log { "search error : $msg" }
-        progressBar.gone()
-        buttonRetry.visible()
-        textEmptyDescription.gone()
+        wrapper.setError()
     }
 
     fun setEmpty() = runWithRoot {
-        progressBar.gone()
-        buttonRetry.gone()
-        textEmptyDescription.visible()
+        wrapper.setEmpty()
     }
 
     override fun onDestroy() {

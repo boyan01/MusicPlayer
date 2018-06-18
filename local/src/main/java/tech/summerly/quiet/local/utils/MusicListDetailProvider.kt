@@ -4,10 +4,10 @@ import android.os.Parcel
 import android.os.Parcelable
 import tech.summerly.quiet.commonlib.bean.Album
 import tech.summerly.quiet.commonlib.bean.Artist
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
-import tech.summerly.quiet.local.repository.LocalMusicApi
+import tech.summerly.quiet.local.repository.database.LocalMusicDatabase
 
 /**
  * 本地专辑详情
@@ -28,8 +28,8 @@ internal class AlbumDetailProvider(
         private val album: Album
 ) : PlaylistProvider, Parcelable {
 
-    override suspend fun getMusicList(): List<Music> {
-        return LocalMusicApi.getLocalMusicApi().getMusicsByAlbum(album).await()
+    override suspend fun getMusicList(): List<IMusic> {
+        return LocalMusicDatabase.instance.albumDao().musics(album.id)
     }
 
     override suspend fun getDescription(): PlaylistProvider.Description? {
@@ -60,8 +60,8 @@ internal class ArtistDetailProvider(
         private val artist: Artist
 ) : PlaylistProvider {
 
-    override suspend fun getMusicList(): List<Music> {
-        return LocalMusicApi.getLocalMusicApi().getMusicsByArtist(artist)
+    override suspend fun getMusicList(): List<IMusic> {
+        return LocalMusicDatabase.instance.artistDao().musics(artist.id)
     }
 
     override suspend fun getDescription(): PlaylistProvider.Description? {

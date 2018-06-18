@@ -3,7 +3,6 @@ package tech.summerly.quiet.commonlib.model
 import android.os.Parcel
 import android.os.Parcelable
 import tech.summerly.quiet.commonlib.R
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.utils.string
 
@@ -14,7 +13,7 @@ import tech.summerly.quiet.commonlib.utils.string
  */
 interface PlaylistProvider : Parcelable {
 
-    suspend fun getMusicList(): List<Music>
+    suspend fun getMusicList(): List<IMusic>
 
     /**
      * 播放列表说明
