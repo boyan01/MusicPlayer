@@ -4,7 +4,6 @@ import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.player.playlist.Playlist2
@@ -15,21 +14,21 @@ import tech.summerly.quiet.commonlib.utils.observeFilterNull
 object MusicPlayerManager {
 
 
-    internal val internalPlayingMusic = MutableLiveData<Music>()
-    internal val internalMusicChange = MutableLiveData<Pair<Music?, Music?>>()
+    internal val internalPlayingMusic = MutableLiveData<IMusic>()
+    internal val internalMusicChange = MutableLiveData<Pair<IMusic?, IMusic?>>()
     internal val internalPosition = MutableLiveData<Pair<Long, Long>>()
     internal val internalPlayerState = WithDefaultLiveData(PlayerState.Idle)
     internal val internalPlayMode = WithDefaultLiveData(PlayMode.Sequence)
-    internal val internalPlaylist = MutableLiveData<List<Music>>()
+    internal val internalPlaylist = MutableLiveData<List<IMusic>>()
 
 
-    val musicChange: LiveData<Pair<Music?, Music?>> = internalMusicChange
-    val playingMusic: LiveData<Music>
+    val musicChange: LiveData<Pair<IMusic?, IMusic?>> = internalMusicChange
+    val playingMusic: LiveData<IMusic>
         get() = internalPlayingMusic
     val position: LiveData<Pair<Long, Long>> get() = internalPosition
     val playerState: LiveData<PlayerState> get() = internalPlayerState
     val playMode: LiveData<PlayMode> get() = internalPlayMode
-    val playlist: LiveData<List<Music>> get() = internalPlaylist
+    val playlist: LiveData<List<IMusic>> get() = internalPlaylist
 
 
     private var internalPlayer: MusicPlayer = MusicPlayer()
@@ -88,7 +87,7 @@ private object AutoPlayNext : Observer<PlayerState> {
 
 
 fun LifecycleOwner.listenMusicChangePosition(items: () -> List<*>,
-                                             predicate: (any: Any?, music: Music?) -> Boolean = { any, music -> any == music },
+                                             predicate: (any: Any?, music: IMusic?) -> Boolean = { any, music -> any == music },
                                              change: (from: Int, to: Int) -> Unit) =
         MusicPlayerManager.musicChange.observeFilterNull(this) { (old, new) ->
             val from = items().indexOfFirst { predicate(it, old) }

@@ -1,48 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<tech.summerly.quiet.commonlib.component.view.StatedRecyclerViewWrapper xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
-
-
-    <FrameLayout
-        android:id="@+id/stateLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            tools:visibility="gone" />
-
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/buttonRetry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="?colorPrimary"
-            android:gravity="center"
-            android:text="@string/retry"
-            android:textColor="@color/color_text_primary_dark_background"
-            tools:visibility="gone" />
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/textEmptyDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/empty_description" />
-
-    </FrameLayout>
-
-</FrameLayout>
+    android:id="@+id/wrapper"
+    android:layout_height="match_parent" />

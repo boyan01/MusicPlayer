@@ -4,4 +4,7 @@ import java.io.Serializable
 
 interface IAlbum : Serializable {
 
+
+    fun name(): String
+
 }

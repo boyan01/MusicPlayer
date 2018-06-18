@@ -10,7 +10,7 @@ import com.bumptech.glide.module.AppGlideModule
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Album
 import tech.summerly.quiet.commonlib.bean.Artist
-import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
 import java.net.URL
 
 /**
@@ -49,11 +49,11 @@ fun String.toPictureUrl(): Any {
     return PictureUrl(this)
 }
 
-fun Music.getPictureUrl(): Any {
-    if (picUri == null) {
+fun IMusic.getPictureUrl(): Any {
+    if (artwork == null) {
         return R.drawable.common_image_music_disk
     }
-    return picUri.toPictureUrl()
+    return artwork!!.toPictureUrl()
 }
 
 fun Artist.getPictureUrl(): Any {

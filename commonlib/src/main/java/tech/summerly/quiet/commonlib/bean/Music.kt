@@ -13,20 +13,27 @@ import tech.summerly.quiet.commonlib.model.IMusic
  *          才能被 MusicPlayerService 播放
  */
 open class Music(
-        val id: Long,
-        val title: String,
-        val artist: List<Artist>,
-        val album: Album,
+        override val id: Long,
+        override val title: String,
+        override val artist: List<Artist>,
+        override val album: Album,
         val picUri: String?,
         val type: MusicType,
         val mvId: Long,
-        @Deprecated("不可信")
-        val duration: Long,
+        override val duration: Long,
         val playUri: MutableList<MusicUri>
 ) : Parcelable, IMusic {
 
-    @Transient
-    var isFavorite: Boolean = false
+
+    override val artwork: String?
+        get() = picUri
+
+    override val isFavorite: Boolean
+        get() = false
+
+    override fun getUrl(bitrate: Int): String {
+        return ""
+    }
 
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
@@ -40,7 +47,7 @@ open class Music(
             parcel.createTypedArrayList(MusicUri.CREATOR))
 
     fun toShortString(): String = "$id : $title - ${artist.joinToString("/") { it.name }}"
-    fun artistAlbumString(): String = "${album.name} - ${artist.joinToString { it.name }}"
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(id)
         parcel.writeString(title)
@@ -109,4 +116,11 @@ open class Music(
     }
 
 
+    override suspend fun delete() {
+
+    }
+
+    override suspend fun like() {
+
+    }
 }

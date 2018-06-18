@@ -1,13 +1,13 @@
 package tech.summerly.quiet.commonlib.utils.support
 
 import android.content.Context
-import android.support.annotation.LayoutRes
 import android.support.v4.util.SparseArrayCompat
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.alibaba.android.arouter.facade.template.IProvider
 import tech.summerly.quiet.commonlib.utils.log
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
 open class TypedAdapter constructor(list: List<Any>) : RecyclerView.Adapter<ViewHolder>() {
 
@@ -73,6 +73,13 @@ class TypedBinderPool {
     private val typePool = SparseArrayCompat<KClass<*>>()
     private val binderPool = SparseArrayCompat<TypedBinder<*>>()
 
+    /**
+     * when can not directly use typePool.indexOfValue to find the key of class
+     * we need to this class' super class , but the process is expensive
+     * so we need cache the process'result
+     */
+    private val cachedSubClassKey = SparseArrayCompat<KClass<*>>()
+
     private var typeAutoIncrement = START
 
     @Synchronized
@@ -92,7 +99,26 @@ class TypedBinderPool {
      */
     fun key(klass: KClass<*>): Int {
         val index = typePool.indexOfValue(klass)
-        return typePool.keyAt(index)
+        if (index != -1) {
+            return typePool.keyAt(index)
+        }
+
+        //if can not find the same class , try to search supper class
+
+        val cachedIndex = cachedSubClassKey.indexOfValue(klass)
+        if (cachedIndex != -1) {
+            return cachedSubClassKey.keyAt(cachedIndex)
+        }
+
+        for (i in 0 until typePool.size()) {
+            val c = typePool.valueAt(i)
+            if (klass.isSubclassOf(c)) {
+                val key = typePool.keyAt(i)
+                cachedSubClassKey.put(key, c)
+                return key
+            }
+        }
+        throw IllegalAccessError("class :${klass.simpleName} has not register!!")
     }
 
     fun getBinder(key: Int): TypedBinder<*> {

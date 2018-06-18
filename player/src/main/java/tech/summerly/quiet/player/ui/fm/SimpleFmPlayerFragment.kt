@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.player_fragment_fm_simple.view.*
 import tech.summerly.quiet.commonlib.base.BaseFragment
-import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.utils.getPictureUrl
@@ -49,7 +49,7 @@ class SimpleFmPlayerFragment : BaseFragment() {
     }
 
 
-    private fun changeMusic(music: Music) = withRoot {
+    private fun changeMusic(music: IMusic) = withRoot {
         textTitle.text = music.title
         val width = (getScreenWidth() * 0.4f).toInt()
         val artwork = PictureModel.with(music.getPictureUrl()).get(imageArtwork, true, width, width)

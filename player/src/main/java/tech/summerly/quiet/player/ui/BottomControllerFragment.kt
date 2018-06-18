@@ -9,9 +9,9 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.player_fragment_bottom_controller.view.*
 import tech.summerly.quiet.commonlib.base.BaseFragment
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.component.callback.BottomControllerHost
 import tech.summerly.quiet.commonlib.fragments.PlayingListFragment
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.player.core.PlayerState
@@ -103,7 +103,7 @@ internal class BottomControllerFragment : BaseFragment() {
         }
     }
 
-    private fun updateMusicInfo(music: Music?) = runWithRoot {
+    private fun updateMusicInfo(music: IMusic?) = runWithRoot {
         val host = getControllerHost() ?: return@runWithRoot
         //首先根据music是否为空来控制底部控制fragment的显示与否。
         if (music == null) {

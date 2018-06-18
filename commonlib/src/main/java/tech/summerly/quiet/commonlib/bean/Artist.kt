@@ -11,6 +11,9 @@ data class Artist(
         val picUri: String?,
         val type: MusicType
 ) : Parcelable, IArtist {
+
+    override fun name(): String = name
+
     constructor(parcel: Parcel) : this(
             parcel.readLong(),
             parcel.readString(),

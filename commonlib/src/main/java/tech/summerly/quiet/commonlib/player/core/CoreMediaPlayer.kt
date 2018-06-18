@@ -8,7 +8,6 @@ import android.media.AudioManager
 import android.os.Build
 import android.view.animation.LinearInterpolator
 import org.jetbrains.anko.coroutines.experimental.asReference
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.persistence.preference.PreferenceProvider
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
@@ -75,6 +74,7 @@ class CoreMediaPlayer {
                 else -> "未知"
             }
             log { "player error : $message , $extra" }
+            state = PlayerState.Idle
             true
         }
         mediaPlayer.setOnCompletionListener {
@@ -86,7 +86,6 @@ class CoreMediaPlayer {
 
 
     suspend fun play(music: IMusic) {
-        music as Music
         stop()
         reset()
         val ref = internalMediaPlayer.asReference()

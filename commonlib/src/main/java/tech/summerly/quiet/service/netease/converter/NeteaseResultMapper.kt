@@ -99,7 +99,9 @@ internal class NeteaseResultMapper {
                 type = MusicType.NETEASE_FM,
                 mvId = resultBean.mvid ?: 0L,
                 duration = resultBean.duration.toLong()
-        ).also { it.isFavorite = resultBean.starred ?: false }
+        ).also {
+            //todo set favorite
+        }
     }
 
     fun convertToPlaylist(playlistResultBean: PlaylistResultBean.PlaylistBean): Playlist = with(playlistResultBean) {

@@ -1,7 +1,6 @@
 package tech.summerly.quiet.commonlib.player.playlist
 
 import kotlinx.coroutines.experimental.launch
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.PlayerPersistenceHelper
@@ -64,7 +63,7 @@ abstract class Playlist2<T>(
         if (!isActive) {
             return
         }
-        if (to is Music? && from is Music?) {
+        if (to is IMusic? && from is IMusic?) {
             MusicPlayerManager.internalPlayingMusic.postValue(to)
             MusicPlayerManager.internalMusicChange.postValue(from to to)
         }

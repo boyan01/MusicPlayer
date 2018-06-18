@@ -4,4 +4,6 @@ import java.io.Serializable
 
 interface IArtist : Serializable {
 
+    fun name(): String
+
 }

@@ -2,7 +2,6 @@ package tech.summerly.quiet.commonlib.player
 
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.core.CoreMediaPlayer
 import tech.summerly.quiet.commonlib.player.core.PlayerState
@@ -91,7 +90,6 @@ class MusicPlayer {
      * @param music Must be in [playlist]
      */
     fun play(music: IMusic) = safeAsync {
-        music as Music
         if (!playlist.list.contains(music)) {
             playlist.insertToNext(music)
         }
@@ -118,7 +116,7 @@ class MusicPlayer {
                     if (mediaPlayer.getPlayerState() == PlayerState.Playing || mediaPlayer.getPlayerState() == PlayerState.Pausing) {
                         MusicPlayerManager.internalPosition.postValue(mediaPlayer.position to mediaPlayer.duration)
                     } else {
-                        val duration = (playlist.current as Music?)?.duration ?: 0
+                        val duration = playlist.current?.duration ?: 0
                         MusicPlayerManager.internalPosition.postValue(0L to duration)
                     }
                 } catch (e: Exception) {

@@ -10,7 +10,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.player_content_fm_controller.*
 import kotlinx.android.synthetic.main.player_fragment_fm.view.*
 import tech.summerly.quiet.commonlib.base.BaseFragment
-import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayer
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.PlayerType
@@ -95,7 +95,7 @@ class FmPlayerFragment : BaseFragment() {
     }
 
 
-    private val onMusicChange = fun(_: Music?, new: Music?) {
+    private val onMusicChange = fun(_: IMusic?, new: IMusic?) {
         if (new == null) {
             return
         }

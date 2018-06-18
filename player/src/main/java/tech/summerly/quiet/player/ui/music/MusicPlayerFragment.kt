@@ -9,8 +9,8 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.player_content_music_controller.view.*
 import kotlinx.android.synthetic.main.player_fragment_music.view.*
 import tech.summerly.quiet.commonlib.base.BaseFragment
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.fragments.PlayingListFragment
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.core.PlayerState
 import tech.summerly.quiet.commonlib.utils.getPictureUrl
@@ -106,7 +106,7 @@ class MusicPlayerFragment : BaseFragment() {
 
     }
 
-    private fun setPlayingMusic(music: Music) = withRoot {
+    private fun setPlayingMusic(music: IMusic) = withRoot {
         textTitle.text = music.title
         textSubTitle.text = music.artistAlbumString()
         val bitmap = PictureModel.with(music.getPictureUrl()).get()
