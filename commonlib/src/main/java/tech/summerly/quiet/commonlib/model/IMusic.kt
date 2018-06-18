@@ -1,8 +1,9 @@
 package tech.summerly.quiet.commonlib.model
 
+import android.os.Parcelable
 import java.io.Serializable
 
-interface IMusic : Serializable {
+interface IMusic : Serializable, Parcelable {
 
     val id: Long
 

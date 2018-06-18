@@ -6,12 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.pd_fragment_internal_search.view.*
-import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseFragment
-import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.color
-import tech.summerly.quiet.commonlib.utils.setItems2
+import tech.summerly.quiet.commonlib.utils.support.TypedAdapter
 import tech.summerly.quiet.playlistdetail.items.MusicViewBinder
 
 /**
@@ -23,7 +22,7 @@ class PlaylistInternalSearchFragment : BaseFragment() {
 
         private const val KEY_MUSIC_LIST = "musics"
 
-        fun getInstance(musics: ArrayList<Music>) = PlaylistInternalSearchFragment().also {
+        fun getInstance(musics: ArrayList<IMusic>) = PlaylistInternalSearchFragment().also {
             it.arguments = Bundle().apply {
                 putParcelableArrayList(KEY_MUSIC_LIST, musics)
             }
@@ -31,12 +30,10 @@ class PlaylistInternalSearchFragment : BaseFragment() {
     }
 
     private val adapter by lazy {
-        val adapter = MultiTypeAdapter()
-        adapter.register(Music::class.java, MusicViewBinder().withOnItemClickListener(onMusicClick))
-        adapter
+        TypedAdapter().withBinder(IMusic::class, MusicViewBinder().withOnItemClickListener(onMusicClick))
     }
 
-    private val musicList = ArrayList<Music>()
+    private val musicList = ArrayList<IMusic>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,8 +74,8 @@ class PlaylistInternalSearchFragment : BaseFragment() {
         super.onStop()
     }
 
-    private val onMusicClick = fun(music: Music) {
-        MusicPlayerManager.play(musicList, music)
+    private val onMusicClick = fun(music: IMusic) {
+        MusicPlayerManager.play(PlaylistDetailActivity.TOKEN_PLAY, musicList, music)
     }
 
     /**
@@ -86,10 +83,8 @@ class PlaylistInternalSearchFragment : BaseFragment() {
      */
     private fun filterText(text: CharSequence?) {
         if (text == null || text.isEmpty()) {
-            if (adapter.items.isNotEmpty()) {
-                val size = adapter.items.size
-                adapter.items.clear()
-                adapter.notifyItemRangeRemoved(0, size)
+            if (adapter.list.isNotEmpty()) {
+                adapter.submit(emptyList<Any>())
             }
             return
         }
@@ -98,7 +93,7 @@ class PlaylistInternalSearchFragment : BaseFragment() {
                     it.title.contains(text, true)
                             || it.artistAlbumString().contains(text, true)
                 }
-        adapter.setItems2(data, detectDiff = false)
+        adapter.submit(data)
     }
 
 }

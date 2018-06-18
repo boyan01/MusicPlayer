@@ -26,14 +26,15 @@ open class TypedAdapter constructor(list: List<Any>) : RecyclerView.Adapter<View
         return this
     }
 
-    fun setList(list: List<Any>, notify: Boolean = true) {
-        this.items = list
+    fun setList(list: List<*>, notify: Boolean = true) {
+        @Suppress("UNCHECKED_CAST")
+        this.items = list as List<Any>
         if (notify) {
             notifyDataSetChanged()
         }
     }
 
-    fun submit(list: List<Any>) {
+    fun submit(list: List<*>) {
         setList(list)
     }
 
@@ -140,13 +141,14 @@ abstract class TypedBinder<T : Any> : IProvider {
 
     }
 
-    private lateinit var adapter: TypedAdapter
+    private lateinit var _adapter: TypedAdapter
 
     internal fun attachAdapter(adapter: TypedAdapter) {
-        this.adapter = adapter
+        this._adapter = adapter
     }
 
-    fun getAdapter(): TypedAdapter = adapter
+
+    val adapter get() = _adapter
 
     abstract fun onCreateViewHolder(parent: ViewGroup): ViewHolder
 
