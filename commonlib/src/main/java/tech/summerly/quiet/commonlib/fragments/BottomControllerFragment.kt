@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.common_fragment_controller_bottom.view.*
 import org.jetbrains.anko.dimen
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.base.BaseFragment
-import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.PlayerType
 import tech.summerly.quiet.commonlib.player.PlayerType.FM
@@ -108,7 +108,7 @@ open class BottomControllerFragment : BaseFragment() {
         }
     }
 
-    private fun updateMusicInfo(music: Music?) {
+    private fun updateMusicInfo(music: IMusic?) {
         //首先根据music是否为空来控制底部控制fragment的显示与否。
         val root = view ?: return
         if (music == null) {
@@ -119,7 +119,7 @@ open class BottomControllerFragment : BaseFragment() {
         //更新音乐信息
         root.musicTitle.text = music.title
         root.musicSubTitle.text = music.artistAlbumString()
-        GlideApp.with(this).load(music.getPictureUrl()).into(root.artWork)
+        GlideApp.with(this).load(music.artwork).into(root.artWork)
     }
 
     interface BottomControllerContainer {

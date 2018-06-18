@@ -18,9 +18,12 @@ interface IMusic : Serializable {
 
     val isFavorite: Boolean
 
-    val artwork: String
+    val artwork: String?
 
     suspend fun delete()
 
     suspend fun like()
+
+    fun artistAlbumString(): String = "${album.name()} - ${artist.joinToString { it.name() }}"
+
 }

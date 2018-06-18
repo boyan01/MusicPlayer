@@ -15,7 +15,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import org.jetbrains.anko.dip
-import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.notification.NotificationHelper
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.player.PlayerType
@@ -25,6 +25,7 @@ import tech.summerly.quiet.commonlib.utils.color
 import tech.summerly.quiet.commonlib.utils.toPictureUrl
 import tech.summerly.quiet.player.PlayerModule
 import tech.summerly.quiet.player.R
+import tech.summerly.quiet.player.service.MusicNotification.update
 
 
 /**
@@ -38,7 +39,7 @@ internal object MusicNotification : NotificationHelper() {
 
     val colorDefault = color(R.color.common_color_primary_dark)
 
-    private var music: Music? = null
+    private var music: IMusic? = null
 
     private var isPlaying: Boolean = false
 
@@ -107,7 +108,7 @@ internal object MusicNotification : NotificationHelper() {
             service.notify(notification, cancelAble)
         }
 
-        val picUrl = music.picUri?.toPictureUrl()
+        val picUrl = music.artwork?.toPictureUrl()
         if (picUrl == null) {
             preview()
             isNotifyCompleted = true
@@ -157,7 +158,7 @@ internal object MusicNotification : NotificationHelper() {
         return this
     }
 
-    private fun NotificationCompat.Builder.buildStep2(music: Music): NotificationCompat.Builder {
+    private fun NotificationCompat.Builder.buildStep2(music: IMusic): NotificationCompat.Builder {
         setContentTitle(music.title)
         setContentText(music.artistAlbumString())
 

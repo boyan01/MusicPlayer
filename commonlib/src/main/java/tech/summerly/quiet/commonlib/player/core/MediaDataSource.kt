@@ -6,6 +6,7 @@ import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.bean.MusicType
 import tech.summerly.quiet.commonlib.bean.MusicUri
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.utils.md5
 import tech.summerly.quiet.commonlib.utils.retryNull
 import tech.summerly.quiet.commonlib.utils.string
@@ -24,9 +25,11 @@ import java.net.URI
  * Created by summer on 18-3-5
  */
 
-suspend fun IjkMediaPlayer.setDataSource(music: Music) {
+suspend fun IjkMediaPlayer.setDataSource(music: IMusic) {
     val url = MusicUrlSource.getPlayableUri(music)
-            ?: throw IOException(string(R.string.can_not_find_music_url))
+    if (url == null || url.isEmpty()) {
+        throw IOException(string(R.string.can_not_find_music_url))
+    }
     val needCache = !url.startsWith("file", true)
     if (needCache) {
         setDataSource(MediaDataSource.with(url))
@@ -84,10 +87,16 @@ private object MusicUrlSource {
     /**
      * @throws IOException
      */
-    suspend fun getPlayableUri(music: Music): String? = with(music) {
-        return when (type) {
-            MusicType.LOCAL -> getLocalMusicUri()
-            MusicType.NETEASE, MusicType.NETEASE_FM -> getNeteaseMusicUri()
+    suspend fun getPlayableUri(music: IMusic): String? {
+        if (music is Music) {
+            return with(music) {
+                when (type) {
+                    MusicType.LOCAL -> getLocalMusicUri()
+                    MusicType.NETEASE, MusicType.NETEASE_FM -> getNeteaseMusicUri()
+                }
+            }
+        } else {
+            return music.getUrl()
         }
     }
 

@@ -25,8 +25,8 @@ open class Music(
 ) : Parcelable, IMusic {
 
 
-    override val artwork: String
-        get() = picUri!!
+    override val artwork: String?
+        get() = picUri
 
     override val isFavorite: Boolean
         get() = false
@@ -47,7 +47,7 @@ open class Music(
             parcel.createTypedArrayList(MusicUri.CREATOR))
 
     fun toShortString(): String = "$id : $title - ${artist.joinToString("/") { it.name }}"
-    fun artistAlbumString(): String = "${album.name} - ${artist.joinToString { it.name }}"
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeLong(id)
         parcel.writeString(title)

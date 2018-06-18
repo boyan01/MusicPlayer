@@ -7,7 +7,8 @@ import kotlinx.android.synthetic.main.local_item_music.view.*
 import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.utils.image.setImageUrl
+import tech.summerly.quiet.commonlib.utils.GlideApp
+import tech.summerly.quiet.commonlib.utils.getPictureUrl
 import tech.summerly.quiet.commonlib.utils.popupMenu
 import tech.summerly.quiet.commonlib.utils.support.TypedBinder
 import tech.summerly.quiet.commonlib.utils.support.ViewHolder
@@ -58,7 +59,7 @@ internal class MusicItemBinder : TypedBinder<IMusic>() {
                 true
             }
         }
-        image.setImageUrl(item.artwork)
+        GlideApp.with(this).load(item.getPictureUrl()).into(image)
         text_item_title.text = item.title
         text_item_subtitle.text = item.artist.joinToString("/") { it.name() }
         text_item_subtitle_2.text = item.album.name()
