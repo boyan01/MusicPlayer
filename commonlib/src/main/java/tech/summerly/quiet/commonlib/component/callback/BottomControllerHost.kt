@@ -28,6 +28,9 @@ interface BottomControllerHost {
         val fm = getAvailableFragmentManager() ?: return
         val fragment = fm.findFragmentByTag(PATH_BOTTOM_CONTROLLER)
                 ?: ARouter.getInstance().build(PATH_BOTTOM_CONTROLLER).navigation() as Fragment
+        if (fragment.isVisible) {
+            return
+        }
         fm.intransaction {
             replace(container.id, fragment, PATH_BOTTOM_CONTROLLER)
         }

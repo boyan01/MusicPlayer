@@ -125,11 +125,6 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
         loadData()
     }
 
-    override fun onStart() {
-        super.onStart()
-        initBottomController()
-    }
-
     //记录toolbar的点击次数以实现双击回到顶部功能
     private val mTitleHits = LongArray(2)
 
