@@ -20,7 +20,7 @@ class RemoteTypedBinderWrapper<T : Any>(
         fun <T : Any> withPath(path: String): RemoteTypedBinderWrapper<T> {
             val obj = ARouter.getInstance().build(path).navigation()
             @Suppress("UNCHECKED_CAST")
-            return RemoteTypedBinderWrapper<T>(obj as TypedBinder<T>)
+            return RemoteTypedBinderWrapper<T>(obj as TypedBinder<T>?)
         }
 
     }
