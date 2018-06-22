@@ -29,6 +29,8 @@ object Search {
      */
     const val ACTIVITY_SEARCH_MAIN = "/search/main"
 
+    const val FRAGMENT_SEARCH_MAIN = "/search/main_fragment"
+
 }
 
 object Netease {

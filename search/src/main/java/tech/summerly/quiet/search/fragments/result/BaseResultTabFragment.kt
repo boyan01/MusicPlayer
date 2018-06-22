@@ -1,4 +1,4 @@
-package tech.summerly.quiet.search.fragments
+package tech.summerly.quiet.search.fragments.result
 
 import android.support.v7.widget.RecyclerView
 import tech.summerly.quiet.commonlib.fragments.StatedRecyclerFragment
@@ -17,7 +17,7 @@ internal abstract class BaseResultTabFragment : StatedRecyclerFragment<Any>(), L
 
 
     companion object {
-        const val KEY_QUERY_TEXT = SearchResultsFragment.KEY_QUERY_TEXT
+
     }
 
     override val canLoadMore: Boolean
@@ -37,13 +37,13 @@ internal abstract class BaseResultTabFragment : StatedRecyclerFragment<Any>(), L
         LoadMoreDelegate(this@BaseResultTabFragment).attach(recyclerView)
     }
 
-    private val keyword get() = arguments?.getString(KEY_QUERY_TEXT) ?: ""
-
     override suspend fun loadData(): List<Any> {
-        return startQuery(keyword, items.size)
+        return startQuery("TODO", items.size)
     }
 
     protected fun search(): SearchInterface = NeteaseRepository()
+
+    internal abstract fun search(query: String?)
 
     override fun loadMore() {
         loadDataInternal()

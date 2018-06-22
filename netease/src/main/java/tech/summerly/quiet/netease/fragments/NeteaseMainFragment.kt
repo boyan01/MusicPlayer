@@ -1,6 +1,7 @@
 package tech.summerly.quiet.netease.fragments
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.SimpleItemAnimator
 import android.support.v7.widget.Toolbar
 import android.view.LayoutInflater
@@ -41,7 +42,11 @@ class NeteaseMainFragment : BaseFragment(), BottomControllerHost, Toolbar.OnMenu
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.netease_menu_search -> {
-                ARouter.getInstance().build(Search.ACTIVITY_SEARCH_MAIN).navigation()
+                val fragment = ARouter.getInstance().build(Search.FRAGMENT_SEARCH_MAIN).navigation() as Fragment
+                requireFragmentManager().beginTransaction()
+                        .replace(android.R.id.content, fragment)
+                        .addToBackStack(null)
+                        .commit()
             }
             R.id.netease_menu_main_logout -> {
                 logout()

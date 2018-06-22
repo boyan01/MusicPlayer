@@ -1,4 +1,4 @@
-package tech.summerly.quiet.search.fragments
+package tech.summerly.quiet.search.fragments.result
 
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -21,45 +21,67 @@ internal class SearchResultsFragment : BaseFragment() {
 
     companion object {
 
-        const val KEY_QUERY_TEXT = "query_text"
-
+        @Deprecated("...")
         fun newInstance(query: String): SearchResultsFragment {
-            return SearchResultsFragment().also {
-                val bundle = Bundle()
-                bundle.putString(KEY_QUERY_TEXT, query)
-                it.arguments = bundle
-            }
+            return SearchResultsFragment()
         }
 
         private const val COUNT_PAGE = 3
     }
 
-    private val query: String get() = arguments?.getString(KEY_QUERY_TEXT) ?: ""
+    private var _query: String? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.search_fragment_results, container, false)
     }
 
+    private val pagerAdapter by lazy {
+        SectionsPagerAdapter(childFragmentManager)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
         super.onViewCreated(view, savedInstanceState)
-        pager.adapter = SectionsPagerAdapter(childFragmentManager)
+        pager.adapter = pagerAdapter
         pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(pager))
         pager.offscreenPageLimit = COUNT_PAGE
     }
 
+    /**
+     * search [query] and display the result to screen
+     */
+    internal fun search(query: String) {
+        if (_query == query) {
+            return
+        }
+        _query = query
+
+        if (host == null) {
+            return
+        }
+        // hang out the query event to all child fragment
+        pagerAdapter.fragments.forEach {
+            it.search(query)
+        }
+    }
+
     private inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-        val fragments = Array<Fragment?>(count) { null }
+        private val _fragments = Array<Fragment?>(count) { null }
 
-        override fun getItem(position: Int): Fragment? = fragments[position] ?: when (position) {
-            0 -> MusicsResultTabFragment.newInstance(query)
+        override fun getItem(position: Int): Fragment? = _fragments[position] ?: when (position) {
+            0 -> MusicsResultTabFragment()
             1 -> UnimplementedFragment()
             2 -> UnimplementedFragment()
             else -> UnimplementedFragment()
         }.also {
-            fragments[position] = it
+            if (it is BaseResultTabFragment) {
+                it.search(_query)
+            }
+            _fragments[position] = it
         }
+
+        val fragments get() = _fragments.filterIsInstance(BaseResultTabFragment::class.java)
 
 
         // display four fragment: overview , total , artist , album

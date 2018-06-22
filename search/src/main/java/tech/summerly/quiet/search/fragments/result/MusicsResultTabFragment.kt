@@ -1,4 +1,4 @@
-package tech.summerly.quiet.search.fragments
+package tech.summerly.quiet.search.fragments.result
 
 import android.os.Bundle
 import tech.summerly.quiet.commonlib.objects.PortionList
@@ -9,15 +9,13 @@ import tech.summerly.quiet.search.model.SearchResult
  */
 internal class MusicsResultTabFragment : BaseResultTabFragment() {
 
+    override fun search(query: String?) {
+
+    }
+
     companion object {
 
-        fun newInstance(query: String): MusicsResultTabFragment {
-            return MusicsResultTabFragment().also {
-                val bundle = Bundle()
-                bundle.putString(KEY_QUERY_TEXT, query)
-                it.arguments = bundle
-            }
-        }
+
     }
 
     override suspend fun startQuery(text: String, offset: Int): PortionList<SearchResult.Music> {

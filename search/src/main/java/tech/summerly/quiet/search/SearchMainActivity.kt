@@ -8,11 +8,11 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.search_activity_main.*
 import kotlinx.coroutines.experimental.launch
 import tech.summerly.quiet.commonlib.base.BaseActivity
-import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
+import tech.summerly.quiet.commonlib.component.callback.BottomControllerHost
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.constraints.Search
 import tech.summerly.quiet.search.fragments.SearchDefaultFragment
-import tech.summerly.quiet.search.fragments.SearchResultsFragment
+import tech.summerly.quiet.search.fragments.result.SearchResultsFragment
 import tech.summerly.quiet.search.fragments.items.History
 import tech.summerly.quiet.search.utils.getHistory
 import tech.summerly.quiet.search.utils.inTransaction
@@ -22,7 +22,7 @@ import tech.summerly.quiet.search.utils.saveHistory
  * Created by summer on 18-2-17
  */
 @Route(path = Search.ACTIVITY_SEARCH_MAIN)
-class SearchMainActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
+class SearchMainActivity : BaseActivity(), BottomControllerHost {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
