@@ -9,17 +9,15 @@ import tech.summerly.quiet.search.model.SearchResult
  */
 internal class MusicsResultTabFragment : BaseResultTabFragment() {
 
-    override fun search(query: String?) {
 
-    }
 
     companion object {
 
 
     }
 
-    override suspend fun startQuery(text: String, offset: Int): PortionList<SearchResult.Music> {
-        return search().searchMusic(text, offset)
+    override suspend fun queryInternal(query: String, offset: Int): PortionList<SearchResult.Music> {
+        return search().searchMusic(query, offset)
 
     }
 }

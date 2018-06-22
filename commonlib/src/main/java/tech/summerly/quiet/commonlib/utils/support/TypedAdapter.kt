@@ -18,12 +18,28 @@ open class TypedAdapter constructor(list: List<Any>) : RecyclerView.Adapter<View
 
     private val pool = TypedBinderPool()
 
+    private val mapper = TypedMapper()
+
     val list: List<Any> get() = items.toList()
 
     fun <T : Any> withBinder(klass: KClass<T>, binder: TypedBinder<T>): TypedAdapter {
         pool.register(klass, binder)
         binder.attachAdapter(this)
         return this
+    }
+
+    /**
+     * see [withBinder]
+     *
+     * @param mapper
+     *
+     */
+    fun <T : Any, R : Any> withBinder(klass: KClass<T>,
+                                      binder: TypedBinder<R>,
+                                      mapper: (T) -> R): TypedAdapter {
+        this.mapper.register(klass, mapper)
+        @Suppress("UNCHECKED_CAST")
+        return withBinder(klass, binder/*错误的类型转换，但是却没有办法，以后再看看能否优雅一点*/ as TypedBinder<T>)
     }
 
     fun setList(list: List<*>, notify: Boolean = true) {
@@ -54,7 +70,8 @@ open class TypedAdapter constructor(list: List<Any>) : RecyclerView.Adapter<View
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         @Suppress("UNCHECKED_CAST")
         val binder = pool.getBinder(getItemViewType(position)) as TypedBinder<Any>
-        binder.onBindViewHolder(holder, items[position])
+        val data = mapper.getMappedObject(items[position])
+        binder.onBindViewHolder(holder, data)
     }
 
     fun getItem(adapterPosition: Int): Any {
@@ -129,6 +146,30 @@ class TypedBinderPool {
 }
 
 
+internal class TypedMapper() {
+
+    private val map = HashMap<KClass<*>, (Any) -> Any>()
+
+    fun <T : Any, R : Any> register(klass: KClass<T>, mapper: (T) -> R) {
+        @Suppress("UNCHECKED_CAST")
+        map.put(klass, mapper as (Any) -> Any)
+    }
+
+    /**
+     * get the object has been mapped
+     */
+    fun getMappedObject(any: Any): Any {
+        //short cuts for empty mapper
+        if (map.isEmpty()) {
+            return any
+        }
+        val mapper = map[any::class] ?: return any
+        return mapper(any)
+    }
+
+}
+
+
 /**
  * bind data to view
  *
@@ -143,7 +184,7 @@ abstract class TypedBinder<T : Any> : IProvider {
 
     private lateinit var _adapter: TypedAdapter
 
-    open internal fun attachAdapter(adapter: TypedAdapter) {
+    internal open fun attachAdapter(adapter: TypedAdapter) {
         this._adapter = adapter
     }
 

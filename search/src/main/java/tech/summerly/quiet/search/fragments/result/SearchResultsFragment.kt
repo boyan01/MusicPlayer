@@ -76,7 +76,7 @@ internal class SearchResultsFragment : BaseFragment() {
             else -> UnimplementedFragment()
         }.also {
             if (it is BaseResultTabFragment) {
-                it.search(_query)
+                _query?.let(it::search)
             }
             _fragments[position] = it
         }
