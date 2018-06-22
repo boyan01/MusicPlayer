@@ -1,4 +1,4 @@
-package tech.summerly.quiet
+package tech.summerly.quiet.ui.activity
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -11,6 +11,7 @@ import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.activity_main.*
+import tech.summerly.quiet.R
 import tech.summerly.quiet.commonlib.base.BaseActivity
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.constraints.Main
