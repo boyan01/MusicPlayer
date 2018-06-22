@@ -7,17 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.search_content_default.view.*
 import kotlinx.android.synthetic.main.search_fragment_default.view.*
-import me.drakeet.multitype.Items
-import org.jetbrains.anko.dip
 import tech.summerly.quiet.commonlib.base.BaseFragment
-import tech.summerly.quiet.commonlib.utils.asyncUI
-import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.search.R
 import tech.summerly.quiet.search.SearchMainActivity
-import tech.summerly.quiet.search.fragments.items.History
-import tech.summerly.quiet.search.fragments.items.SearchHotHint
-import tech.summerly.quiet.search.utils.getHistory
-import tech.summerly.quiet.search.utils.saveHistory
 
 /**
  * Created by summer on 18-3-6
@@ -27,8 +19,6 @@ import tech.summerly.quiet.search.utils.saveHistory
  * 目前只包含搜索历史记录
  */
 internal class SearchDefaultFragment : BaseFragment() {
-
-    private val items = Items(15)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.search_fragment_default, container, false)
