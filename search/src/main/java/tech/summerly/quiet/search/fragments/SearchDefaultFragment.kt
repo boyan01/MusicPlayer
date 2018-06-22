@@ -9,14 +9,9 @@ import kotlinx.android.synthetic.main.search_content_default.view.*
 import kotlinx.android.synthetic.main.search_fragment_default.view.*
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.search.R
-import tech.summerly.quiet.search.SearchMainActivity
 
 /**
  * Created by summer on 18-3-6
- *
- * [SearchMainActivity] 默认显示的fragment
- *
- * 目前只包含搜索历史记录
  */
 internal class SearchDefaultFragment : BaseFragment() {
 

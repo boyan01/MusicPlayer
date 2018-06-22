@@ -2,9 +2,6 @@
     package="tech.summerly.quiet.search">
 
     <application>
-        <activity
-            android:name=".SearchMainActivity"
-            android:theme="@style/SearchAppTheme"
-            android:windowSoftInputMode="adjustResize" />
+
     </application>
 </manifest>

@@ -21,11 +21,6 @@ internal class SearchResultsFragment : BaseFragment() {
 
     companion object {
 
-        @Deprecated("...")
-        fun newInstance(query: String): SearchResultsFragment {
-            return SearchResultsFragment()
-        }
-
         private const val COUNT_PAGE = 3
     }
 
