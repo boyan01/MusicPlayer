@@ -3,7 +3,6 @@ package tech.summerly.quiet.commonlib.utils.support
 import android.view.ViewGroup
 import android.widget.TextView
 import com.alibaba.android.arouter.launcher.ARouter
-import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
@@ -27,6 +26,7 @@ class RemoteTypedBinderWrapper<T : Any>(
 
     public override fun attachAdapter(adapter: TypedAdapter) {
         super.attachAdapter(adapter)
+        binder?.attachAdapter(adapter)
     }
 
     /**
@@ -47,6 +47,7 @@ class RemoteTypedBinderWrapper<T : Any>(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
+        @Suppress("IfThenToElvis")
         return if (binder == null) {
             sUnImplementedItemViewBinder.onCreateViewHolder(parent)
         } else {
