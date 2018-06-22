@@ -31,4 +31,9 @@ class PortionList<T : Any>(
         return PortionList(new, total, offset)
     }
 
+    fun clear() {
+        data.clear()
+        offset = 0
+    }
+
 }

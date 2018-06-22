@@ -13,15 +13,15 @@ import androidx.core.view.updateLayoutParams
 import com.alibaba.android.arouter.facade.annotation.Route
 import kotlinx.android.synthetic.main.pd_activity_playlist_deatil.*
 import me.drakeet.multitype.Items
-import me.drakeet.multitype.MultiTypeAdapter
 import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.dimen
-import tech.summerly.quiet.commonlib.bean.Music
 import tech.summerly.quiet.commonlib.component.activities.NoIsolatedActivity
 import tech.summerly.quiet.commonlib.component.callback.BottomControllerHost
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
 import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.commonlib.utils.support.TypedAdapter
 import tech.summerly.quiet.constraints.Main
 import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.playlistdetail.items.MusicHeader
@@ -39,6 +39,8 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
     companion object {
 
         private const val PARAM_PLAYLIST_PROVIDER = PlaylistDetail.PARAM_PLAYLIST_PROVIDER
+
+        internal const val TOKEN_PLAY = "playlist_detail_"
 
     }
 
@@ -114,18 +116,13 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
 
     }
 
-    private val adapter = MultiTypeAdapter()
+    internal val adapter = TypedAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.pd_activity_playlist_deatil)
         setEvent()
         loadData()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        initBottomController()
     }
 
     //记录toolbar的点击次数以实现双击回到顶部功能
@@ -136,12 +133,12 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
     private var isNeedShowIndicatorFindLocation = false
 
     private fun setEvent() {
-        list.adapter = adapter.also {
-            it.register(PlaylistProvider.Description::class.java, PlaylistHeaderViewBinder(setBackgroundColor))
-            it.register(MusicHeader::class.java, MusicHeaderViewBinder())
-            it.register(Music::class.java,
-                    MusicViewBinder())
-        }
+        list.adapter = adapter
+                .withBinder(PlaylistProvider.Description::class, PlaylistHeaderViewBinder(setBackgroundColor))
+                .withBinder(MusicHeader::class, MusicHeaderViewBinder())
+                .withBinder(IMusic::class,
+                        MusicViewBinder())
+
         list.addOnScrollListener(mScrollListener)
         (list.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         imageBack.setOnClickListener {
@@ -149,7 +146,7 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
         }
         imageSearch.setOnClickListener {
             val searchFragment = PlaylistInternalSearchFragment
-                    .getInstance(ArrayList<Music>().also { adapter.items.filterIsInstanceTo(it) })
+                    .getInstance(ArrayList<IMusic>().also { adapter.list.filterIsInstanceTo(it) })
             supportFragmentManager.intransaction {
                 replace(android.R.id.content, searchFragment)
                 addToBackStack("search")
@@ -171,14 +168,15 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
             list.layoutManager?.startSmoothScroll(scroller)
         }
         MusicPlayerManager.musicChange.observeFilterNull(this) { (old, new) ->
+            val list = adapter.list
             if (old != null) {
-                val index = adapter.items.indexOf(old)
+                val index = list.indexOf(old)
                 if (index != -1) {
                     adapter.notifyItemChanged(index)
                 }
             }
             if (new != null) {
-                val index = adapter.items.indexOf(new)
+                val index = list.indexOf(new)
                 if (index != -1) {
                     adapter.notifyItemChanged(index)
                 }
@@ -198,7 +196,7 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
      */
     private fun checkPlayingMusicIsInList() {
         val current = MusicPlayerManager.player.playlist.current
-        if (current != null && adapter.items.contains(current)) {
+        if (current != null && adapter.list.contains(current)) {
             isNeedShowIndicatorFindLocation = true
         } else {
             isNeedShowIndicatorFindLocation = false
@@ -234,7 +232,7 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
     }
 
     private fun showPlaylists(items: List<*>) {
-        adapter.setItems2(items)
+        adapter.submit(items)
     }
 
     private val setBackgroundColor = fun(color: Int) {
@@ -244,7 +242,7 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
 
     private fun findCurrentPlayingMusic(): Int? {
         val current = MusicPlayerManager.player.playlist.current ?: return null
-        val index = adapter.items.indexOf(current)
+        val index = adapter.list.indexOf(current)
         if (index == -1) {
             return null
         }

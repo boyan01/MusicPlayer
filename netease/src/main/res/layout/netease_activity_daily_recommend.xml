@@ -27,11 +27,9 @@
         android:layout_weight="1"
         app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
-    <fragment
-        android:name="tech.summerly.quiet.commonlib.fragments.BottomControllerFragment"
+    <FrameLayout
+        android:id="@+id/bottomPlayerContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:tag="@string/common_tag_fragment_bottom_controller"
-        tools:layout="@layout/common_fragment_controller_bottom" />
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

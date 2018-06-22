@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.content.systemService
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
+import tech.summerly.quiet.commonlib.component.callback.BottomControllerHost
 import kotlin.reflect.KProperty
 
 /**
@@ -25,6 +26,10 @@ open class BaseFragment : Fragment() {
         super.onStart()
         //让 fragment 布局也支持 fitSystemWindows 属性
         (activity as BaseActivity).requestApplyInserts()
+
+        if (this is BottomControllerHost) {
+            initBottomController()
+        }
     }
 
     /**

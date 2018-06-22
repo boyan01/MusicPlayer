@@ -2,38 +2,43 @@ package tech.summerly.quiet.playlistdetail.items
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.alibaba.android.arouter.facade.template.IProvider
 import kotlinx.android.synthetic.main.pd_item_music.view.*
-import tech.summerly.quiet.commonlib.bean.Music
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.utils.ItemViewBinder2
 import tech.summerly.quiet.commonlib.utils.image.setImageUrl
 import tech.summerly.quiet.commonlib.utils.log
 import tech.summerly.quiet.commonlib.utils.popupMenu
+import tech.summerly.quiet.commonlib.utils.support.TypedBinder
+import tech.summerly.quiet.commonlib.utils.support.ViewHolder
 import tech.summerly.quiet.constraints.PlaylistDetail
+import tech.summerly.quiet.playlistdetail.PlaylistDetailActivity
 import tech.summerly.quiet.playlistdetail.R
 
 
 @Route(path = PlaylistDetail.ITEM_BINDER_MUSIC)
-class MusicViewBinder : ItemViewBinder2<Music>(), IProvider {
+class MusicViewBinder : TypedBinder<IMusic>() {
 
 
-    private val defaultMusicClickListener = fun(music: Music) {
-        val musicList = adapter.items.filterIsInstance(Music::class.java)
-        MusicPlayerManager.play("playlist detail", musicList, music)
+    private val defaultMusicClickListener = fun(music: IMusic) {
+        val musicList = adapter.list.filterIsInstance(IMusic::class.java)
+        MusicPlayerManager.play(PlaylistDetailActivity.TOKEN_PLAY, musicList, music)
     }
 
     private var onMusicClickListener = defaultMusicClickListener
 
-    override val layoutId: Int = R.layout.pd_item_music
 
     override fun init(context: Context) {
 
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, item: Music) = with(holder.itemView) {
-        val picUri = item.picUri
+    override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
+        return ViewHolder.from(R.layout.pd_item_music, parent)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, item: IMusic) = with(holder.itemView) {
+        val picUri = item.artwork
         if (picUri == null) {
             image.setImageResource(R.drawable.common_image_music_disk)
         } else {
@@ -49,7 +54,7 @@ class MusicViewBinder : ItemViewBinder2<Music>(), IProvider {
         Unit
     }
 
-    fun withOnItemClickListener(listener: ((Music) -> Unit)): MusicViewBinder {
+    fun withOnItemClickListener(listener: ((IMusic) -> Unit)): MusicViewBinder {
         onMusicClickListener = listener
         return this
     }

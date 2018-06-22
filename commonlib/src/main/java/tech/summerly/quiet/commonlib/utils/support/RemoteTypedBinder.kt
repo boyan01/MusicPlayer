@@ -3,7 +3,6 @@ package tech.summerly.quiet.commonlib.utils.support
 import android.view.ViewGroup
 import android.widget.TextView
 import com.alibaba.android.arouter.launcher.ARouter
-import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.R
 import tech.summerly.quiet.commonlib.utils.LoggerLevel
 import tech.summerly.quiet.commonlib.utils.log
@@ -20,24 +19,14 @@ class RemoteTypedBinderWrapper<T : Any>(
         fun <T : Any> withPath(path: String): RemoteTypedBinderWrapper<T> {
             val obj = ARouter.getInstance().build(path).navigation()
             @Suppress("UNCHECKED_CAST")
-            return RemoteTypedBinderWrapper<T>(obj as TypedBinder<T>)
+            return RemoteTypedBinderWrapper<T>(obj as TypedBinder<T>?)
         }
 
     }
 
-    fun setAdapter(adapter: MultiTypeAdapter) {
-        if (binder == null) {
-            return
-        }
-        try {
-            val clazz = me.drakeet.multitype.ItemViewBinder::class.java
-            val field = clazz.getDeclaredField("adapter")
-            field.isAccessible = true
-            field.set(binder, adapter)
-        } catch (e: Exception) {
-            log { e.printStackTrace() }
-        }
-
+    public override fun attachAdapter(adapter: TypedAdapter) {
+        super.attachAdapter(adapter)
+        binder?.attachAdapter(adapter)
     }
 
     /**
@@ -58,6 +47,7 @@ class RemoteTypedBinderWrapper<T : Any>(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
+        @Suppress("IfThenToElvis")
         return if (binder == null) {
             sUnImplementedItemViewBinder.onCreateViewHolder(parent)
         } else {

@@ -2,7 +2,6 @@ package tech.summerly.quiet.playlistdetail.items
 
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.request.target.ImageViewTarget
 import kotlinx.android.synthetic.main.pd_header_playlist.view.*
@@ -10,15 +9,18 @@ import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import tech.summerly.quiet.commonlib.model.PlaylistProvider
 import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.commonlib.utils.support.TypedBinder
+import tech.summerly.quiet.commonlib.utils.support.ViewHolder
 import tech.summerly.quiet.playlistdetail.R
 
 
 internal class PlaylistHeaderViewBinder(
         private val onHeaderColorAvailable: (color: Int) -> Unit
-) : ItemViewBinder<PlaylistProvider.Description>() {
+) : TypedBinder<PlaylistProvider.Description>() {
 
-    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
-        return ViewHolder(R.layout.pd_header_playlist, parent, inflater)
+
+    override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
+        return ViewHolder.from(R.layout.pd_header_playlist, parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, item: PlaylistProvider.Description) = with(holder.itemView) {

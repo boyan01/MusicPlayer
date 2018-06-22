@@ -1,9 +1,9 @@
 package tech.summerly.quiet.playlistdetail.items
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.pd_header_music.view.*
-import tech.summerly.quiet.commonlib.utils.ItemViewBinder
+import tech.summerly.quiet.commonlib.utils.support.TypedBinder
+import tech.summerly.quiet.commonlib.utils.support.ViewHolder
 import tech.summerly.quiet.playlistdetail.R
 
 
@@ -11,10 +11,10 @@ import tech.summerly.quiet.playlistdetail.R
  * author : yangbin10
  * date   : 2018/1/15
  */
-internal class MusicHeaderViewBinder : ItemViewBinder<MusicHeader>() {
+internal class MusicHeaderViewBinder : TypedBinder<MusicHeader>() {
 
-    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
-        return ViewHolder(R.layout.pd_header_music, parent, inflater)
+    override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
+        return ViewHolder.from(R.layout.pd_header_music, parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, item: MusicHeader) = with(holder.itemView) {

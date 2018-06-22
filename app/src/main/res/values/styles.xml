@@ -1,5 +1,8 @@
 <resources>
 
 
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@color/common_color_primary</item>
+    </style>
 
 </resources>

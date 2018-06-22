@@ -5,12 +5,14 @@ import android.os.Bundle
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.android.synthetic.main.netease_activity_daily_recommend.*
-import me.drakeet.multitype.MultiTypeAdapter
 import tech.summerly.quiet.commonlib.base.BaseActivity
-import tech.summerly.quiet.commonlib.bean.Music
-import tech.summerly.quiet.commonlib.fragments.BottomControllerFragment
+import tech.summerly.quiet.commonlib.component.callback.BottomControllerHost
+import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
-import tech.summerly.quiet.commonlib.utils.*
+import tech.summerly.quiet.commonlib.utils.alert
+import tech.summerly.quiet.commonlib.utils.asyncUI
+import tech.summerly.quiet.commonlib.utils.support.RemoteTypedBinderWrapper
+import tech.summerly.quiet.commonlib.utils.support.TypedAdapter
 import tech.summerly.quiet.constraints.PlaylistDetail
 import tech.summerly.quiet.netease.R
 import tech.summerly.quiet.netease.ui.items.NeteaseDailyHeader
@@ -23,7 +25,7 @@ import java.util.*
  * activity for daily recommend 30 songs
  */
 @Route(path = "/netease/daily")
-internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerFragment.BottomControllerContainer {
+internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerHost {
 
     companion object {
         private const val REQUEST_LOGIN = 101
@@ -36,15 +38,21 @@ internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerF
 
     private val items = ArrayList<Any>()
 
+    protected val adapter by lazy {
+        TypedAdapter(items)
+                .withBinder(NeteaseDailyHeader::class, NeteaseDailyHeaderViewBinder())
+                .also {
+                    val musicItemBinder = RemoteTypedBinderWrapper.withPath<IMusic>(PATH_BINDER_MUSIC)
+                    musicItemBinder.attachAdapter(it)
+                    musicItemBinder.invoke("withOnItemClickListener", this::onMusicClick)
+                    it.withBinder(IMusic::class, musicItemBinder)
+                }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.netease_activity_daily_recommend)
-        recyclerList.adapter = MultiTypeAdapter(items).also {
-            val musicItemBinder = RemoteItemBinderWrapper.withPath<Music>(PATH_BINDER_MUSIC)
-            musicItemBinder.invoke("withOnItemClickListener", this::onMusicClick)
-            it.register(NeteaseDailyHeader::class.java, NeteaseDailyHeaderViewBinder())
-            it.register(Music::class.java, musicItemBinder)
-        }
+        recyclerList.adapter = adapter
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -66,15 +74,15 @@ internal class NeteaseDailyRecommendActivity : BaseActivity(), BottomControllerF
         val songs = NeteaseCloudMusicApi().getDailyRecommend()
         items.add(NeteaseDailyHeader(getToday()))
         items.addAll(songs)
-        recyclerList.multiTypeAdapter.notifyDataSetChanged()
+        adapter.submit(items)
     }
 
     private fun getToday(): String {
         return Calendar.getInstance().get(Calendar.DAY_OF_MONTH).toString()
     }
 
-    private fun onMusicClick(music: Music) {
-        MusicPlayerManager.play(TOKEN, items.filterIsInstance(Music::class.java), music)
+    private fun onMusicClick(music: IMusic) {
+        MusicPlayerManager.play(TOKEN, items.filterIsInstance(IMusic::class.java), music)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

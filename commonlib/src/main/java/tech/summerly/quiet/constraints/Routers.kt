@@ -24,10 +24,7 @@ object Local {
 //搜索
 object Search {
 
-    /**
-     * search activity router path
-     */
-    const val ACTIVITY_SEARCH_MAIN = "/search/main"
+    const val FRAGMENT_SEARCH_MAIN = "/search/main_fragment"
 
 }
 
