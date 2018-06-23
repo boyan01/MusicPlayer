@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="SettingTheme" parent="CommonAppTheme">
+    <style name="SettingTheme" parent="AppTheme">
         <item name="preferenceTheme">@style/PreferenceFragment.Material</item>
         <item name="seekBarPreferenceStyle">@style/Preference.SeekBarPreference.Material</item>
     </style>
