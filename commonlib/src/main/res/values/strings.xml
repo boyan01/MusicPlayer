@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="common_tag_fragment_bottom_controller">bottom_fragment_tag</string>
     <string name="common_channel_name_music_play_service">quiet音乐播放服务通知</string>
     <string name="common_channel_description_music_play_service">提供播放控制的通知</string>
     <string name="common_action_remove">移除</string>
@@ -9,7 +8,6 @@
     <string name="common_playmode_sequence">顺序播放</string>
     <string name="common_playmode_single">单曲循环</string>
     <string name="common_tag_fragment_playing_list">fragment_playing_list</string>
-    <string name="common_tooltips_playing_list">当前播放列表</string>
     <string name="common_pause">暂停</string>
     <string name="tips_action_more">更多选项</string>
     <string name="tips_action_back">返回</string>
