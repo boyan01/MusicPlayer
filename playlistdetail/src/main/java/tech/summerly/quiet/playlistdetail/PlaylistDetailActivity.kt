@@ -196,7 +196,8 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
      */
     private fun checkPlayingMusicIsInList() {
         val current = MusicPlayerManager.player.playlist.current
-        if (current != null && adapter.list.contains(current)) {
+        //todo token check
+        if (current != null && MusicPlayerManager.player.playlist.token == TOKEN_PLAY && adapter.list.contains(current)) {
             isNeedShowIndicatorFindLocation = true
         } else {
             isNeedShowIndicatorFindLocation = false
