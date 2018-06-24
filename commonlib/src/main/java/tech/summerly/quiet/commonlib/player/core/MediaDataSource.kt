@@ -13,7 +13,6 @@ import tech.summerly.quiet.commonlib.utils.string
 import tech.summerly.quiet.service.netease.NeteaseCloudMusicApi
 import tech.summerly.streamcache.CachedDataSource
 import tech.summerly.streamcache.DataSource
-import tech.summerly.streamcache.DirectDataSource
 import tv.danmaku.ijk.media.player.IjkMediaPlayer
 import tv.danmaku.ijk.media.player.misc.IMediaDataSource
 import java.io.File
@@ -43,32 +42,9 @@ class MediaDataSource(dataSource: DataSource) : DataSource by dataSource, IMedia
     companion object {
 
         fun with(url: String): MediaDataSource {
-            val dataSource = CachedDataSource(Uri.parse(url))
+            val dataSource = CachedDataSource(Uri.parse(url), DefaultNameGenerator)
             return MediaDataSource(dataSource)
         }
-
-        /**
-         *
-         * @throws IOException
-         */
-        suspend operator fun invoke(music: Music): MediaDataSource {
-            val url = MusicUrlSource.getPlayableUri(music)
-                    ?: throw IOException(string(R.string.can_not_find_music_url))
-            return invoke(url, !url.startsWith("file", true))
-        }
-
-        /**
-         * @param cache cache to local file if set true
-         */
-        operator fun invoke(url: String, cache: Boolean = true): MediaDataSource {
-            val datasource = if (cache) {
-                CachedDataSource(Uri.parse(url), DefaultNameGenerator)
-            } else {
-                DirectDataSource(Uri.parse(url))
-            }
-            return MediaDataSource(datasource)
-        }
-
     }
 
     private object DefaultNameGenerator : (String) -> String {
