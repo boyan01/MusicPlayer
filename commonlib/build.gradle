@@ -106,7 +106,7 @@ dependencies {
     api 'com.alibaba:arouter-api:1.3.1'
     kapt 'com.alibaba:arouter-compiler:1.1.4'
 
-    implementation project(":streamcache")
+    implementation project(':streamcache')
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'

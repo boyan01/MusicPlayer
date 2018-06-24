@@ -65,6 +65,7 @@ dependencies {
         implementation project(':search')
         implementation project(':playlistdetail')
         implementation project(':player')
+        implementation project(':download')
     }
     implementation project(':commonlib')
     kapt 'com.alibaba:arouter-compiler:1.1.4'

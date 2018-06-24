@@ -1,1 +1,1 @@
-include ':app', ':commonlib', ':local', ':netease', ':setting', ':search', ':playlistdetail', ':player', ':streamcache'
+include ':app', ':commonlib', ':local', ':netease', ':setting', ':search', ':playlistdetail', ':player', ':streamcache', ':download'
