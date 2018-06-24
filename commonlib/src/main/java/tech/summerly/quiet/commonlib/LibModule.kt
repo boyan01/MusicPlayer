@@ -28,6 +28,7 @@ internal object LibModule : BaseModule() {
         ARouter.init(applicationContext as Application?)
 
         CacheGlobalSetting.CACHE_PATH = File(externalCacheDir, "musics_cache").path
+        CacheGlobalSetting.CACHE_SIZE = 1024 * 1024 * 800
         (baseContext as Application).registerActivityLifecycleCallbacks(AppTask.CallBack)
         MusicPlayerManager.playMode.observeForeverFilterNull {
             PlayerPersistenceHelper.savePlayMode(it)

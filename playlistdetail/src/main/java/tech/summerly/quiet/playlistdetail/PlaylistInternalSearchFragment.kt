@@ -1,11 +1,14 @@
 package tech.summerly.quiet.playlistdetail
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.support.annotation.ColorInt
 import android.support.v7.widget.SearchView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.pd_fragment_internal_search.view.*
+import org.jetbrains.anko.withAlpha
 import tech.summerly.quiet.commonlib.base.BaseFragment
 import tech.summerly.quiet.commonlib.model.IMusic
 import tech.summerly.quiet.commonlib.player.MusicPlayerManager
@@ -21,10 +24,14 @@ class PlaylistInternalSearchFragment : BaseFragment() {
     companion object {
 
         private const val KEY_MUSIC_LIST = "musics"
+        private const val KEY_COLOR = "color"
 
-        fun getInstance(musics: ArrayList<IMusic>) = PlaylistInternalSearchFragment().also {
+        fun getInstance(musics: ArrayList<IMusic>,
+                        @ColorInt color: Int? = null) = PlaylistInternalSearchFragment().also {
             it.arguments = Bundle().apply {
                 putParcelableArrayList(KEY_MUSIC_LIST, musics)
+                putInt(KEY_COLOR, color
+                        ?: tech.summerly.quiet.commonlib.utils.color(R.color.common_color_primary))
             }
         }
     }
@@ -46,6 +53,13 @@ class PlaylistInternalSearchFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
         super.onViewCreated(view, savedInstanceState)
+
+        //更改fragment的主题颜色
+        val colorful = getArgument<Int>(KEY_COLOR).withAlpha(0xff)
+        toolbarLayout.setBackgroundColor(colorful)
+        toolbar.setBackgroundColor(colorful)
+        coordinator.setStatusBarBackgroundColor(colorful)
+
         toolbar.navigationIcon?.setTint(color(R.color.color_text_primary_dark_background))
         toolbar.setNavigationOnClickListener {
             closeSelf()

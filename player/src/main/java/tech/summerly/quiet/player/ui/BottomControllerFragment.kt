@@ -1,5 +1,6 @@
 package tech.summerly.quiet.player.ui
 
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -87,7 +88,12 @@ internal class BottomControllerFragment : BaseFragment() {
         progressPlayPause.invisible()
         controllerPauseOrPlay.visible()
         when (state) {
-            PlayerState.Playing -> controllerPauseOrPlay.setImageResource(R.drawable.ic_pause_black_24dp)
+            PlayerState.Playing -> {
+                controllerPauseOrPlay.setImageResource(R.drawable.ic_pause_black_24dp)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    controllerPauseOrPlay.tooltipText = string(R.string.player_pause)
+                }
+            }
             PlayerState.Preparing -> {
                 controllerPauseOrPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 // delay 500ms to display load progress bar
@@ -99,7 +105,12 @@ internal class BottomControllerFragment : BaseFragment() {
                     }
                 }, 500)
             }
-            else -> controllerPauseOrPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp)
+            else -> {
+                controllerPauseOrPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    controllerPauseOrPlay.tooltipText = string(R.string.player_play)
+                }
+            }
         }
     }
 
