@@ -2,6 +2,7 @@ package tech.summerly.quiet.playlistdetail
 
 import android.animation.ValueAnimator
 import android.content.Context
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.SystemClock
 import android.support.design.widget.CoordinatorLayout
@@ -145,8 +146,11 @@ class PlaylistDetailActivity : NoIsolatedActivity(), BottomControllerHost {
             onBackPressed()
         }
         imageSearch.setOnClickListener {
+            val list = ArrayList<IMusic>().also {
+                adapter.list.filterIsInstanceTo(it)
+            }
             val searchFragment = PlaylistInternalSearchFragment
-                    .getInstance(ArrayList<IMusic>().also { adapter.list.filterIsInstanceTo(it) })
+                    .getInstance(list, (toolbarPlaylist.background as? ColorDrawable)?.color)
             supportFragmentManager.intransaction {
                 replace(android.R.id.content, searchFragment)
                 addToBackStack("search")
