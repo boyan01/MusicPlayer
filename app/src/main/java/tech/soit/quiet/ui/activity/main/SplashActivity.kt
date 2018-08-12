@@ -1,4 +1,4 @@
-package tech.soit.quiet.ui.activity
+package tech.soit.quiet.ui.activity.main
 
 import android.content.Intent
 import android.os.Bundle

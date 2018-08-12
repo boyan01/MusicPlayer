@@ -28,11 +28,11 @@
         <item name="quietIconInactive">@color/color_icon_inactive</item>
 
         <!-- support material components style -->
-        <item name="chipGroupStyle">@style/Widget.MaterialComponents.ChipGroup</item>
-        <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Action</item>
-        <item name="navigationViewStyle">@style/Widget.Design.NavigationView</item>
-        <item name="materialCardViewStyle">@style/Widget.MaterialComponents.CardView</item>
-        <item name="materialButtonStyle">@style/Widget.MaterialComponents.Button</item>
+        <!--<item name="chipGroupStyle">@style/Widget.MaterialComponents.ChipGroup</item>-->
+        <!--<item name="chipStyle">@style/Widget.MaterialComponents.Chip.Action</item>-->
+        <!--<item name="navigationViewStyle">@style/Widget.Design.NavigationView</item>-->
+        <!--<item name="materialCardViewStyle">@style/Widget.MaterialComponents.CardView</item>-->
+        <!--<item name="materialButtonStyle">@style/Widget.MaterialComponents.Button</item>-->
 
         <!-- disable action bar and make window translucent -->
         <item name="windowActionBar">false</item>
