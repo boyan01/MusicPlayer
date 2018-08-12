@@ -2,7 +2,43 @@
 
 
     <style name="SplashTheme" parent="AppTheme">
-        <item name="android:windowBackground">@color/common_color_primary</item>
+        <item name="android:windowBackground">@color/color_primary</item>
+    </style>
+
+    <!-- application base theme -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
+
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">false</item>
+        <item name="android:windowAllowReturnTransitionOverlap">false</item>
+
+        <!-- default theme color -->
+        <item name="quietBackground">@color/background</item>
+        <item name="quietPrimaryLight">@color/color_primary_light</item>
+        <item name="quietTextPrimary">@color/color_text_primary</item>
+        <item name="quietTextPrimaryInverse">@color/color_text_inverse_primary</item>
+        <item name="quietTextSecondary">@color/color_text_secondary</item>
+        <item name="quietTextSecondaryInverse">@color/color_text_inverse_secondary</item>
+        <item name="quietDivider">@color/color_divider</item>
+        <item name="quietIconActive">@color/color_icon_active</item>
+        <item name="quietIconInactive">@color/color_icon_inactive</item>
+
+        <!-- support material components style -->
+        <item name="chipGroupStyle">@style/Widget.MaterialComponents.ChipGroup</item>
+        <item name="chipStyle">@style/Widget.MaterialComponents.Chip.Action</item>
+        <item name="navigationViewStyle">@style/Widget.Design.NavigationView</item>
+        <item name="materialCardViewStyle">@style/Widget.MaterialComponents.CardView</item>
+        <item name="materialButtonStyle">@style/Widget.MaterialComponents.Button</item>
+
+        <!-- disable action bar and make window translucent -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowTranslucentStatus">true</item>
+
     </style>
 
 </resources>

@@ -1,8 +1,8 @@
-package tech.summerly.quiet.ui.activity
+package tech.soit.quiet.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
-import tech.summerly.quiet.commonlib.base.BaseActivity
+import tech.soit.quiet.ui.activity.base.BaseActivity
 
 /**
  * application splash

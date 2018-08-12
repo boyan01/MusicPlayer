@@ -13,7 +13,7 @@ android {
     compileSdkVersion compile_sdk
 
     defaultConfig {
-        applicationId "tech.summerly.quiet"
+        applicationId "tech.soit.quiet"
         minSdkVersion min_sdk.toInteger()
         targetSdkVersion target_sdk
         versionCode app_version_code.toInteger()
@@ -32,11 +32,6 @@ android {
     }
 }
 
-kapt {
-    arguments {
-        arg("moduleName", project.getName())
-    }
-}
 
 androidExtensions {
     experimental = true
@@ -51,26 +46,18 @@ kotlin {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+    implementation 'androidx.appcompat:appcompat:1.0.0-rc01'
+    implementation 'androidx.drawerlayout:drawerlayout:1.0.0-rc01'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0-rc01'
 
-    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
+    implementation 'com.google.android.material:material:1.0.0-rc01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    implementation 'androidx.constraintlayout:constraintlayout-solver:1.1.2'
 
-    // optional - Test helpers
-    androidTestImplementation "android.arch.navigation:navigation-testing-ktx:$nav_version" // use -ktx for Kotlin
-
-    if (!isIndependentApk.toBoolean()) {
-        implementation project(':netease')
-        implementation project(':local')
-        implementation project(':setting')
-        implementation project(':search')
-        implementation project(':playlistdetail')
-        implementation project(':player')
-        implementation project(':download')
-    }
-    implementation project(':commonlib')
-    kapt 'com.alibaba:arouter-compiler:1.1.4'
-
+    //test
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation "android.arch.navigation:navigation-testing-ktx:$nav_version"
+
 }

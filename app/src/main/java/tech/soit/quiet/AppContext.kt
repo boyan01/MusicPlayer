@@ -1,15 +1,19 @@
-package tech.summerly.quiet
+package tech.soit.quiet
 
 import android.app.Application
-import tech.summerly.quiet.commonlib.base.BaseModule
 
 /**
  * application context
  */
 class AppContext : Application() {
 
+    /**
+     * singleton for application
+     */
+    companion object : Application()
+
     override fun onCreate() {
         super.onCreate()
-        BaseModule.init(this)
+        AppContext.attachBaseContext(this)
     }
 }
