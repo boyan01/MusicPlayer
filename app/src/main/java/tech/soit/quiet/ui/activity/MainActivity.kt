@@ -5,7 +5,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.soit.quiet.R
@@ -16,26 +15,12 @@ import tech.soit.quiet.ui.activity.base.BaseActivity
  */
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    companion object {
-
-        private const val TAG_FRAGMENT_NETEASE = "netease_main"
-        private const val TAG_FRAGMENT_LOCAL = "local_main"
-
-    }
-
-    private var checkedFragment = TAG_FRAGMENT_NETEASE
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         navigationView.setNavigationItemSelectedListener(this)
     }
 
-    override fun onStart() {
-        super.onStart()
-        checkToFragment(checkedFragment)
-
-    }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -68,8 +53,5 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return toggle
     }
 
-    private fun Fragment.toolbar(): Toolbar? = when (this) {
-        else -> null
-    }
 
 }
