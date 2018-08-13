@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import tech.soit.quiet.AppContext
-import tech.soit.quiet.repository.db.po.LocalMusic
+import tech.soit.quiet.repository.db.entity.LocalMusic
 import tech.soit.quiet.repository.db.dao.LocalMusicDao
 
 @Database(

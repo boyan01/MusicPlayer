@@ -1,6 +1,7 @@
 package tech.soit.quiet
 
 import android.app.Application
+import tech.soit.quiet.utils.component.AppTask
 
 /**
  * application context
@@ -15,5 +16,6 @@ class AppContext : Application() {
     override fun onCreate() {
         super.onCreate()
         AppContext.attachBaseContext(this)
+        registerActivityLifecycleCallbacks(AppTask.CallBack)
     }
 }

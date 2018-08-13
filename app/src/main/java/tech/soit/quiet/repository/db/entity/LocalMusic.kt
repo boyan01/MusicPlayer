@@ -1,8 +1,11 @@
-package tech.soit.quiet.repository.db.po
+package tech.soit.quiet.repository.db.entity
 
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import tech.soit.quiet.model.vo.Album
+import tech.soit.quiet.model.vo.Artist
+import tech.soit.quiet.model.vo.Music
 
 
 @Entity(
@@ -43,4 +46,10 @@ data class LocalMusic(
          */
         val artist: String
 
-)
+) {
+
+    fun toMusic(): Music {
+        return Music(id, title, Album(album), listOf(Artist(artist)), mapOf("uri" to uri))
+    }
+
+}
