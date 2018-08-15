@@ -1,17 +1,19 @@
+
 language: android
 jdk: oraclejdk8
 
 env:
   global:
     - ANDROID_BUILD_TOOLS_VERSION=27.0.3
-    - ANDROID_ABI=x86
+    - ANDROID_ABI=armeabi-v7a
 
 android:
   components:
     - tools
     - build-tools-$ANDROID_BUILD_TOOLS_VERSION
-    - android-28
-    - sys-img-$ANDROID_ABI-android-28
+    - android-22
+    - android-27
+    - sys-img-armeabi-v7a-android-22
     - extra-android-m2repository
     - extra-android-support
     - extra
@@ -24,7 +26,7 @@ before_install:
 
 before_script:
   - chmod +x gradlew
-  - echo no | android create avd --force -n test -t android-28 --abi $ANDROID_ABI
+  - echo no | android create avd --force -n test -t android-22 --abi $ANDROID_ABI
   - emulator -avd test -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
