@@ -2,37 +2,35 @@ package tech.soit.quiet.ui.fragment.home
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.runner.AndroidJUnit4
-import org.junit.*
-import org.junit.Assert.*
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
-import tech.soit.quiet.repository.db.QuietDatabase
+import org.mockito.Mockito
 import tech.soit.quiet.repository.db.QuietDatabaseTest
-import tech.soit.quiet.repository.db.await
-
 import tech.soit.quiet.repository.db.QuietDatabaseTest.Companion.DUMMY_MUSICS
+import tech.soit.quiet.repository.db.await
+import tech.soit.quiet.repository.db.dao.LocalMusicDao
+import tech.soit.quiet.utils.component.support.liveDataWith
+import tech.soit.quiet.utils.mock
 
 @RunWith(AndroidJUnit4::class)
 class HomePageLocalViewModelTest {
 
-    private lateinit var db: QuietDatabase
-
     private lateinit var viewModel: HomePageLocalViewModel
+
+    private val localMusicDao = mock<LocalMusicDao>()
 
     @get:Rule
     val r = InstantTaskExecutorRule()
 
     @Before
     fun setUp() {
-        db = QuietDatabaseTest.instance
-        viewModel = HomePageLocalViewModel(db)
-        DUMMY_MUSICS.forEach {
-            db.localMusicDao().insertMusic(it)
-        }
-    }
-
-    @After
-    fun tearDown() {
-        db.close()
+        viewModel = HomePageLocalViewModel(localMusicDao)
+        Mockito.`when`(localMusicDao.getAllMusics())
+                .thenReturn(liveDataWith(QuietDatabaseTest.DUMMY_MUSICS))
     }
 
     @Test

@@ -6,15 +6,25 @@ import androidx.lifecycle.*
 /**
  * @see Transformations.map
  */
-fun <T, R> LiveData<T>.map(function: (T) -> R): LiveData<R> {
+fun <T, R> LiveData<T>.map(function: (T?) -> R?): LiveData<R> {
     return Transformations.map(this, function)
+}
+
+/**
+ * the same as [map],but ignore [function] when received a null object
+ */
+fun <T, R> LiveData<T>.mapNonNull(function: (T) -> R): LiveData<R> {
+    return map { t: T? ->
+        t ?: return@map null
+        return@map function(t)
+    }
 }
 
 
 /**
  * @see Transformations.switchMap
  */
-fun <T, R> LiveData<T>.swithMap(function: (T) -> LiveData<R>): LiveData<R> {
+fun <T, R> LiveData<T>.switchMap(function: (T) -> LiveData<R>): LiveData<R> {
     return Transformations.switchMap(this, function)
 }
 

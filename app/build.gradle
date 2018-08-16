@@ -71,6 +71,8 @@ dependencies {
 
     //test
     testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:2.21.0"
+    androidTestImplementation "org.mockito:mockito-android:2.21.0"
     androidTestImplementation "androidx.room:room-testing:$room_version"
     androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
