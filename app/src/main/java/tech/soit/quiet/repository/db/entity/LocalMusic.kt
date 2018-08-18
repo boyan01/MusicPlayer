@@ -49,7 +49,7 @@ data class LocalMusic(
 ) {
 
     fun toMusic(): Music {
-        return Music(id, title, Album(album), listOf(Artist(artist)), mapOf("uri" to uri))
+        return Music(id, title, Album(album), listOf(Artist(artist)), mapOf(Music.URI to uri))
     }
 
 }

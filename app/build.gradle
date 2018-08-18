@@ -47,6 +47,10 @@ dependencies {
     implementation "tech.soit.typedadapterx:typedadapter:1.0.0"
     implementation 'androidx.core:core-ktx:1.0.0-rc01'
 
+    //mp3
+    implementation 'com.mpatric:mp3agic:0.9.0'
+
+
     def lifecycle_version = "2.0.0-rc01"
     def room_version = "2.0.0-rc01"
 
@@ -74,8 +78,10 @@ dependencies {
 
     //test
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:2.21.0"
-    androidTestImplementation "org.mockito:mockito-android:2.21.0"
+    //noinspection GradleDependency
+    testImplementation "org.mockito:mockito-core:2.18.3"
+    //noinspection GradleDependency
+    androidTestImplementation "org.mockito:mockito-android:2.18.3"
     androidTestImplementation "androidx.room:room-testing:$room_version"
     androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'

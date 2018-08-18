@@ -38,7 +38,7 @@ object Preference {
      * player preference ,save persistence config for Player
      *@param onChange String: the key which changed, T: the value changed
      */
-    fun <T> player(onChange: ((String, T) -> Unit)? = null): PreferenceProperty<T> {
+    fun <T> player(onChange: ((key: String, value: T) -> Unit)? = null): PreferenceProperty<T> {
         if (onChange != null) {
             player.addListener(onChange as (String, Any?) -> Unit)
         }

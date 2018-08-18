@@ -11,4 +11,12 @@ data class Music(
         val artists: List<Artist>,
         //附加
         val attach: Map<String, String> = emptyMap()
-) : Parcelable
+) : Parcelable {
+
+    companion object {
+
+        const val URI = "uri"
+
+    }
+
+}
