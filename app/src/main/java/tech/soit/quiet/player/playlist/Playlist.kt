@@ -27,6 +27,11 @@ open class Playlist(
          */
         const val TOKEN_FM = "token_fm_player"
 
+        const val TOKEN_EMPTY = "empty_playlist"
+
+
+        val EMPTY = Playlist(TOKEN_EMPTY)
+
     }
 
     constructor(token: String, musics: List<Music>) : this(token) {
