@@ -22,12 +22,22 @@ class QuietMusicPlayer {
         const val DURATION_UPDATE_PROGRESS = 200L
     }
 
+    /**
+     * @see IMediaPlayer
+     */
     val mediaPlayer: IMediaPlayer = QuietMediaPlayer()
 
+    /**
+     * @see Playlist
+     */
     var playlist: Playlist by Delegates.observable(Playlist.EMPTY) { _, _, newValue ->
         MusicPlayerManager.playlist.postValue(newValue)
     }
 
+
+    /**
+     * play the music which return by [Playlist.getNext]
+     */
     fun playNext() = safeAsync {
         val next = playlist.getNext()
         if (next == null) {
@@ -38,6 +48,10 @@ class QuietMusicPlayer {
         play(next)
     }
 
+    /**
+     * if is playing , pause
+     * if is not playing , playing current music
+     */
     fun playPause() = safeAsync {
         val current = playlist.current
         if (current == null) {
@@ -51,6 +65,9 @@ class QuietMusicPlayer {
         }
     }
 
+    /**
+     * play the music which return by [Playlist.getPrevious]
+     */
     fun playPrevious() = safeAsync {
         val previous = playlist.getPrevious()
         if (previous == null) {
@@ -86,6 +103,8 @@ class QuietMusicPlayer {
 
     init {
 
+        //indefinite to emit current playing music' duration and playing position
+        //maybe have a cleverer way to do that!!
         launch {
             while (true) {
                 delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
