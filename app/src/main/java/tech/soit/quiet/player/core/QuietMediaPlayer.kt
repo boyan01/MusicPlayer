@@ -38,6 +38,10 @@ class QuietMediaPlayer(
         }
 
     override fun prepare(uri: String, playWhenReady: Boolean) {
+        if (state != IMediaPlayer.IDLE) {
+            player.reset()
+            state = IMediaPlayer.IDLE
+        }
         isPlayWhenReady = playWhenReady
         player.setDataSource(AppContext, Uri.parse(uri))
         player.setOnPreparedListener {

@@ -16,7 +16,7 @@ class QuietMediaPlayerTest {
     companion object {
 
 
-        private val URI = Uri.parse("android.resource://"
+        val URI = Uri.parse("android.resource://"
                 + InstrumentationRegistry.getContext().packageName + "/raw/summer").toString()
 
 
@@ -87,5 +87,18 @@ class QuietMediaPlayerTest {
         assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PAUSING)
 
         assertTrue(quietMediaPlayer.getDuration() > 5000)
+    }
+
+    @Test
+    fun testPlayOther() = runBlocking {
+
+        quietMediaPlayer.prepare(URI, true)
+
+        delay(20)
+
+        quietMediaPlayer.prepare(URI, true)
+        delay(100)
+        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PLAYING)
+
     }
 }
