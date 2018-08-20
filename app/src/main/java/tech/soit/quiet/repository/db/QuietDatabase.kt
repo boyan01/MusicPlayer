@@ -4,17 +4,21 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import tech.soit.quiet.AppContext
+import tech.soit.quiet.repository.db.dao.KeyValueDao
 import tech.soit.quiet.repository.db.entity.LocalMusic
 import tech.soit.quiet.repository.db.dao.LocalMusicDao
+import tech.soit.quiet.repository.db.entity.KeyValueEntity
 
 @Database(
-        entities = [LocalMusic::class],
+        entities = [LocalMusic::class, KeyValueEntity::class],
         version = 1,
         exportSchema = false
 )
 abstract class QuietDatabase : RoomDatabase() {
 
     abstract fun localMusicDao(): LocalMusicDao
+
+    abstract fun keyValueDao(): KeyValueDao
 
     companion object {
 
