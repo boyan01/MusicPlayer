@@ -21,8 +21,11 @@ object KeyValue : KeyValuePersistence {
         impl.put(key, any)
     }
 
-    inline fun <reified T> get(key: String): T? {
-        return get(key, T::class.java)
-    }
+}
 
+/**
+ * @see KeyValuePersistence.get
+ */
+inline fun <reified T> KeyValuePersistence.get(key: String): T? {
+    return get(key, T::class.java)
 }
