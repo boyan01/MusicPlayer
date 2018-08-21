@@ -101,4 +101,20 @@ class QuietMediaPlayerTest {
         assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PLAYING)
 
     }
+
+    @Test
+    fun testRelease() = runBlocking {
+
+        quietMediaPlayer.prepare(URI, true)
+        delay(20)
+        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PLAYING)
+
+        quietMediaPlayer.release()
+        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.IDLE)
+
+        quietMediaPlayer.prepare(URI, true)
+        delay(100)
+        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PLAYING)
+
+    }
 }

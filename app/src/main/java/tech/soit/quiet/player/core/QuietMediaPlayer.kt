@@ -71,8 +71,9 @@ class QuietMediaPlayer(
 
 
     override fun release() {
-        player.release()
+        isPlayWhenReady = false
         state = IMediaPlayer.IDLE
+        player.reset()
     }
 
     override fun getState(): LiveData<Int> {

@@ -44,7 +44,6 @@ class QuietMusicPlayer {
             log(LoggerLevel.WARN) { "next music is null" }
             return@safeAsync
         }
-        playlist.current = next
         play(next)
     }
 
@@ -57,6 +56,9 @@ class QuietMusicPlayer {
         if (current == null) {
             playNext()
             return@safeAsync
+        }
+        if (current != MusicPlayerManager.playingMusic.value) {
+            MusicPlayerManager.playingMusic.postValue(current)
         }
         if (mediaPlayer.getState().value == IMediaPlayer.IDLE) {
             play(current)
@@ -74,7 +76,6 @@ class QuietMusicPlayer {
             log(LoggerLevel.WARN) { "previous is null , op canceled!" }
             return@safeAsync
         }
-        playlist.current = previous
         play(previous)
     }
 
@@ -88,12 +89,23 @@ class QuietMusicPlayer {
         log { "try to play $music" }
         playlist.current = music
 
+        //live data playing music changed
+        MusicPlayerManager.playingMusic.postValue(music)
+
         val uri = music.attach[Music.URI]
         if (uri == null) {
             log(LoggerLevel.ERROR) { "next music uri is empty or null" }
             return@safeAsync
         }
         mediaPlayer.prepare(uri, true)
+    }
+
+
+    /**
+     * stop play
+     */
+    fun quiet() {
+        mediaPlayer.release()
     }
 
 

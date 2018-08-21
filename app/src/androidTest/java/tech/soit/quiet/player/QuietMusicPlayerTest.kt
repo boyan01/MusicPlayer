@@ -11,6 +11,7 @@ import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.player.core.QuietMediaPlayerTest
 import tech.soit.quiet.player.playlist.Playlist
+import tech.soit.quiet.repository.db.await
 import tech.soit.quiet.utils.Dummy
 
 /**
@@ -106,6 +107,20 @@ class QuietMusicPlayerTest {
         player.playPrevious()
         delay(100)
         assertEquals(musics[musics.size - 3], player.playlist.current)
+
+    }
+
+
+    @Test
+    fun testQuiet() = runBlocking {
+        val music = musics[1]
+        player.play(music)
+        delay(120)
+        assertEquals(music, player.playlist.current)
+        assertTrue(player.mediaPlayer.isPlayWhenReady)
+        player.quiet()
+        assertEquals(music, player.playlist.current)
+        assertEquals(IMediaPlayer.IDLE, player.mediaPlayer.getState().await())
 
     }
 

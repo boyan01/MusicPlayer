@@ -22,7 +22,7 @@ enum class PlayMode {
         /**
          * safely convert enum name to instance
          */
-        operator fun invoke(name: String) = when (name) {
+        fun from(name: String?) = when (name) {
             Shuffle.name -> Shuffle
             Single.name -> Single
             Sequence.name -> Sequence
