@@ -1,6 +1,7 @@
 package tech.soit.quiet.utils.component.persistence
 
 import tech.soit.quiet.repository.db.QuietDatabase
+import java.lang.reflect.Type
 
 /**
  *
@@ -13,8 +14,8 @@ object KeyValue : KeyValuePersistence {
 
     private val impl: KeyValuePersistence get() = QuietDatabase.instance.keyValueDao()
 
-    override fun <T> get(key: String, cls: Class<T>): T? {
-        return impl.get(key, cls)
+    override fun <T> get(key: String, typeofT: Type): T? {
+        return impl.get(key, typeofT)
     }
 
     override fun put(key: String, any: Any?) {

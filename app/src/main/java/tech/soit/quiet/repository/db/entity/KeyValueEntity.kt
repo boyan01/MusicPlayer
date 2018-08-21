@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.Gson
+import java.lang.reflect.Type
 
 /**
  * @author : summer
@@ -27,8 +28,8 @@ data class KeyValueEntity(
     constructor(key: String, value: Any?) : this(key, GSON.toJson(value))
 
 
-    fun <T> getValue(cls: Class<T>): T {
-        return GSON.fromJson(data, cls)
+    fun <T> getValue(typeofT: Type): T {
+        return GSON.fromJson(data, typeofT)
     }
 
 }

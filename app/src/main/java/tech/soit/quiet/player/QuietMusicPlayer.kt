@@ -30,7 +30,8 @@ class QuietMusicPlayer {
     /**
      * @see Playlist
      */
-    var playlist: Playlist by Delegates.observable(Playlist.EMPTY) { _, _, newValue ->
+    var playlist: Playlist by Delegates.observable(Playlist.EMPTY) { _, oldValue, newValue ->
+        newValue.playMode = oldValue.playMode//inherit old playlist play mode
         MusicPlayerManager.playlist.postValue(newValue)
     }
 
@@ -82,7 +83,7 @@ class QuietMusicPlayer {
     /**
      * play [music] , if music is not in [playlist] , insert ot next
      */
-    fun play(music: Music) = safeAsync {
+    fun play(music: Music) {
         if (!playlist.list.contains(music)) {
             playlist.insertToNext(music)
         }
@@ -95,7 +96,7 @@ class QuietMusicPlayer {
         val uri = music.attach[Music.URI]
         if (uri == null) {
             log(LoggerLevel.ERROR) { "next music uri is empty or null" }
-            return@safeAsync
+            return
         }
         mediaPlayer.prepare(uri, true)
     }
