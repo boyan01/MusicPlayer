@@ -12,4 +12,7 @@
     <attr name="quietIconActive" format="color" />
     <attr name="quietIconInactive" format="color" />
 
+    <!-- application activity root view -->
+    <item name="content" format="integer" type="id" />
+
 </resources>
