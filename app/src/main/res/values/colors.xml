@@ -1,4 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="color_primary">#4CAF50</color>
+    <color name="color_primary_light">#81C784</color>
+    <color name="color_primary_dark">#388E3C</color>
+
+    <color name="color_accent">#DD2C00</color>
+
+    <color name="color_accent_light">#ff3d44</color>
+
+    <color name="color_text_primary">#dd000000</color>
+    <color name="color_text_secondary">#8a000000</color>
+    <color name="color_text_disable">#60000000</color>
+    <color name="color_text_hint">@color/color_text_disable</color>
+
+    <color name="color_text_inverse_primary">#ffffff</color>
+    <color name="color_text_inverse_secondary">#B2ffffff</color>
+
+    <color name="color_divider">#1e000000</color>
+
+    <!-- ripple effect on normal background -->
+    <color name="color_ripple">#bf797979</color>
+
+    <color name="background">#FAFAFA</color>
+    <color name="background_secondary">#EEEEEE</color>
+    <color name="background_white">#ffffff</color>
+
+    <color name="color_transparent">#00000000</color>
+    <color name="color_transparent_secondary">#4effffff</color>
+    <color name="color_transparent_dark_secondary">#4e000000</color>
+
+    <!-- colorImageMask用来作为image的遮罩，让夜间模式下的imageView不会太过刺眼-->
+    <color name="color_image_mask">@android:color/transparent</color>
+
+    <color name="color_warning">@color/color_accent</color>
+
+    <color name="color_icon_active">#565656</color>
+    <color name="color_icon_inactive">#9e9e9e</color>
+
+    <color name="color_indicator">#4CAF50</color>
+
 </resources>

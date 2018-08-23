@@ -1,36 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <group android:checkableBehavior="single">
-
-        <item
-            android:id="@+id/nav_local"
-            android:icon="@drawable/local_ic_library_music_black_24dp"
-            android:title="@string/local_app_name" />
-
-        <item
-            android:id="@+id/nav_netease"
-            android:icon="@drawable/netease_ic_today_black_24dp"
-            android:title="@string/netease_app_name"
-            app:actionLayout="@layout/nav_login_indicator" />
-
-    </group>
-
-
-    <item android:title="@string/nav_others">
-        <menu>
-            <group>
-
-                <item
-                    android:id="@+id/nav_settings"
-                    android:icon="@drawable/ic_settings_black_24dp"
-                    android:title="@string/setting_app_name" />
-
-            </group>
-        </menu>
-
-    </item>
+<menu>
 
 
 </menu>

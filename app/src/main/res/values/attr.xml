@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- app theme color reference -->
+    <attr name="quietBackground" format="color" />
+    <attr name="quietPrimaryLight" format="color" tools:override="true" />
+    <attr name="quietTextPrimary" format="color" />
+    <attr name="quietTextPrimaryInverse" format="color" />
+    <attr name="quietTextSecondary" format="color" />
+    <attr name="quietTextSecondaryInverse" format="color" />
+    <attr name="quietDivider" format="color" />
+    <attr name="quietIconActive" format="color" />
+    <attr name="quietIconInactive" format="color" />
+
+    <!-- application activity root view -->
+    <item name="content" format="integer" type="id" />
+
+</resources>

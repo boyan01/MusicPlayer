@@ -7,9 +7,9 @@ import java.lang.reflect.Array
 import java.lang.reflect.InvocationTargetException
 
 /**
- * @param is_removale true返回外置存储卡路径 false返回内置存储卡的路径
+ * @param isRemovable true返回外置存储卡路径 false返回内置存储卡的路径
  */
-fun getStoragePath(is_removale: Boolean): String? {
+fun getStoragePath(isRemovable: Boolean): String? {
 
     val mStorageManager = LocalModule.getSystemService(Context.STORAGE_SERVICE) as StorageManager
     val storageVolumeClazz: Class<*>?
@@ -17,14 +17,14 @@ fun getStoragePath(is_removale: Boolean): String? {
         storageVolumeClazz = Class.forName("android.os.storage.StorageVolume")
         val getVolumeList = mStorageManager.javaClass.getMethod("getVolumeList")
         val getPath = storageVolumeClazz!!.getMethod("getPath")
-        val isRemovable = storageVolumeClazz.getMethod("isRemovable")
+        val isRemovableMethod = storageVolumeClazz.getMethod("isRemovable")
         val result = getVolumeList.invoke(mStorageManager)
         val length = Array.getLength(result)
         for (i in 0 until length) {
             val storageVolumeElement = Array.get(result, i)
             val path = getPath.invoke(storageVolumeElement) as String
-            val removable = isRemovable.invoke(storageVolumeElement) as Boolean
-            if (is_removale == removable) {
+            val removable = isRemovableMethod.invoke(storageVolumeElement) as Boolean
+            if (isRemovable == removable) {
                 return path
             }
         }

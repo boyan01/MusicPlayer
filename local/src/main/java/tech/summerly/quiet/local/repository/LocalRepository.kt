@@ -9,7 +9,6 @@ import tech.summerly.quiet.local.repository.entity.MusicEntity
 internal object LocalRepository {
 
 
-
     private val context: Context get() = LocalModule
 
 

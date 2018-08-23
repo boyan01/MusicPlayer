@@ -13,12 +13,12 @@ android {
     compileSdkVersion compile_sdk
 
     defaultConfig {
-        applicationId "tech.summerly.quiet"
+        applicationId "tech.soit.quiet"
         minSdkVersion min_sdk.toInteger()
         targetSdkVersion target_sdk
         versionCode app_version_code.toInteger()
         versionName app_version_name
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
     }
     buildTypes {
@@ -32,11 +32,6 @@ android {
     }
 }
 
-kapt {
-    arguments {
-        arg("moduleName", project.getName())
-    }
-}
 
 androidExtensions {
     experimental = true
@@ -49,28 +44,50 @@ kotlin {
 }
 
 dependencies {
+    implementation "tech.soit.typedadapterx:typedadapter:1.0.0"
+    implementation 'androidx.core:core-ktx:1.0.0-rc01'
+    implementation 'com.google.code.gson:gson:2.8.5'
+
+    //mp3
+    implementation 'com.mpatric:mp3agic:0.9.0'
+
+
+    def lifecycle_version = "2.0.0-rc01"
+    def room_version = "2.0.0-rc01"
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
 
-    implementation "android.arch.navigation:navigation-fragment-ktx:$nav_version"
-    implementation "android.arch.navigation:navigation-ui-ktx:$nav_version"
 
-    // optional - Test helpers
-    androidTestImplementation "android.arch.navigation:navigation-testing-ktx:$nav_version" // use -ktx for Kotlin
+    //aac
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
-    if (!isIndependentApk.toBoolean()) {
-        implementation project(':netease')
-        implementation project(':local')
-        implementation project(':setting')
-        implementation project(':search')
-        implementation project(':playlistdetail')
-        implementation project(':player')
-        implementation project(':download')
-    }
-    implementation project(':commonlib')
-    kapt 'com.alibaba:arouter-compiler:1.1.4'
 
+
+    implementation 'androidx.appcompat:appcompat:1.0.0-rc01'
+    implementation 'androidx.drawerlayout:drawerlayout:1.0.0-rc01'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0-rc01'
+
+
+
+    implementation 'com.google.android.material:material:1.0.0-rc01'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.2'
+    implementation 'androidx.constraintlayout:constraintlayout-solver:1.1.2'
+
+    //test
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    //noinspection GradleDependency
+    testImplementation "org.mockito:mockito-core:2.18.3"
+    //noinspection GradleDependency
+    androidTestImplementation "org.mockito:mockito-android:2.18.3"
+    androidTestImplementation "androidx.room:room-testing:$room_version"
+    androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test:rules:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
 }
