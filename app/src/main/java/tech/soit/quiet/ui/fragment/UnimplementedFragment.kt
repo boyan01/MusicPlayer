@@ -19,7 +19,7 @@ import tech.soit.quiet.ui.fragment.base.BaseFragment
  */
 class UnimplementedFragment : BaseFragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView2(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layout = FrameLayout(inflater.context)
 
         val text = TextView(inflater.context)

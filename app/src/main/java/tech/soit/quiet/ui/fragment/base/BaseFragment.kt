@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
+import tech.soit.quiet.ui.view.ContentFrameLayout
 import tech.soit.quiet.utils.annotation.LayoutId
 import kotlin.reflect.full.findAnnotation
 
@@ -16,13 +18,27 @@ import kotlin.reflect.full.findAnnotation
 abstract class BaseFragment : Fragment() {
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layoutId = this::class.findAnnotation<LayoutId>()
-        return if (layoutId == null) {
-            super.onCreateView(inflater, container, savedInstanceState)
+        val view = if (layoutId == null) {
+            onCreateView2(inflater, container, savedInstanceState)
         } else {
             inflater.inflate(layoutId.value, container, false)
         }
+        view ?: return null
+        val content = ContentFrameLayout(inflater.context)
+        content.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        content.addView(view)
+        return content
+    }
+
+    /**
+     * @see Fragment.onCreateView
+     *
+     * @return Return the View for the fragment's UI, or null.
+     */
+    open fun onCreateView2(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return null
     }
 
 
