@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.view.ContentFrameLayout
+import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.LayoutId
 import kotlin.reflect.full.findAnnotation
 
@@ -14,8 +15,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val isInjectLayout = this::class.findAnnotation<DisableLayoutInject>() == null
         val layoutId = this::class.findAnnotation<LayoutId>()
-        if (layoutId != null) {
+        if (isInjectLayout && layoutId != null) {
             setContentView(layoutId.value)
         }
     }
