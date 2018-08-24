@@ -47,10 +47,16 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     override fun addContentView(view: View, params: ViewGroup.LayoutParams?) {
-        val content = ContentFrameLayout(this)
-        content.id = R.id.content
-        content.addView(view, params)
-        super.addContentView(content, params)
+        val content = findViewById<ViewGroup>(R.id.content)
+        if (content != null) {//ensure there is only one R.id.content view in Activity
+            content.addView(view, params)
+            window.callback.onContentChanged()
+        } else {
+            val newContent = ContentFrameLayout(this)
+            newContent.id = R.id.content
+            newContent.addView(view, params)
+            super.addContentView(newContent, params)
+        }
     }
 
 }
