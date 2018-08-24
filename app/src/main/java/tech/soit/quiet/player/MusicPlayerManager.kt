@@ -15,6 +15,7 @@ import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.player.playlist.Playlist
 import tech.soit.quiet.utils.component.persistence.KeyValue
 import tech.soit.quiet.utils.component.persistence.get
+import tech.soit.quiet.utils.component.support.liveDataWith
 
 
 /**
@@ -55,7 +56,7 @@ object MusicPlayerManager {
     /**
      * current playing music live data
      */
-    val playingMusic = MutableLiveData<Music?>()
+    val playingMusic = liveDataWith(musicPlayer.playlist.current)
 
     val position = MutableLiveData<Position>()
 
