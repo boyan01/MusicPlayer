@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import tech.soit.quiet.AppContext
 import tech.soit.quiet.ui.view.ContentFrameLayout
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.LayoutId
@@ -19,7 +20,7 @@ import kotlin.reflect.full.findAnnotation
  */
 abstract class BaseFragment : Fragment() {
 
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    var viewModelFactory: ViewModelProvider.Factory = ViewModelProvider.AndroidViewModelFactory(AppContext)
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layoutId = this::class.findAnnotation<LayoutId>()
