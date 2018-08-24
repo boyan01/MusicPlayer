@@ -2,6 +2,7 @@ package tech.soit.quiet.ui.fragment.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.*
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
@@ -82,6 +83,31 @@ class BottomControllerFragmentTest {
         playingMusic.postValue(music)
         onView(withId(R.id.musicTitle)).check(matches(withText(music.title)))
         onView(withId(R.id.musicSubTitle)).check(matches(withText(music.subTitle)))
+    }
+
+
+    @Test
+    fun testPausePlayClick() {
+        Mockito.`when`(viewModel.pauseOrPlay()).then {
+            if (playerState.value != IMediaPlayer.PLAYING) {
+                playerState.postValue(IMediaPlayer.PLAYING)
+            } else {
+                playerState.postValue(IMediaPlayer.PAUSING)
+            }
+        }
+        //initial state with playing
+        playingMusic.postValue(music)
+        playerState.postValue(IMediaPlayer.PLAYING)
+        onView(withId(R.id.controllerPauseOrPlay)).check(matches(withContentDescription(R.string.pause)))
+
+        //click one time , to pause state
+        onView(withId(R.id.controllerPauseOrPlay)).perform(click())
+        onView(withId(R.id.controllerPauseOrPlay)).check(matches(withContentDescription(R.string.play)))
+
+        //click one more time . to playing state again
+        onView(withId(R.id.controllerPauseOrPlay)).perform(click())
+        onView(withId(R.id.controllerPauseOrPlay)).check(matches(withContentDescription(R.string.pause)))
+
     }
 
 }

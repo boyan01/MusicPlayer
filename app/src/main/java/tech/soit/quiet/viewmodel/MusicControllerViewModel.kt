@@ -12,6 +12,14 @@ import tech.soit.quiet.utils.testing.OpenForTesting
 @OpenForTesting
 class MusicControllerViewModel : ViewModel() {
 
+    /**
+     * pause if playing
+     * play if not playing
+     */
+    fun pauseOrPlay() {
+        MusicPlayerManager.musicPlayer.playPause()
+    }
+
     val playingMusic: LiveData<Music?>
         get() = MusicPlayerManager.playingMusic
 

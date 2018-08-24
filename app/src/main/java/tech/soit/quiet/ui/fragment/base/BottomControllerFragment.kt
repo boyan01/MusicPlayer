@@ -17,6 +17,7 @@ import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.component.ImageLoader
+import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.attrValue
 import tech.soit.quiet.utils.component.support.observeNonNull
 import tech.soit.quiet.utils.component.support.string
@@ -67,6 +68,12 @@ open class BottomControllerFragment : BaseFragment() {
                 controllerPauseOrPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp)
                 controllerPauseOrPlay.contentDescription = string(R.string.play)
             }
+        }
+        bottomControllerLayout.setOnClickListener {
+            log { "on bottom controller clicked" }
+        }
+        controllerPauseOrPlay.setOnClickListener {
+            controllerViewModel.pauseOrPlay()
         }
     }
 
