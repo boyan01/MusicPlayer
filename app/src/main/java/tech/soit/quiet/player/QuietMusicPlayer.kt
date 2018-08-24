@@ -61,7 +61,7 @@ class QuietMusicPlayer {
         if (current != MusicPlayerManager.playingMusic.value) {
             MusicPlayerManager.playingMusic.postValue(current)
         }
-        if (mediaPlayer.getState().value == IMediaPlayer.IDLE) {
+        if (mediaPlayer.getState() == IMediaPlayer.IDLE) {
             play(current)
         } else {
             mediaPlayer.isPlayWhenReady = !mediaPlayer.isPlayWhenReady
@@ -123,7 +123,7 @@ class QuietMusicPlayer {
                 delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
                 try {
                     val notify = playlist.current == null
-                            && mediaPlayer.getState().value == IMediaPlayer.PLAYING
+                            && mediaPlayer.getState() == IMediaPlayer.PLAYING
 
                     if (notify) {
                         MusicPlayerManager.position

@@ -39,28 +39,28 @@ class QuietMediaPlayerTest {
 
     @Test
     fun basic() = runBlocking {
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.IDLE)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.IDLE)
         quietMediaPlayer.prepare(URI, true)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PREPARING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PREPARING)
         delay(100)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PLAYING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PLAYING)
     }
 
     @Test
     fun testPlayAndPause() = runBlocking {
         quietMediaPlayer.prepare(URI, false)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PREPARING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PREPARING)
 
         delay(100)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PAUSING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PAUSING)
 
         quietMediaPlayer.isPlayWhenReady = true
         delay(100)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PLAYING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PLAYING)
 
         quietMediaPlayer.isPlayWhenReady = false
         delay(100)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PAUSING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PAUSING)
 
     }
 
@@ -68,7 +68,7 @@ class QuietMediaPlayerTest {
     fun seekTo() = runBlocking {
         quietMediaPlayer.prepare(URI, true)
         delay(100)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PLAYING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PLAYING)
 
         assertTrue(quietMediaPlayer.getPosition() < 1000)
 
@@ -84,7 +84,7 @@ class QuietMediaPlayerTest {
         assertEquals(quietMediaPlayer.getDuration(), 0L)
         quietMediaPlayer.prepare(URI, false)
         delay(100)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PAUSING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PAUSING)
 
         assertTrue(quietMediaPlayer.getDuration() > 5000)
     }
@@ -98,7 +98,7 @@ class QuietMediaPlayerTest {
 
         quietMediaPlayer.prepare(URI, true)
         delay(100)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PLAYING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PLAYING)
 
     }
 
@@ -107,14 +107,14 @@ class QuietMediaPlayerTest {
 
         quietMediaPlayer.prepare(URI, true)
         delay(20)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PLAYING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PLAYING)
 
         quietMediaPlayer.release()
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.IDLE)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.IDLE)
 
         quietMediaPlayer.prepare(URI, true)
         delay(100)
-        assertTrue(quietMediaPlayer.getState().value == IMediaPlayer.PLAYING)
+        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PLAYING)
 
     }
 }
