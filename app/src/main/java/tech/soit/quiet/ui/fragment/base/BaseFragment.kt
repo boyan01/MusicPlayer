@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import tech.soit.quiet.ui.view.ContentFrameLayout
+import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.LayoutId
 import kotlin.reflect.full.findAnnotation
 
@@ -20,7 +21,8 @@ abstract class BaseFragment : Fragment() {
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layoutId = this::class.findAnnotation<LayoutId>()
-        val view = if (layoutId == null) {
+        val isInjectLayout = this::class.findAnnotation<DisableLayoutInject>() == null
+        val view = if (!isInjectLayout || layoutId == null) {
             onCreateView2(inflater, container, savedInstanceState)
         } else {
             inflater.inflate(layoutId.value, container, false)

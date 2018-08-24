@@ -17,6 +17,7 @@ data class Music(
 
         const val URI = "uri"
 
+        const val PIC_URI = "pic_uri"
     }
 
 }

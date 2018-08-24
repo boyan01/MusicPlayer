@@ -6,4 +6,6 @@
     <string name="single_song">单曲</string>
     <string name="artist">歌手</string>
     <string name="album">专辑</string>
+    <string name="playing_list">播放列表</string>
+    <string name="play">播放</string>
 </resources>
