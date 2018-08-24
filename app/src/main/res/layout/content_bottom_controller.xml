@@ -77,14 +77,13 @@
             style="@style/Widget.AppCompat.ActionButton.Overflow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/play"
             android:padding="4dp"
             android:src="@drawable/ic_play_arrow_black_24dp"
             android:tint="?quietIconActive"
-            android:tooltipText="@string/play"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/controllerPlaylist"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="UnusedAttribute"
             tools:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -92,6 +91,7 @@
             style="@style/Widget.AppCompat.ActionButton.Overflow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/playing_list"
             android:src="@drawable/ic_menu_black_24dp"
             android:tint="?quietIconActive"
             android:tooltipText="@string/playing_list"
