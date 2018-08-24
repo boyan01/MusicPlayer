@@ -3,7 +3,7 @@ package tech.soit.quiet.utils
 import androidx.core.net.toUri
 import com.mpatric.mp3agic.Mp3File
 import tech.soit.quiet.repository.db.entity.LocalMusic
-import tech.summerly.quiet.commonlib.utils.log
+import tech.soit.quiet.utils.component.log
 import java.io.File
 
 /**

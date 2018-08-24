@@ -6,8 +6,8 @@ import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.player.core.QuietMediaPlayer
 import tech.soit.quiet.player.playlist.Playlist
-import tech.summerly.quiet.commonlib.utils.LoggerLevel
-import tech.summerly.quiet.commonlib.utils.log
+import tech.soit.quiet.utils.component.LoggerLevel
+import tech.soit.quiet.utils.component.log
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 

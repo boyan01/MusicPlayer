@@ -6,8 +6,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import tech.soit.quiet.repository.db.entity.KeyValueEntity
 import tech.soit.quiet.utils.component.persistence.KeyValuePersistence
-import tech.summerly.quiet.commonlib.utils.LoggerLevel
-import tech.summerly.quiet.commonlib.utils.log
+import tech.soit.quiet.utils.component.LoggerLevel
+import tech.soit.quiet.utils.component.log
 import java.lang.reflect.Type
 
 /**

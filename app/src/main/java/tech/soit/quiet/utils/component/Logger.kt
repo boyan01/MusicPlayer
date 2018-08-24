@@ -1,4 +1,4 @@
-package tech.summerly.quiet.commonlib.utils
+package tech.soit.quiet.utils.component
 
 import android.util.Log
 import tech.soit.quiet.BuildConfig

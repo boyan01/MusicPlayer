@@ -2,7 +2,7 @@ package tech.soit.quiet.player.playlist
 
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.PlayMode
-import tech.summerly.quiet.commonlib.utils.log
+import tech.soit.quiet.utils.component.log
 
 
 /**
