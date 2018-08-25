@@ -15,11 +15,12 @@ import tech.soit.quiet.repository.db.await
 import tech.soit.quiet.repository.db.dao.LocalMusicDao
 import tech.soit.quiet.utils.component.support.liveDataWith
 import tech.soit.quiet.utils.mock
+import tech.soit.quiet.viewmodel.LocalMusicViewModel
 
 @RunWith(AndroidJUnit4::class)
-class HomePageLocalViewModelTest {
+class LocalMusicViewModelTest {
 
-    private lateinit var viewModel: HomePageLocalViewModel
+    private lateinit var viewModel: LocalMusicViewModel
 
     private val localMusicDao = mock<LocalMusicDao>()
 
@@ -28,7 +29,7 @@ class HomePageLocalViewModelTest {
 
     @Before
     fun setUp() {
-        viewModel = HomePageLocalViewModel(localMusicDao)
+        viewModel = LocalMusicViewModel(localMusicDao)
         Mockito.`when`(localMusicDao.getAllMusics())
                 .thenReturn(liveDataWith(QuietDatabaseTest.DUMMY_MUSICS))
     }

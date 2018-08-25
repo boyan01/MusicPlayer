@@ -65,22 +65,22 @@ class MusicPlayerManagerTest {
     @Test
     fun testPlayMusic() = runBlocking {
 
-        delay(20)
+        delay(200)
 
         manager.play("test", musics[0], musics)
-        delay(20)
+        delay(1000)
         assertEquals(musics[0], manager.playingMusic.await())
 
         // let playlist use Sequence play mode
         manager.musicPlayer.playlist.playMode = PlayMode.Sequence
 
         manager.musicPlayer.playNext()
-        delay(20)
+        delay(1000)
         assertEquals(musics[1], manager.playingMusic.await())
 
 
         manager.musicPlayer.playNext()
-        delay(20)
+        delay(1000)
         assertEquals(musics[2], manager.playingMusic.await())
 
 
@@ -91,14 +91,15 @@ class MusicPlayerManagerTest {
         manager.musicPlayer.playlist = playlist
 
         manager.musicPlayer.playPause()
-        delay(100)
+        delay(1000)
         assertEquals(IMediaPlayer.PLAYING, manager.playerState.await())
 
         manager.musicPlayer.playPause()
-        delay(100)
+        delay(1000)
         assertEquals(IMediaPlayer.PAUSING, manager.playerState.await())
 
         manager.musicPlayer.quiet()
+        delay(1000)
         assertEquals(IMediaPlayer.IDLE, manager.playerState.await())
     }
 

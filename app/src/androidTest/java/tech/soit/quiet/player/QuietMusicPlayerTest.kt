@@ -42,10 +42,10 @@ class QuietMusicPlayerTest {
         val music = Dummy.MUSICS[0].copy(id = 12004)
         player.play(music)
 
-        delay(120)
+        delay(1000)
 
         assertTrue("player contains ${music.id}", player.playlist.list.contains(music))
-        assertFalse(player.mediaPlayer.isPlayWhenReady)
+        assertFalse("not isPlayWhenReady", player.mediaPlayer.isPlayWhenReady)
 
     }
 
@@ -53,9 +53,9 @@ class QuietMusicPlayerTest {
     fun play() = runBlocking {
         val music = musics[1]
         player.play(music)
-        delay(120)
+        delay(1000)
         assertEquals(music, player.playlist.current)
-        assertTrue(player.mediaPlayer.isPlayWhenReady)
+        assertTrue("is playWhenReady", player.mediaPlayer.isPlayWhenReady)
     }
 
     @Test
@@ -63,13 +63,13 @@ class QuietMusicPlayerTest {
         assertTrue("music.size : ${musics.size} greater than 3", musics.size > 3)
 
         player.playNext()
-        delay(120)
+        delay(1000)
         assertEquals(musics[1], player.playlist.current)
         player.playNext()
-        delay(120)
+        delay(1000)
         assertEquals(musics[2], player.playlist.current)
         player.playNext()
-        delay(120)
+        delay(1000)
         assertEquals(musics[3], player.playlist.current)
     }
 
@@ -79,13 +79,13 @@ class QuietMusicPlayerTest {
         assertFalse(player.mediaPlayer.isPlayWhenReady)
 
         player.playPause()
-        delay(100)
+        delay(1000)
         assertTrue(player.mediaPlayer.isPlayWhenReady)
         assertEquals("expect state is playing", player.mediaPlayer.getState(), IMediaPlayer.PLAYING)
 
 
         player.playPause()
-        delay(100)
+        delay(1000)
         assertFalse(player.mediaPlayer.isPlayWhenReady)
         assertEquals(player.mediaPlayer.getState(), IMediaPlayer.PAUSING)
 
@@ -96,15 +96,15 @@ class QuietMusicPlayerTest {
         assertTrue("music.size : ${musics.size} greater than 3", musics.size > 3)
 
         player.playPrevious()
-        delay(100)
+        delay(1000)
         assertEquals(musics[musics.size - 1], player.playlist.current)
 
         player.playPrevious()
-        delay(100)
+        delay(1000)
         assertEquals(musics[musics.size - 2], player.playlist.current)
 
         player.playPrevious()
-        delay(100)
+        delay(1000)
         assertEquals(musics[musics.size - 3], player.playlist.current)
 
     }
