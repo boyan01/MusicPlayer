@@ -1,7 +1,9 @@
 package tech.soit.quiet.ui.fragment.home
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -9,8 +11,7 @@ import kotlinx.android.synthetic.main.home_page_local.view.*
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.fragment.UnimplementedFragment
-import tech.soit.quiet.ui.fragment.base.BaseFragment
-import tech.soit.quiet.utils.annotation.LayoutId
+import tech.soit.quiet.ui.fragment.base.BottomControllerFragment
 
 /**
  * home page - Local
@@ -18,8 +19,7 @@ import tech.soit.quiet.utils.annotation.LayoutId
  * manage local musics
  *
  */
-@LayoutId(R.layout.home_page_local)
-class HomePageLocal : BaseFragment() {
+class HomePageLocal : BottomControllerFragment() {
 
     companion object {
 
@@ -29,6 +29,10 @@ class HomePageLocal : BaseFragment() {
         fun newInstance(): HomePageLocal {
             return HomePageLocal()
         }
+    }
+
+    override fun onCreateView3(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.home_page_local, container, false)
     }
 
 

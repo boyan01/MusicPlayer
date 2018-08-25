@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import tech.soit.quiet.AppContext
 import tech.soit.quiet.ui.view.ContentFrameLayout
+import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.LayoutId
 import kotlin.reflect.full.findAnnotation
 
@@ -17,10 +20,12 @@ import kotlin.reflect.full.findAnnotation
  */
 abstract class BaseFragment : Fragment() {
 
+    var viewModelFactory: ViewModelProvider.Factory = ViewModelProvider.AndroidViewModelFactory(AppContext)
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val layoutId = this::class.findAnnotation<LayoutId>()
-        val view = if (layoutId == null) {
+        val isInjectLayout = this::class.findAnnotation<DisableLayoutInject>() == null
+        val view = if (!isInjectLayout || layoutId == null) {
             onCreateView2(inflater, container, savedInstanceState)
         } else {
             inflater.inflate(layoutId.value, container, false)
@@ -50,7 +55,7 @@ abstract class BaseFragment : Fragment() {
      *
      */
     protected inline fun <reified T : ViewModel> lazyViewModel(): Lazy<T> = lazy {
-        ViewModelProviders.of(requireActivity()).get(T::class.java)
+        ViewModelProviders.of(requireActivity(), viewModelFactory).get(T::class.java)
     }
 
 

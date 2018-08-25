@@ -1,12 +1,14 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
-
 apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'kotlin-allopen'
+
+allOpen {
+    // allows mocking for classes w/o directly opening them for release builds
+    annotation 'tech.soit.quiet.utils.testing.OpenClass'
+}
 
 android {
 
@@ -30,6 +32,9 @@ android {
     packagingOptions {
         exclude 'META-INF/main.kotlin_module'
     }
+    testOptions {
+        animationsDisabled = true
+    }
 }
 
 
@@ -48,6 +53,8 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.0-rc01'
     implementation 'com.google.code.gson:gson:2.8.5'
 
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    kapt 'com.github.bumptech.glide:compiler:4.8.0'
     //mp3
     implementation 'com.mpatric:mp3agic:0.9.0'
 
@@ -60,7 +67,6 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutine_version"
-
 
     //aac
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"

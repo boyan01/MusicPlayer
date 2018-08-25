@@ -1,6 +1,5 @@
 package tech.soit.quiet.player
 
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.experimental.launch
@@ -15,6 +14,7 @@ import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.player.playlist.Playlist
 import tech.soit.quiet.utils.component.persistence.KeyValue
 import tech.soit.quiet.utils.component.persistence.get
+import tech.soit.quiet.utils.component.support.liveDataWith
 
 
 /**
@@ -55,18 +55,18 @@ object MusicPlayerManager {
     /**
      * current playing music live data
      */
-    val playingMusic = MutableLiveData<Music?>()
+    val playingMusic = liveDataWith(musicPlayer.playlist.current)
 
     val position = MutableLiveData<Position>()
 
     /**
      * @see IMediaPlayer.PlayerState
      */
-    val playerState = MediatorLiveData<Int>()
+    val playerState = liveDataWith(IMediaPlayer.IDLE)
 
     init {
-        playerState.addSource(musicPlayer.mediaPlayer.getState()) { state ->
-            playerState.postValue(state)
+        musicPlayer.mediaPlayer.setOnStateChangeCallback {
+            playerState.postValue(it)
         }
     }
 

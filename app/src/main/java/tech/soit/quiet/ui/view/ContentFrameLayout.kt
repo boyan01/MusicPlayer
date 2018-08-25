@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.WindowInsets
 import android.widget.FrameLayout
-import tech.summerly.quiet.commonlib.utils.log
 
 
 /**

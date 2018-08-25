@@ -6,8 +6,8 @@ import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.player.core.QuietMediaPlayer
 import tech.soit.quiet.player.playlist.Playlist
-import tech.summerly.quiet.commonlib.utils.LoggerLevel
-import tech.summerly.quiet.commonlib.utils.log
+import tech.soit.quiet.utils.component.LoggerLevel
+import tech.soit.quiet.utils.component.log
 import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
@@ -61,7 +61,7 @@ class QuietMusicPlayer {
         if (current != MusicPlayerManager.playingMusic.value) {
             MusicPlayerManager.playingMusic.postValue(current)
         }
-        if (mediaPlayer.getState().value == IMediaPlayer.IDLE) {
+        if (mediaPlayer.getState() == IMediaPlayer.IDLE) {
             play(current)
         } else {
             mediaPlayer.isPlayWhenReady = !mediaPlayer.isPlayWhenReady
@@ -123,7 +123,7 @@ class QuietMusicPlayer {
                 delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
                 try {
                     val notify = playlist.current == null
-                            && mediaPlayer.getState().value == IMediaPlayer.PLAYING
+                            && mediaPlayer.getState() == IMediaPlayer.PLAYING
 
                     if (notify) {
                         MusicPlayerManager.position

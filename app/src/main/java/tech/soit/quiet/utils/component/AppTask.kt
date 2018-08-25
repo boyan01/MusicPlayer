@@ -5,8 +5,6 @@ import android.app.Application
 import android.os.Bundle
 import androidx.collection.ArraySet
 import tech.soit.quiet.ui.activity.base.BaseActivity
-import tech.summerly.quiet.commonlib.utils.LoggerLevel
-import tech.summerly.quiet.commonlib.utils.log
 
 object AppTask {
 

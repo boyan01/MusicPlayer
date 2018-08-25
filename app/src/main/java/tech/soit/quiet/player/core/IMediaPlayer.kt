@@ -1,7 +1,6 @@
 package tech.soit.quiet.player.core
 
 import androidx.annotation.IntDef
-import androidx.lifecycle.LiveData
 
 
 /**
@@ -21,7 +20,7 @@ interface IMediaPlayer {
 
 
         @IntDef(IDLE, PLAYING, PAUSING, PREPARING)
-        @Target(AnnotationTarget.FIELD, AnnotationTarget.PROPERTY)
+        @Target(AnnotationTarget.TYPE)
         annotation class PlayerState
 
     }
@@ -58,11 +57,20 @@ interface IMediaPlayer {
     fun release()
 
     /**
-     * observable PlayerState
+     * get current PlayerState
      *
      * @see PlayerState
      */
-    fun getState(): LiveData<Int>
+    fun getState(): @PlayerState Int
+
+
+    /**
+     *
+     * set a callback to listener state change
+     *
+     * @param callBack on state change callback, null to remove
+     */
+    fun setOnStateChangeCallback(callBack: ((state: @PlayerState Int) -> Unit)?)
 
 
     /**

@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="tech.soit.quiet">
+
+    <application tools:ignore="GoogleAppIndexingWarning">
+
+        <activity android:name="tech.soit.quiet.utils.testing.SingleFragmentActivity" />
+
+    </application>
+</manifest>

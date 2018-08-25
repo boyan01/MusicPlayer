@@ -1,4 +1,4 @@
-package tech.soit.quiet.ui.fragment.home
+package tech.soit.quiet.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -10,7 +10,11 @@ import tech.soit.quiet.repository.db.entity.LocalMusic
 import tech.soit.quiet.utils.component.support.map
 import tech.soit.quiet.utils.component.support.mapNonNull
 
-class HomePageLocalViewModel constructor(
+
+/**
+ * view model tracks LocalMusicRepository
+ */
+class LocalMusicViewModel constructor(
         private val localMusicDao: LocalMusicDao
 ) : ViewModel() {
 

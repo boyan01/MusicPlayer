@@ -3,6 +3,8 @@ package tech.soit.quiet.utils
 import tech.soit.quiet.model.vo.Album
 import tech.soit.quiet.model.vo.Artist
 import tech.soit.quiet.model.vo.Music
+import tech.soit.quiet.player.core.QuietMediaPlayerTest
+import tech.soit.quiet.player.playlist.Playlist
 
 /**
  * provider dummy data
@@ -17,5 +19,13 @@ object Dummy {
             Music(4, "test4", Album("album2"), listOf(Artist("artist2"), Artist("artist3"))),
             Music(5, "test5", Album("album1"), listOf(Artist("artist3")))
     )
+
+
+    val MUSICS_WITH_URI = MUSICS.map {
+        it.copy(attach = mapOf(Music.URI to QuietMediaPlayerTest.URI))
+    }
+
+
+    val PLAYLIST = Playlist("test", MUSICS_WITH_URI)
 
 }
