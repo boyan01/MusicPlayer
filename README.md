@@ -1,4 +1,4 @@
-# Quiet
+# Quiet [![Build Status](https://travis-ci.org/summerlly/MusicPlayer.svg?branch=master)](https://travis-ci.org/summerlly/MusicPlayer)
 
 A simple MusicPlayer for Android.
 
