@@ -72,7 +72,7 @@ class QuietMediaPlayerTest {
         assertTrue("current position(${quietMediaPlayer.getPosition()}) less than 2000", quietMediaPlayer.getPosition() < 2000)
 
         quietMediaPlayer.seekTo(4000)
-        delay(100)
+        delay(1000)
         assertTrue("current position(${quietMediaPlayer.getPosition()} greater than 3500", quietMediaPlayer.getPosition() > 3500)
 
     }
