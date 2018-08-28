@@ -76,6 +76,8 @@ dependencies {
 
 
     implementation 'androidx.appcompat:appcompat:1.0.0-rc01'
+    implementation "androidx.palette:palette-ktx:1.0.0-rc01"
+    implementation "androidx.media:media:1.0.0-rc01"
     implementation 'androidx.drawerlayout:drawerlayout:1.0.0-rc01'
     implementation 'androidx.coordinatorlayout:coordinatorlayout:1.0.0-rc01'
 
@@ -89,8 +91,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     //noinspection GradleDependency
     testImplementation "org.mockito:mockito-core:2.18.3"
-    //noinspection GradleDependency
+//    noinspection GradleDependency
     androidTestImplementation "org.mockito:mockito-android:2.18.3"
+    testImplementation "io.mockk:mockk:1.8.6"
+    androidTestImplementation "io.mockk:mockk-android:1.8.6"
     androidTestImplementation "androidx.room:room-testing:$room_version"
     androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'

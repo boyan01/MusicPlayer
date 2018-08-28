@@ -9,4 +9,10 @@
     <string name="playing_list">播放列表</string>
     <string name="play">播放</string>
     <string name="pause">暂停</string>
+    <string name="add_to_favorite">Like</string>
+    <string name="remove_from_favorite">Dislike</string>
+    <string name="move_to_trash">Do Not Recommend This One</string>
+    <string name="skip_to_previous">Skip Previous</string>
+    <string name="skip_to_next">Skip Next</string>
+    <string name="exit_player">Exit</string>
 </resources>

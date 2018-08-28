@@ -16,6 +16,7 @@ class AppContext : Application() {
     override fun onCreate() {
         super.onCreate()
         AppContext.attachBaseContext(this)
+        AppContext.setTheme(R.style.AppTheme)
         registerActivityLifecycleCallbacks(AppTask.CallBack)
     }
 }
