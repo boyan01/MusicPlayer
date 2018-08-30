@@ -12,6 +12,7 @@ import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.fragment.UnimplementedFragment
 import tech.soit.quiet.ui.fragment.base.BottomControllerFragment
+import tech.soit.quiet.ui.fragment.local.LocalSingleSongFragment
 
 /**
  * home page - Local
@@ -49,7 +50,7 @@ class HomePageLocal : BottomControllerFragment() {
 
         override fun getItem(position: Int): Fragment? = fragments[position]
                 ?: when (position) {
-                    0 -> UnimplementedFragment()
+                    0 -> LocalSingleSongFragment()
                     1 -> UnimplementedFragment()
                     2 -> UnimplementedFragment()
                     else -> error("illegal position $position")

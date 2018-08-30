@@ -6,7 +6,7 @@
     android:background="?selectableItemBackground">
 
     <View
-        android:id="@+id/now_playing_indicator"
+        android:id="@+id/indicatorPlaying"
         android:layout_width="5.0dp"
         android:layout_height="match_parent"
         android:layout_marginTop="12dp"
