@@ -15,4 +15,11 @@
     <string name="skip_to_previous">Skip Previous</string>
     <string name="skip_to_next">Skip Next</string>
     <string name="exit_player">Exit</string>
+    <string name="title_local_scanner">本地音乐扫描</string>
+    <string name="start_local_scanner">开始扫描</string>
+    <string name="processing_local_scanner">正在扫描:%s</string>
+    <string name="template_scanner_result">共扫描到%d首歌曲</string>
+    <string name="end_local_scanner">结束</string>
+    <string name="stop_local_scanner">停止扫描</string>
+    <string name="local_scanner_hint">点击开始扫描以检索手机中的音乐。</string>
 </resources>

@@ -59,4 +59,27 @@ abstract class BaseFragment : Fragment() {
     }
 
 
+    /**
+     * lazy generate ViewModel , this ViewModel store is use the fragment
+     *
+     * example :
+     *   private val viewModel by lazyViewModel(XXXViewModel::class)
+     *
+     */
+    protected inline fun <reified T : ViewModel> lazyViewModelInternal(): Lazy<T> = lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
+    }
+
+    /**
+     * close this fragment from host
+     */
+    fun close() {
+        if (!isAdded) {
+            return
+        }
+        requireFragmentManager().beginTransaction()
+                .remove(this)
+                .commit()
+    }
+
 }

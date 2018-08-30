@@ -3,12 +3,13 @@ package tech.soit.quiet.repository.local
 import android.os.Environment
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.experimental.isActive
 import kotlinx.coroutines.experimental.launch
+import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.repository.db.dao.LocalMusicDao
 import tech.soit.quiet.utils.MusicConverter
+import tech.soit.quiet.utils.component.support.Resource
 import tech.soit.quiet.utils.getStoragePath
 import java.io.File
 import kotlin.coroutines.experimental.coroutineContext
@@ -22,10 +23,7 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
 
     companion object {
 
-        private var isEngineRunning = false
 
-        /** flag identify scan complete */
-        val COMPLETE = "complete" to "complete"
 
         /** internal and external storage directory */
         private val disks
@@ -35,14 +33,16 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
 
     }
 
-    private val newMusic = MutableLiveData<Pair<String, String>>()
+    private var isEngineRunning = false
+
+    val newMusic = MutableLiveData<Resource<Music>>()
+
     /**
-     *
-     * @return Pair: first -> path , second -> title - artist
+     * start scan
      */
-    fun scan(): LiveData<Pair<String, String>> {
+    fun scan() {
         if (isEngineRunning) {
-            return newMusic
+            return
         }
         isEngineRunning = true
 
@@ -52,12 +52,10 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
             disks.forEach {
                 traversalDirectory(File(it))
             }
+            newMusic.postValue(Resource.success(null))
+            isEngineRunning = false
         }
-
-        newMusic.postValue(COMPLETE)
-
-        isEngineRunning = false
-        return newMusic
+        return
     }
 
 
@@ -87,14 +85,14 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
     }
 
     /** on a file has been traversed */
-    private fun onFileEmitted(file: File) = launch {
+    private fun onFileEmitted(file: File) {
         if (!isFileAccept(file)) {
-            return@launch
+            return
         }
         val music = MusicConverter.scanFileToMusic(file)
         if (music != null) {
             localMusicDao.insertMusic(music)
-            newMusic.postValue(file.path to music.title)
+            newMusic.postValue(Resource.loading(music.toMusic()))
         }
     }
 
