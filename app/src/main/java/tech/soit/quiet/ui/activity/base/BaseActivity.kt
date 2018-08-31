@@ -69,7 +69,8 @@ abstract class BaseActivity : AppCompatActivity() {
         } else {
             val new = fragment()
             supportFragmentManager.beginTransaction()
-                    .replace(R.id.content, new, tag)
+                    .replace(android.R.id.content, new, tag)
+                    .addToBackStack(tag)
                     .commit()
         }
 
