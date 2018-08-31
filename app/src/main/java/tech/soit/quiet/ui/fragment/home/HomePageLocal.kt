@@ -12,6 +12,7 @@ import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.fragment.UnimplementedFragment
 import tech.soit.quiet.ui.fragment.base.BottomControllerFragment
+import tech.soit.quiet.ui.fragment.local.LocalMusicScannerFragment
 import tech.soit.quiet.ui.fragment.local.LocalSingleSongFragment
 
 /**
@@ -41,6 +42,13 @@ class HomePageLocal : BottomControllerFragment() {
         super.onViewCreated(view, savedInstanceState)
         tabLayout.setupWithViewPager(viewPager)
         viewPager.adapter = SectionsPagerAdapter(childFragmentManager)
+        toolbar.inflateMenu(R.menu.menu_local_home_page)
+        toolbar.setOnMenuItemClickListener { item ->
+            if (item.itemId == R.id.menu_local_home_scan) {
+                requireBaseActivity().navigationTo(LocalMusicScannerFragment.TAG) { LocalMusicScannerFragment() }
+            }
+            true
+        }
     }
 
 

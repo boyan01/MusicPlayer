@@ -14,7 +14,6 @@ import tech.soit.quiet.repository.db.QuietDatabase
 import tech.soit.quiet.repository.local.LocalMusicEngine
 import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.utils.annotation.LayoutId
-import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.Status
 import tech.soit.quiet.utils.component.support.string
 import tech.soit.quiet.viewmodel.LocalScannerViewModel
@@ -26,6 +25,11 @@ import tech.soit.quiet.viewmodel.LocalScannerViewModel
 @LayoutId(R.layout.fragment_local_scanner)
 class LocalMusicScannerFragment : BaseFragment() {
 
+    companion object {
+
+        const val TAG = "LocalMusicScanner"
+
+    }
 
     init {
         viewModelFactory = object : ViewModelProvider.AndroidViewModelFactory(AppContext) {

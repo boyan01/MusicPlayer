@@ -30,12 +30,6 @@
                 app:tabMode="fixed"
                 app:tabTextColor="?quietTextSecondary" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imageMenu"
-                style="@style/Widget.AppCompat.ActionButton.Overflow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end" />
         </FrameLayout>
 
     </androidx.appcompat.widget.Toolbar>

@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import tech.soit.quiet.AppContext
+import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.view.ContentFrameLayout
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.LayoutId
@@ -69,6 +70,12 @@ abstract class BaseFragment : Fragment() {
     protected inline fun <reified T : ViewModel> lazyViewModelInternal(): Lazy<T> = lazy {
         ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
     }
+
+    /**
+     * cast the activity to [BaseActivity]
+     */
+    protected fun requireBaseActivity() = requireActivity() as BaseActivity
+
 
     /**
      * close this fragment from host

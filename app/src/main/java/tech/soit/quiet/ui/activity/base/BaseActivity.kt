@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import tech.soit.quiet.R
+import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.ui.view.ContentFrameLayout
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.LayoutId
@@ -57,6 +58,21 @@ abstract class BaseActivity : AppCompatActivity() {
             newContent.addView(view, params)
             super.addContentView(newContent, params)
         }
+    }
+
+    fun navigationTo(tag: String, fragment: () -> BaseFragment) {
+        val exist = supportFragmentManager.findFragmentByTag(tag)
+        if (exist != null && exist.isAdded) {
+            supportFragmentManager.beginTransaction()
+                    .show(exist)
+                    .commit()
+        } else {
+            val new = fragment()
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.content, new, tag)
+                    .commit()
+        }
+
     }
 
 }
