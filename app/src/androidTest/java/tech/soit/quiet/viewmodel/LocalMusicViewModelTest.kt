@@ -1,4 +1,4 @@
-package tech.soit.quiet.ui.fragment.home
+package tech.soit.quiet.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.runner.AndroidJUnit4
@@ -15,7 +15,6 @@ import tech.soit.quiet.repository.db.await
 import tech.soit.quiet.repository.db.dao.LocalMusicDao
 import tech.soit.quiet.utils.component.support.liveDataWith
 import tech.soit.quiet.utils.mock
-import tech.soit.quiet.viewmodel.LocalMusicViewModel
 
 @RunWith(AndroidJUnit4::class)
 class LocalMusicViewModelTest {

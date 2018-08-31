@@ -2,13 +2,12 @@ package tech.soit.quiet.ui.activity.main
 
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.annotation.StringDef
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.Fragment
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.activity.base.BaseActivity
+import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.ui.fragment.home.HomePageLocal
 
 /**
@@ -26,12 +25,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         // list of home page tag
         private val HOME_PAGES = listOf(HOME_PAGE_LOCAL)
-
-
-        @Target(AnnotationTarget.VALUE_PARAMETER, AnnotationTarget.FIELD)
-        @StringDef(HOME_PAGE_LOCAL)
-        @Retention(AnnotationRetention.SOURCE)
-        annotation class HomePage
 
     }
 
@@ -58,31 +51,14 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    private fun checkToFragment(@HomePage tag: String) {
-
-        val transaction = supportFragmentManager.beginTransaction()
-
-        //hide home pages
-        HOME_PAGES
-                .mapNotNull {
-                    supportFragmentManager.findFragmentByTag(it)
-                }.filter {
-                    !it.isHidden
-                }.forEach {
-                    transaction.hide(it)
-                }
-
-        val fragment = supportFragmentManager.findFragmentByTag(tag)
-        if (fragment != null) {
-            transaction.show(fragment)
-        } else {
-            transaction.add(R.id.container, createHomePage(tag), tag)
-        }
-
-        transaction.commit()
+    /**
+     * @param tag [HOME_PAGES]
+     */
+    private fun checkToFragment(tag: String) {
+        navigationTo(tag) { createHomePage(tag) }
     }
 
-    private fun createHomePage(@HomePage tag: String): Fragment {
+    private fun createHomePage(tag: String): BaseFragment {
         return when (tag) {
             HOME_PAGE_LOCAL -> HomePageLocal.newInstance()
             else -> error("illegal tag to create Home Page : $tag")

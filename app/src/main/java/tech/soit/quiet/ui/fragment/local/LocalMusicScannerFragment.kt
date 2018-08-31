@@ -53,6 +53,9 @@ class LocalMusicScannerFragment : BaseFragment() {
         buttonStart.setOnClickListener {
             viewModel.startScan()
         }
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
     }
 
 
@@ -81,13 +84,13 @@ class LocalMusicScannerFragment : BaseFragment() {
                     textResult.text = string(R.string.template_scanner_result, viewModel.resultCount)
                     buttonEnd.setText(R.string.end_local_scanner)
                     buttonEnd.setOnClickListener {
-                        close()
+                        onBackPressed()
                     }
                 }
                 else -> {
                     buttonEnd.setText(R.string.end_local_scanner)
                     buttonEnd.setOnClickListener {
-                        close()
+                        onBackPressed()
                     }
                     scanningLayout.isGone = true
                     resultLayout.isVisible = true

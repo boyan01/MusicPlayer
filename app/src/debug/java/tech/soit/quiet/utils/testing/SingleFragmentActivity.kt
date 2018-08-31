@@ -1,10 +1,10 @@
 package tech.soit.quiet.utils.testing
 
 import android.os.Bundle
-import android.view.View
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.fragment.base.BaseFragment
+import tech.soit.quiet.ui.view.ContentFrameLayout
 
 /**
  * Used for testing fragments inside a fake activity.
@@ -14,7 +14,9 @@ class SingleFragmentActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(View(this))
+        val content = ContentFrameLayout(this)
+        content.id = R.id.content
+        setContentView(content)
     }
 
 

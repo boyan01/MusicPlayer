@@ -1,5 +1,6 @@
 package tech.soit.quiet.ui.fragment.base
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -83,17 +84,24 @@ abstract class BaseFragment : Fragment() {
      */
     protected fun requireBaseActivity() = requireActivity() as BaseActivity
 
-
     /**
-     * close this fragment from host
+     * Take care of popping the fragment back stack or finishing the activity
+     * as appropriate.
      */
-    fun close() {
-        if (!isAdded) {
+    fun onBackPressed() {
+        val isStateSaved = childFragmentManager.isStateSaved
+        if (isStateSaved && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+            // Older versions will throw an exception from the framework
+            // FragmentManager.popBackStackImmediate(), so we'll just
+            // return here. The Activity is likely already on its way out
+            // since the fragmentManager has already been saved.
             return
         }
-        requireFragmentManager().beginTransaction()
-                .remove(this)
-                .commit()
+
+        if (isStateSaved || !childFragmentManager.popBackStackImmediate()) {
+            requireBaseActivity().onBackPressed()
+        }
     }
+
 
 }

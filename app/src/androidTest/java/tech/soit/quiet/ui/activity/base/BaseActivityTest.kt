@@ -26,8 +26,6 @@ class BaseActivityTest {
         val appContent = activity.activity.findViewById<View>(R.id.content)
         assertNotNull("View: R.id.content exist", appContent)
 
-        val androidContent = appContent.parent as ViewGroup
-        assertEquals("R.id.content 'parent is android.R.id.content", android.R.id.content, androidContent.id)
 
     }
 

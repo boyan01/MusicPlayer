@@ -9,8 +9,8 @@
     tools:context=".ui.activity.main.MainActivity"
     tools:openDrawer="start">
 
-    <FrameLayout
-        android:id="@+id/container"
+    <tech.soit.quiet.ui.view.ContentFrameLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true" />
