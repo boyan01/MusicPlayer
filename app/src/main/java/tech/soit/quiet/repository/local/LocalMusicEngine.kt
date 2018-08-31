@@ -4,12 +4,16 @@ import android.os.Environment
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.experimental.CancellationException
 import kotlinx.coroutines.experimental.isActive
 import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.repository.db.dao.LocalMusicDao
 import tech.soit.quiet.utils.MusicConverter
+import tech.soit.quiet.utils.component.log
+import tech.soit.quiet.utils.component.logError
 import tech.soit.quiet.utils.component.support.Resource
+import tech.soit.quiet.utils.component.support.Status
 import tech.soit.quiet.utils.getStoragePath
 import java.io.File
 import kotlin.coroutines.experimental.coroutineContext
@@ -24,16 +28,20 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
     companion object {
 
 
-
         /** internal and external storage directory */
         private val disks
             get() = listOfNotNull(
                     Environment.getExternalStorageDirectory().path,
                     getStoragePath(true))
 
+
     }
 
-    private var isEngineRunning = false
+    val states = MutableLiveData<Status>()
+
+    init {
+        states.postValue(null)
+    }
 
     val newMusic = MutableLiveData<Resource<Music>>()
 
@@ -41,19 +49,24 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
      * start scan
      */
     fun scan() {
-        if (isEngineRunning) {
+        if (states.value == Status.LOADING) {
             return
         }
-        isEngineRunning = true
-
+        states.postValue(Status.LOADING)
         //do scan work
-
-        launch {
+        launch(
+                onCompletion = {
+                    if (it != null && it !is CancellationException) {
+                        logError(it)
+                        states.postValue(Status.ERROR)
+                    } else {
+                        states.postValue(Status.SUCCESS)
+                    }
+                }
+        ) {
             disks.forEach {
                 traversalDirectory(File(it))
             }
-            newMusic.postValue(Resource.success(null))
-            isEngineRunning = false
         }
         return
     }
@@ -74,11 +87,11 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
             return
         }
         val files = listFiles() ?: return@with
-        files.forEach {
-            if (it.isDirectory) {
-                traversalDirectory(it)
-            } else if (it.isFile && it.exists()) {
-                onFileEmitted(file)
+        files.forEach { child ->
+            if (child.isDirectory) {
+                traversalDirectory(child)
+            } else if (child.isFile && child.exists()) {
+                onFileEmitted(child)
             }
         }
         Unit
@@ -86,13 +99,14 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
 
     /** on a file has been traversed */
     private fun onFileEmitted(file: File) {
+        log { "scanning file : ${file.path}" }
         if (!isFileAccept(file)) {
             return
         }
         val music = MusicConverter.scanFileToMusic(file)
         if (music != null) {
             localMusicDao.insertMusic(music)
-            newMusic.postValue(Resource.loading(music.toMusic()))
+            newMusic.postValue(Resource.success(music.toMusic()))
         }
     }
 

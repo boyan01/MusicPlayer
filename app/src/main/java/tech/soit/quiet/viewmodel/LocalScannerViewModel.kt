@@ -1,11 +1,12 @@
 package tech.soit.quiet.viewmodel
 
 import androidx.annotation.IntDef
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.repository.local.LocalMusicEngine
 import tech.soit.quiet.utils.component.support.Status
+import tech.soit.quiet.utils.component.support.map
 import tech.soit.quiet.utils.testing.OpenForTesting
 
 /**
@@ -19,10 +20,19 @@ class LocalScannerViewModel(
 
     companion object {
 
+        /**
+         * state scanning processing
+         */
         const val STATUS_SCANNING = 1
 
+        /**
+         * state scan complete
+         */
         const val STATUS_SUCCESS = 2
 
+        /**
+         * idle status
+         */
         const val STATUS_IDLE = 0
 
 
@@ -54,13 +64,24 @@ class LocalScannerViewModel(
             }
             resultCount = result.size
         }
+
     }
 
     var resultCount = 0
 
     val newAdded get() = localMusicEngine.newMusic
 
-    val status = MutableLiveData<@ScannerStatus Int>()
+    /**
+     * status [STATUS_IDLE] [STATUS_SCANNING] [STATUS_SUCCESS]
+     */
+    val status: LiveData<Int> = localMusicEngine.states.map { status ->
+        status ?: return@map STATUS_IDLE
+        if (status == Status.LOADING) {
+            return@map STATUS_SCANNING
+        } else {
+            return@map STATUS_SUCCESS
+        }
+    }
 
     fun startScan() {
         localMusicEngine.scan()

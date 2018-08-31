@@ -12,6 +12,13 @@ private val DEBUG get() = BuildConfig.DEBUG
 
 private const val TAG = "QUIET"
 
+fun logError(error: Throwable?) {
+    error ?: return
+    if (DEBUG) {
+        error.printStackTrace()
+    }
+}
+
 fun log(level: LoggerLevel = LoggerLevel.INFO, lazyMessage: () -> Any?) {
     if (DEBUG) {
         //TODO logger 调整

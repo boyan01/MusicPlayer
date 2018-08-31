@@ -85,6 +85,10 @@ class LocalMusicScannerFragment : BaseFragment() {
                     }
                 }
                 else -> {
+                    buttonEnd.setText(R.string.end_local_scanner)
+                    buttonEnd.setOnClickListener {
+                        close()
+                    }
                     scanningLayout.isGone = true
                     resultLayout.isVisible = true
                     textResult.text = getString(R.string.local_scanner_hint)
