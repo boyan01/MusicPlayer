@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?><!--notice--><!--参考自https://github.com/hefuyicoder/ListenerMusicPlayer/blob/master/app/src/main/res/layout/item_list_linear_layout_item.xml-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    android:background="?selectableItemBackground">
+    android:background="?selectableItemBackground"
+    tools:layout_gravity="center">
 
     <View
         android:id="@+id/indicatorPlaying"
         android:layout_width="5.0dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="?colorPrimary"
         android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatImageView
@@ -21,8 +26,13 @@
         android:layout_height="40dp"
         android:layout_centerVertical="true"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:scaleType="centerCrop"
-        tools:src="?colorPrimary" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="?colorPrimary" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/popup_menu"
@@ -31,62 +41,66 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:background="?actionBarItemBackground"
         android:tint="?quietIconActive"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="UnusedAttribute" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/text_item_title"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_marginStart="16dp"
-        android:layout_toStartOf="@id/popup_menu"
-        android:layout_toEndOf="@id/image"
-        android:orientation="vertical">
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/popup_menu"
+        app:layout_constraintStart_toEndOf="@+id/image"
+        tools:text="缘分一道桥" />
 
-        <TextView
-            android:id="@+id/text_item_title"
-            style="@style/TextAppearance.MaterialComponents.Body1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="缘分一道桥" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_item_subtitle"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxWidth="180dp"
+        app:layout_constraintStart_toStartOf="@+id/text_item_title"
+        app:layout_constraintTop_toBottomOf="@+id/text_item_title"
+        tools:text="王力宏/谭维维" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp">
+    <View
+        android:id="@+id/divider_subtitle"
+        android:layout_width="1.0dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="6dp"
+        android:background="?colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/text_item_subtitle"
+        app:layout_constraintStart_toEndOf="@+id/text_item_subtitle"
+        app:layout_constraintTop_toTopOf="@+id/text_item_subtitle" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/text_item_subtitle"
-                style="@style/TextAppearance.MaterialComponents.Body1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lines="1"
-                tools:text="王力宏/谭维维" />
+    <TextView
+        android:id="@+id/text_item_subtitle_2"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintEnd_toStartOf="@id/popup_menu"
+        app:layout_constraintStart_toEndOf="@id/divider_subtitle"
+        app:layout_constraintTop_toTopOf="@+id/text_item_subtitle"
+        tools:text="主题曲" />
 
-            <View
-                android:id="@+id/divider_subtitle"
-                android:layout_width="1.0dp"
-                android:layout_height="8dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_toEndOf="@id/text_item_subtitle"
-                android:background="?colorPrimary" />
-
-            <TextView
-                android:id="@+id/text_item_subtitle_2"
-                style="@style/TextAppearance.MaterialComponents.Body2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/divider_subtitle"
-                android:maxWidth="80dp"
-                tools:text="主题曲" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -94,4 +108,11 @@
         android:layout_alignParentBottom="true"
         android:background="?quietDivider" />
 
-</RelativeLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
