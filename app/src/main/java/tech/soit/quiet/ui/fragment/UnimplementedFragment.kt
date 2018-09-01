@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import android.widget.TextView
 import tech.soit.quiet.ui.fragment.base.BaseFragment
 
+@Suppress("unused")
 /**
  *
  * fragment placeholder

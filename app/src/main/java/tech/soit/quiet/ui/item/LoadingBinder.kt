@@ -21,3 +21,11 @@ class LoadingViewBinder : TypedBinder<Loading>() {
  * object for [LoadingViewBinder]
  */
 object Loading
+
+
+/**
+ * shortcut to register Loading
+ */
+fun TypedAdapter.withLoadingBinder(): TypedAdapter {
+    return withBinder(Loading::class, LoadingViewBinder())
+}

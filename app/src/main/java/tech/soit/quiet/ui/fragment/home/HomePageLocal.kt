@@ -10,8 +10,9 @@ import androidx.fragment.app.FragmentPagerAdapter
 import kotlinx.android.synthetic.main.home_page_local.view.*
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
-import tech.soit.quiet.ui.fragment.UnimplementedFragment
 import tech.soit.quiet.ui.fragment.base.BottomControllerFragment
+import tech.soit.quiet.ui.fragment.local.LocalAlbumFragment
+import tech.soit.quiet.ui.fragment.local.LocalArtistFragment
 import tech.soit.quiet.ui.fragment.local.LocalMusicScannerFragment
 import tech.soit.quiet.ui.fragment.local.LocalSingleSongFragment
 
@@ -59,8 +60,8 @@ class HomePageLocal : BottomControllerFragment() {
         override fun getItem(position: Int): Fragment? = fragments[position]
                 ?: when (position) {
                     0 -> LocalSingleSongFragment()
-                    1 -> UnimplementedFragment()
-                    2 -> UnimplementedFragment()
+                    1 -> LocalArtistFragment()
+                    2 -> LocalAlbumFragment()
                     else -> error("illegal position $position")
                 }.also {
                     fragments[position] = it
