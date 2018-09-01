@@ -1,6 +1,0 @@
-<resources>
-    <string name="setting_app_name">设置</string>
-    <string name="setting_general">常用设置</string>
-    <string name="setting_night_mode">夜间模式</string>
-    <string name="setting_audio_volume">音量</string>
-</resources>
