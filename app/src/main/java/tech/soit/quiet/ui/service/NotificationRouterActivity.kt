@@ -3,7 +3,6 @@ package tech.soit.quiet.ui.service
 import android.content.Intent
 import android.os.Bundle
 import tech.soit.quiet.AppContext
-import tech.soit.quiet.R
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.playlist.Playlist
 import tech.soit.quiet.ui.activity.base.BaseActivity
@@ -40,13 +39,7 @@ class NotificationRouterActivity : BaseActivity() {
             AppContext.startActivity(intent)
         } else {
             val topStack = active.valueAt(active.size - 1)!!
-            val find = topStack.supportFragmentManager.findFragmentByTag(tag)
-            if (find == null || !find.isVisible) {
-                val fragment = find ?: UnimplementedFragment()
-                topStack.supportFragmentManager.beginTransaction()
-                        .replace(R.id.content, fragment, tag)
-                        .commit()
-            }
+            topStack.navigationTo(tag) { UnimplementedFragment() }
         }
         finish()
     }
