@@ -15,4 +15,14 @@
     <!-- application activity root view -->
     <item name="content" format="integer" type="id" />
 
+    <!-- attributes for LyricView -->
+    <declare-styleable name="LyricView">
+        <attr name="lyricTextSize" format="dimension" />
+        <attr name="lyricNormalTextColor" format="color" />
+        <attr name="lyricPlayingTextColor" format="color" />
+        <attr name="lyricLineSpacing" format="dimension" />
+        <attr name="lyricEmptyText" format="string" />
+        <attr name="lyricPlayIndicatorColor" format="color" />
+    </declare-styleable>
+
 </resources>

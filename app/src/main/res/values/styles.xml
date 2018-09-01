@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
 
     <style name="SplashTheme" parent="AppTheme">
@@ -45,6 +45,23 @@
 
     <style name="Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
         <item name="tint">@color/color_text_inverse_primary</item>
+    </style>
+
+
+    <!-- action button -->
+    <style name="ActionOverflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tooltipText" tools:ignore="NewApi" />
+        <item name="android:tint">?quietTextPrimary</item>
+    </style>
+
+    <!-- Action With Overflow , it's design for black background -->
+    <style name="ActionOverflow.Dark">
+        <item name="android:theme">@style/RippleThemeDark</item>
+        <item name="android:tint">?quietTextPrimaryInverse</item>
+    </style>
+
+    <style name="RippleThemeDark">
+        <item name="colorControlHighlight">@color/background_secondary</item>
     </style>
 
 </resources>

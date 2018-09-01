@@ -7,7 +7,7 @@ import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.playlist.Playlist
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.activity.main.MainActivity
-import tech.soit.quiet.ui.fragment.UnimplementedFragment
+import tech.soit.quiet.ui.fragment.player.MusicPlayerFragment
 import tech.soit.quiet.utils.component.AppTask
 
 
@@ -26,7 +26,7 @@ class NotificationRouterActivity : BaseActivity() {
         if (pl == Playlist.TOKEN_FM) {
             navigationToPlayer("TODO")
         } else {
-            navigationToPlayer("TODO")
+            navigationToPlayer(MusicPlayerFragment.TAG)
         }
     }
 
@@ -39,7 +39,7 @@ class NotificationRouterActivity : BaseActivity() {
             AppContext.startActivity(intent)
         } else {
             val topStack = active.valueAt(active.size - 1)!!
-            topStack.navigationTo(tag) { UnimplementedFragment() }
+            topStack.navigationTo(tag) { MusicPlayerFragment() }
         }
         finish()
     }

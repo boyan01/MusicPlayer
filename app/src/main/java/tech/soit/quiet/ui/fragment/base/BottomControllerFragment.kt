@@ -15,9 +15,9 @@ import kotlinx.android.synthetic.main.fragment_bottom_controller.view.*
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
+import tech.soit.quiet.ui.fragment.player.MusicPlayerFragment
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.component.ImageLoader
-import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.attrValue
 import tech.soit.quiet.utils.component.support.observeNonNull
 import tech.soit.quiet.utils.component.support.string
@@ -70,7 +70,10 @@ open class BottomControllerFragment : BaseFragment() {
             }
         }
         bottomControllerLayout.setOnClickListener {
-            log { "on bottom controller clicked" }
+            requireBaseActivity().navigationTo(MusicPlayerFragment.TAG) { MusicPlayerFragment() }
+        }
+        controllerPlaylist.setOnClickListener {
+            //TODO
         }
         controllerPauseOrPlay.setOnClickListener {
             controllerViewModel.pauseOrPlay()
