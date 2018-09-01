@@ -23,6 +23,7 @@ class SingleFragmentActivity : BaseActivity() {
     fun setFragment(fragment: BaseFragment) {
         supportFragmentManager.beginTransaction()
                 .add(R.id.content, fragment, "test")
+                .addToBackStack("test")
                 .commit()
     }
 

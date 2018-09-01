@@ -90,8 +90,7 @@ class LocalMusicScannerFragmentTest {
         onView(withId(R.id.textResult)).check(matches(withText(string(R.string.template_scanner_result, 5))))
 
         onView(withId(R.id.buttonEnd)).perform(click())
-        //only has a child which has been added on activity setContent
-        onView(withId(R.id.content)).check(matches(hasChildCount(1)))
+        onView(withId(R.id.content)).check(matches(hasChildCount(0)))
 
     }
 
