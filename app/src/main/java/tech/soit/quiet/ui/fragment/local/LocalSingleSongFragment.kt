@@ -17,6 +17,7 @@ import tech.soit.quiet.ui.item.*
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.LoggerLevel
 import tech.soit.quiet.utils.component.log
+import tech.soit.quiet.utils.component.support.CenterSmoothScroller
 import tech.soit.quiet.viewmodel.LocalMusicViewModel
 import tech.soit.typed.adapter.TypedAdapter
 
@@ -31,15 +32,42 @@ class LocalSingleSongFragment : BaseFragment() {
 
     private val viewModel by lazyViewModel<LocalMusicViewModel>()
 
+
+    private val onPlayingItemShowHide = { show: Boolean ->
+        if (show) {
+            floatingButton.hide()
+        } else {
+            floatingButton.show()
+        }
+    }
+
     private val adapter = TypedAdapter()
             .withBinder(Loading::class, LoadingViewBinder())
             .withBinder(Empty::class, EmptyViewBinder())
-            .withBinder(Music::class, MusicItemBinder(TOKEN_PLAYLIST, this::onMusicItemClick))
+            .withBinder(Music::class, MusicItemBinder(TOKEN_PLAYLIST,
+                    this::onMusicItemClick, onPlayingItemShowHide))
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.adapter = adapter
         (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        floatingButton.setOnClickListener {
+            val playlist = MusicPlayerManager.musicPlayer.playlist
+            if (playlist.token != TOKEN_PLAYLIST) {
+                return@setOnClickListener
+            }
+            val current = playlist.current
+            if (current == null) {
+                return@setOnClickListener
+            }
+            val index = adapter.list.indexOf(current)
+            if (index != -1) {
+                val scroller = CenterSmoothScroller(it.context)
+                scroller.targetPosition = index
+                recyclerView.layoutManager?.startSmoothScroll(scroller)
+            }
+        }
 
     }
 
