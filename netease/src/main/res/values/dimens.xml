@@ -1,7 +1,0 @@
-<resources>
-    <dimen name="netease_status_bar_height">24dp</dimen>
-
-    <dimen name="netease_item_music_height">60dp</dimen>
-    <dimen name="netease_header_music_height">40dp</dimen>
-
-</resources>

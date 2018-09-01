@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/local_image_music_in_phone">
-
-    <target
-        android:name="musicEvent"
-        android:animation="@animator/local_animation_hide" />
-
-</animated-vector>

@@ -1,6 +1,0 @@
-apply from: '../module_build_scripts.gradle'
-
-dependencies {
-    kapt "android.arch.persistence.room:compiler:$room_version"
-    testImplementation "android.arch.persistence.room:testing:$room_version"
-}
