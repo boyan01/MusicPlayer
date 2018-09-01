@@ -1,6 +1,7 @@
 package tech.soit.quiet.ui.item
 
 import android.view.View
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import kotlinx.android.synthetic.main.item_music.view.*
@@ -31,8 +32,26 @@ class MusicItemBinder(
 
     }
 
+    /**
+     * save current playing music index
+     */
+    private var currentPlayingPosition = -1
+
+
     override fun onBindViewHolder(holder: ViewHolder, item: Music) = with(holder.itemView) {
-        indicatorPlaying.isVisible = isPlaying(item)
+        val isPlaying = isPlaying(item)
+        if (isPlaying) {
+            if (currentPlayingPosition != -1) {
+                val position = currentPlayingPosition
+                post {
+                    adapter.notifyItemChanged(position)
+                }
+            }
+            currentPlayingPosition = holder.adapterPosition
+            indicatorPlaying.isVisible = true
+        } else {
+            indicatorPlaying.isGone = true
+        }
         setOnClickListener {
             onClick(holder.itemView, item)
         }

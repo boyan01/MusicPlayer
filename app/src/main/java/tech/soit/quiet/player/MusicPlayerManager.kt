@@ -3,6 +3,7 @@ package tech.soit.quiet.player
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.experimental.launch
+import tech.soit.quiet.AppContext
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.MusicPlayerManager.musicPlayer
 import tech.soit.quiet.player.MusicPlayerManager.play
@@ -12,6 +13,7 @@ import tech.soit.quiet.player.MusicPlayerManager.playlist
 import tech.soit.quiet.player.MusicPlayerManager.position
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.player.playlist.Playlist
+import tech.soit.quiet.ui.service.QuietPlayerService
 import tech.soit.quiet.utils.component.persistence.KeyValue
 import tech.soit.quiet.utils.component.persistence.get
 import tech.soit.quiet.utils.component.support.liveDataWith
@@ -79,11 +81,9 @@ object MusicPlayerManager {
      * @param list the music from
      */
     fun play(token: String, music: Music, list: List<Music>) {
-        if (token != musicPlayer.playlist.token) {
-            val newPlaylist = Playlist(token, list)
-            newPlaylist.current = music
-            musicPlayer.playlist = newPlaylist
-        }
+        val newPlaylist = Playlist(token, list)
+        newPlaylist.current = music
+        musicPlayer.playlist = newPlaylist
         musicPlayer.play(music)
     }
 
@@ -98,6 +98,7 @@ object MusicPlayerManager {
             restore.current = current
             restore.playMode = PlayMode.from(playMode)
             musicPlayer.playlist = restore
+            playingMusic.postValue(current)
         }
 
         //persistence playlist
@@ -116,6 +117,7 @@ object MusicPlayerManager {
             m ?: return@observeForever
             KeyValue.put(KEY_PLAYLIST_CURRENT, m)
         }
+        QuietPlayerService.init(AppContext)
     }
 
 

@@ -136,6 +136,11 @@ class QuietMusicPlayer {
             }
         }
 
+        //to auto play next
+        mediaPlayer.setOnCompleteListener {
+            playNext()
+        }
+
     }
 
 }

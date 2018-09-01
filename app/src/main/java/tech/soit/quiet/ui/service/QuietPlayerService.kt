@@ -1,5 +1,6 @@
 package tech.soit.quiet.ui.service
 
+import android.app.Application
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -13,6 +14,7 @@ import androidx.lifecycle.Observer
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.QuietMusicPlayer
+import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.utils.component.LoggerLevel
 import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.testing.OpenForTesting
@@ -73,9 +75,21 @@ class QuietPlayerService : Service(), LifecycleOwner {
 
 
         /**
+         * init with application.
+         * register [MusicPlayerManager.playerState] to ensure service running.
+         */
+        fun init(application: Application) {
+            MusicPlayerManager.playerState.observeForever {
+                if (it == IMediaPlayer.PLAYING || it == IMediaPlayer.PREPARING) {
+                    ensureServiceRunning(application)
+                }
+            }
+        }
+
+        /**
          * ensure [QuietPlayerService] is Running
          */
-        fun ensureServiceRunning(context: Context = AppContext) {
+        private fun ensureServiceRunning(context: Context = AppContext) {
             if (!isRunning) {
                 context.startService(Intent(context, QuietPlayerService::class.java))
             } else {
