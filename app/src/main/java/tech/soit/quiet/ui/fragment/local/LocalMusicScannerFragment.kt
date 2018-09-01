@@ -1,7 +1,9 @@
 package tech.soit.quiet.ui.fragment.local
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
@@ -16,6 +18,7 @@ import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.support.Status
 import tech.soit.quiet.utils.component.support.string
+import tech.soit.quiet.utils.doWithPermissions
 import tech.soit.quiet.viewmodel.LocalScannerViewModel
 
 /**
@@ -50,8 +53,12 @@ class LocalMusicScannerFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        buttonStart.setOnClickListener {
-            viewModel.startScan()
+        buttonStart.setOnClickListener { _ ->
+            requireBaseActivity().doWithPermissions(READ_EXTERNAL_STORAGE, onDenied = { _ ->
+                Toast.makeText(requireContext(), R.string.toast_read_storage_permission_denied, Toast.LENGTH_SHORT).show()
+            }) {
+                viewModel.startScan()
+            }
         }
         toolbar.setNavigationOnClickListener {
             onBackPressed()
