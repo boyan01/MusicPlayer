@@ -8,6 +8,7 @@ import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Artist
 import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.ui.item.*
@@ -15,6 +16,9 @@ import tech.soit.quiet.viewmodel.LocalMusicViewModel
 import tech.soit.typed.adapter.TypedAdapter
 
 /**
+ *
+ * display local artist list
+ *
  * @author : summer
  * @date : 18-9-1
  */
@@ -32,7 +36,7 @@ class LocalArtistFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         viewModel.allArtists.observe(this, Observer { artists ->
             when {
-                artists == null -> adapter.submit(listOf(Empty))
+                artists == null -> adapter.submit(listOf(Loading))
                 artists.isEmpty() -> adapter.submit(listOf(Empty))
                 else -> adapter.submit(artists)
             }
@@ -40,7 +44,9 @@ class LocalArtistFragment : BaseFragment() {
     }
 
     override fun onCreateView2(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return RecyclerView(inflater.context)
+        val recyclerView = RecyclerView(inflater.context)
+        recyclerView.id = R.id.recyclerView
+        return recyclerView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
