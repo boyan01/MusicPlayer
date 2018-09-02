@@ -8,6 +8,7 @@ import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Album
 import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.ui.item.*
@@ -32,7 +33,7 @@ class LocalAlbumFragment : BaseFragment() {
         super.onCreate(savedInstanceState)
         viewModel.allAlbums.observe(this, Observer { albums ->
             when {
-                albums == null -> adapter.submit(listOf(Empty))
+                albums == null -> adapter.submit(listOf(Loading))
                 albums.isEmpty() -> adapter.submit(listOf(Empty))
                 else -> adapter.submit(albums)
             }
@@ -40,7 +41,9 @@ class LocalAlbumFragment : BaseFragment() {
     }
 
     override fun onCreateView2(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return RecyclerView(inflater.context)
+        val view = RecyclerView(inflater.context)
+        view.id = R.id.recyclerView
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
