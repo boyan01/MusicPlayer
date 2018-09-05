@@ -122,7 +122,7 @@ class QuietMusicPlayer {
             while (true) {
                 delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
                 try {
-                    val notify = playlist.current == null
+                    val notify = playlist.current != null
                             && mediaPlayer.getState() == IMediaPlayer.PLAYING
 
                     if (notify) {
