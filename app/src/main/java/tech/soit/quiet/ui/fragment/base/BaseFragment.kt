@@ -34,10 +34,15 @@ abstract class BaseFragment : Fragment() {
             inflater.inflate(layoutId.value, container, false)
         }
         view ?: return null
-        val content = ContentFrameLayout(inflater.context)
-        content.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-        content.addView(view)
-        return content
+        return if (view is ContentFrameLayout) {
+            view
+        } else {
+            val content = ContentFrameLayout(inflater.context)
+            content.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            content.addView(view)
+            content
+        }
+
     }
 
     /**

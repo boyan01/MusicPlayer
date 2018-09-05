@@ -53,6 +53,7 @@ class LocalMusicScannerFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.fitsSystemWindows = true
         buttonStart.setOnClickListener { _ ->
             requireBaseActivity().doWithPermissions(READ_EXTERNAL_STORAGE, onDenied = { _ ->
                 Toast.makeText(requireContext(), R.string.toast_read_storage_permission_denied, Toast.LENGTH_SHORT).show()
