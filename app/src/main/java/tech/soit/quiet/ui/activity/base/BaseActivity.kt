@@ -2,8 +2,6 @@ package tech.soit.quiet.ui.activity.base
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
@@ -26,7 +24,9 @@ abstract class BaseActivity : AppCompatActivity() {
      *
      * NOTE: fragment' container has been ordered to [R.id.content]
      */
-    open fun navigationTo(tag: String, fragment: () -> BaseFragment) {
+    open fun navigationTo(tag: String,
+                          addToBackStack: Boolean = true,
+                          fragment: () -> BaseFragment) {
         val exist = supportFragmentManager.findFragmentByTag(tag)
         if (exist != null && exist.isAdded) {
             supportFragmentManager.beginTransaction()
@@ -36,7 +36,11 @@ abstract class BaseActivity : AppCompatActivity() {
             val new = fragment()
             supportFragmentManager.beginTransaction()
                     .replace(R.id.content, new, tag)
-                    .addToBackStack(tag)
+                    .apply {
+                        if (addToBackStack) {
+                            addToBackStack(tag)
+                        }
+                    }
                     .commit()
         }
 

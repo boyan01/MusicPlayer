@@ -88,7 +88,7 @@ abstract class BaseFragment : Fragment() {
      * Take care of popping the fragment back stack or finishing the activity
      * as appropriate.
      */
-    fun onBackPressed() {
+    open fun onBackPressed() {
         val isStateSaved = childFragmentManager.isStateSaved
         if (isStateSaved && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
             // Older versions will throw an exception from the framework
