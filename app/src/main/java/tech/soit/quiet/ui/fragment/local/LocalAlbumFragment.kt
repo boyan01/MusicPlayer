@@ -25,9 +25,17 @@ class LocalAlbumFragment : BaseFragment() {
     private val viewModel by lazyViewModel<LocalMusicViewModel>()
 
     private val adapter = TypedAdapter()
-            .withBinder(Album::class, CommonAItemBinder()) { CommonAItem(it.title, "") }
+            .withBinder(Album::class, CommonAItemBinder(
+                    onClick = this::onAlbumClick
+            )) { CommonAItem(it.title, "") }
             .withEmptyBinder()
             .withLoadingBinder()
+
+    private fun onAlbumClick(position: Int) {
+        //FIXME it's do not clever
+        val album = adapter.list[position] as Album
+        requireBaseActivity().open(LocalAlbumDetailFragment.newInstance(album))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

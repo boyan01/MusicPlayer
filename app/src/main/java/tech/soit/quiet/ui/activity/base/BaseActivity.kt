@@ -46,4 +46,21 @@ abstract class BaseActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * open this fragment
+     */
+    open fun open(fragment: BaseFragment,
+                  addToBackStack: Boolean = true,
+                  tag: String? = null) {
+        supportFragmentManager
+                .beginTransaction()
+                .add(R.id.content, fragment, tag)
+                .apply {
+                    if (addToBackStack) {
+                        addToBackStack(tag)
+                    }
+                }
+                .commit()
+    }
+
 }

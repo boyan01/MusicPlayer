@@ -15,7 +15,10 @@ import tech.soit.typed.adapter.annotation.TypeLayoutResource
  * @date : 18-9-1
  */
 @TypeLayoutResource(R.layout.item_common_a)
-class CommonAItemBinder : TypedBinder<CommonAItem>() {
+class CommonAItemBinder(
+        private val onClick: ((position: Int) -> Unit)? = null,
+        private val onLongClick: ((position: Int) -> Boolean)? = null
+) : TypedBinder<CommonAItem>() {
 
 
     override fun onBindViewHolder(holder: ViewHolder, item: CommonAItem) = with(holder.itemView) {
@@ -26,6 +29,9 @@ class CommonAItemBinder : TypedBinder<CommonAItem>() {
         }
         textTitle.text = item.title
         textCaption.text = item.caption
+        onClick?.let { action -> setOnClickListener { action(holder.adapterPosition) } }
+        onLongClick?.let { action -> setOnLongClickListener { action(holder.adapterPosition) } }
+        Unit
     }
 
 }

@@ -24,7 +24,7 @@ fun <T, R> LiveData<T>.mapNonNull(function: (T) -> R): LiveData<R> {
 /**
  * @see Transformations.switchMap
  */
-fun <T, R> LiveData<T>.switchMap(function: (T) -> LiveData<R>): LiveData<R> {
+fun <T, R> LiveData<T>.switchMap(function: (T) -> LiveData<R>?): LiveData<R> {
     return Transformations.switchMap(this, function)
 }
 
