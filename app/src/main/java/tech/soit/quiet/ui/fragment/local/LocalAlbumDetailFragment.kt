@@ -1,21 +1,23 @@
 package tech.soit.quiet.ui.fragment.local
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.Observer
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_local_album_detail.*
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Album
 import tech.soit.quiet.model.vo.Music
+import tech.soit.quiet.ui.drawable.ArcColorDrawable
 import tech.soit.quiet.ui.fragment.base.BottomControllerFragment
 import tech.soit.quiet.ui.item.*
-import tech.soit.quiet.utils.component.log
+import tech.soit.quiet.utils.annotation.LayoutId
+import tech.soit.quiet.utils.component.support.attrValue
 import tech.soit.quiet.viewmodel.LocalAlbumDetailViewModel
 import tech.soit.typed.adapter.TypedAdapter
 
+@LayoutId(R.layout.fragment_local_album_detail, translucent = false)
 class LocalAlbumDetailFragment : BottomControllerFragment() {
 
     companion object {
@@ -67,32 +69,31 @@ class LocalAlbumDetailFragment : BottomControllerFragment() {
         })
     }
 
-    override fun onCreateView3(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_local_album_detail, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView.adapter = adapter
-        (toolbar.layoutParams as CoordinatorLayout.LayoutParams).apply {
-            behavior = object : CoordinatorLayout.Behavior<View>() {
+        appBarLayout.background = ArcColorDrawable(view.context.attrValue(R.attr.colorPrimary))
+        (appBarLayout.layoutParams as CoordinatorLayout.LayoutParams).apply {
+            behavior = object : AppBarLayout.Behavior() {
 
-                override fun layoutDependsOn(parent: CoordinatorLayout, child: View, dependency: View): Boolean {
-                    log { "depend : $child $dependency" }
-                    return dependency.id == R.id.recyclerView
-                }
-
-                override fun onStartNestedScroll(coordinatorLayout: CoordinatorLayout, child: View, directTargetChild: View, target: View, axes: Int, type: Int): Boolean {
-                    return true
-                }
-
-                override fun onNestedScroll(coordinatorLayout: CoordinatorLayout, child: View, target: View, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, type: Int) {
+                override fun onNestedScroll(coordinatorLayout: CoordinatorLayout, child: AppBarLayout, target: View, dxConsumed: Int, dyConsumed: Int, dxUnconsumed: Int, dyUnconsumed: Int, type: Int) {
                     super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, type)
-                    log { "on nested scroll($type) : $dyConsumed ,  $dyUnconsumed " }
+                    val drawable = appBarLayout.background as ArcColorDrawable
+                    if (topAndBottomOffset == 0) {
+                        drawable.pull(-dyUnconsumed.toFloat() / 2)
+                    }
+                }
+
+                override fun onStopNestedScroll(coordinatorLayout: CoordinatorLayout, abl: AppBarLayout, target: View, type: Int) {
+                    super.onStopNestedScroll(coordinatorLayout, abl, target, type)
+                    (appBarLayout.background as ArcColorDrawable).release()
                 }
 
             }
         }
+        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, offset ->
+            (appBarLayout.background as ArcColorDrawable).absorb(-offset.toFloat())
+        })
     }
 
 
