@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModelProviders
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.view.ContentFrameLayout
-import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.support.QuietViewModelProvider
 import tech.soit.quiet.utils.component.support.attrValue
@@ -28,27 +27,30 @@ abstract class BaseFragment : Fragment() {
     var viewModelFactory: ViewModelProvider.Factory = QuietViewModelProvider()
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val layoutId = this::class.findAnnotation<LayoutId>()
-        val isInjectLayout = this::class.findAnnotation<DisableLayoutInject>() == null
-        val view = if (!isInjectLayout || layoutId == null) {
-            onCreateView2(inflater, container, savedInstanceState)
-        } else {
-            inflater.inflate(layoutId.value, container, false).apply {
-                if (!layoutId.translucent) {
-                    setBackgroundColor(context.attrValue(R.attr.quietBackground))
-                }
-            }
+        var view = onCreateView2(inflater, container, savedInstanceState)
+        if (view == null) {
+            view = getAnnotatedLayout(inflater, container)
         }
-        view ?: return null
-        return if (view is ContentFrameLayout) {
-            view
-        } else {
-            val content = ContentFrameLayout(inflater.context)
-            content.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-            content.addView(view)
-            content
+        if (view != null && view !is ContentFrameLayout) {
+            val wrapper = ContentFrameLayout(inflater.context)
+            wrapper.layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+            wrapper.addView(view)
+            return wrapper
         }
+        return view
+    }
 
+    /**
+     * inflate view by [LayoutId] annotation
+     *  if annotation is not presenter , null returned
+     */
+    protected fun getAnnotatedLayout(inflater: LayoutInflater, container: ViewGroup?): View? {
+        val layoutId = this::class.findAnnotation<LayoutId>() ?: return null
+        val view = inflater.inflate(layoutId.value, container, false)
+        if (!layoutId.translucent) {
+            view.setBackgroundColor(view.context.attrValue(R.attr.quietBackground))
+        }
+        return view
     }
 
     /**

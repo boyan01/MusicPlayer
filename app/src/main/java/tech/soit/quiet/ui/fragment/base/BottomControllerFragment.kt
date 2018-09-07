@@ -16,7 +16,6 @@ import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.ui.fragment.player.MusicPlayerFragment
-import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.component.ImageLoader
 import tech.soit.quiet.utils.component.support.attrValue
 import tech.soit.quiet.utils.component.support.observeNonNull
@@ -27,19 +26,22 @@ import tech.soit.quiet.viewmodel.MusicControllerViewModel
 /**
  * a fragment Template which holder a BottomMusicController
  */
-@DisableLayoutInject
 open class BottomControllerFragment : BaseFragment() {
 
     private val controllerViewModel by lazyViewModel<MusicControllerViewModel>()
 
     final override fun onCreateView2(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val uiWithBottomController = inflater.inflate(R.layout.fragment_bottom_controller, container, false)
+        val ui = inflater.inflate(R.layout.fragment_bottom_controller, container, false)
 
-        val ui = onCreateView3(inflater, container, savedInstanceState)
-        if (ui != null) {
-            uiWithBottomController.fragmentContentHolder.addView(ui)
+        var view = onCreateView3(inflater, container, savedInstanceState)
+        if (view == null) {
+            view = getAnnotatedLayout(inflater, container)
         }
-        return uiWithBottomController
+        if (view == null) {
+            throw RuntimeException("layout is null")
+        }
+        ui.fragmentContentHolder.addView(view)
+        return ui
     }
 
     /**
