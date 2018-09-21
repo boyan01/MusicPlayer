@@ -24,4 +24,6 @@
     <string name="stop_local_scanner">停止扫描</string>
     <string name="local_scanner_hint">点击开始扫描以检索手机中的音乐。</string>
     <string name="toast_read_storage_permission_denied">没有权限访问内置存储</string>
+    <string name="local_scanner_setting_title">扫描设置</string>
+    <string name="local_scan_setting">扫描设置</string>
 </resources>

@@ -64,6 +64,14 @@ class LocalMusicScannerFragment : BaseFragment() {
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+        toolbar.inflateMenu(R.menu.menu_local_scanner)
+        toolbar.setOnMenuItemClickListener {
+            if (it.itemId == R.id.menu_setting) {
+                requireBaseActivity().navigationTo(LocalMusicScannerSettingFragment.TAG) { LocalMusicScannerSettingFragment() }
+                return@setOnMenuItemClickListener true
+            }
+            false
+        }
     }
 
 
