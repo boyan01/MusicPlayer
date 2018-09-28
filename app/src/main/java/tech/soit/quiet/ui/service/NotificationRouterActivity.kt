@@ -36,6 +36,7 @@ class NotificationRouterActivity : BaseActivity() {
             //navigation to MainActivity
             val intent = Intent(AppContext, MainActivity::class.java)
             intent.putExtra("openPlayingFragment", true)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             AppContext.startActivity(intent)
         } else {
             val topStack = active.valueAt(active.size - 1)!!
