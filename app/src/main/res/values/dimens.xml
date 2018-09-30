@@ -2,4 +2,5 @@
 <resources>
     <dimen name="height_bottom_controller">50dp</dimen>
     <dimen name="notification_image_size">50dp</dimen>
+    <dimen name="playlist_detail_header_height">270dp</dimen>
 </resources>

@@ -2,6 +2,7 @@ package tech.soit.quiet.utils.component.support
 
 import android.content.Context
 import android.util.TypedValue
+import android.view.View
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
 import tech.soit.quiet.AppContext
@@ -46,4 +47,9 @@ fun Context.attrValue(@AttrRes id: Int): Int {
     } else {
         error("can not attribute for : $id")
     }
+}
+
+
+fun View.attrValue(@AttrRes id: Int): Int {
+    return context.attrValue(id)
 }
