@@ -22,7 +22,7 @@ class PlaylistTest {
     private lateinit var playlist: Playlist
 
     @get:Rule
-    private val r = Timeout(100, TimeUnit.MILLISECONDS)
+    val r = Timeout(100, TimeUnit.MILLISECONDS)
 
     @Before
     fun setUp() {

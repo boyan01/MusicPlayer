@@ -1,8 +1,12 @@
 package tech.soit.quiet.ui.fragment.base
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.action.ViewActions.*
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
@@ -27,10 +31,17 @@ import tech.soit.quiet.viewmodel.MusicControllerViewModel
 class BottomControllerFragmentTest {
 
 
+    //for test
+    class TestBottomControllerFragment : BottomControllerFragment() {
+        override fun onCreateView3(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+            return View(inflater.context)
+        }
+    }
+
     @get:Rule
     val activity = ActivityTestRule(SingleFragmentActivity::class.java, true, true)
 
-    private val bottomController = BottomControllerFragment()
+    private val bottomController = TestBottomControllerFragment()
 
     private val music = Dummy.MUSICS[0]
 

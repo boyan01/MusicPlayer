@@ -2,6 +2,7 @@ package tech.soit.quiet.player
 
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.model.vo.Music
@@ -40,8 +41,10 @@ object MusicPlayerManager {
     /**
      * keys use to save PlaylistData to Db
      *
-     * [KEY_PLAYLIST_CURRENT],[KEY_PLAYLIST_MUSIC_LIST]
-     * [KEY_PLAYLIST_TOKEN],[KEY_PLAYLIST_PLAY_MODE]
+     * [KEY_PLAYLIST_CURRENT] : current playing music
+     * [KEY_PLAYLIST_MUSIC_LIST] : current playing music list
+     * [KEY_PLAYLIST_TOKEN] : token to identify this music list
+     * [KEY_PLAYLIST_PLAY_MODE] : [PlayMode]
      *
      */
     private const val KEY_PLAYLIST_MUSIC_LIST = "player_playlist_key_music_list"
@@ -51,8 +54,11 @@ object MusicPlayerManager {
 
     /**
      * music player, manage the playlist and [IMediaPlayer]
+     *
+     * ATTENTION: setter is only for TEST!!
+     *
      */
-    val musicPlayer = QuietMusicPlayer()
+    var musicPlayer = QuietMusicPlayer()
 
     /**
      * current playing music live data
@@ -104,7 +110,7 @@ object MusicPlayerManager {
         //persistence playlist
         playlist.observeForever { pl ->
             pl ?: return@observeForever
-            launch {
+            GlobalScope.launch {
                 KeyValue.put(KEY_PLAYLIST_TOKEN, pl.token)
                 KeyValue.put(KEY_PLAYLIST_CURRENT, pl.current)
                 KeyValue.put(KEY_PLAYLIST_PLAY_MODE, pl.playMode)
