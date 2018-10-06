@@ -6,20 +6,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activity.main.MainActivity"
+    android:orientation="vertical"
     tools:openDrawer="start">
 
-    <FrameLayout
-        android:id="@+id/subContent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fitsSystemWindows="true" />
+
+    <include layout="@layout/main_content" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigationView"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        app:headerLayout="@layout/nav_header"
-        app:menu="@menu/navigation_main" />
+        app:headerLayout="@layout/nav_header" />
+
 </androidx.drawerlayout.widget.DrawerLayout>

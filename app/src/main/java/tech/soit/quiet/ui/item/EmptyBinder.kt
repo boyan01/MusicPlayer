@@ -25,3 +25,7 @@ object Empty
 fun TypedAdapter.withEmptyBinder(): TypedAdapter {
     return withBinder(Empty::class, EmptyViewBinder())
 }
+
+fun TypedAdapter.submitEmpty() {
+    submit(listOf(Empty))
+}

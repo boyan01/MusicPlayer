@@ -26,4 +26,11 @@
     <string name="toast_read_storage_permission_denied">没有权限访问内置存储</string>
     <string name="local_scanner_setting_title">扫描设置</string>
     <string name="local_scan_setting">扫描设置</string>
+    <string name="action_search">search</string>
+    <string name="play_lists_created">创建的歌单</string>
+    <string name="play_lists_collection">收藏的歌单</string>
+    <string name="nav_local_music">本地音乐</string>
+    <string name="nav_history">最近播放</string>
+    <string name="nav_collection">我的收藏</string>
+    <string name="nav_download">下载管理</string>
 </resources>

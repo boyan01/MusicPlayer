@@ -28,6 +28,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.activity.main.AppMainActivity"
+            android:theme="@style/AppTheme.ColoredNavigationBar" />
+
         <activity android:name=".ui.activity.main.MainActivity" />
 
         <service android:name=".ui.service.QuietPlayerService" />

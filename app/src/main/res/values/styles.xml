@@ -40,9 +40,13 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
 
-        <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
+
     </style>
 
+    <style name="AppTheme.ColoredNavigationBar">
+        <item name="android:navigationBarColor">?colorPrimary</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+    </style>
 
     <style name="Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
         <item name="tint">@color/color_text_inverse_primary</item>
