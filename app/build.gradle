@@ -53,6 +53,10 @@ kotlin {
 
 dependencies {
     implementation "tech.soit.typedadapterx:typedadapter:1.0.0"
+
+    implementation 'me.drakeet.multitype:multitype:3.5.0'
+    implementation 'me.drakeet.multitype:multitype-ktx:3.5.0'
+
     implementation 'androidx.core:core-ktx:1.0.0'
     implementation 'com.google.code.gson:gson:2.8.5'
 

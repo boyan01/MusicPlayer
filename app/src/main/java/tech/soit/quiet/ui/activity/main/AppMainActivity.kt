@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_app_main.*
 import kotlinx.android.synthetic.main.main_content.*
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.activity.base.BaseActivity
-import tech.soit.quiet.ui.fragment.UnimplementedFragment
+import tech.soit.quiet.ui.fragment.home.MainCloudFragment
 import tech.soit.quiet.ui.fragment.home.MainMusicFragment
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.support.attrValue
@@ -49,7 +49,7 @@ class AppMainActivity : BaseActivity() {
             if (_fragments[position] == null) {
                 _fragments[position] = when (position) {
                     0 -> MainMusicFragment()
-                    1 -> UnimplementedFragment()
+                    1 -> MainCloudFragment()
                     else -> error("can not create page for MainPager , position : $position")
                 }
             }

@@ -33,4 +33,7 @@
     <string name="nav_history">最近播放</string>
     <string name="nav_collection">我的收藏</string>
     <string name="nav_download">下载管理</string>
+    <string name="nav_radio">私人FM</string>
+    <string name="nav_daily_recommend">每日推荐</string>
+    <string name="nav_tends">排行榜</string>
 </resources>
