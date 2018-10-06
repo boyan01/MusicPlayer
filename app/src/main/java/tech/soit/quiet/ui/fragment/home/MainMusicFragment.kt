@@ -1,6 +1,7 @@
 package tech.soit.quiet.ui.fragment.home
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_main_music.*
 import kotlinx.android.synthetic.main.item_main_navigation.view.*
 import tech.soit.quiet.R
+import tech.soit.quiet.ui.activity.LocalMusicActivity
 import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.ui.item.submitEmpty
 import tech.soit.quiet.ui.item.withEmptyBinder
@@ -19,7 +21,7 @@ import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.typed.adapter.TypedAdapter
 
 /**
- * main Fragment
+ * main Fragment of music
  */
 @LayoutId(R.layout.fragment_main_music)
 class MainMusicFragment : BaseFragment() {
@@ -48,6 +50,9 @@ class MainMusicFragment : BaseFragment() {
         with(navLayoutLocal) {
             imageIcon.setImageResource(R.drawable.ic_music_note_black_24dp)
             textTitle.setText(R.string.nav_local_music)
+            setOnClickListener {
+                startActivity(Intent(requireActivity(), LocalMusicActivity::class.java))
+            }
         }
 
         with(navLayoutHistory) {

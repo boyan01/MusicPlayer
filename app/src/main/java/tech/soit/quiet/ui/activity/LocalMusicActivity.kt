@@ -1,59 +1,41 @@
-package tech.soit.quiet.ui.fragment.home
+package tech.soit.quiet.ui.activity
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import kotlinx.android.synthetic.main.home_page_local.view.*
+import kotlinx.android.synthetic.main.activity_local_music.*
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
-import tech.soit.quiet.ui.fragment.base.BottomControllerFragment
+import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.fragment.local.LocalAlbumFragment
 import tech.soit.quiet.ui.fragment.local.LocalArtistFragment
-import tech.soit.quiet.ui.fragment.local.LocalMusicScannerFragment
 import tech.soit.quiet.ui.fragment.local.LocalSingleSongFragment
+import tech.soit.quiet.utils.annotation.LayoutId
+import tech.soit.quiet.utils.component.log
 
-/**
- * home page - Local
- *
- * manage local musics
- *
- */
-class HomePageLocal : BottomControllerFragment() {
+@LayoutId(R.layout.activity_local_music)
+class LocalMusicActivity : BaseActivity() {
 
-    companion object {
-
-        /**
-         * create an instance
-         */
-        fun newInstance(): HomePageLocal {
-            return HomePageLocal()
-        }
-    }
-
-    override fun onCreateView3(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.home_page_local, container, false)
-    }
-
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) = with(view) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         tabLayout.setupWithViewPager(viewPager)
-        viewPager.adapter = SectionsPagerAdapter(childFragmentManager)
+        viewPager.adapter = LocalPagerAdapter()
+
+        //init toolbar
         toolbar.inflateMenu(R.menu.menu_local_home_page)
         toolbar.setOnMenuItemClickListener { item ->
             if (item.itemId == R.id.menu_local_home_scan) {
-                requireBaseActivity().navigationTo(LocalMusicScannerFragment.TAG) { LocalMusicScannerFragment() }
+                log { "to scanner" }
             }
             true
         }
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
     }
 
-
-    private class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    private inner class LocalPagerAdapter : FragmentPagerAdapter(supportFragmentManager) {
 
         private val fragments = Array<Fragment?>(count) { null }
 
