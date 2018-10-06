@@ -120,4 +120,9 @@ class MusicPlayerFragment : BaseFragment() {
 
     }
 
+    override fun onDestroyView() {
+        albumRotationAnimator.end()
+        super.onDestroyView()
+    }
+
 }
