@@ -10,10 +10,12 @@ import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.fragment.local.LocalAlbumFragment
 import tech.soit.quiet.ui.fragment.local.LocalArtistFragment
 import tech.soit.quiet.ui.fragment.local.LocalSingleSongFragment
+import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.log
 
 @LayoutId(R.layout.activity_local_music)
+@EnableBottomController
 class LocalMusicActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

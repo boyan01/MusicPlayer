@@ -38,6 +38,8 @@ class AppMainActivity : BaseActivity() {
 
         //inflate menu to toolbar, only has ONE option which is SEARCH
         toolbar.inflateMenu(R.menu.menu_app_main)
+
+        listenBottomControllerEvent()
     }
 
 

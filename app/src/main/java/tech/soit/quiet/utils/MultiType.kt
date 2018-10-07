@@ -7,6 +7,7 @@ import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import me.drakeet.multitype.ItemViewBinder
 import me.drakeet.multitype.MultiTypeAdapter
+import tech.soit.quiet.R
 
 
 class KViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -31,6 +32,58 @@ inline fun <reified T, V : RecyclerView.ViewHolder, B : ItemViewBinder<T, V>> Mu
     return this
 }
 
-fun MultiTypeAdapter.submitItems(items: List<Any>) {
+fun MultiTypeAdapter.submit(items: List<Any>) {
     this.items = items
+    notifyDataSetChanged()
+}
+
+
+/*
+ * easy access for loading
+ */
+
+@TypeLayoutRes(R.layout.item_loading)
+class LoadingViewBinder : KItemViewBinder<Loading>() {
+
+    override fun onBindViewHolder(holder: KViewHolder, item: Loading) {
+        //do nothing
+    }
+}
+
+/**
+ * object for [LoadingViewBinder]
+ */
+object Loading
+
+
+/**
+ * shortcut to register Loading
+ */
+fun MultiTypeAdapter.withLoadingBinder(): MultiTypeAdapter {
+    return withBinder(LoadingViewBinder())
+}
+
+
+fun MultiTypeAdapter.setLoading() {
+    items = listOf(Loading)
+}
+
+
+class EmptyViewBinder : KItemViewBinder<Empty>() {
+    override fun onBindViewHolder(holder: KViewHolder, item: Empty) {
+        //do nothing
+    }
+
+}
+
+
+object Empty
+
+
+fun MultiTypeAdapter.withEmptyBinder(): MultiTypeAdapter {
+    return withBinder(EmptyViewBinder())
+}
+
+fun MultiTypeAdapter.setEmpty() {
+    items = listOf(Empty)
 }

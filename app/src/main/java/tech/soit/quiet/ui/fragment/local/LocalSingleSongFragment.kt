@@ -11,20 +11,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import kotlinx.android.synthetic.main.fragment_local_single_song.*
+import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.repository.db.QuietDatabase
 import tech.soit.quiet.ui.fragment.base.BaseFragment
-import tech.soit.quiet.ui.item.*
+import tech.soit.quiet.ui.item.Empty
+import tech.soit.quiet.ui.item.Loading
+import tech.soit.quiet.ui.item.MusicItemViewBinder
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.LoggerLevel
 import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.CenterSmoothScroller
 import tech.soit.quiet.utils.component.support.attrValue
+import tech.soit.quiet.utils.submit
+import tech.soit.quiet.utils.withBinder
+import tech.soit.quiet.utils.withEmptyBinder
+import tech.soit.quiet.utils.withLoadingBinder
 import tech.soit.quiet.viewmodel.LocalMusicViewModel
-import tech.soit.typed.adapter.TypedAdapter
 import kotlin.math.abs
 
 @LayoutId(R.layout.fragment_local_single_song)
@@ -48,10 +54,10 @@ class LocalSingleSongFragment : BaseFragment() {
         }
     }
 
-    private val adapter = TypedAdapter()
-            .withBinder(Loading::class, LoadingViewBinder())
-            .withBinder(Empty::class, EmptyViewBinder())
-            .withBinder(Music::class, MusicItemBinder(TOKEN_PLAYLIST,
+    private val adapter = MultiTypeAdapter()
+            .withEmptyBinder()
+            .withLoadingBinder()
+            .withBinder(MusicItemViewBinder(TOKEN_PLAYLIST,
                     this::onMusicItemClick, onPlayingItemShowHide))
 
     /**
@@ -81,7 +87,7 @@ class LocalSingleSongFragment : BaseFragment() {
                 return@setOnClickListener
             }
             val current = playlist.current ?: return@setOnClickListener
-            val index = adapter.list.indexOf(current)
+            val index = adapter.items.indexOf(current)
             if (index != -1) {
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
@@ -157,7 +163,7 @@ class LocalSingleSongFragment : BaseFragment() {
             if (playing == null) {
                 adapter.notifyDataSetChanged()
             } else {
-                val index = adapter.list.indexOf(playing)
+                val index = adapter.items.indexOf(playing)
                 adapter.notifyItemChanged(index)
             }
         })
@@ -184,7 +190,7 @@ class LocalSingleSongFragment : BaseFragment() {
                 player.isPlayWhenReady = true
             }
         } else {
-            val musics = adapter.list.filterIsInstance(Music::class.java)
+            val musics = adapter.items.filterIsInstance(Music::class.java)
             if (musics.isEmpty()) {
                 log(LoggerLevel.ERROR) { "item clicked, but list is still null! token : $TOKEN_PLAYLIST" }
             }
