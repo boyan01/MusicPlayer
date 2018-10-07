@@ -20,4 +20,4 @@ android:
 
 # only perform unit test only
 script:
-    - ./gradlew test
+    - ./gradlew clean connectedAndroidTest
