@@ -5,24 +5,18 @@ import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.Timeout
 import org.junit.runner.RunWith
 import tech.soit.quiet.model.vo.Album
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.PlayMode
 import tech.soit.quiet.utils.Dummy
-import java.util.concurrent.TimeUnit
 
 @RunWith(AndroidJUnit4::class)
 class PlaylistTest {
 
 
     private lateinit var playlist: Playlist
-
-    @get:Rule
-    val r = Timeout(100, TimeUnit.MILLISECONDS)
 
     @Before
     fun setUp() {
