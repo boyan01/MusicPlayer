@@ -1,11 +1,13 @@
 package tech.soit.quiet.ui.fragment.local
 
+import android.Manifest
 import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.rule.ActivityTestRule
+import androidx.test.rule.GrantPermissionRule
 import androidx.test.runner.AndroidJUnit4
 import org.hamcrest.Matchers.not
 import org.junit.Before
@@ -32,6 +34,9 @@ class LocalMusicScannerFragmentTest {
 
     @get:Rule
     val activity = ActivityTestRule(SingleFragmentActivity::class.java, true, true)
+
+    @get:Rule
+    val readStorage = GrantPermissionRule.grant(Manifest.permission.READ_EXTERNAL_STORAGE)!!
 
     private val fragment = LocalMusicScannerFragment()
 

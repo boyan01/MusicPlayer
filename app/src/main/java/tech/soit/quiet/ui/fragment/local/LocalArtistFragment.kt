@@ -17,12 +17,7 @@ import tech.soit.quiet.ui.activity.local.LocalMusicListActivity.Companion.ARG_OB
 import tech.soit.quiet.ui.activity.local.LocalMusicListActivity.Companion.ARG_TYPE
 import tech.soit.quiet.ui.activity.local.LocalMusicListActivity.Companion.TYPE_ARTIST
 import tech.soit.quiet.ui.fragment.base.BaseFragment
-import tech.soit.quiet.ui.item.Empty
-import tech.soit.quiet.ui.item.Loading
-import tech.soit.quiet.utils.submit
-import tech.soit.quiet.utils.withBinder
-import tech.soit.quiet.utils.withEmptyBinder
-import tech.soit.quiet.utils.withLoadingBinder
+import tech.soit.quiet.utils.*
 import tech.soit.quiet.viewmodel.LocalMusicViewModel
 
 /**

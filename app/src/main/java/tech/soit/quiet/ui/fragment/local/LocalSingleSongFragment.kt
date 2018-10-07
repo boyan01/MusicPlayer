@@ -18,18 +18,13 @@ import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.repository.db.QuietDatabase
 import tech.soit.quiet.ui.fragment.base.BaseFragment
-import tech.soit.quiet.ui.item.Empty
-import tech.soit.quiet.ui.item.Loading
 import tech.soit.quiet.ui.item.MusicItemViewBinder
+import tech.soit.quiet.utils.*
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.LoggerLevel
 import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.CenterSmoothScroller
 import tech.soit.quiet.utils.component.support.attrValue
-import tech.soit.quiet.utils.submit
-import tech.soit.quiet.utils.withBinder
-import tech.soit.quiet.utils.withEmptyBinder
-import tech.soit.quiet.utils.withLoadingBinder
 import tech.soit.quiet.viewmodel.LocalMusicViewModel
 import kotlin.math.abs
 

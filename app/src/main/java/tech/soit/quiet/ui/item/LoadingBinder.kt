@@ -10,6 +10,7 @@ import tech.soit.typed.adapter.annotation.TypeLayoutResource
  * show a load view for RecyclerView
  */
 @TypeLayoutResource(R.layout.item_loading)
+@Deprecated("")
 class LoadingViewBinder : TypedBinder<Loading>() {
 
     override fun onBindViewHolder(holder: ViewHolder, item: Loading) {
@@ -20,6 +21,7 @@ class LoadingViewBinder : TypedBinder<Loading>() {
 /**
  * object for [LoadingViewBinder]
  */
+@Deprecated("")
 object Loading
 
 

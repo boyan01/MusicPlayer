@@ -7,6 +7,7 @@ import tech.soit.typed.adapter.ViewHolder
 import tech.soit.typed.adapter.annotation.TypeLayoutResource
 
 @TypeLayoutResource(R.layout.item_empty)
+@Deprecated("")
 class EmptyViewBinder : TypedBinder<Empty>() {
 
     override fun onBindViewHolder(holder: ViewHolder, item: Empty) {
@@ -15,7 +16,7 @@ class EmptyViewBinder : TypedBinder<Empty>() {
 
 }
 
-
+@Deprecated("")
 object Empty
 
 

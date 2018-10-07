@@ -18,7 +18,7 @@ abstract class KItemViewBinder<T> : ItemViewBinder<T, KViewHolder>() {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): KViewHolder {
         val layoutRes = this::class.annotations.firstOrNull { it is TypeLayoutRes } as TypeLayoutRes?
-                ?: throw IllegalStateException("music override this function if you do not use Annotation")
+                ?: throw IllegalStateException("must override this function if you do not use Annotation")
 
         return KViewHolder(inflater.inflate(layoutRes.value, parent, false))
     }
@@ -68,7 +68,7 @@ fun MultiTypeAdapter.setLoading() {
     items = listOf(Loading)
 }
 
-
+@TypeLayoutRes(R.layout.item_empty)
 class EmptyViewBinder : KItemViewBinder<Empty>() {
     override fun onBindViewHolder(holder: KViewHolder, item: Empty) {
         //do nothing
