@@ -13,7 +13,7 @@ import tech.soit.quiet.utils.component.support.attrValue
 
 
 /**
- * ContentFrameLayout do not consume [WindowInsets]
+ * ContentFrameLayout do not consume [WindowInsets] , is usually used as RootLayout
  */
 class ContentFrameLayout @JvmOverloads constructor(
         context: Context,

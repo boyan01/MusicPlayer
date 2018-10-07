@@ -2,13 +2,11 @@ package tech.soit.quiet.ui.service
 
 import android.content.Intent
 import android.os.Bundle
-import tech.soit.quiet.AppContext
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.playlist.Playlist
+import tech.soit.quiet.ui.activity.MusicPlayerActivity
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.activity.main.AppMainActivity
-import tech.soit.quiet.ui.fragment.player.MusicPlayerFragment
-import tech.soit.quiet.utils.component.AppTask
 
 
 /**
@@ -24,23 +22,10 @@ class NotificationRouterActivity : BaseActivity() {
         val pl = MusicPlayerManager.musicPlayer.playlist.token
 
         if (pl == Playlist.TOKEN_FM) {
-            navigationToPlayer("TODO")
+            //TODO
+            startActivity(Intent(this, AppMainActivity::class.java))
         } else {
-            navigationToPlayer(MusicPlayerFragment.TAG)
-        }
-    }
-
-    private fun navigationToPlayer(tag: String) {
-        val active = AppTask.getActiveActivities()
-        if (active.isEmpty()) {
-            //navigation to MainActivity
-            val intent = Intent(AppContext, AppMainActivity::class.java)
-            intent.putExtra("openPlayingFragment", true)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            AppContext.startActivity(intent)
-        } else {
-            val topStack = active.valueAt(active.size - 1)!!
-            topStack.navigationTo(tag) { MusicPlayerFragment() }
+            startActivity(Intent(this, MusicPlayerActivity::class.java))
         }
         finish()
     }

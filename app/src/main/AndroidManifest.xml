@@ -36,6 +36,14 @@
             android:name=".ui.activity.LocalMusicActivity"
             android:theme="@style/AppTheme.ColoredNavigationBar" />
 
+        <activity
+            android:name=".ui.activity.local.LocalMusicListActivity"
+            android:theme="@style/AppTheme.ColoredNavigationBar" />
+
+        <activity
+            android:name=".ui.activity.MusicPlayerActivity"
+            android:theme="@style/AppTheme" />
+
         <service android:name=".ui.service.QuietPlayerService" />
 
         <activity android:name=".ui.service.NotificationRouterActivity" />

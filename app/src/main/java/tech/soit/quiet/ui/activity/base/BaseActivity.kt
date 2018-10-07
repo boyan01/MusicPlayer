@@ -1,5 +1,6 @@
 package tech.soit.quiet.ui.activity.base
 
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +19,7 @@ import kotlinx.android.synthetic.main.content_bottom_controller.*
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
+import tech.soit.quiet.ui.activity.MusicPlayerActivity
 import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.EnableBottomController
@@ -88,7 +90,7 @@ abstract class BaseActivity : AppCompatActivity() {
             }
         }
         bottomControllerLayout.setOnClickListener {
-            //TODO
+            startActivity(Intent(this, MusicPlayerActivity::class.java))
         }
         controllerPlaylist.setOnClickListener {
             //TODO

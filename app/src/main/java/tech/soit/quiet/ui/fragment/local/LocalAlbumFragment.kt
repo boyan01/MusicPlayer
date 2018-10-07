@@ -1,5 +1,6 @@
 package tech.soit.quiet.ui.fragment.local
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Album
+import tech.soit.quiet.ui.activity.local.LocalMusicListActivity
+import tech.soit.quiet.ui.activity.local.LocalMusicListActivity.Companion.ARG_OBJ
+import tech.soit.quiet.ui.activity.local.LocalMusicListActivity.Companion.ARG_TYPE
+import tech.soit.quiet.ui.activity.local.LocalMusicListActivity.Companion.TYPE_ALBUM
 import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.ui.item.*
 import tech.soit.quiet.viewmodel.LocalMusicViewModel
@@ -32,9 +37,11 @@ class LocalAlbumFragment : BaseFragment() {
             .withLoadingBinder()
 
     private fun onAlbumClick(position: Int) {
-        //FIXME it's do not clever
         val album = adapter.list[position] as Album
-        requireBaseActivity().open(LocalAlbumDetailFragment.newInstance(album))
+        val intent = Intent(context, LocalMusicListActivity::class.java)
+        intent.putExtra(ARG_TYPE, TYPE_ALBUM)
+        intent.putExtra(ARG_OBJ, album)
+        startActivity(intent)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

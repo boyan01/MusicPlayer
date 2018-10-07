@@ -1,33 +1,30 @@
-package tech.soit.quiet.ui.fragment.player
+package tech.soit.quiet.ui.activity
 
 import android.animation.ValueAnimator
 import android.os.Bundle
-import android.view.View
-import android.view.animation.LinearInterpolator
 import android.widget.SeekBar
 import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.fragment_music_player.*
+import kotlinx.android.synthetic.main.activity_music_player.*
 import kotlinx.android.synthetic.main.player_content_music_controller.*
 import tech.soit.quiet.R
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.core.IMediaPlayer
-import tech.soit.quiet.ui.fragment.base.BaseFragment
+import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.view.CircleOutlineProvider
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.subTitle
 
-@LayoutId(R.layout.fragment_music_player)
-class MusicPlayerFragment : BaseFragment() {
+/**
+ * activity show playing music
+ */
+@LayoutId(R.layout.activity_music_player)
+class MusicPlayerActivity : BaseActivity() {
 
-    companion object {
-
-        const val TAG = "MusicPlayerFragment"
-
-    }
 
     private var isUserTracking = false
 
     private lateinit var albumRotationAnimator: ValueAnimator
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,18 +57,8 @@ class MusicPlayerFragment : BaseFragment() {
             seekBar.max = max.toInt()
             textDuration.text = toMusicTimeStamp(max.toInt())
         })
-    }
 
-    private fun toMusicTimeStamp(_millisecond: Int): String {
-        var millisecond = _millisecond
-        millisecond /= 1000
-        val second = millisecond % 60
-        val minute = millisecond / 60
-        return String.format("%02d:%02d", minute, second)
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         iconUp.setOnClickListener { onBackPressed() }
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
@@ -110,8 +97,8 @@ class MusicPlayerFragment : BaseFragment() {
         albumRotationAnimator = ValueAnimator.ofFloat(0f, 360f)
         with(albumRotationAnimator) {
             duration = 10000
-            repeatCount = ValueAnimator.INFINITE
-            interpolator = LinearInterpolator()
+            repeatCount = android.animation.ValueAnimator.INFINITE
+            interpolator = android.view.animation.LinearInterpolator()
             addUpdateListener {
                 val value = it.animatedValue as Float
                 imageArtwork.rotation = value
@@ -120,9 +107,24 @@ class MusicPlayerFragment : BaseFragment() {
 
     }
 
-    override fun onDestroyView() {
+    override fun onDestroy() {
         albumRotationAnimator.end()
-        super.onDestroyView()
+        super.onDestroy()
     }
+
+
+    companion object {
+
+        private fun toMusicTimeStamp(_millisecond: Int): String {
+            var millisecond = _millisecond
+            millisecond /= 1000
+            val second = millisecond % 60
+            val minute = millisecond / 60
+            return String.format("%02d:%02d", minute, second)
+        }
+
+
+    }
+
 
 }
