@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:background="?selectableItemBackground"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:ignore="UseCompoundDrawables"
+    tools:layout_gravity="center">
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="?colorPrimary"
+        android:padding="8dp"
+        android:tint="?quietTextPrimaryInverse"
+        tools:src="@drawable/ic_radio_black_24dp" />
+
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        android:textSize="15sp"
+        tools:text="私人FM" />
+
+
+</LinearLayout>

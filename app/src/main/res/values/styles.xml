@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
 
     <style name="SplashTheme" parent="AppTheme">
@@ -6,7 +6,7 @@
     </style>
 
     <!-- application base theme -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
 
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryDark">@color/color_primary_dark</item>
@@ -38,7 +38,40 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
 
+        <item name="toolbarNavigationButtonStyle">@style/Toolbar.Button.Navigation.Tinted</item>
+
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+
+    </style>
+
+    <style name="AppTheme.ColoredNavigationBar">
+        <item name="android:navigationBarColor">?colorPrimary</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+    </style>
+
+    <style name="Toolbar.Button.Navigation.Tinted" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="tint">@color/color_text_inverse_primary</item>
+    </style>
+
+
+    <!-- action button -->
+    <style name="ActionOverflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tooltipText" tools:ignore="NewApi" />
+        <item name="android:tint">?quietTextPrimary</item>
+    </style>
+
+    <!-- Action With Overflow , it's design for black background -->
+    <style name="ActionOverflow.Dark">
+        <item name="android:theme">@style/RippleThemeDark</item>
+        <item name="android:tint">?quietTextPrimaryInverse</item>
+    </style>
+
+    <style name="RippleThemeDark">
+        <item name="colorControlHighlight">@color/background_secondary</item>
     </style>
 
 </resources>

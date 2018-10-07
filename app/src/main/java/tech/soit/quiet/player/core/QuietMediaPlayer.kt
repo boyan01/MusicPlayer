@@ -15,6 +15,14 @@ class QuietMediaPlayer(
 
     private var onStateChangeListener: ((Int) -> Unit)? = null
 
+    private var onCompletedListener: (() -> Unit)? = null
+
+    init {
+        player.setOnCompletionListener {
+            onCompletedListener?.invoke()
+        }
+    }
+
     private var _state by Delegates.observable(IMediaPlayer.IDLE) { _, _, newValue ->
         //might invoke by worker thread
         onStateChangeListener?.invoke(newValue)
@@ -90,6 +98,10 @@ class QuietMediaPlayer(
 
     override fun setOnStateChangeCallback(callBack: ((state: Int) -> Unit)?) {
         this.onStateChangeListener = callBack
+    }
+
+    override fun setOnCompleteListener(callBack: (() -> Unit)?) {
+        this.onCompletedListener = callBack
     }
 
 

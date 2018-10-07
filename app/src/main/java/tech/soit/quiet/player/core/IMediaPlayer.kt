@@ -74,6 +74,11 @@ interface IMediaPlayer {
 
 
     /**
+     * @param callBack invoke when music play complete
+     */
+    fun setOnCompleteListener(callBack: (() -> Unit)?)
+
+    /**
      * get current playing position
      *
      * if filed is not available , return 0

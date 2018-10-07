@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/imageBackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="@drawable/player_gradient_mask"
+        android:scaleType="centerCrop"
+        app:srcCompat="?colorPrimary" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#4e000000"
+        app:layout_constraintBottom_toTopOf="@id/playerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/playerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layoutToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iconUp"
+                style="@style/ActionOverflow.Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_arrow_back_black_24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:lines="1"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="?quietTextPrimaryInverse"
+                app:layout_constraintBottom_toBottomOf="@+id/iconUp"
+                app:layout_constraintEnd_toStartOf="@+id/iconOptions"
+                app:layout_constraintStart_toEndOf="@id/iconUp"
+                app:layout_constraintTop_toTopOf="@+id/iconUp"
+                tools:text="少年他的奇幻漂流" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iconOptions"
+                style="@style/ActionOverflow.Dark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/iconUp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/iconUp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textSubTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="?quietTextPrimaryInverse"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/iconOptions"
+                app:layout_constraintStart_toStartOf="@+id/textTitle"
+                app:layout_constraintTop_toBottomOf="@+id/textTitle"
+                tools:text="—五月天—" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/playerInfo"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/imageArtwork"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:elevation="2dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent=".7"
+                tools:src="@drawable/ic_launcher_background" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <tech.soit.quiet.ui.view.LyricView
+            android:id="@+id/lyricView"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lyricEmptyText="没有歌词"
+            app:lyricLineSpacing="8dp"
+            app:lyricNormalTextColor="?quietTextSecondaryInverse"
+            app:lyricPlayIndicatorColor="?quietTextPrimaryInverse"
+            app:lyricPlayingTextColor="?quietTextPrimaryInverse"
+            app:lyricTextSize="16sp"
+            tools:visibility="visible" />
+
+        <include layout="@layout/player_content_music_options" />
+
+        <LinearLayout
+            android:id="@+id/progressLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textCurrentPosition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="?quietTextPrimaryInverse"
+                android:textSize="12sp"
+                tools:ignore="HardcodedText"
+                tools:text="01:53" />
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:progressTint="?quietTextPrimaryInverse"
+                android:thumbTint="?quietTextPrimaryInverse"
+                tools:progress="54" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textDuration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="?quietTextPrimaryInverse"
+                android:textSize="12sp"
+                tools:ignore="HardcodedText"
+                tools:text="01:53" />
+        </LinearLayout>
+
+        <include layout="@layout/player_content_music_controller" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

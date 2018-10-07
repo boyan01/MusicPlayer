@@ -20,4 +20,12 @@ data class Music(
         const val PIC_URI = "pic_uri"
     }
 
+
+    /**
+     * return the value of [attach]
+     */
+    operator fun get(key: String): String? {
+        return attach[key]
+    }
+
 }

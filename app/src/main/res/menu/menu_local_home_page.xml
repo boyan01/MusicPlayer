@@ -1,0 +1,7 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/menu_local_home_scan"
+        android:title="@string/title_local_scanner" />
+
+</menu>

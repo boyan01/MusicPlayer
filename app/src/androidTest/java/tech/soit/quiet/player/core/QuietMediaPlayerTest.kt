@@ -3,17 +3,17 @@ package tech.soit.quiet.player.core
 import android.media.MediaPlayer
 import android.net.Uri
 import androidx.test.InstrumentationRegistry
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.runBlocking
 import org.junit.After
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
+import org.mockito.Mockito
+import tech.soit.quiet.utils.mock
 
 class QuietMediaPlayerTest {
 
     companion object {
-
 
         val URI = Uri.parse("android.resource://"
                 + InstrumentationRegistry.getContext().packageName + "/raw/summer").toString()
@@ -27,8 +27,21 @@ class QuietMediaPlayerTest {
 
     @Before
     fun setUp() {
-        androidMediaPlayer = MediaPlayer()
+        androidMediaPlayer = mock()
         quietMediaPlayer = QuietMediaPlayer(androidMediaPlayer)
+
+        //mock MediaPlayer.setOnPreparedListener方法
+        var listener: MediaPlayer.OnPreparedListener? = null
+        Mockito.doAnswer {
+            listener = it.getArgument(0) as MediaPlayer.OnPreparedListener
+            Unit
+        }.`when`(androidMediaPlayer).setOnPreparedListener(Mockito.any())
+        Mockito.`when`(androidMediaPlayer.prepareAsync()).then {
+            //当prepareAsync被调用时，立即调用回调
+            assertEquals(IMediaPlayer.PREPARING, quietMediaPlayer.getState())
+            listener!!.onPrepared(androidMediaPlayer)
+        }
+
     }
 
     @After
@@ -36,81 +49,79 @@ class QuietMediaPlayerTest {
         quietMediaPlayer.release()
     }
 
+    /**
+     * 测试 [QuietMediaPlayer.prepare] 方法
+     */
     @Test
-    fun basic() = runBlocking {
-        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.IDLE)
+    fun testPrepare() {
+
+        assertEquals(IMediaPlayer.IDLE, quietMediaPlayer.getState())
+
         quietMediaPlayer.prepare(URI, true)
-        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PREPARING)
-        delay(1000)
-        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PLAYING)
+
+        assertEquals(IMediaPlayer.PLAYING, quietMediaPlayer.getState())
     }
 
     @Test
-    fun testPlayAndPause() = runBlocking {
+    fun testPlayAndPause() {
         quietMediaPlayer.prepare(URI, false)
-        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PREPARING)
-
-        delay(1000)
-        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PAUSING)
+        assertEquals(IMediaPlayer.PAUSING, quietMediaPlayer.getState())
 
         quietMediaPlayer.isPlayWhenReady = true
-        delay(1000)
-        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PLAYING)
+        assertEquals(IMediaPlayer.PLAYING, quietMediaPlayer.getState())
 
         quietMediaPlayer.isPlayWhenReady = false
-        delay(1000)
-        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PAUSING)
-
+        assertEquals(IMediaPlayer.PAUSING, quietMediaPlayer.getState())
     }
 
     @Test
-    fun seekTo() = runBlocking {
+    fun seekTo() {
         quietMediaPlayer.prepare(URI, true)
-        delay(1000)
-        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PLAYING)
 
-        assertTrue("current position(${quietMediaPlayer.getPosition()}) less than 2000", quietMediaPlayer.getPosition() < 2000)
+        var position = 0
 
-        /* below asserts are work proper on local*/
-        /* but this can not work proper with ci , i do not known why....*/
-//        quietMediaPlayer.seekTo(4000)
-//        delay(1000)
-//        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PLAYING)
-//        assertTrue("current position(${quietMediaPlayer.getPosition()} greater than 3500", quietMediaPlayer.getPosition() > 3500)
+        Mockito.`when`(androidMediaPlayer.seekTo(Mockito.anyInt())).then {
+            position = it.getArgument(0) as Int
+            Unit
+        }
 
+        Mockito.`when`(quietMediaPlayer.getPosition()).then { position }
+
+        quietMediaPlayer.seekTo(1000)
+        assertEquals(1000, quietMediaPlayer.getPosition())
+
+        quietMediaPlayer.seekTo(4000)
+        assertEquals(4000, quietMediaPlayer.getPosition())
     }
 
 
     @Test
-    fun getDuration() = runBlocking {
-        assertEquals(quietMediaPlayer.getDuration(), 0L)
+    fun getDuration() {
+        Mockito.`when`(androidMediaPlayer.duration).then { 8000 }
+
+        //it will be zero , because do not start play
+        assertEquals(0, quietMediaPlayer.getDuration())
+
         quietMediaPlayer.prepare(URI, false)
-        delay(1000)
-        assertTrue(quietMediaPlayer.getState() == IMediaPlayer.PAUSING)
 
-        assertTrue("duration ${quietMediaPlayer.getDuration()} greater than 7000", quietMediaPlayer.getDuration() > 7000)
-        assertTrue("duration ${quietMediaPlayer.getDuration()} less than 9000", quietMediaPlayer.getDuration() < 9000)
+        assertEquals(8000, quietMediaPlayer.getDuration())
     }
 
     @Test
-    fun testPlayOther() = runBlocking {
+    fun testPlayOther() {
 
         quietMediaPlayer.prepare(URI, true)
-        delay(1000)
         assertEquals("player is playing", IMediaPlayer.PLAYING, quietMediaPlayer.getState())
 
         quietMediaPlayer.prepare(URI, true)
-        delay(1000)
         assertEquals("play an other music is still playing !!", IMediaPlayer.PLAYING, quietMediaPlayer.getState())
 
     }
 
     @Test
-    fun testRelease() = runBlocking {
+    fun testRelease() {
 
         quietMediaPlayer.prepare(URI, true)
-        delay(1000)
-        assertEquals("player is playing..", IMediaPlayer.PLAYING, quietMediaPlayer.getState())
 
         quietMediaPlayer.release()
 
@@ -118,7 +129,6 @@ class QuietMediaPlayerTest {
         assertFalse("player has been release", quietMediaPlayer.isPlayWhenReady)
 
         quietMediaPlayer.prepare(URI, true)
-        delay(1000)
         assertEquals("player replay after release", IMediaPlayer.PLAYING, quietMediaPlayer.getState())
 
     }

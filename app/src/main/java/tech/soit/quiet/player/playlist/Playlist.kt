@@ -60,11 +60,7 @@ open class Playlist(
             log { "empty playlist" }
             return null
         }
-        val anchor = this.current
-        if (anchor == null) {
-            //fast return
-            return _list[0]
-        }
+        val anchor = this.current ?: /*fast return */ return _list[0]
         return when (playMode) {
             PlayMode.Single -> {
                 anchor

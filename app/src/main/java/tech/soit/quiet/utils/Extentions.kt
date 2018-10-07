@@ -18,3 +18,10 @@ fun List<Artist>.getString(): String = joinToString(ARTIST_SEPARATOR) { it.name 
  */
 val Music.subTitle: String
     get() = artists.getString() + " - " + album.title
+
+
+/**
+ * if music was marked as Favorite
+ */
+val Music.isFavorite: Boolean
+    get() = attach.containsKey("isFavorite")

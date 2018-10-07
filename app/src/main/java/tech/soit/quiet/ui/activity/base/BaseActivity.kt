@@ -1,62 +1,220 @@
 package tech.soit.quiet.ui.activity.base
 
+import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.transition.TransitionManager
+import kotlinx.android.synthetic.main.base_activity_bottom_controller.*
+import kotlinx.android.synthetic.main.content_bottom_controller.*
 import tech.soit.quiet.R
-import tech.soit.quiet.ui.view.ContentFrameLayout
+import tech.soit.quiet.model.vo.Music
+import tech.soit.quiet.player.core.IMediaPlayer
+import tech.soit.quiet.ui.activity.MusicPlayerActivity
+import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
+import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
+import tech.soit.quiet.utils.component.ImageLoader
+import tech.soit.quiet.utils.component.support.QuietViewModelProvider
+import tech.soit.quiet.utils.component.support.attrValue
+import tech.soit.quiet.utils.component.support.observeNonNull
+import tech.soit.quiet.utils.component.support.string
+import tech.soit.quiet.utils.subTitle
+import tech.soit.quiet.viewmodel.MusicControllerViewModel
 import kotlin.reflect.full.findAnnotation
 
+/**
+ *
+ * the BaseActivity of this application
+ *
+ * use [LayoutId] annotation to bind a layout to activity
+ *
+ * use [EnableBottomController] to enable bottom controller for this activity
+ *
+ */
 abstract class BaseActivity : AppCompatActivity() {
+
+    private val controllerViewModel by lazyViewModel<MusicControllerViewModel>()
+
+    var viewModelFactory: ViewModelProvider.Factory = QuietViewModelProvider()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //inject layout for annotation
         val isInjectLayout = this::class.findAnnotation<DisableLayoutInject>() == null
         val layoutId = this::class.findAnnotation<LayoutId>()
         if (isInjectLayout && layoutId != null) {
             setContentView(layoutId.value)
         }
+
+        if (enableBottomController()) {
+            //make bottom controller interchangeable
+            listenBottomControllerEvent()
+        }
     }
 
     /**
-     * add a
+     * observe [controllerViewModel] states
+     *
+     * ATTENTION!! need add layout [R.layout.content_bottom_controller] to activity's
+     * content view if you do not use [EnableBottomController] annotation
      */
-    override fun setContentView(layoutResID: Int) {
-        val content = ContentFrameLayout(this)
-        content.id = R.id.content
-        LayoutInflater.from(this).inflate(layoutResID, content, true)
-        super.setContentView(content)
+    protected fun listenBottomControllerEvent() {
+        controllerViewModel.playingMusic.observe(this, Observer { playing ->
+            TransitionManager.beginDelayedTransition(root)
+            if (playing == null) {
+                bottomControllerLayout.isGone = true
+            } else {
+                bottomControllerLayout.isVisible = true
+                updateBottomController(playing)
+            }
+        })
+        controllerViewModel.playerState.observeNonNull(this) { state ->
+            if (state == IMediaPlayer.PLAYING) {
+                controllerPauseOrPlay.setImageResource(R.drawable.ic_pause_black_24dp)
+                controllerPauseOrPlay.contentDescription = string(R.string.pause)
+            } else {
+                controllerPauseOrPlay.setImageResource(R.drawable.ic_play_arrow_black_24dp)
+                controllerPauseOrPlay.contentDescription = string(R.string.play)
+            }
+        }
+        bottomControllerLayout.setOnClickListener {
+            startActivity(Intent(this, MusicPlayerActivity::class.java))
+        }
+        controllerPlaylist.setOnClickListener {
+            //TODO
+        }
+        controllerPauseOrPlay.setOnClickListener {
+            controllerViewModel.pauseOrPlay()
+        }
     }
 
-    override fun setContentView(view: View, params: ViewGroup.LayoutParams?) {
-        val content = ContentFrameLayout(this)
-        content.id = R.id.content
-        content.addView(view, params)
-        super.setContentView(content, params)
+    /**
+     * is should init bottom controller for this activity or not
+     */
+    protected open fun enableBottomController(): Boolean {
+        val annotation = this::class.annotations.firstOrNull { it is EnableBottomController }
+        return annotation != null
+    }
+
+
+    /**
+     * update BottomController UI
+     */
+    private fun updateBottomController(playing: Music) {
+        //更新音乐信息
+        musicTitle.text = playing.title
+        musicSubTitle.text = playing.subTitle
+
+        val picUri = playing.attach[Music.PIC_URI]
+        if (picUri != null) {
+            ImageLoader.with(this).load(picUri).into(artWork)
+        } else {
+            artWork.setImageDrawable(ColorDrawable(attrValue(R.attr.colorPrimary)))
+        }
+    }
+
+
+    override fun setContentView(layoutResID: Int) {
+        if (enableBottomController()) {
+            //if need show bottom controller, we need inject this method to add controller layout to screen
+            super.setContentView(R.layout.base_activity_bottom_controller)
+            val container = findViewById<ViewGroup>(R.id.container)
+            LayoutInflater.from(this).inflate(layoutResID, container)
+        } else {
+            super.setContentView(layoutResID)
+        }
+
     }
 
     override fun setContentView(view: View) {
-        val content = ContentFrameLayout(this)
-        content.id = R.id.content
-        content.addView(view)
-        super.setContentView(content)
-    }
-
-    override fun addContentView(view: View, params: ViewGroup.LayoutParams?) {
-        val content = findViewById<ViewGroup>(R.id.content)
-        if (content != null) {//ensure there is only one R.id.content view in Activity
-            content.addView(view, params)
-            window.callback.onContentChanged()
+        if (enableBottomController()) {
+            //if need show bottom controller, we need inject this method to add controller layout to screen
+            super.setContentView(R.layout.base_activity_bottom_controller)
+            val container = findViewById<ViewGroup>(R.id.container)
+            container.removeAllViews()
+            container.addView(view)
         } else {
-            val newContent = ContentFrameLayout(this)
-            newContent.id = R.id.content
-            newContent.addView(view, params)
-            super.addContentView(newContent, params)
+            super.setContentView(view)
         }
     }
+
+    override fun setContentView(view: View, params: ViewGroup.LayoutParams?) {
+        if (enableBottomController()) {
+            //if need show bottom controller, we need inject this method to add controller layout to screen
+            super.setContentView(R.layout.base_activity_bottom_controller)
+            val container = findViewById<ViewGroup>(R.id.container)
+            container.removeAllViews()
+            container.addView(view, params)
+        }
+        super.setContentView(view, params)
+    }
+
+    /**
+     * navigation to the fragment, if fragment exist, will not add
+     *
+     * NOTE: fragment' container has been ordered to [R.id.content]
+     */
+    open fun navigationTo(tag: String,
+                          addToBackStack: Boolean = true,
+                          fragment: () -> BaseFragment) {
+        val exist = supportFragmentManager.findFragmentByTag(tag)
+        if (exist != null && exist.isAdded) {
+            supportFragmentManager.beginTransaction()
+                    .show(exist)
+                    .commit()
+        } else {
+            val new = fragment()
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.content, new, tag)
+                    .apply {
+                        if (addToBackStack) {
+                            addToBackStack(tag)
+                        }
+                    }
+                    .commit()
+        }
+
+    }
+
+    /**
+     * open this fragment
+     */
+    open fun open(fragment: BaseFragment,
+                  addToBackStack: Boolean = true,
+                  tag: String? = null) {
+        supportFragmentManager
+                .beginTransaction()
+                .add(R.id.content, fragment, tag)
+                .apply {
+                    if (addToBackStack) {
+                        addToBackStack(tag)
+                    }
+                }
+                .commit()
+    }
+
+    /**
+     * lazy generate ViewModel
+     *
+     * example :
+     *   private val viewModel by lazyViewModel(XXXViewModel::class)
+     *
+     */
+    protected inline fun <reified T : ViewModel> lazyViewModel(): Lazy<T> = lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
+    }
+
 
 }

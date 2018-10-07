@@ -9,11 +9,13 @@ import tech.soit.quiet.repository.db.dao.LocalMusicDao
 import tech.soit.quiet.repository.db.entity.LocalMusic
 import tech.soit.quiet.utils.component.support.map
 import tech.soit.quiet.utils.component.support.mapNonNull
+import tech.soit.quiet.utils.testing.OpenForTesting
 
 
 /**
  * view model tracks LocalMusicRepository
  */
+@OpenForTesting
 class LocalMusicViewModel constructor(
         private val localMusicDao: LocalMusicDao
 ) : ViewModel() {
