@@ -9,6 +9,7 @@ import androidx.core.view.get
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Album
 import tech.soit.quiet.ui.activity.local.LocalMusicListActivity
@@ -16,9 +17,13 @@ import tech.soit.quiet.ui.activity.local.LocalMusicListActivity.Companion.ARG_OB
 import tech.soit.quiet.ui.activity.local.LocalMusicListActivity.Companion.ARG_TYPE
 import tech.soit.quiet.ui.activity.local.LocalMusicListActivity.Companion.TYPE_ALBUM
 import tech.soit.quiet.ui.fragment.base.BaseFragment
-import tech.soit.quiet.ui.item.*
+import tech.soit.quiet.ui.item.Empty
+import tech.soit.quiet.ui.item.Loading
+import tech.soit.quiet.utils.submit
+import tech.soit.quiet.utils.withBinder
+import tech.soit.quiet.utils.withEmptyBinder
+import tech.soit.quiet.utils.withLoadingBinder
 import tech.soit.quiet.viewmodel.LocalMusicViewModel
-import tech.soit.typed.adapter.TypedAdapter
 
 /**
  * @author : summer
@@ -29,15 +34,13 @@ class LocalAlbumFragment : BaseFragment() {
 
     private val viewModel by lazyViewModel<LocalMusicViewModel>()
 
-    private val adapter = TypedAdapter()
-            .withBinder(Album::class, CommonAItemBinder(
-                    onClick = this::onAlbumClick
-            )) { CommonAItem(it.title, "") }
+    private val adapter = MultiTypeAdapter()
+            .withBinder(AItemViewBinder(onClick = this::onAlbumClick))
             .withEmptyBinder()
             .withLoadingBinder()
 
     private fun onAlbumClick(position: Int) {
-        val album = adapter.list[position] as Album
+        val album = adapter.items[position] as Album
         val intent = Intent(context, LocalMusicListActivity::class.java)
         intent.putExtra(ARG_TYPE, TYPE_ALBUM)
         intent.putExtra(ARG_OBJ, album)
@@ -50,7 +53,7 @@ class LocalAlbumFragment : BaseFragment() {
             when {
                 albums == null -> adapter.submit(listOf(Loading))
                 albums.isEmpty() -> adapter.submit(listOf(Empty))
-                else -> adapter.submit(albums)
+                else -> adapter.submit(albums.map { AItem(it.title, "") })
             }
         })
     }

@@ -1,27 +1,23 @@
-package tech.soit.quiet.ui.item
+package tech.soit.quiet.ui.fragment.local
 
 import android.graphics.drawable.ColorDrawable
 import androidx.annotation.DrawableRes
 import kotlinx.android.synthetic.main.item_common_a.view.*
 import tech.soit.quiet.R
+import tech.soit.quiet.utils.KItemViewBinder
+import tech.soit.quiet.utils.KViewHolder
+import tech.soit.quiet.utils.TypeLayoutRes
 import tech.soit.quiet.utils.component.ImageLoader
 import tech.soit.quiet.utils.component.support.attrValue
-import tech.soit.typed.adapter.TypedBinder
-import tech.soit.typed.adapter.ViewHolder
-import tech.soit.typed.adapter.annotation.TypeLayoutResource
 
-/**
- * @author : summer
- * @date : 18-9-1
- */
-@TypeLayoutResource(R.layout.item_common_a)
-class CommonAItemBinder(
+@TypeLayoutRes(R.layout.item_common_a)
+class AItemViewBinder(
         private val onClick: ((position: Int) -> Unit)? = null,
         private val onLongClick: ((position: Int) -> Boolean)? = null
-) : TypedBinder<CommonAItem>() {
+) : KItemViewBinder<AItem>() {
 
 
-    override fun onBindViewHolder(holder: ViewHolder, item: CommonAItem) = with(holder.itemView) {
+    override fun onBindViewHolder(holder: KViewHolder, item: AItem) = with(holder.itemView) {
         when {
             item.imageResource != 0 -> image.setImageResource(item.imageResource)
             item.imageUrl != null -> ImageLoader.with(image).load(item.imageUrl).into(image)
@@ -37,7 +33,7 @@ class CommonAItemBinder(
 }
 
 
-class CommonAItem(
+class AItem(
         val title: String,
         val caption: String
 ) {
