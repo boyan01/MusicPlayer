@@ -1,5 +1,6 @@
 package tech.soit.quiet.player
 
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.model.vo.Music
@@ -111,14 +112,14 @@ class QuietMusicPlayer {
 
 
     private fun safeAsync(block: suspend () -> Unit) {
-        launch { block() }
+        GlobalScope.launch { block() }
     }
 
     init {
 
         //indefinite to emit current playing music' duration and playing position
         //maybe have a cleverer way to do that!!
-        launch {
+        GlobalScope.launch {
             while (true) {
                 delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
                 try {
@@ -127,7 +128,7 @@ class QuietMusicPlayer {
 
                     if (notify) {
                         MusicPlayerManager.position
-                                .postValue(MusicPlayerManager.Position(mediaPlayer.getPosition(),
+                                .postValue(IMusicPlayerManager.Position(mediaPlayer.getPosition(),
                                         mediaPlayer.getDuration()))
                     }
                 } catch (e: Exception) {
