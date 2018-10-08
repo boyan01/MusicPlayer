@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
+import org.junit.After
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -41,7 +42,10 @@ class MusicPlayerManagerTest {
     fun setUp() {
         playlist = Playlist("test_token", musics)
         playlist.playMode = PlayMode.Shuffle
-        //clear former cache
+    }
+
+    @After
+    fun tearDown() {
         manager.musicPlayer.playlist = Playlist.EMPTY
         manager.musicPlayer.quiet()
     }

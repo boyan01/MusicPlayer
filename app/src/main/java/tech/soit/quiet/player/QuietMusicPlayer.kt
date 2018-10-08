@@ -37,6 +37,7 @@ class QuietMusicPlayer {
     }
 
 
+
     /**
      * play the music which return by [Playlist.getNext]
      */

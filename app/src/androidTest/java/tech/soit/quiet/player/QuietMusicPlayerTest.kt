@@ -3,6 +3,7 @@ package tech.soit.quiet.player
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
@@ -34,6 +35,11 @@ class QuietMusicPlayerTest {
     fun setUp() {
         player = QuietMusicPlayer()
         player.playlist = Playlist("test", musics)
+    }
+
+    @After
+    fun tearDown() {
+        player.quiet()
     }
 
     @Test

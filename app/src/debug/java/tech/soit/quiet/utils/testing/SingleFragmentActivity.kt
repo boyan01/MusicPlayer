@@ -24,7 +24,7 @@ class SingleFragmentActivity : BaseActivity() {
         supportFragmentManager.beginTransaction()
                 .add(R.id.content, fragment, "test")
                 .addToBackStack("test")
-                .commit()
+                .commitAllowingStateLoss()
     }
 
     fun replaceFragment(fragment: BaseFragment) {

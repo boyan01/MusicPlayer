@@ -13,6 +13,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
 import androidx.palette.graphics.Target.MUTED
 import androidx.palette.graphics.Target.VIBRANT
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.AppContext
@@ -29,12 +30,13 @@ import tech.soit.quiet.utils.component.support.string
 import tech.soit.quiet.utils.isFavorite
 import tech.soit.quiet.utils.subTitle
 import tech.soit.quiet.utils.testing.OpenForTesting
+import java.lang.Exception
 
 
 /**
  * Utils for notify MediaStyle notification for music
  *
- *  see more at [update]
+ * see more at [update]
  */
 @OpenForTesting
 class MusicNotification {
@@ -44,6 +46,7 @@ class MusicNotification {
         private const val ID_PLAY_SERVICE = "music_play_service"
 
         private const val ID_NOTIFICATION_PLAY_SERVICE = 0x30312
+
 
     }
 
@@ -170,11 +173,15 @@ class MusicNotification {
             val futureTarget = ImageLoader.with(AppContext).asBitmap()
                     .load(picUrl)
                     .submit(imageSize, imageSize)
-            launch {
+            GlobalScope.launch {
                 while (!futureTarget.isDone) {
                     delay(200)
                 }
-                val bitmap = futureTarget.get()
+                val bitmap = try {
+                    futureTarget.get()
+                } catch (e: Exception) {
+                    return@launch
+                }
                 val palette = Palette.from(bitmap).clearTargets().addTarget(MUTED).addTarget(VIBRANT).generate()
                 val color = palette.getVibrantColor(palette.getMutedColor(colorDefault))
                 builder.buildStep3(bitmap, color)
