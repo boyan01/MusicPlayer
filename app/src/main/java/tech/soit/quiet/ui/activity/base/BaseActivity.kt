@@ -31,6 +31,9 @@ import tech.soit.quiet.utils.component.support.observeNonNull
 import tech.soit.quiet.utils.component.support.string
 import tech.soit.quiet.utils.subTitle
 import tech.soit.quiet.viewmodel.MusicControllerViewModel
+import kotlin.reflect.full.companionObject
+import kotlin.reflect.full.companionObjectInstance
+import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.findAnnotation
 
 /**
@@ -49,6 +52,7 @@ abstract class BaseActivity : AppCompatActivity() {
     var viewModelFactory: ViewModelProvider.Factory = QuietViewModelProvider()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        checkTest()
         super.onCreate(savedInstanceState)
 
         //inject layout for annotation
@@ -62,6 +66,20 @@ abstract class BaseActivity : AppCompatActivity() {
             //make bottom controller interchangeable
             listenBottomControllerEvent()
         }
+    }
+
+    /**
+     *  check for test , if is in test mode, will replace [viewModelFactory]
+     */
+    private fun checkTest() {
+        val isTest = intent.getBooleanExtra("isTest", false)
+        if (!isTest) {
+            return
+        }
+        val rule = Class.forName("tech.soit.quiet.utils.test.BaseActivityTestRule").kotlin
+        val objectInstance = rule.companionObjectInstance!!
+        val objectClass = rule.companionObject!!
+        objectClass.declaredFunctions.find { it.name == "injectActivity" }!!.call(objectInstance, this)
     }
 
     /**

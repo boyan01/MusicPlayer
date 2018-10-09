@@ -1,5 +1,6 @@
 package tech.soit.quiet.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
@@ -7,13 +8,18 @@ import kotlinx.android.synthetic.main.activity_local_music.*
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.activity.base.BaseActivity
+import tech.soit.quiet.ui.activity.local.LocalScannerActivity
 import tech.soit.quiet.ui.fragment.local.LocalAlbumFragment
 import tech.soit.quiet.ui.fragment.local.LocalArtistFragment
 import tech.soit.quiet.ui.fragment.local.LocalSingleSongFragment
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
-import tech.soit.quiet.utils.component.log
 
+/**
+ * local music main activity
+ *
+ * contain three fragment [LocalAlbumFragment] [LocalSingleSongFragment] [LocalArtistFragment]
+ */
 @LayoutId(R.layout.activity_local_music)
 @EnableBottomController
 class LocalMusicActivity : BaseActivity() {
@@ -27,7 +33,7 @@ class LocalMusicActivity : BaseActivity() {
         toolbar.inflateMenu(R.menu.menu_local_home_page)
         toolbar.setOnMenuItemClickListener { item ->
             if (item.itemId == R.id.menu_local_home_scan) {
-                log { "to scanner" }
+                startActivity(Intent(this, LocalScannerActivity::class.java))
             }
             true
         }

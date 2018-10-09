@@ -19,6 +19,9 @@ import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.log
 
+/**
+ * an activity which display a music list for Local
+ */
 @EnableBottomController
 @LayoutId(R.layout.activity_local_music_list)
 class LocalMusicListActivity : BaseActivity() {

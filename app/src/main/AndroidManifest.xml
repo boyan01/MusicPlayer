@@ -41,6 +41,10 @@
             android:theme="@style/AppTheme.ColoredNavigationBar" />
 
         <activity
+            android:name=".ui.activity.local.LocalScannerActivity"
+            android:theme="@style/AppTheme.ColoredNavigationBar" />
+
+        <activity
             android:name=".ui.activity.MusicPlayerActivity"
             android:theme="@style/AppTheme" />
 

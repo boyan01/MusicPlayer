@@ -1,6 +1,7 @@
 package tech.soit.quiet.player
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.runner.AndroidJUnit4
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
@@ -10,6 +11,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.player.core.QuietMediaPlayerTest
@@ -23,6 +25,7 @@ import tech.soit.quiet.utils.component.persistence.get
  * @author : summer
  * @date : 18-8-21
  */
+@RunWith(AndroidJUnit4::class)
 class MusicPlayerManagerTest {
 
 
