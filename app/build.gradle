@@ -65,9 +65,11 @@ dependencies {
     //mp3
     implementation 'com.mpatric:mp3agic:0.9.0'
 
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
 
     def lifecycle_version = "2.0.0"
-    def room_version = "2.0.0-rc01"
+    def room_version = "2.0.0"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -104,7 +106,7 @@ dependencies {
     androidTestImplementation "io.mockk:mockk-android:1.8.6"
     androidTestImplementation "androidx.room:room-testing:$room_version"
     androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
-    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test:rules:1.1.0-alpha4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
+    androidTestImplementation 'androidx.test:runner:1.1.0-beta01'
+    androidTestImplementation 'androidx.test:rules:1.1.0-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta01'
 }

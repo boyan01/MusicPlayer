@@ -155,29 +155,4 @@ class MusicPlayerManagerImpl : IMusicPlayerManager {
 }
 
 
-object MusicPlayerManager : IMusicPlayerManager {
-
-    private val proxy = MusicPlayerManagerImpl()
-
-    override var musicPlayer: QuietMusicPlayer
-        get() = proxy.musicPlayer
-        set(value) {
-            proxy.musicPlayer = value
-        }
-    override val playingMusic: MutableLiveData<Music?>
-        get() = proxy.playingMusic
-
-    override val position: MutableLiveData<IMusicPlayerManager.Position>
-        get() = proxy.position
-
-    override val playerState: MutableLiveData<Int>
-        get() = proxy.playerState
-
-    override val playlist: MutableLiveData<Playlist>
-        get() = proxy.playlist
-
-    override fun play(token: String, music: Music, list: List<Music>) {
-        proxy.play(token, music, list)
-    }
-
-}
+object MusicPlayerManager : IMusicPlayerManager by MusicPlayerManagerImpl()
