@@ -1,7 +1,7 @@
 package tech.soit.quiet.repository.db.dao
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.*
 import org.junit.runner.RunWith
 import tech.soit.quiet.repository.db.QuietDatabase

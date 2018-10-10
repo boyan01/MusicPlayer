@@ -1,14 +1,29 @@
 package tech.soit.quiet.repository.netease
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.JsonArray
+import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import retrofit2.Call
+import tech.soit.quiet.model.po.NeteasePlayList
+import tech.soit.quiet.model.vo.PlayList
 import tech.soit.quiet.utils.component.network.enqueue
 import tech.soit.quiet.utils.component.support.Resource
+import tech.soit.quiet.utils.component.support.Status
+import tech.soit.quiet.utils.component.support.map
+import java.util.concurrent.atomic.AtomicBoolean
 
-object NeteaseRepository {
+class NeteaseRepository(
+        private val service: CloudMusicService = CloudMusicServiceProvider.provideCloudMusicService()
+) {
 
+    companion object {
 
-    private val service = CloudMusicServiceProvider.provideCloudMusicService()
+        val instance = NeteaseRepository()
+
+    }
+
 
     /**
      * 搜索服务
@@ -58,7 +73,7 @@ object NeteaseRepository {
     }
 
 
-    fun getUserPlayerList(userId: Long, offset: Int = 0, limit: Int = 1000) {
+    fun getUserPlayerList(userId: Long, offset: Int = 0, limit: Int = 1000): LiveData<Resource<List<PlayList>>> {
         val encrypt = Crypto.encrypt("""
             {
                 "offset" : $offset ,
@@ -67,17 +82,9 @@ object NeteaseRepository {
                 "csrf_token" : ""
             }
         """.trimIndent())
-
-        val liveData = MutableLiveData<Resource<JsonObject>>()
-        liveData.postValue(Resource.loading())
-        service.userPlayList(encrypt).enqueue {
-            onFailure { call, t ->
-                liveData.postValue(Resource.error(t.message!!))
-            }
-            onResponse { call, response ->
-                liveData.postValue(Resource.success(response.body()))
-            }
-        }
+        return service.userPlayList(encrypt)
+                .preParse<JsonArray>("playlist")
+                .mapJsonArray { NeteasePlayList(it as JsonObject) }
     }
 
     fun recommendSongs() {
@@ -122,6 +129,59 @@ object NeteaseRepository {
             }
         """.trimIndent())
         TODO()
+    }
+
+
+    private fun <T> LiveData<Resource<JsonArray>>.mapJsonArray(transform: (JsonElement) -> T): LiveData<Resource<List<T>>> {
+        return map { resource ->
+            when {
+                resource == null -> null
+                resource.status == Status.SUCCESS -> {
+                    val result = resource.data!!.map(transform)
+                    Resource.success(result)
+                }
+                resource.status == Status.ERROR -> {
+                    Resource.error(resource.message)
+                }
+                else -> error("")
+            }
+        }
+    }
+
+
+    /**
+     * this function only fit parse json object from Netease remove service
+     */
+    fun <T : JsonElement> Call<JsonObject>.preParse(
+            key: String,
+            responseHandler: ((response: JsonObject?, liveData: MutableLiveData<Resource<T>>) -> Unit)? = null
+    ): LiveData<Resource<T>> {
+        return object : MutableLiveData<Resource<T>>() {
+
+            private val started = AtomicBoolean(false)
+
+            override fun onActive() {
+                super.onActive()
+                val data = this
+                if (started.compareAndSet(false, true)) {
+                    enqueue {
+                        onFailure { _, t ->
+                            postValue(Resource.error(t))
+                        }
+                        onResponse { _, response ->
+                            val body = response.body()
+                            when {
+                                responseHandler != null -> responseHandler(body, data)
+                                body == null -> postValue(Resource.error("service not responding"))
+                                body["code"].asInt != 200 -> postValue(Resource.error("service error : ${body["code"].asInt}"))
+                                else -> @Suppress("UNCHECKED_CAST")
+                                postValue(Resource.success(body[key] as T))
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }

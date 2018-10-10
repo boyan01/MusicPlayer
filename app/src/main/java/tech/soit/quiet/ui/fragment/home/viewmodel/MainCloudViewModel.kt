@@ -8,7 +8,7 @@ class MainCloudViewModel : ViewModel() {
     private val userId: Long = TODO()
 
     fun getPlaylists() {
-        NeteaseRepository.getUserPlayerList(userId)
+
     }
 
 

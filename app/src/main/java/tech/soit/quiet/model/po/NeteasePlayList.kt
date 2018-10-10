@@ -2,6 +2,7 @@ package tech.soit.quiet.model.po
 
 import com.google.gson.JsonObject
 import tech.soit.quiet.model.vo.PlayList
+import tech.soit.quiet.repository.netease.source.NeteaseGlideUrl
 
 class NeteasePlayList(private val jsonObject: JsonObject) : PlayList() {
 
@@ -9,8 +10,8 @@ class NeteasePlayList(private val jsonObject: JsonObject) : PlayList() {
         return jsonObject["description"].asString
     }
 
-    override fun getCoverImageUrl(): String {
-        return jsonObject["coverImgUrl"].asString
+    override fun getCoverImageUrl(): NeteaseGlideUrl {
+        return NeteaseGlideUrl(jsonObject["coverImgUrl"].asString)
     }
 
     override fun getTrackCount(): Int {

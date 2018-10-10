@@ -7,7 +7,7 @@ abstract class PlayList {
 
     abstract fun getDescription(): String
 
-    abstract fun getCoverImageUrl(): String
+    abstract fun getCoverImageUrl(): Any
 
     abstract fun getTrackCount(): Int
 
