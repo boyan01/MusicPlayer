@@ -1,5 +1,6 @@
 package tech.soit.quiet.repository.netease
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import okhttp3.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -27,6 +28,7 @@ internal object CloudMusicServiceProvider {
         return Retrofit.Builder()
                 .baseUrl(URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .client(generateClient(cookieStore))
                 .build()
                 .create(CloudMusicService::class.java)

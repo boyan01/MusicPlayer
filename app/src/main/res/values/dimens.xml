@@ -3,4 +3,5 @@
     <dimen name="height_bottom_controller">50dp</dimen>
     <dimen name="notification_image_size">50dp</dimen>
     <dimen name="playlist_detail_header_height">270dp</dimen>
+    <dimen name="height_item_play_list">64dp</dimen>
 </resources>

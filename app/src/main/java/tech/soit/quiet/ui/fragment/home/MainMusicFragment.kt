@@ -1,24 +1,26 @@
 package tech.soit.quiet.ui.fragment.home
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.PagerAdapter
-import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.fragment_main_music.*
 import kotlinx.android.synthetic.main.item_main_navigation.view.*
+import kotlinx.coroutines.experimental.launch
+import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
+import tech.soit.quiet.model.vo.PlayList
 import tech.soit.quiet.ui.activity.LocalMusicActivity
 import tech.soit.quiet.ui.fragment.base.BaseFragment
-import tech.soit.quiet.ui.item.submitEmpty
-import tech.soit.quiet.ui.item.withEmptyBinder
-import tech.soit.quiet.ui.item.withLoadingBinder
+import tech.soit.quiet.ui.fragment.home.cloud.PlayListViewBinder
+import tech.soit.quiet.ui.fragment.home.viewmodel.MainMusicViewModel
 import tech.soit.quiet.utils.annotation.LayoutId
-import tech.soit.typed.adapter.TypedAdapter
+import tech.soit.quiet.utils.component.log
+import tech.soit.quiet.utils.component.support.dimen
+import tech.soit.quiet.utils.submit
+import tech.soit.quiet.utils.withBinder
+import tech.soit.quiet.utils.withEmptyBinder
+import tech.soit.quiet.utils.withLoadingBinder
 
 /**
  * main Fragment of music
@@ -26,8 +28,15 @@ import tech.soit.typed.adapter.TypedAdapter
 @LayoutId(R.layout.fragment_main_music)
 class MainMusicFragment : BaseFragment() {
 
+    private val mainMusicViewMode by lazyViewModel<MainMusicViewModel>()
 
-    private lateinit var pagerAdapter: PagerPlaylistAdapter
+    private val neteaseRepository get() = mainMusicViewMode.getNeteaseRepository()
+
+    private lateinit var adapter: MultiTypeAdapter
+
+
+    private var rangeCreated = IntRange(0, 0)
+    private var rangeCollection = IntRange(0, 0)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,15 +44,48 @@ class MainMusicFragment : BaseFragment() {
         //init navigation items
         initNavigation()
 
-        //contract tab layout with view pager
-        pagerAdapter = PagerPlaylistAdapter(view.context)
-        pagerPlayLists.adapter = pagerAdapter
-        pagerPlayLists.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayoutPlayLists))
-        tabLayoutPlayLists.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(pagerPlayLists))
+        //init recycler view
+        adapter = MultiTypeAdapter()
+                .withBinder(PlayListViewBinder())
+                .withEmptyBinder()
+                .withLoadingBinder()
+        recyclerView.adapter = adapter
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-        //init data
-        pagerAdapter.adapters[0].submitEmpty()
-        pagerAdapter.adapters[1].submitEmpty()
+            private var totalY = 0
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                totalY += dy
+                val position = if (totalY in rangeCreated) {
+                    0
+                } else {
+                    1
+                }
+                val offset = totalY.toFloat() / rangeCollection.last
+                log { "offset = $offset" }
+                tabLayoutPlayLists.setScrollPosition(position, offset, true)
+            }
+        })
+
+        launch {
+            val user = neteaseRepository.getLoginUser()
+            enterNotLoginMode(user == null)
+            user ?: return@launch
+            val playLists = neteaseRepository.getUserPlayerList(user.getId())
+            computePlayListRange(playLists, user.getId())
+            adapter.submit(playLists)
+        }
+    }
+
+    private fun computePlayListRange(playLists: List<PlayList>, userId: Long) {
+        val createdCount = playLists.count { it.getUserId() == userId }
+        val height = dimen(R.dimen.height_item_play_list).toInt()
+        rangeCreated = 0..(createdCount * height)
+        rangeCollection = (createdCount * height)..(playLists.size * height)
+    }
+
+    private fun enterNotLoginMode(enter: Boolean) {
+
     }
 
     private fun initNavigation() {
@@ -72,39 +114,5 @@ class MainMusicFragment : BaseFragment() {
 
     }
 
-
-    inner class PagerPlaylistAdapter(context: Context) : PagerAdapter() {
-
-        val adapters = Array(2) {
-            TypedAdapter()
-                    .withLoadingBinder()
-                    .withEmptyBinder()
-        }
-
-        private val recyclers = Array(2) {
-            val recyclerView = RecyclerView(context)
-            recyclerView.adapter = adapters[it]
-            recyclerView.layoutManager = LinearLayoutManager(context)
-            return@Array recyclerView
-        }
-
-        override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            val view = recyclers[position]
-            container.addView(view)
-            return view
-        }
-
-        override fun isViewFromObject(view: View, `object`: Any): Boolean {
-            return view == `object`
-        }
-
-        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-            container.removeView(recyclers[position])
-        }
-
-        override fun getCount(): Int {
-            return 2
-        }
-    }
 
 }

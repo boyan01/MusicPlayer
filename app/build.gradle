@@ -67,6 +67,7 @@ dependencies {
 
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.jakewharton.retrofit:retrofit2-kotlin-coroutines-experimental-adapter:1.0.0'
 
     def lifecycle_version = "2.0.0"
     def room_version = "2.0.0"
@@ -103,8 +104,6 @@ dependencies {
     androidTestImplementation 'com.squareup.retrofit2:retrofit-mock:2.4.0'
 //    noinspection GradleDependency
     androidTestImplementation "org.mockito:mockito-android:2.18.3"
-    testImplementation "io.mockk:mockk:1.8.6"
-    androidTestImplementation "io.mockk:mockk-android:1.8.6"
     androidTestImplementation "androidx.room:room-testing:$room_version"
     androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
     androidTestImplementation 'androidx.test:runner:1.1.0-beta01'

@@ -11,20 +11,32 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.Main
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.view.ContentFrameLayout
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.support.QuietViewModelProvider
 import tech.soit.quiet.utils.component.support.attrValue
+import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.reflect.full.findAnnotation
 
 /**
  * @see Fragment
  */
-abstract class BaseFragment : Fragment() {
+abstract class BaseFragment : Fragment(), CoroutineScope {
 
     var viewModelFactory: ViewModelProvider.Factory = QuietViewModelProvider()
+
+    private lateinit var job: Job
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        job = Job()
+    }
 
     final override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = onCreateView2(inflater, container, savedInstanceState)
@@ -68,6 +80,11 @@ abstract class BaseFragment : Fragment() {
         view.requestApplyInsets()
     }
 
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
+    }
 
     /**
      * lazy generate ViewModel
@@ -115,6 +132,10 @@ abstract class BaseFragment : Fragment() {
             requireBaseActivity().onBackPressed()
         }
     }
+
+
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.Main
 
 
 }

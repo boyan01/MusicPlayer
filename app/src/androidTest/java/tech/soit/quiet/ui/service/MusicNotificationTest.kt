@@ -2,16 +2,18 @@ package tech.soit.quiet.ui.service
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.app.NotificationCompat
-import androidx.test.runner.AndroidJUnit4
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import org.junit.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.utils.Dummy
+import tech.soit.quiet.utils.mock
 import tech.soit.quiet.utils.test.getPropertyValue
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -35,11 +37,10 @@ class MusicNotificationTest {
 
     @Before
     fun setUp() {
-        onCancel = mockk()
-        every { onCancel() }.returns(Unit)
-        onNotify = mockk()
-        every { onNotify(allAny(), allAny()) }.returns(Unit)
-
+        onCancel = mock()
+        Mockito.`when`(onCancel.invoke()).thenReturn(Unit)
+        onNotify = mock()
+        Mockito.`when`(onNotify.invoke(Mockito.any(), Mockito.anyBoolean())).thenReturn(Unit)
         helper = MusicNotification()
 
     }
@@ -59,7 +60,7 @@ class MusicNotificationTest {
 
         helper.checkNotification(onNotify, onCancel)
 
-        verify(exactly = 1) { onNotify(allAny(), false) }
+        Mockito.verify(onNotify(Mockito.any(), false), Mockito.times(1))
     }
 
 
@@ -75,10 +76,11 @@ class MusicNotificationTest {
         CountDownLatch(1).await(2000, TimeUnit.MILLISECONDS)
 
         if (helper.getPropertyValue("isNotifyCompleted")) {
-            verify(exactly = 2) { onNotify(allAny(), false) }
+            Mockito.verify(onNotify(Mockito.any(), false), Mockito.times(2))
+
         } else {
             //will not be 2 when device access PIC_URL failed
-            verify(exactly = 1) { onNotify(allAny(), false) }
+            Mockito.verify(onNotify(Mockito.any(), false), Mockito.times(1))
         }
 
     }
