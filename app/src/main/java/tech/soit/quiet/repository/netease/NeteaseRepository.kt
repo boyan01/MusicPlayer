@@ -2,9 +2,11 @@ package tech.soit.quiet.repository.netease
 
 import com.google.gson.JsonObject
 import tech.soit.quiet.model.po.NeteasePlayList
+import tech.soit.quiet.model.po.NeteasePlayListDetail
 import tech.soit.quiet.model.po.NeteaseUser
 import tech.soit.quiet.model.vo.PlayList
 import tech.soit.quiet.model.vo.User
+import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.persistence.KeyValue
 import tech.soit.quiet.utils.component.persistence.get
 import tech.soit.quiet.utils.testing.OpenForTesting
@@ -116,18 +118,21 @@ class NeteaseRepository(
     }
 
 
-    fun playListDetail(playlistId: Long, offset: Int = 0) {
+    suspend fun playListDetail(playlistId: Long, offset: Int = 0): NeteasePlayListDetail {
         val encrypt = Crypto.encrypt("""
             {
                 "id":"$playlistId",
-                "offset":$offset,
-                "total":true,
-                "limit":1000,
-                "n":1000s,
+                "n":100000,
+                "s":8,
                 "csrf_token":""
             }
         """.trimIndent())
-        TODO()
+        val response = service.playlistDetail(encrypt).await()
+        log { "response : $response" }
+        if (!response.isSuccess()) {
+            error(response[REMOTE_KEY_MESSAGE])
+        }
+        return NeteasePlayListDetail(response["playlist"].asJsonObject)
     }
 
 

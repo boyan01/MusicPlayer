@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.content_main_music_user_info.*
@@ -16,7 +15,7 @@ import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.PlayList
 import tech.soit.quiet.model.vo.User
-import tech.soit.quiet.ui.activity.LocalMusicActivity
+import tech.soit.quiet.ui.activity.local.LocalMusicActivity
 import tech.soit.quiet.ui.activity.user.LoginActivity
 import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.ui.fragment.home.cloud.PlayListViewBinder

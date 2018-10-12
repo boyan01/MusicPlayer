@@ -1,8 +1,10 @@
 package tech.soit.quiet.ui.fragment.home.cloud
 
+import android.content.Intent
 import kotlinx.android.synthetic.main.item_play_list.view.*
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.PlayList
+import tech.soit.quiet.ui.activity.cloud.CloudPlayListDetailActivity
 import tech.soit.quiet.utils.KItemViewBinder
 import tech.soit.quiet.utils.KViewHolder
 import tech.soit.quiet.utils.TypeLayoutRes
@@ -17,6 +19,11 @@ class PlayListViewBinder : KItemViewBinder<PlayList>() {
             ImageLoader.with(this).load(item.getCoverImageUrl()).into(imageCover)
             textTitle.text = item.getName()
             textSubTitle.text = string(R.string.template_item_play_list_count, item.getTrackCount())
+            setOnClickListener {
+                val intent = Intent(context, CloudPlayListDetailActivity::class.java)
+                intent.putExtra("id", item.getId())
+                context.startActivity(intent)
+            }
         }
     }
 

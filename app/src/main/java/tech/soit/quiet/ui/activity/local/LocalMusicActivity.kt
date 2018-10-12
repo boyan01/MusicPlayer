@@ -1,4 +1,4 @@
-package tech.soit.quiet.ui.activity
+package tech.soit.quiet.ui.activity.local
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,6 @@ import kotlinx.android.synthetic.main.activity_local_music.*
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.activity.base.BaseActivity
-import tech.soit.quiet.ui.activity.local.LocalScannerActivity
 import tech.soit.quiet.ui.fragment.local.LocalAlbumFragment
 import tech.soit.quiet.ui.fragment.local.LocalArtistFragment
 import tech.soit.quiet.ui.fragment.local.LocalSingleSongFragment

@@ -40,4 +40,9 @@
     <string name="login_hint_phone">手机号</string>
     <string name="action_login">登陆</string>
     <string name="user_not_login">未登录</string>
+    <string name="title_play_list">歌单</string>
+    <string name="action_comment">评论</string>
+    <string name="action_share">分享</string>
+    <string name="action_download">下载</string>
+    <string name="action_multi_select">多选</string>
 </resources>

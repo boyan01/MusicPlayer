@@ -20,7 +20,6 @@ data class Music(
         const val PIC_URI = "pic_uri"
     }
 
-
     /**
      * return the value of [attach]
      */

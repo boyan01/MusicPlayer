@@ -33,7 +33,7 @@
             android:theme="@style/AppTheme.ColoredNavigationBar" />
 
         <activity
-            android:name=".ui.activity.LocalMusicActivity"
+            android:name=".ui.activity.local.LocalMusicActivity"
             android:theme="@style/AppTheme.ColoredNavigationBar" />
 
         <activity
@@ -49,6 +49,10 @@
             android:theme="@style/AppTheme" />
 
         <activity android:name=".ui.activity.user.LoginActivity" />
+
+        <activity
+            android:name=".ui.activity.cloud.CloudPlayListDetailActivity"
+            android:theme="@style/AppTheme.ColoredNavigationBar" />
 
         <service android:name=".ui.service.QuietPlayerService" />
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_item_play_list"
+    android:background="?selectableItemBackground"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatImageView
