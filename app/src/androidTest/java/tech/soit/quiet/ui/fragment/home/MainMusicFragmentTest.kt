@@ -1,12 +1,14 @@
 package tech.soit.quiet.ui.fragment.home
 
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
-import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
-import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ActivityTestRule
 import kotlinx.coroutines.experimental.runBlocking
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -16,10 +18,12 @@ import tech.soit.quiet.R
 import tech.soit.quiet.model.po.NeteaseUser
 import tech.soit.quiet.model.vo.PlayList
 import tech.soit.quiet.repository.netease.NeteaseRepository
+import tech.soit.quiet.ui.activity.user.LoginActivity
 import tech.soit.quiet.ui.fragment.home.viewmodel.MainMusicViewModel
 import tech.soit.quiet.utils.mock
 import tech.soit.quiet.utils.test.ViewModelUtil
 import tech.soit.quiet.utils.testing.SingleFragmentActivity
+import kotlin.reflect.jvm.jvmName
 
 @RunWith(AndroidJUnit4::class)
 class MainMusicFragmentTest {
@@ -59,6 +63,12 @@ class MainMusicFragmentTest {
         Mockito.`when`(neteaseRepository.getLoginUser()).thenReturn(null)
         activityTestRule.activity.setFragment(mainMusicFragment)
 
+        onView(withId(R.id.textUserNickname)).check(matches(withText(R.string.user_not_login)))
+
+        onView(withId(R.id.textUserNickname)).perform(click())
+        val am = InstrumentationRegistry.getInstrumentation().addMonitor(LoginActivity::class.jvmName, null, false)
+        am.waitForActivity()
+        Assert.assertEquals("login activity has been opened", 1, am.hits)
     }
 
     @Test
@@ -67,6 +77,7 @@ class MainMusicFragmentTest {
         activityTestRule.activity.setFragment(mainMusicFragment)
 
         onView(withId(R.id.tabLayoutPlayLists)).check(matches(isDisplayed()))
+        onView(withId(R.id.textUserNickname)).check(matches(withText("quiet")))
     }
 
 

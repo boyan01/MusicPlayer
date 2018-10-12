@@ -17,6 +17,8 @@
             android:orientation="vertical"
             app:layout_scrollFlags="scroll">
 
+            <include layout="@layout/content_main_music_user_info" />
+
             <include
                 android:id="@+id/navLayoutLocal"
                 layout="@layout/item_main_navigation" />

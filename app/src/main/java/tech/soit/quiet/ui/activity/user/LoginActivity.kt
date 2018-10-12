@@ -1,5 +1,6 @@
 package tech.soit.quiet.ui.activity.user
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -41,6 +42,7 @@ class LoginActivity : BaseActivity() {
             val (isSuccess, msg) = loginViewModel.login(phone, password)
             if (isSuccess) {
                 startActivity(Intent(this@LoginActivity, AppMainActivity::class.java))
+                setResult(Activity.RESULT_OK)
                 finish()
             } else {
                 Toast.makeText(this@LoginActivity, msg!!, Toast.LENGTH_SHORT).show()

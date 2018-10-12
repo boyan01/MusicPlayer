@@ -40,4 +40,6 @@
 
     <color name="color_indicator">#4CAF50</color>
 
+    <color name="color_gray">#939393</color>
+
 </resources>
