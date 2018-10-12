@@ -63,7 +63,7 @@ class MainMusicFragmentTest {
 
     @Test
     fun testWithLogin() {
-        Mockito.`when`(neteaseRepository.getLoginUser()).thenReturn(NeteaseUser(100, "quiet"))
+        Mockito.`when`(neteaseRepository.getLoginUser()).thenReturn(NeteaseUser(100, "quiet", "null"))
         activityTestRule.activity.setFragment(mainMusicFragment)
 
         onView(withId(R.id.tabLayoutPlayLists)).check(matches(isDisplayed()))

@@ -20,6 +20,8 @@ class NeteaseRepository(
 
         private const val KEY_USER = "netease_repository_user"
 
+        private const val REMOTE_KEY_MESSAGE = "msg"
+
     }
 
     /**
@@ -65,7 +67,7 @@ class NeteaseRepository(
         )
     }
 
-    fun login(phone: String, password: String) {
+    suspend fun login(phone: String, password: String): User {
         val encrypt = Crypto.encrypt("""
             {
                 "phone" : "$phone",
@@ -73,7 +75,19 @@ class NeteaseRepository(
                 "rememberLogin" : "true"
             }
         """.trimIndent())
-        TODO()
+        val response = service.login(encrypt).await()
+        if (!response.isSuccess()) {
+            error(response[REMOTE_KEY_MESSAGE])
+        }
+
+        val profile = response["profile"].asJsonObject
+        val user = NeteaseUser(
+                id = response["account"].asJsonObject["id"].asLong,
+                nickname = profile["nickname"].asString,
+                avatarUrl = profile["avatarUrl"].asString
+        )
+        KeyValue.put(KEY_USER, user)
+        return user
     }
 
 

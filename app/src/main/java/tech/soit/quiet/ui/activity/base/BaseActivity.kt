@@ -16,6 +16,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.transition.TransitionManager
 import kotlinx.android.synthetic.main.base_activity_bottom_controller.*
 import kotlinx.android.synthetic.main.content_bottom_controller.*
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.Main
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
@@ -31,6 +35,7 @@ import tech.soit.quiet.utils.component.support.observeNonNull
 import tech.soit.quiet.utils.component.support.string
 import tech.soit.quiet.utils.subTitle
 import tech.soit.quiet.viewmodel.MusicControllerViewModel
+import kotlin.coroutines.experimental.CoroutineContext
 import kotlin.reflect.full.companionObject
 import kotlin.reflect.full.companionObjectInstance
 import kotlin.reflect.full.declaredFunctions
@@ -45,15 +50,21 @@ import kotlin.reflect.full.findAnnotation
  * use [EnableBottomController] to enable bottom controller for this activity
  *
  */
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
 
     private val controllerViewModel by lazyViewModel<MusicControllerViewModel>()
 
     var viewModelFactory: ViewModelProvider.Factory = QuietViewModelProvider()
 
+    private lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
     override fun onCreate(savedInstanceState: Bundle?) {
         checkTest()
         super.onCreate(savedInstanceState)
+        job = Job()
 
         //inject layout for annotation
         val isInjectLayout = this::class.findAnnotation<DisableLayoutInject>() == null
@@ -177,6 +188,11 @@ abstract class BaseActivity : AppCompatActivity() {
             container.addView(view, params)
         }
         super.setContentView(view, params)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     /**

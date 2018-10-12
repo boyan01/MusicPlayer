@@ -37,4 +37,6 @@
     <string name="nav_daily_recommend">每日推荐</string>
     <string name="nav_tends">排行榜</string>
     <string name="template_item_play_list_count">(%d首)</string>
+    <string name="login_hint_phone">手机号</string>
+    <string name="action_login">登陆</string>
 </resources>

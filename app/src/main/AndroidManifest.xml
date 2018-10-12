@@ -48,6 +48,8 @@
             android:name=".ui.activity.MusicPlayerActivity"
             android:theme="@style/AppTheme" />
 
+        <activity android:name=".ui.activity.user.LoginActivity" />
+
         <service android:name=".ui.service.QuietPlayerService" />
 
         <activity android:name=".ui.service.NotificationRouterActivity" />
