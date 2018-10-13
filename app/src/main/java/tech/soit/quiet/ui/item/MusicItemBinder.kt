@@ -48,9 +48,9 @@ class MusicItemViewBinder(
         popup_menu.setOnClickListener {
             //
         }
-        text_item_title.text = item.title
-        text_item_subtitle.text = item.artists.joinToString("/") { it.name }
-        text_item_subtitle_2.text = item.album.title
+        text_item_title.text = item.getTitle()
+        text_item_subtitle.text = item.getArtists().joinToString("/") { it.getName() }
+        text_item_subtitle_2.text = item.getAlbum().getName()
     }
 
     override fun onViewDetachedFromWindow(holder: KViewHolder) {

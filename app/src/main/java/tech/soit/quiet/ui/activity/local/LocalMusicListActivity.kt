@@ -68,13 +68,13 @@ class LocalMusicListActivity : BaseActivity() {
         val title: String
 
         if (type == TYPE_ALBUM) {
-            title = (obj as Album).title
+            title = (obj as Album).getName()
             listLiveData = viewModel.getMusicListByAlbum(obj)
-            token = "local_artist_%s".format(obj.title)
+            token = "local_artist_%s".format(obj.getName())
         } else {
-            title = (obj as Artist).name
+            title = (obj as Artist).getName()
             listLiveData = viewModel.getMusicListByArtist(obj)
-            token = "local_album_%s".format(obj.name)
+            token = "local_album_%s".format(obj.getName())
         }
 
         //init view

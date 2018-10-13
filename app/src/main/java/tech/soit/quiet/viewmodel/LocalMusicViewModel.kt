@@ -6,8 +6,6 @@ import tech.soit.quiet.model.vo.Album
 import tech.soit.quiet.model.vo.Artist
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.repository.db.dao.LocalMusicDao
-import tech.soit.quiet.repository.db.entity.LocalMusic
-import tech.soit.quiet.utils.component.support.map
 import tech.soit.quiet.utils.component.support.mapNonNull
 import tech.soit.quiet.utils.testing.OpenForTesting
 
@@ -24,13 +22,8 @@ class LocalMusicViewModel constructor(
      * local total musics
      */
     val allMusics: LiveData<List<Music>>
-        get() = localMusicDao.getAllMusics()
-                .map { localMusics ->
-                    if (localMusics == null) {
-                        return@map null
-                    }
-                    localMusics.map(LocalMusic::toMusic)
-                }
+        @Suppress("UNCHECKED_CAST")
+        get() = localMusicDao.getAllMusics() as LiveData<List<Music>>
 
 
     /**
@@ -38,7 +31,7 @@ class LocalMusicViewModel constructor(
      */
     val allAlbums: LiveData<List<Album>>
         get() = allMusics.mapNonNull { musics ->
-            musics.map { it.album }.distinctBy { it.title }
+            musics.map { it.getAlbum() }.distinctBy { it.getName() }
         }
 
     /**
@@ -46,7 +39,7 @@ class LocalMusicViewModel constructor(
      */
     val allArtists: LiveData<List<Artist>>
         get() = allMusics.mapNonNull { musics ->
-            musics.flatMap { it.artists }.distinctBy { it.name }
+            musics.flatMap { it.getArtists() }.distinctBy { it.getName() }
         }
 
 }

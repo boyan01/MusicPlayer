@@ -43,7 +43,7 @@ class LocalArtistFragment : BaseFragment() {
             when {
                 artists == null -> adapter.submit(listOf(Loading))
                 artists.isEmpty() -> adapter.submit(listOf(Empty))
-                else -> adapter.submit(artists.map { AItem(it.name, "") })
+                else -> adapter.submit(artists.map { AItem(it.getName(), "") })
             }
         })
     }

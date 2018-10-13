@@ -166,7 +166,7 @@ class MusicNotification {
         }
         preview()
 
-        val picUrl = music.attach[Music.PIC_URI]
+        val picUrl = music.getAlbum().getCoverImageUrl()
         if (picUrl == null) {
             isNotifyCompleted = true
         } else {
@@ -215,7 +215,7 @@ class MusicNotification {
     }
 
     private fun NotificationCompat.Builder.buildStep2(music: Music): NotificationCompat.Builder {
-        setContentTitle(music.title)
+        setContentTitle(music.getTitle())
         setContentText(music.subTitle)
 
 

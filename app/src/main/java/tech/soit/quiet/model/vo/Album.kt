@@ -1,9 +1,17 @@
 package tech.soit.quiet.model.vo
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
-data class Album(
-        val title: String
-) : Parcelable
+abstract class Album : Parcelable {
+
+    @Deprecated("..", ReplaceWith("getName()"))
+    val title: String
+        get() = getName()
+
+    abstract fun getCoverImageUrl(): Any?
+
+    abstract fun getName(): String
+
+    abstract fun getId(): Long
+
+}

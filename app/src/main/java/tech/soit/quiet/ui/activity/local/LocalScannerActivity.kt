@@ -70,7 +70,7 @@ class LocalScannerActivity : BaseActivity() {
         viewModel.newAdded.observe(this, Observer {
             it ?: return@Observer
             if (it.status == Status.SUCCESS) {
-                textLoading.text = string(R.string.processing_local_scanner, it.requireData().title)
+                textLoading.text = string(R.string.processing_local_scanner, it.requireData().getTitle())
             }
         })
         viewModel.status.observe(this, Observer { status: @LocalScannerViewModel.ScannerStatus Int ->

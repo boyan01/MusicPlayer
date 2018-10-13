@@ -1,7 +1,7 @@
 package tech.soit.quiet.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -38,7 +38,7 @@ class LocalMusicViewModelTest {
         val list = viewModel.allMusics.await()
         assertTrue(list.size == DUMMY_MUSICS.size)
         DUMMY_MUSICS.forEach { localMusic ->
-            assertNotNull(list.find { it.title == localMusic.title })
+            assertNotNull(list.find { it.getTitle() == localMusic.getTitle() })
         }
     }
 
@@ -46,16 +46,16 @@ class LocalMusicViewModelTest {
     fun getAllAlbums() {
         val list = viewModel.allAlbums.await()
         assertTrue(list.size == 2)
-        assertNotNull(list.find { it.title == "album01" })
-        assertNotNull(list.find { it.title == "album02" })
+        assertNotNull(list.find { it.getName() == "album01" })
+        assertNotNull(list.find { it.getName() == "album02" })
     }
 
     @Test
     fun getAllArtists() {
         val list = viewModel.allArtists.await()
         assertTrue(list.size == 3)
-        assertNotNull(list.find { it.name == "artist01" })
-        assertNotNull(list.find { it.name == "artist0102" })
-        assertNotNull(list.find { it.name == "artist0302" })
+        assertNotNull(list.find { it.getName() == "artist01" })
+        assertNotNull(list.find { it.getName() == "artist0102" })
+        assertNotNull(list.find { it.getName() == "artist0302" })
     }
 }

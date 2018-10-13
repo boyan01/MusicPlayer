@@ -95,11 +95,7 @@ class QuietMusicPlayer {
         //live data playing music changed
         MusicPlayerManager.playingMusic.postValue(music)
 
-        val uri = music.attach[Music.URI]
-        if (uri == null) {
-            log(LoggerLevel.ERROR) { "next music uri is empty or null" }
-            return
-        }
+        val uri = music.getPlayUrl()
         mediaPlayer.prepare(uri, true)
     }
 

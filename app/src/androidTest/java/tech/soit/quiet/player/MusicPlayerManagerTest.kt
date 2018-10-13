@@ -1,7 +1,7 @@
 package tech.soit.quiet.player
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
@@ -14,7 +14,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
-import tech.soit.quiet.player.core.QuietMediaPlayerTest
 import tech.soit.quiet.player.playlist.Playlist
 import tech.soit.quiet.repository.db.await
 import tech.soit.quiet.utils.Dummy
@@ -34,9 +33,7 @@ class MusicPlayerManagerTest {
 
     private val manager get() = MusicPlayerManager
 
-    private val musics = Dummy.MUSICS.map {
-        it.copy(attach = mapOf(Music.URI to QuietMediaPlayerTest.URI))
-    }
+    private val musics = Dummy.MUSICS
 
     private lateinit var playlist: Playlist
 

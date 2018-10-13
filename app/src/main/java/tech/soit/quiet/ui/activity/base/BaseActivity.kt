@@ -143,10 +143,10 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
      */
     private fun updateBottomController(playing: Music) {
         //更新音乐信息
-        musicTitle.text = playing.title
+        musicTitle.text = playing.getTitle()
         musicSubTitle.text = playing.subTitle
 
-        val picUri = playing.attach[Music.PIC_URI]
+        val picUri = playing.getAlbum().getCoverImageUrl()
         if (picUri != null) {
             ImageLoader.with(this).load(picUri).into(artWork)
         } else {

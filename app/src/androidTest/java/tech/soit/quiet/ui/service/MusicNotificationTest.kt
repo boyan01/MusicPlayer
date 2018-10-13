@@ -9,7 +9,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
-import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.utils.Dummy
@@ -66,7 +65,7 @@ class MusicNotificationTest {
 
     @Test
     fun testBasicWithPic() {
-        val music = Dummy.MUSICS[0].copy(attach = mapOf(Music.PIC_URI to "https://via.placeholder.com/350x150"))
+        val music = Dummy.MUSICS[0]
 
         MusicPlayerManager.playingMusic.postValue(music)
         MusicPlayerManager.playerState.postValue(IMediaPlayer.PLAYING)

@@ -33,7 +33,7 @@ class MusicItemBinder(
 
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<Music>() {
             override fun areItemsTheSame(oldItem: Music, newItem: Music): Boolean {
-                return oldItem.id == newItem.id
+                return oldItem.getId() == newItem.getId()
             }
 
             override fun areContentsTheSame(oldItem: Music, newItem: Music): Boolean {
@@ -69,9 +69,9 @@ class MusicItemBinder(
         popup_menu.setOnClickListener {
             //
         }
-        text_item_title.text = item.title
-        text_item_subtitle.text = item.artists.joinToString("/") { it.name }
-        text_item_subtitle_2.text = item.album.title
+        text_item_title.text = item.getTitle()
+        text_item_subtitle.text = item.getArtists().joinToString("/") { it.getName() }
+        text_item_subtitle_2.text = item.getAlbum().getName()
     }
 
     override fun onViewDetachedFromWindow(holder: ViewHolder) {

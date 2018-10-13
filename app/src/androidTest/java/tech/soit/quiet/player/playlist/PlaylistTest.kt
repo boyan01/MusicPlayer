@@ -1,14 +1,12 @@
 package tech.soit.quiet.player.playlist
 
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import tech.soit.quiet.model.vo.Album
-import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.PlayMode
 import tech.soit.quiet.utils.Dummy
 
@@ -80,7 +78,7 @@ class PlaylistTest {
     @Test
     fun testInsert() = runBlocking {
 
-        val insert = Music(10000, "inserted", Album("14"), emptyList())
+        val insert = Dummy.DummyMusic(10000, "inserted", "14", emptyList())
         playlist.insertToNext(insert)
         assertEquals(playlist.list.size, Dummy.MUSICS.size + 1)
 

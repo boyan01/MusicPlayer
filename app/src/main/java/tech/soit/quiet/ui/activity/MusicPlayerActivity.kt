@@ -44,7 +44,7 @@ class MusicPlayerActivity : BaseActivity() {
         })
         MusicPlayerManager.playingMusic.observe(this, Observer { music ->
             music ?: return@Observer
-            textTitle.text = music.title
+            textTitle.text = music.getTitle()
             textSubTitle.text = music.subTitle
         })
         MusicPlayerManager.position.observe(this, Observer { position ->

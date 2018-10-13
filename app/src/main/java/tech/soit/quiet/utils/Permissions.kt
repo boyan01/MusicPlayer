@@ -5,7 +5,9 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.suspendCancellableCoroutine
 import tech.soit.quiet.ui.fragment.base.BaseFragment
@@ -21,7 +23,7 @@ fun FragmentActivity.doWithPermissions(
         vararg permissions: String,
         onDenied: ((permission: List<String>) -> Unit)? = null,
         onGranted: () -> Unit) {
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
         val result = requestPermission(*permissions)
         if (result.all { it }) {
             onGranted()
@@ -39,7 +41,7 @@ fun FragmentActivity.doWithPermissions(
  * request a list of permissions ,return result array for all permissions
  */
 private suspend fun FragmentActivity.requestPermission(vararg permissions: String): BooleanArray = suspendCancellableCoroutine { continuation ->
-    launch(UI) {
+    GlobalScope.launch(Dispatchers.Main) {
         val fragment = createPermissionFragment(this@requestPermission)
         launch {
             fragment.setPermissionResultCallback {
@@ -83,7 +85,7 @@ internal class CoPermissionsFragment : BaseFragment() {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    internal fun requestPermissions(permissions: Array<String>) = launch(UI) {
+    internal fun requestPermissions(permissions: Array<String>) = GlobalScope.launch(Dispatchers.Main) {
         requestPermissions(permissions, PERMISSIONS_REQUEST_CODE)
     }
 

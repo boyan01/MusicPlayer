@@ -6,8 +6,8 @@ import androidx.test.espresso.Espresso
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.GrantPermissionRule
-import androidx.test.runner.AndroidJUnit4
 import org.hamcrest.Matchers
 import org.junit.Assert
 import org.junit.Rule
@@ -63,7 +63,7 @@ class LocalScannerActivityTest {
         newAdded.postValue(Resource.success(Dummy.MUSICS[0]))
 
         Espresso.onView(ViewMatchers.withId(R.id.scanningLayout)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
-        Espresso.onView(ViewMatchers.withId(R.id.textLoading)).check(ViewAssertions.matches(ViewMatchers.withText(string(R.string.processing_local_scanner, Dummy.MUSICS[0].title))))
+        Espresso.onView(ViewMatchers.withId(R.id.textLoading)).check(ViewAssertions.matches(ViewMatchers.withText(string(R.string.processing_local_scanner, Dummy.MUSICS[0].getTitle()))))
 
     }
 

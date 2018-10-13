@@ -11,17 +11,18 @@ private const val ARTIST_SEPARATOR = "/"
 /**
  * convert a List of Artist to String
  */
-fun List<Artist>.getString(): String = joinToString(ARTIST_SEPARATOR) { it.name }
+fun List<Artist>.getString(): String = joinToString(ARTIST_SEPARATOR) { it.getName() }
 
 /**
  * music artist and album info
  */
 val Music.subTitle: String
-    get() = artists.getString() + " - " + album.title
+    get() = getArtists().getString() + " - " + getAlbum().getName()
 
 
 /**
  * if music was marked as Favorite
+ * TODO
  */
 val Music.isFavorite: Boolean
-    get() = attach.containsKey("isFavorite")
+    get() = false
