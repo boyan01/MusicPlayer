@@ -46,6 +46,9 @@ class QuietMediaPlayer(
 
     override fun prepare(uri: String, playWhenReady: Boolean) {
         if (_state != IMediaPlayer.IDLE) {
+            if (player.isPlaying) {
+                player.stop()
+            }
             player.reset()
             _state = IMediaPlayer.IDLE
         }

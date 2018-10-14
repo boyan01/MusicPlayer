@@ -84,7 +84,7 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
 
-
+    implementation "androidx.palette:palette:1.0.0"
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation "androidx.palette:palette-ktx:1.0.0"
     implementation "androidx.media:media:1.0.0"

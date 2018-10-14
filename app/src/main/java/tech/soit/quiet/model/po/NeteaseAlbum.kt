@@ -18,10 +18,10 @@ class NeteaseAlbum(
          * @param al 网易云音乐API json
          */
         fun fromJson(al: JsonObject): NeteaseAlbum {
-            return NeteaseAlbum(al["id"].asLong, al["picUrl"].asString, al["name"].asString)
+            return NeteaseAlbum(al["id"].asLong, al["name"].asString, al["picUrl"].asString)
         }
 
-    }
+     }
 
     override fun getCoverImageUrl(): Any {
         return NeteaseGlideUrl(imageUrl)

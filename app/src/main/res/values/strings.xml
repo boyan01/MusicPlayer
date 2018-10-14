@@ -45,4 +45,7 @@
     <string name="action_share">分享</string>
     <string name="action_download">下载</string>
     <string name="action_multi_select">多选</string>
+    <string name="action_play_all">播放全部</string>
+    <string name="add_to_collection">收藏</string>
+    <string name="collected">已收藏</string>
 </resources>

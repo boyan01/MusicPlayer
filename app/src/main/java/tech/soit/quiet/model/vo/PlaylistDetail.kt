@@ -16,4 +16,6 @@ abstract class PlaylistDetail {
 
     abstract fun getTracks(): List<Music>
 
+    abstract fun isSubscribed(): Boolean
+
 }

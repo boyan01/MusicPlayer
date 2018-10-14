@@ -31,7 +31,7 @@ class LocalMusicViewModel constructor(
      */
     val allAlbums: LiveData<List<Album>>
         get() = allMusics.mapNonNull { musics ->
-            musics.map { it.getAlbum() }.distinctBy { it.getName() }
+            musics.asSequence().map { it.getAlbum() }.distinctBy { it.getName() }.toList()
         }
 
     /**
