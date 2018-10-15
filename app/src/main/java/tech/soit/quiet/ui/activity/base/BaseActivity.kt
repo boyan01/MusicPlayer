@@ -24,7 +24,6 @@ import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.ui.activity.MusicPlayerActivity
-import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
@@ -88,9 +87,9 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
             return
         }
         val rule = Class.forName("tech.soit.quiet.utils.test.BaseActivityTestRule").kotlin
-        val objectInstance = rule.companionObjectInstance!!
-        val objectClass = rule.companionObject!!
-        objectClass.declaredFunctions.find { it.name == "injectActivity" }!!.call(objectInstance, this)
+        val objectInstance = rule.companionObjectInstance ?: return
+        val objectClass = rule.companionObject ?: return
+        objectClass.declaredFunctions.find { it.name == "injectActivity" }?.call(objectInstance, this)
     }
 
     /**
@@ -193,50 +192,6 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
-    }
-
-    /**
-     * navigation to the fragment, if fragment exist, will not add
-     *
-     * NOTE: fragment' container has been ordered to [R.id.content]
-     */
-    open fun navigationTo(tag: String,
-                          addToBackStack: Boolean = true,
-                          fragment: () -> BaseFragment) {
-        val exist = supportFragmentManager.findFragmentByTag(tag)
-        if (exist != null && exist.isAdded) {
-            supportFragmentManager.beginTransaction()
-                    .show(exist)
-                    .commit()
-        } else {
-            val new = fragment()
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.content, new, tag)
-                    .apply {
-                        if (addToBackStack) {
-                            addToBackStack(tag)
-                        }
-                    }
-                    .commit()
-        }
-
-    }
-
-    /**
-     * open this fragment
-     */
-    open fun open(fragment: BaseFragment,
-                  addToBackStack: Boolean = true,
-                  tag: String? = null) {
-        supportFragmentManager
-                .beginTransaction()
-                .add(R.id.content, fragment, tag)
-                .apply {
-                    if (addToBackStack) {
-                        addToBackStack(tag)
-                    }
-                }
-                .commit()
     }
 
     /**

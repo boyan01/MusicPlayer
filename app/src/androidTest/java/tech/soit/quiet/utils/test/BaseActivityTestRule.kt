@@ -17,8 +17,9 @@ class BaseActivityTestRule<T : BaseActivity>(
         var viewModelFactory: ViewModelProvider.Factory? = null
 
         /**
-         * this function is called by [BaseActivity.onCreate]
+         * this function is called by [BaseActivity.onCreate] throw Reflect
          */
+        @Suppress("unused")
         fun injectActivity(activity: BaseActivity) {
             //check again
             val isTest = activity.intent.getBooleanExtra("isTest", false)
