@@ -15,7 +15,7 @@ class NeteasePlayList(private val jsonObject: JsonObject) : PlayList() {
     }
 
     override fun getTrackCount(): Int {
-        return jsonObject["playCount"].asInt
+        return jsonObject["trackCount"].asInt
     }
 
     override fun getName(): String {

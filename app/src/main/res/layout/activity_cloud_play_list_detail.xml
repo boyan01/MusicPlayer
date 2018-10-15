@@ -31,10 +31,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="?quietTextSecondaryInverse" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_height="20dp"
+                android:background="@drawable/mask_play_list_detail_cover"
+                app:layout_constraintEnd_toEndOf="@id/imageCover"
+                app:layout_constraintStart_toStartOf="@id/imageCover"
+                app:layout_constraintTop_toTopOf="@id/imageCover" />
+
             <androidx.appcompat.widget.AppCompatImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
+                android:padding="1dp"
                 android:src="@drawable/ic_play_circle_outline_black_24dp"
+                android:tint="?quietTextPrimaryInverse"
                 app:layout_constraintBottom_toBottomOf="@id/textPlayCount"
                 app:layout_constraintEnd_toStartOf="@id/textPlayCount"
                 app:layout_constraintTop_toTopOf="@id/textPlayCount" />
@@ -43,6 +53,7 @@
                 android:id="@+id/textPlayCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="?quietTextPrimaryInverse"
                 android:textSize="11sp"
                 app:layout_constraintEnd_toEndOf="@id/imageCover"
                 app:layout_constraintTop_toTopOf="@id/imageCover"

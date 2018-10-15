@@ -18,4 +18,6 @@ abstract class PlaylistDetail {
 
     abstract fun isSubscribed(): Boolean
 
+    abstract fun getPlayCount(): Int
+
 }

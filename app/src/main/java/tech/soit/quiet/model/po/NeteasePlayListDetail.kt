@@ -40,6 +40,10 @@ class NeteasePlayListDetail(private val jsonObject: JsonObject) : PlaylistDetail
         return jsonObject["subscribed"].asBoolean
     }
 
+    override fun getPlayCount(): Int {
+        return jsonObject["playCount"].asInt
+    }
+
     /**
      * create music from playlist track json
      */

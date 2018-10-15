@@ -1,33 +1,23 @@
 package tech.soit.quiet.ui.activity.cloud
 
-import android.content.Intent
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.View
-import androidx.core.view.isGone
 import androidx.core.view.updatePadding
-import androidx.lifecycle.Observer
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_cloud_play_list_detail.*
 import kotlinx.android.synthetic.main.item_cloud_play_list_detail_action.view.*
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
-import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
 import tech.soit.quiet.model.po.NeteasePlayListDetail
-import tech.soit.quiet.model.vo.Music
-import tech.soit.quiet.player.MusicPlayerManager
-import tech.soit.quiet.ui.activity.MusicPlayerActivity
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.activity.cloud.viewmodel.CloudPlayListDetailViewModel
-import tech.soit.quiet.ui.item.ItemMusicListHeader
-import tech.soit.quiet.ui.item.MusicItemViewBinder
-import tech.soit.quiet.ui.item.MusicListHeaderViewBinder
+import tech.soit.quiet.ui.adapter.MusicListAdapter
 import tech.soit.quiet.ui.view.CircleOutlineProvider
-import tech.soit.quiet.utils.*
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.ImageLoader
@@ -36,6 +26,9 @@ import tech.soit.quiet.utils.component.generatePalette
 import tech.soit.quiet.utils.component.getMuteSwatch
 import tech.soit.quiet.utils.component.support.attrValue
 import tech.soit.quiet.utils.component.support.color
+import tech.soit.quiet.utils.component.support.string
+import tech.soit.quiet.utils.setEmpty
+import tech.soit.quiet.utils.setLoading
 
 @LayoutId(R.layout.activity_cloud_play_list_detail)
 @EnableBottomController
@@ -47,7 +40,7 @@ class CloudPlayListDetailActivity : BaseActivity() {
 
     private lateinit var detail: NeteasePlayListDetail
 
-    private lateinit var adapter: MultiTypeAdapter
+    private lateinit var adapter: MusicListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +60,13 @@ class CloudPlayListDetailActivity : BaseActivity() {
 
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, offset ->
             val alpha = -offset.toFloat() / appBarLayout.totalScrollRange
-            if (alpha > 0.5) {
-                toolbar.title = textPlayListTitle.text
+            val title = if (alpha > 0.5) {
+                textPlayListTitle.text
             } else {
-                toolbar.setTitle(R.string.title_play_list)
+                string(R.string.title_play_list)
+            }
+            if (toolbar.title != title) {
+                toolbar.title = title
             }
             toolbar.background.alpha = (alpha * 255).toInt()
         })
@@ -86,26 +82,8 @@ class CloudPlayListDetailActivity : BaseActivity() {
 
         playlistToken = "netease_$playlistId"
 
-        val musicItemViewBinder = MusicItemViewBinder(this, playlistToken, { _, music ->
-            val playlist = MusicPlayerManager.musicPlayer.playlist
-            if (playlist.token == playlistToken && playlist.current == music) {
-                //if current is playing.. open player activity
-                startActivity(Intent(this, MusicPlayerActivity::class.java))
-            } else {
-                MusicPlayerManager.play(playlistToken, music, detail.getTracks())
-            }
-        })
-        adapter = MultiTypeAdapter()
-                .withEmptyBinder()
-                .withLoadingBinder()
-                .withBinder(musicItemViewBinder)
-                .withBinder(MusicListHeaderViewBinder(
-                        onClicked = {
-                            MusicPlayerManager.play(playlistToken, detail.getTracks()[0], detail.getTracks())
-                        },
-                        onCollectionClicked = {
-                            //TODO
-                        }))
+
+        adapter = MusicListAdapter(playlistToken)
         recyclerView.adapter = adapter
 
         launch {
@@ -127,7 +105,7 @@ class CloudPlayListDetailActivity : BaseActivity() {
                     val swatch = bitmap.generatePalette().await().getMuteSwatch()
                     toolbar.setBackgroundColor(swatch.rgb)
                     window.navigationBarColor = swatch.rgb
-                    musicItemViewBinder.colorIndicator = swatch.rgb
+                    adapter.applyPrimaryColor(swatch.rgb)
                 }
 
                 //draw blur bitmap
@@ -144,54 +122,17 @@ class CloudPlayListDetailActivity : BaseActivity() {
             ImageLoader.with(this@CloudPlayListDetailActivity).load(detail.getCreator().getAvatarUrl()).into(imageCreatorAvatar)
             textCreatorNickname.text = "%s>".format(detail.getCreator().getNickName())
 
-            //music list header info
+            textPlayCount.text = detail.getPlayCount().toString()
+
+            //show music list
             val user = viewModel.getLoginUser()
             val isShowCollectionButton = user == null || user.getId() == detail.getCreator().getId()
-            val isSubscribe = user != null && user.getId() != detail.getCreator().getId()
+            val isSubscribed = user != null && user.getId() != detail.getCreator().getId()
                     && detail.isSubscribed()
-            val header = ItemMusicListHeader(detail.getTracks().size,
-                    isShowCollectionButton, isSubscribe)
-
-            val items = ArrayList<Any>()
-            items.add(header)
-            items.addAll(detail.getTracks())
-            adapter.submit(items)
-
-            subscribeData()
+            adapter.showList(detail.getTracks(), isShowCollectionButton, isSubscribed)
         }
     }
 
-    private fun subscribeData() {
-
-        MusicPlayerManager.playingMusic.observe(this, object : Observer<Music?> {
-
-            private var current: Music? = null
-
-            override fun onChanged(playing: Music?) {
-                if (MusicPlayerManager.musicPlayer.playlist.token != playlistToken) {
-                    return
-                }
-                val old = adapter.items.indexOf(current)
-                val new = adapter.items.indexOf(playing)
-                if (old != -1) {
-                    setIndicator(old, false)
-                }
-                if (new != -1) {
-                    setIndicator(new, true)
-                }
-                current = playing
-            }
-
-            private fun setIndicator(adapterPosition: Int, show: Boolean) {
-                recyclerView
-                        .findViewHolderForAdapterPosition(adapterPosition)
-                        ?.itemView
-                        ?.findViewById<View>(R.id.indicatorPlaying)
-                        ?.isGone = show
-            }
-
-        })
-    }
 
     private fun setupActions() {
         with(layoutComment) {

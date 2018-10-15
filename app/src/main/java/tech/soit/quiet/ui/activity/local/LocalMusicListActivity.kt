@@ -81,7 +81,7 @@ class LocalMusicListActivity : BaseActivity() {
         adapter.withEmptyBinder()
                 .withLoadingBinder()
                 .withBinder(MusicItemViewBinder(
-                        this, token, this::onMusicItemClicked
+                        token, this::onMusicItemClicked
                 ))
         recyclerView.adapter = adapter
 

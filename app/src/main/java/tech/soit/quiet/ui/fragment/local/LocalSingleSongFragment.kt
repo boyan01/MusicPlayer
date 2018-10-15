@@ -73,7 +73,7 @@ class LocalSingleSongFragment : BaseFragment() {
         adapter = MultiTypeAdapter()
                 .withEmptyBinder()
                 .withLoadingBinder()
-                .withBinder(MusicItemViewBinder(this, TOKEN_PLAYLIST,
+                .withBinder(MusicItemViewBinder(TOKEN_PLAYLIST,
                         this::onMusicItemClick, onPlayingItemShowHide))
 
 

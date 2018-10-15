@@ -1,30 +1,25 @@
 package tech.soit.quiet.ui.item
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.ColorInt
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_music.view.*
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
-import kotlinx.coroutines.experimental.launch
+import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.MusicPlayerManager
-import tech.soit.quiet.ui.item.MusicItemViewBinder.PlayingIndicatorObserver
 import tech.soit.quiet.utils.KItemViewBinder
 import tech.soit.quiet.utils.KViewHolder
 import tech.soit.quiet.utils.TypeLayoutRes
 import tech.soit.quiet.utils.component.ImageLoader
+import tech.soit.quiet.utils.component.support.attrValue
 
 
 /**
  * item music
- *
- * NOTE: to perceive the playing music change , need use [PlayingIndicatorObserver]
  *
  * @param token the token of playlist, to check music if playing
  * @param onClick callback of music been clicked
@@ -32,7 +27,6 @@ import tech.soit.quiet.utils.component.ImageLoader
  */
 @TypeLayoutRes(R.layout.item_music)
 class MusicItemViewBinder(
-        private val lifecycleObserver: LifecycleOwner,
         private val token: String,
         private val onClick: (view: View, music: Music) -> Unit,
         private val onPlayingItemShowHide: ((show: Boolean) -> Unit)? = null
@@ -41,29 +35,35 @@ class MusicItemViewBinder(
     /**
      * save current playing music index
      */
-    private var playingViewHolder: KViewHolder? = null
-
-    private val playingIndicatorObserver = PlayingIndicatorObserver()
-    private var observerAdded = false
+    private var playingViewHolder: MusicViewHolder? = null
 
     @ColorInt
-    var colorIndicator: Int = 0
+    var colorIndicator: Int = AppContext.attrValue(R.attr.colorPrimary)
+
+    fun applyPrimaryColor(@ColorInt color: Int) {
+        colorIndicator = color
+    }
+
+    override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): KViewHolder {
+        return MusicViewHolder(inflater.inflate(R.layout.item_music, parent, false))
+    }
 
     override fun onBindViewHolder(holder: KViewHolder, item: Music) = with(holder.itemView) {
+        holder as MusicViewHolder
+        if (colorIndicator != 0) {
+            holder.setPrimaryColor(colorIndicator)
+        }
+
         val isPlaying = isPlaying(item)
         if (isPlaying) {
-            if (playingViewHolder != null && playingViewHolder != holder) {
-                playingViewHolder!!.itemView.indicatorPlaying.isGone = true
+            if (playingViewHolder != holder) {
+                playingViewHolder?.setIsPlaying(false)
             }
             playingViewHolder = holder
-            indicatorPlaying.isVisible = true
-            if (colorIndicator != 0) {
-                indicatorPlaying.setBackgroundColor(colorIndicator)
-            }
             onPlayingItemShowHide?.invoke(true)
-        } else {
-            indicatorPlaying.isGone = true
         }
+        holder.setIsPlaying(isPlaying)
+
         ImageLoader.with(this).load(item.getAlbum().getCoverImageUrl()).centerCrop().into(image)
         setOnClickListener {
             onClick(holder.itemView, item)
@@ -76,19 +76,10 @@ class MusicItemViewBinder(
         text_item_subtitle_2.text = item.getAlbum().getName()
     }
 
-    override fun onViewAttachedToWindow(holder: KViewHolder) {
-        super.onViewAttachedToWindow(holder)
-        if (!observerAdded) {
-            MusicPlayerManager.playingMusic.observe(lifecycleObserver, playingIndicatorObserver)
-            observerAdded = true
-        }
-    }
-
     override fun onViewDetachedFromWindow(holder: KViewHolder) {
         super.onViewDetachedFromWindow(holder)
         if (holder == playingViewHolder) {
             onPlayingItemShowHide?.invoke(false)
-            playingViewHolder = null
         }
     }
 
@@ -97,12 +88,33 @@ class MusicItemViewBinder(
                 && MusicPlayerManager.musicPlayer.playlist.current == music
     }
 
-    private inner class PlayingIndicatorObserver : Observer<Music?> {
+    fun setCurrentPlaying(music: Music?, recyclerView: RecyclerView) {
+        val index = adapter.items.indexOf(music)
+        if (index == -1) {
+            playingViewHolder?.setIsPlaying(false)
+            playingViewHolder = null
+        }
+        val holder = recyclerView.findViewHolderForAdapterPosition(index) as? MusicViewHolder
+        if (holder == playingViewHolder || holder == null) {
+            return
+        }
+        playingViewHolder = holder
+        holder.setIsPlaying(true)
 
-        override fun onChanged(playing: Music?) {
-            playing ?: return
-            val new = adapter.items.indexOf(playing)
-            GlobalScope.launch(Dispatchers.Main) { adapter.notifyItemChanged(new) }
+    }
+
+    class MusicViewHolder(itemView: View) : KViewHolder(itemView) {
+
+        fun setIsPlaying(isPlaying: Boolean) {
+            itemView.indicatorPlaying.isGone = !isPlaying
+        }
+
+        /**
+         * reset item view primary color
+         */
+        fun setPrimaryColor(@ColorInt color: Int) {
+            itemView.indicatorPlaying.setBackgroundColor(color)
+            itemView.divider_subtitle.setBackgroundColor(color)
         }
 
     }

@@ -10,7 +10,7 @@ import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
 
 
-class KViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+open class KViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
 annotation class TypeLayoutRes(@LayoutRes val value: Int)
 
