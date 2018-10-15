@@ -64,7 +64,7 @@ class MusicItemViewBinder(
         } else {
             indicatorPlaying.isGone = true
         }
-        ImageLoader.with(this).load(item.getAlbum().getCoverImageUrl()).into(image)
+        ImageLoader.with(this).load(item.getAlbum().getCoverImageUrl()).centerCrop().into(image)
         setOnClickListener {
             onClick(holder.itemView, item)
         }

@@ -9,6 +9,7 @@ import android.view.View
 import androidx.core.view.isGone
 import androidx.core.view.updatePadding
 import androidx.lifecycle.Observer
+import com.bumptech.glide.load.resource.bitmap.TransformationUtils
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_cloud_play_list_detail.*
 import kotlinx.android.synthetic.main.item_cloud_play_list_detail_action.view.*
@@ -131,29 +132,11 @@ class CloudPlayListDetailActivity : BaseActivity() {
 
                 //draw blur bitmap
                 val blur = bitmap.blur(100, false)
-
-                val bg = Bitmap.createBitmap(appBarLayout.width, appBarLayout.height, Bitmap.Config.RGB_565)
-                val canvas = Canvas(bg)
-
-                //calculate matrix to make bg center corp
-                val matrix = Matrix()
-                val scale: Float
-                var dx = 0F
-                var dy = 0F
-                if (blur.width * bg.height > blur.height * bg.width) {
-                    scale = bg.height.toFloat() / blur.height
-                    dx = (bg.width - blur.width * scale) / 2
-                } else {
-                    scale = bg.width.toFloat() / blur.width
-                    dy = (bg.height - blur.height * scale) / 2
-                }
-                matrix.postScale(scale, scale)
-                matrix.postTranslate(dx, dy)
-
-                canvas.drawBitmap(blur, matrix, Paint())
-                blur.recycle()
-                canvas.drawColor(color(R.color.color_transparent_dark_secondary), PorterDuff.Mode.SRC_OVER)
-                this@CloudPlayListDetailActivity.launch { appBarLayout.background = BitmapDrawable(resources, bg) }
+                val crop = TransformationUtils.centerCrop(ImageLoader.get(this@CloudPlayListDetailActivity).bitmapPool,
+                        blur, appBarLayout.width, appBarLayout.height)
+                //draw a dark mask on the blur image, to make appbar layout background fit white action button
+                Canvas(crop).drawColor(color(R.color.color_transparent_dark_secondary), PorterDuff.Mode.SRC_OVER)
+                this@CloudPlayListDetailActivity.launch { appBarLayout.background = BitmapDrawable(resources, crop) }
             }
             ImageLoader.with(this@CloudPlayListDetailActivity).load(detail.getCoverUrl()).into(imageCover)
 
