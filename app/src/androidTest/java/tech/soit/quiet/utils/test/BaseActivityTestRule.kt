@@ -44,7 +44,7 @@ class BaseActivityTestRule<T : BaseActivity>(
     /**
      * add a default identify value
      */
-    override fun getActivityIntent(): Intent {
+    public override fun getActivityIntent(): Intent {
         val intent = Intent(Intent.ACTION_MAIN)
         intent.putExtra("isTest", true)
         return intent

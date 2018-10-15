@@ -1,5 +1,6 @@
 package tech.soit.quiet.ui.activity.cloud
 
+import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
@@ -13,7 +14,7 @@ import kotlinx.android.synthetic.main.item_cloud_play_list_detail_action.view.*
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.R
-import tech.soit.quiet.model.po.NeteasePlayListDetail
+import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.activity.cloud.viewmodel.CloudPlayListDetailViewModel
 import tech.soit.quiet.ui.adapter.MusicListAdapter
@@ -34,11 +35,18 @@ import tech.soit.quiet.utils.setLoading
 @EnableBottomController
 class CloudPlayListDetailActivity : BaseActivity() {
 
+    companion object {
+
+
+        const val PARAM_ID = "id"
+
+    }
+
     private val viewModel by lazyViewModel<CloudPlayListDetailViewModel>()
 
     private lateinit var playlistToken: String
 
-    private lateinit var detail: NeteasePlayListDetail
+    private lateinit var detail: PlayListDetail
 
     private lateinit var adapter: MusicListAdapter
 
@@ -75,7 +83,7 @@ class CloudPlayListDetailActivity : BaseActivity() {
         imageCreatorAvatar.outlineProvider = CircleOutlineProvider()
         imageCreatorAvatar.clipToOutline = true
 
-        val playlistId = intent.getLongExtra("id", -1)
+        val playlistId = intent.getLongExtra(PARAM_ID, -1)
         if (playlistId == -1L) {
             error("need playlist id")
         }
@@ -96,10 +104,16 @@ class CloudPlayListDetailActivity : BaseActivity() {
             this@CloudPlayListDetailActivity.detail = detail
             textPlayListTitle.text = detail.getName()
 
-            GlobalScope.launch {
+            GlobalScope.launch pictureLoader@{
                 val submit = ImageLoader.with(this@CloudPlayListDetailActivity).asBitmap()
                         .load(detail.getCoverUrl()).submit(appBarLayout.width, appBarLayout.height)
-                val bitmap = submit.get()
+                val bitmap: Bitmap
+                try {
+                    bitmap = submit.get()
+                } catch (e: Exception) {
+                    return@pictureLoader
+                }
+
                 this@CloudPlayListDetailActivity.launch {
                     imageCover.setImageBitmap(bitmap)
                     val swatch = bitmap.generatePalette().await().getMuteSwatch()
