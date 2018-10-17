@@ -1,5 +1,7 @@
 package tech.soit.quiet.utils
 
+import com.google.gson.JsonElement
+import com.google.gson.JsonNull
 import tech.soit.quiet.model.vo.Artist
 import tech.soit.quiet.model.vo.Music
 
@@ -26,3 +28,16 @@ val Music.subTitle: String
  */
 val Music.isFavorite: Boolean
     get() = false
+
+
+val JsonElement.string: String
+    get() {
+        if (this is JsonNull) {
+            return "null"
+        }
+        return try {
+            asString
+        } catch (e: Exception) {
+            toString()
+        }
+    }

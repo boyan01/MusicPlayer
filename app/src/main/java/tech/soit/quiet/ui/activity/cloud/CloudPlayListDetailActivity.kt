@@ -105,10 +105,10 @@ class CloudPlayListDetailActivity : BaseActivity() {
             textPlayListTitle.text = detail.getName()
 
             GlobalScope.launch pictureLoader@{
-                val submit = ImageLoader.with(this@CloudPlayListDetailActivity).asBitmap()
-                        .load(detail.getCoverUrl()).submit(appBarLayout.width, appBarLayout.height)
                 val bitmap: Bitmap
                 try {
+                    val submit = ImageLoader.with(this@CloudPlayListDetailActivity).asBitmap()
+                            .load(detail.getCoverUrl()).submit(appBarLayout.width, appBarLayout.height)
                     bitmap = submit.get()
                 } catch (e: Exception) {
                     return@pictureLoader

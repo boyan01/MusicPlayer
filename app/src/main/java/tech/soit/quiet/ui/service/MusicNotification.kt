@@ -30,7 +30,6 @@ import tech.soit.quiet.utils.component.support.string
 import tech.soit.quiet.utils.isFavorite
 import tech.soit.quiet.utils.subTitle
 import tech.soit.quiet.utils.testing.OpenForTesting
-import java.lang.Exception
 
 
 /**

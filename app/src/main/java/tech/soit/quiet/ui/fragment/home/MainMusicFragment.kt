@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.content_main_music_user_info.*
@@ -110,8 +111,15 @@ class MainMusicFragment : BaseFragment() {
             val user = neteaseRepository.getLoginUser()
             checkUser(user)
             user ?: return@launch
-            val playLists = neteaseRepository.getUserPlayerList(user.getId())
-            computePlayListRange(playLists, user.getId())
+
+            val playLists: List<PlayList>
+            try {
+                playLists = neteaseRepository.getUserPlayerList(user.getId())
+                computePlayListRange(playLists, user.getId())
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), e.message ?: "error", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
             adapter.submit(playLists)
         }
     }
