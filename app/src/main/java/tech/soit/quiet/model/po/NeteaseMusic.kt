@@ -48,5 +48,9 @@ class NeteaseMusic(
         return id.hashCode()
     }
 
+    override fun toString(): String {
+        return "NeteaseMusic(id=$id, title='$title')"
+    }
+
 
 }

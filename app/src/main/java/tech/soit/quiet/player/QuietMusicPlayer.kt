@@ -5,7 +5,7 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
-import tech.soit.quiet.player.core.QuietMediaPlayer
+import tech.soit.quiet.player.core.QuietExoPlayer
 import tech.soit.quiet.player.playlist.Playlist
 import tech.soit.quiet.utils.component.LoggerLevel
 import tech.soit.quiet.utils.component.log
@@ -14,8 +14,6 @@ import kotlin.properties.Delegates
 
 /**
  * provide method could directly interaction with UI
- *
- * @author 杨彬
  */
 class QuietMusicPlayer {
 
@@ -26,7 +24,7 @@ class QuietMusicPlayer {
     /**
      * @see IMediaPlayer
      */
-    val mediaPlayer: IMediaPlayer = QuietMediaPlayer()
+    val mediaPlayer: IMediaPlayer = QuietExoPlayer()
 
     /**
      * @see Playlist
@@ -35,7 +33,6 @@ class QuietMusicPlayer {
         newValue.playMode = oldValue.playMode//inherit old playlist play mode
         MusicPlayerManager.playlist.postValue(newValue)
     }
-
 
 
     /**
