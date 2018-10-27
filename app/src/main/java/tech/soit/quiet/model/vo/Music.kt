@@ -1,31 +1,18 @@
 package tech.soit.quiet.model.vo
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 
-@Parcelize
-data class Music(
-        val id: Long,
-        val title: String,
-        val album: Album,
-        val artists: List<Artist>,
-        //附加
-        val attach: Map<String, String> = emptyMap()
-) : Parcelable {
+abstract class Music : Parcelable, Serializable {
 
-    companion object {
+    abstract fun getId(): Long
 
-        const val URI = "uri"
+    abstract fun getTitle(): String
 
-        const val PIC_URI = "pic_uri"
-    }
+    abstract fun getAlbum(): Album
 
+    abstract fun getArtists(): List<Artist>
 
-    /**
-     * return the value of [attach]
-     */
-    operator fun get(key: String): String? {
-        return attach[key]
-    }
+    abstract fun getPlayUrl(): String
 
 }

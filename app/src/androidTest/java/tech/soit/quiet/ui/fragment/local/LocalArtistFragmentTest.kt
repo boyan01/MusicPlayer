@@ -5,8 +5,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.test.espresso.Espresso
 import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import org.hamcrest.CoreMatchers
 import org.junit.Before
 import org.junit.Rule
@@ -14,6 +14,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import tech.soit.quiet.R
+import tech.soit.quiet.model.local.LocalArtist
 import tech.soit.quiet.model.vo.Artist
 import tech.soit.quiet.utils.mock
 import tech.soit.quiet.utils.test.ViewModelUtil
@@ -54,7 +55,7 @@ class LocalArtistFragmentTest {
         Espresso.onView(ViewMatchers.withId(R.id.itemEmptyLayout)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
         val artists = (0..10).map {
-            Artist("artist $it")
+            LocalArtist("artist $it")
         }
 
         liveData.postValue(artists)

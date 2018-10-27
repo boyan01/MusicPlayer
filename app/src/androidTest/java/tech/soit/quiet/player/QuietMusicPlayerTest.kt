@@ -3,13 +3,12 @@ package tech.soit.quiet.player
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.runBlocking
+import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
-import tech.soit.quiet.player.core.QuietMediaPlayerTest
 import tech.soit.quiet.player.playlist.Playlist
 import tech.soit.quiet.utils.Dummy
 
@@ -26,14 +25,17 @@ class QuietMusicPlayerTest {
     val r = InstantTaskExecutorRule()
 
     // inflate with dummy play uri
-    private val musics = Dummy.MUSICS.map {
-        it.copy(attach = mapOf(Music.URI to QuietMediaPlayerTest.URI))
-    }
+    private val musics = Dummy.MUSICS
 
     @Before
     fun setUp() {
         player = QuietMusicPlayer()
         player.playlist = Playlist("test", musics)
+    }
+
+    @After
+    fun tearDown() {
+        player.quiet()
     }
 
     @Test
@@ -44,7 +46,7 @@ class QuietMusicPlayerTest {
 
         delay(1000)
 
-        assertTrue("player contains ${music.id}", player.playlist.list.contains(music))
+        assertTrue("player contains ${music.getId()}", player.playlist.list.contains(music))
         assertFalse("not isPlayWhenReady", player.mediaPlayer.isPlayWhenReady)
 
     }

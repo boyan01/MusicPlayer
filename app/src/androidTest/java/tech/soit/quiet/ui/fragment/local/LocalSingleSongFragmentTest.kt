@@ -4,8 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -59,7 +59,7 @@ class LocalSingleSongFragmentTest {
         val musics = Dummy.MUSICS
         musicList.postValue(musics)
 
-        onView(listMatcher().atPosition(0)).check(matches(hasDescendant(withText(musics[0].title))))
+        onView(listMatcher().atPosition(0)).check(matches(hasDescendant(withText(musics[0].getTitle()))))
     }
 
     private fun listMatcher(): RecyclerViewMatcher {

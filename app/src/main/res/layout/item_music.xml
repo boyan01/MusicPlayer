@@ -3,16 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
+    android:layout_height="56dp"
     android:background="?selectableItemBackground"
     tools:layout_gravity="center">
 
     <View
         android:id="@+id/indicatorPlaying"
         android:layout_width="5.0dp"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="30dp"
         android:background="?colorPrimary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -70,7 +68,7 @@
         style="@style/TextAppearance.MaterialComponents.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="2dp"
         android:ellipsize="end"
         android:lines="1"
         android:maxWidth="180dp"
@@ -103,10 +101,12 @@
 
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="1px"
-        android:layout_alignParentBottom="true"
-        android:background="?quietDivider" />
+        android:background="?quietDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/image" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"

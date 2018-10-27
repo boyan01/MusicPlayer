@@ -5,6 +5,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.experimental.CancellationException
+import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.isActive
 import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.model.vo.Music
@@ -54,7 +55,7 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
         }
         states.postValue(Status.LOADING)
         //do scan work
-        launch(
+        GlobalScope.launch(
                 onCompletion = {
                     if (it != null && it !is CancellationException) {
                         logError(it)
@@ -106,7 +107,7 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
         val music = MusicConverter.scanFileToMusic(file)
         if (music != null) {
             localMusicDao.insertMusic(music)
-            newMusic.postValue(Resource.success(music.toMusic()))
+            newMusic.postValue(Resource.success(music))
         }
     }
 

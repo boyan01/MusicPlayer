@@ -1,7 +1,7 @@
 package tech.soit.quiet.repository.db.dao
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.*
 import org.junit.runner.RunWith
 import tech.soit.quiet.repository.db.QuietDatabase
@@ -51,7 +51,7 @@ class LocalMusicDaoTest {
         }
         val musics = db.localMusicDao().getAllMusics().await()
         ids.forEach { id ->
-            Assert.assertTrue(musics.find { it.id == id } != null)
+            Assert.assertTrue(musics.find { it.getId() == id } != null)
         }
     }
 
@@ -60,9 +60,9 @@ class LocalMusicDaoTest {
 
         val list = db.localMusicDao().getMusicsByArtist("artist01").await()
         Assert.assertTrue(list.size == 3)
-        Assert.assertNotNull(list.find { it.title == "music01" })
-        Assert.assertNotNull(list.find { it.title == "music03" })
-        Assert.assertNotNull(list.find { it.title == "music05" })
+        Assert.assertNotNull(list.find { it.getTitle() == "music01" })
+        Assert.assertNotNull(list.find { it.getTitle() == "music03" })
+        Assert.assertNotNull(list.find { it.getTitle() == "music05" })
     }
 
 
@@ -70,8 +70,8 @@ class LocalMusicDaoTest {
     fun testFilterByAlbum() {
         val list = db.localMusicDao().getMusicsByAlbum("album02").await()
         Assert.assertTrue(list.size == 2)
-        Assert.assertNotNull(list.find { it.title == "music02" })
-        Assert.assertNotNull(list.find { it.title == "music04" })
+        Assert.assertNotNull(list.find { it.getTitle() == "music02" })
+        Assert.assertNotNull(list.find { it.getTitle() == "music04" })
     }
 
 }

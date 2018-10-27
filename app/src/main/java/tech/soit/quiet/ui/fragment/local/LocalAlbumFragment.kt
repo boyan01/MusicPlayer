@@ -2,6 +2,7 @@ package tech.soit.quiet.ui.fragment.local
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,11 +35,12 @@ class LocalAlbumFragment : BaseFragment() {
             .withEmptyBinder()
             .withLoadingBinder()
 
+    private var albums: List<Album> = emptyList()
+
     private fun onAlbumClick(position: Int) {
-        val album = adapter.items[position] as Album
         val intent = Intent(context, LocalMusicListActivity::class.java)
         intent.putExtra(ARG_TYPE, TYPE_ALBUM)
-        intent.putExtra(ARG_OBJ, album)
+        intent.putExtra(ARG_OBJ, albums[position] as Parcelable)
         startActivity(intent)
     }
 
@@ -48,7 +50,10 @@ class LocalAlbumFragment : BaseFragment() {
             when {
                 albums == null -> adapter.submit(listOf(Loading))
                 albums.isEmpty() -> adapter.submit(listOf(Empty))
-                else -> adapter.submit(albums.map { AItem(it.title, "") })
+                else -> {
+                    adapter.submit(albums.map { AItem(it.getName(), "") })
+                    this.albums = albums
+                }
             }
         })
     }

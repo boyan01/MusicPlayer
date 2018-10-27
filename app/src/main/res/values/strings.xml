@@ -36,4 +36,16 @@
     <string name="nav_radio">私人FM</string>
     <string name="nav_daily_recommend">每日推荐</string>
     <string name="nav_tends">排行榜</string>
+    <string name="template_item_play_list_count">共%d首</string>
+    <string name="login_hint_phone">手机号</string>
+    <string name="action_login">登陆</string>
+    <string name="user_not_login">未登录</string>
+    <string name="title_play_list">歌单</string>
+    <string name="action_comment">评论</string>
+    <string name="action_share">分享</string>
+    <string name="action_download">下载</string>
+    <string name="action_multi_select">多选</string>
+    <string name="action_play_all">播放全部</string>
+    <string name="add_to_collection">收藏</string>
+    <string name="collected">已收藏</string>
 </resources>

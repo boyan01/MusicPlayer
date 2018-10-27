@@ -1,24 +1,35 @@
 package tech.soit.quiet.ui.fragment.home
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.PagerAdapter
-import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.content_main_music_user_info.*
 import kotlinx.android.synthetic.main.fragment_main_music.*
 import kotlinx.android.synthetic.main.item_main_navigation.view.*
+import kotlinx.coroutines.experimental.launch
+import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
-import tech.soit.quiet.ui.activity.LocalMusicActivity
+import tech.soit.quiet.model.vo.PlayList
+import tech.soit.quiet.model.vo.User
+import tech.soit.quiet.ui.activity.local.LocalMusicActivity
+import tech.soit.quiet.ui.activity.user.LoginActivity
 import tech.soit.quiet.ui.fragment.base.BaseFragment
-import tech.soit.quiet.ui.item.submitEmpty
-import tech.soit.quiet.ui.item.withEmptyBinder
-import tech.soit.quiet.ui.item.withLoadingBinder
+import tech.soit.quiet.ui.fragment.home.cloud.PlayListViewBinder
+import tech.soit.quiet.ui.fragment.home.viewmodel.MainMusicViewModel
+import tech.soit.quiet.ui.view.CircleOutlineProvider
 import tech.soit.quiet.utils.annotation.LayoutId
-import tech.soit.typed.adapter.TypedAdapter
+import tech.soit.quiet.utils.component.ImageLoader
+import tech.soit.quiet.utils.component.log
+import tech.soit.quiet.utils.component.support.color
+import tech.soit.quiet.utils.component.support.dimen
+import tech.soit.quiet.utils.submit
+import tech.soit.quiet.utils.withBinder
+import tech.soit.quiet.utils.withEmptyBinder
+import tech.soit.quiet.utils.withLoadingBinder
 
 /**
  * main Fragment of music
@@ -26,8 +37,24 @@ import tech.soit.typed.adapter.TypedAdapter
 @LayoutId(R.layout.fragment_main_music)
 class MainMusicFragment : BaseFragment() {
 
+    companion object {
 
-    private lateinit var pagerAdapter: PagerPlaylistAdapter
+        private const val REQUEST_LOGIN = 1203
+
+    }
+
+    private val mainMusicViewMode by lazyViewModel<MainMusicViewModel>()
+
+    private val neteaseRepository get() = mainMusicViewMode.getNeteaseRepository()
+
+    private lateinit var adapter: MultiTypeAdapter
+
+
+    private var rangeCreated = IntRange(0, 0)
+    private var rangeCollection = IntRange(0, 0)
+    private var positionCollectionStart = 0
+
+    private var isLogin = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,18 +62,79 @@ class MainMusicFragment : BaseFragment() {
         //init navigation items
         initNavigation()
 
-        //contract tab layout with view pager
-        pagerAdapter = PagerPlaylistAdapter(view.context)
-        pagerPlayLists.adapter = pagerAdapter
-        pagerPlayLists.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayoutPlayLists))
-        tabLayoutPlayLists.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(pagerPlayLists))
+        //init recycler view
+        adapter = MultiTypeAdapter()
+                .withBinder(PlayListViewBinder())
+                .withEmptyBinder()
+                .withLoadingBinder()
+        recyclerView.adapter = adapter
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-        //init data
-        pagerAdapter.adapters[0].submitEmpty()
-        pagerAdapter.adapters[1].submitEmpty()
+            private var totalY = 0
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                totalY += dy
+                val offset = totalY.toFloat() / (rangeCollection.last - recyclerView.height)
+                tabLayoutPlayLists.setScrollPosition(0, offset, true)
+            }
+        })
+        tabLayoutPlayLists.touchables.forEach { it.isClickable = false }
+
+        loadData()
+    }
+
+    private fun loadData() {
+        launch {
+            val user = neteaseRepository.getLoginUser()
+            checkUser(user)
+            user ?: return@launch
+
+            val playLists: List<PlayList>
+            try {
+                playLists = neteaseRepository.getUserPlayerList(user.getId())
+                computePlayListRange(playLists, user.getId())
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), e.message ?: "error", Toast.LENGTH_SHORT).show()
+                return@launch
+            }
+            adapter.submit(playLists)
+        }
+    }
+
+    private fun computePlayListRange(playLists: List<PlayList>, userId: Long) {
+        val createdCount = playLists.count { it.getUserId() == userId }
+        positionCollectionStart = createdCount //reset started position of collection
+        val height = dimen(R.dimen.height_item_play_list).toInt()
+        rangeCreated = 0..(createdCount * height)
+        rangeCollection = (createdCount * height)..(playLists.size * height)
+    }
+
+    /**
+     * check if user has been login
+     */
+    private fun checkUser(user: User?) {
+        isLogin = user != null
+        if (user == null) {
+            imageUserAvatar.setImageDrawable(ColorDrawable(color(R.color.color_gray)))
+            textUserNickname.setText(R.string.user_not_login)
+        } else {
+            ImageLoader.with(this).load(user.getAvatarUrl()).into(imageUserAvatar)
+            textUserNickname.text = user.getNickName()
+        }
     }
 
     private fun initNavigation() {
+        imageUserAvatar.outlineProvider = CircleOutlineProvider()
+        imageUserAvatar.clipToOutline = true
+
+        layoutUserInfo.setOnClickListener {
+            if (!isLogin) {
+                startActivityForResult(Intent(requireContext(), LoginActivity::class.java), REQUEST_LOGIN)
+            } else {
+                log { "has been login" }
+            }
+        }
+
         with(navLayoutLocal) {
             imageIcon.setImageResource(R.drawable.ic_music_note_black_24dp)
             textTitle.setText(R.string.nav_local_music)
@@ -73,38 +161,11 @@ class MainMusicFragment : BaseFragment() {
     }
 
 
-    inner class PagerPlaylistAdapter(context: Context) : PagerAdapter() {
-
-        val adapters = Array(2) {
-            TypedAdapter()
-                    .withLoadingBinder()
-                    .withEmptyBinder()
-        }
-
-        private val recyclers = Array(2) {
-            val recyclerView = RecyclerView(context)
-            recyclerView.adapter = adapters[it]
-            recyclerView.layoutManager = LinearLayoutManager(context)
-            return@Array recyclerView
-        }
-
-        override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            val view = recyclers[position]
-            container.addView(view)
-            return view
-        }
-
-        override fun isViewFromObject(view: View, `object`: Any): Boolean {
-            return view == `object`
-        }
-
-        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-            container.removeView(recyclers[position])
-        }
-
-        override fun getCount(): Int {
-            return 2
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == REQUEST_LOGIN && resultCode == Activity.RESULT_OK) {
+            loadData()
         }
     }
+
 
 }

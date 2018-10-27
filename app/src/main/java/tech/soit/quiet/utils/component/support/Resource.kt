@@ -19,10 +19,15 @@ data class Resource<out T>(
             return Resource(Status.SUCCESS, data, null)
         }
 
-        fun <T> error(msg: String, data: T? = null): Resource<T> {
+        fun <T> error(msg: String?, data: T? = null): Resource<T> {
             return Resource(Status.ERROR, data, msg)
         }
 
+        fun <T> error(throwable: Throwable): Resource<T> {
+            return error(throwable.message ?: "Unknown exception")
+        }
+
+        @Deprecated("do not use loading")
         fun <T> loading(data: T? = null): Resource<T> {
             return Resource(Status.LOADING, data, null)
         }

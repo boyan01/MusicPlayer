@@ -1,10 +1,13 @@
 package tech.soit.quiet.player
 
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.android.Main
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
-import tech.soit.quiet.player.core.QuietMediaPlayer
+import tech.soit.quiet.player.core.QuietExoPlayer
 import tech.soit.quiet.player.playlist.Playlist
 import tech.soit.quiet.utils.component.LoggerLevel
 import tech.soit.quiet.utils.component.log
@@ -13,8 +16,6 @@ import kotlin.properties.Delegates
 
 /**
  * provide method could directly interaction with UI
- *
- * @author 杨彬
  */
 class QuietMusicPlayer {
 
@@ -25,7 +26,7 @@ class QuietMusicPlayer {
     /**
      * @see IMediaPlayer
      */
-    val mediaPlayer: IMediaPlayer = QuietMediaPlayer()
+    val mediaPlayer: IMediaPlayer = QuietExoPlayer()
 
     /**
      * @see Playlist
@@ -93,11 +94,7 @@ class QuietMusicPlayer {
         //live data playing music changed
         MusicPlayerManager.playingMusic.postValue(music)
 
-        val uri = music.attach[Music.URI]
-        if (uri == null) {
-            log(LoggerLevel.ERROR) { "next music uri is empty or null" }
-            return
-        }
+        val uri = music.getPlayUrl()
         mediaPlayer.prepare(uri, true)
     }
 
@@ -111,14 +108,14 @@ class QuietMusicPlayer {
 
 
     private fun safeAsync(block: suspend () -> Unit) {
-        launch { block() }
+        GlobalScope.launch { block() }
     }
 
     init {
 
         //indefinite to emit current playing music' duration and playing position
         //maybe have a cleverer way to do that!!
-        launch {
+        GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
                 try {
@@ -127,7 +124,7 @@ class QuietMusicPlayer {
 
                     if (notify) {
                         MusicPlayerManager.position
-                                .postValue(MusicPlayerManager.Position(mediaPlayer.getPosition(),
+                                .postValue(IMusicPlayerManager.Position(mediaPlayer.getPosition(),
                                         mediaPlayer.getDuration()))
                     }
                 } catch (e: Exception) {

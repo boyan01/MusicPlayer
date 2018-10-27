@@ -7,7 +7,6 @@ import tech.soit.quiet.model.vo.Artist
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.repository.db.dao.LocalMusicDao
 import tech.soit.quiet.repository.db.entity.LocalMusic
-import tech.soit.quiet.utils.component.support.map
 import tech.soit.quiet.utils.testing.OpenForTesting
 
 @OpenForTesting
@@ -20,7 +19,8 @@ class LocalMusicListViewModel(
      * get local music by artist
      */
     fun getMusicListByArtist(artist: Artist): LiveData<List<Music>> {
-        return dao.getMusicsByArtist(artist.name).map { it?.map(LocalMusic::toMusic) }
+        @Suppress("UNCHECKED_CAST")
+        return dao.getMusicsByArtist(artist.getName()) as LiveData<List<Music>>
     }
 
 
@@ -28,8 +28,8 @@ class LocalMusicListViewModel(
      * get local music by album
      */
     fun getMusicListByAlbum(album: Album): LiveData<List<Music>> {
-        return dao.getMusicsByAlbum(album.title)
-                .map { it?.map(LocalMusic::toMusic) }
+        @Suppress("UNCHECKED_CAST")
+        return dao.getMusicsByAlbum(album.getName()) as LiveData<List<Music>>
     }
 
 

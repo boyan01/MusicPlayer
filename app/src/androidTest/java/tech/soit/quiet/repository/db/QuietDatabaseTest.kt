@@ -3,7 +3,7 @@ package tech.soit.quiet.repository.db
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.room.Room
-import androidx.test.InstrumentationRegistry
+import androidx.test.platform.app.InstrumentationRegistry
 import tech.soit.quiet.repository.db.entity.LocalMusic
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
@@ -24,7 +24,7 @@ class QuietDatabaseTest {
         val instance
             get() = Room
                     .inMemoryDatabaseBuilder(
-                            InstrumentationRegistry.getContext(),
+                            InstrumentationRegistry.getInstrumentation().context,
                             QuietDatabase::class.java)
                     .allowMainThreadQueries()
                     .build()

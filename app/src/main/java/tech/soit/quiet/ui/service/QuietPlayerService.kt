@@ -1,16 +1,12 @@
 package tech.soit.quiet.ui.service
 
-import android.app.Application
 import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.Observer
+import androidx.lifecycle.*
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.QuietMusicPlayer
@@ -78,10 +74,10 @@ class QuietPlayerService : Service(), LifecycleOwner {
          * init with application.
          * register [MusicPlayerManager.playerState] to ensure service running.
          */
-        fun init(application: Application) {
-            MusicPlayerManager.playerState.observeForever {
+        fun init(playerState: LiveData<Int>) {
+            playerState.observeForever {
                 if (it == IMediaPlayer.PLAYING || it == IMediaPlayer.PREPARING) {
-                    ensureServiceRunning(application)
+                    ensureServiceRunning()
                 }
             }
         }

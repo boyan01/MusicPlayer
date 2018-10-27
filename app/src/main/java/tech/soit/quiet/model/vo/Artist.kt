@@ -1,9 +1,12 @@
 package tech.soit.quiet.model.vo
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import java.io.Serializable
 
-@Parcelize
-data class Artist(
-        val name: String
-) : Parcelable
+abstract class Artist : Parcelable, Serializable {
+
+    abstract fun getId(): Long
+
+    abstract fun getName(): String
+
+}

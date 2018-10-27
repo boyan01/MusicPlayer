@@ -34,6 +34,11 @@
         <!--<item name="materialCardViewStyle">@style/Widget.MaterialComponents.CardView</item>-->
         <!--<item name="materialButtonStyle">@style/Widget.MaterialComponents.Button</item>-->
 
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox
+        </item>
+        <item name="editTextStyle">@style/Widget.MaterialComponents.TextInputEditText.OutlinedBox
+        </item>
+
         <!-- disable action bar and make window translucent -->
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

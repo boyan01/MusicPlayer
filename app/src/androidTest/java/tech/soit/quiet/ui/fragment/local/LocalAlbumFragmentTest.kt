@@ -7,8 +7,8 @@ import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
-import androidx.test.runner.AndroidJUnit4
 import org.hamcrest.CoreMatchers.`is`
 import org.junit.Before
 import org.junit.Rule
@@ -16,6 +16,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import tech.soit.quiet.R
+import tech.soit.quiet.model.local.LocalAlbum
 import tech.soit.quiet.model.vo.Album
 import tech.soit.quiet.utils.mock
 import tech.soit.quiet.utils.test.ViewModelUtil
@@ -56,7 +57,7 @@ class LocalAlbumFragmentTest {
         Espresso.onView(ViewMatchers.withId(R.id.itemEmptyLayout)).check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
 
         val albumsData = (1..10).map {
-            Album("test album $it")
+            LocalAlbum("test album $it", "...")
         }
         albums.postValue(albumsData)
         Espresso.onView(withId(R.id.recyclerView)).check { view, noViewFoundException ->

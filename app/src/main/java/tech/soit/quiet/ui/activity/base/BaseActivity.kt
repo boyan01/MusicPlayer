@@ -1,6 +1,7 @@
 package tech.soit.quiet.ui.activity.base
 
 import android.content.Intent
+import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,11 +17,14 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.transition.TransitionManager
 import kotlinx.android.synthetic.main.base_activity_bottom_controller.*
 import kotlinx.android.synthetic.main.content_bottom_controller.*
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.Dispatchers
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.android.Main
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.ui.activity.MusicPlayerActivity
-import tech.soit.quiet.ui.fragment.base.BaseFragment
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
@@ -31,6 +35,10 @@ import tech.soit.quiet.utils.component.support.observeNonNull
 import tech.soit.quiet.utils.component.support.string
 import tech.soit.quiet.utils.subTitle
 import tech.soit.quiet.viewmodel.MusicControllerViewModel
+import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.reflect.full.companionObject
+import kotlin.reflect.full.companionObjectInstance
+import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.findAnnotation
 
 /**
@@ -42,14 +50,21 @@ import kotlin.reflect.full.findAnnotation
  * use [EnableBottomController] to enable bottom controller for this activity
  *
  */
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
 
     private val controllerViewModel by lazyViewModel<MusicControllerViewModel>()
 
     var viewModelFactory: ViewModelProvider.Factory = QuietViewModelProvider()
 
+    private lateinit var job: Job
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        checkTest()
         super.onCreate(savedInstanceState)
+        job = Job()
 
         //inject layout for annotation
         val isInjectLayout = this::class.findAnnotation<DisableLayoutInject>() == null
@@ -62,6 +77,20 @@ abstract class BaseActivity : AppCompatActivity() {
             //make bottom controller interchangeable
             listenBottomControllerEvent()
         }
+    }
+
+    /**
+     *  check for test , if is in test mode, will replace [viewModelFactory]
+     */
+    private fun checkTest() {
+        val isTest = intent.getBooleanExtra("isTest", false)
+        if (!isTest) {
+            return
+        }
+        val rule = Class.forName("tech.soit.quiet.utils.test.BaseActivityTestRule").kotlin
+        val objectInstance = rule.companionObjectInstance ?: return
+        val objectClass = rule.companionObject ?: return
+        objectClass.declaredFunctions.find { it.name == "injectActivity" }?.call(objectInstance, this)
     }
 
     /**
@@ -114,10 +143,10 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     private fun updateBottomController(playing: Music) {
         //更新音乐信息
-        musicTitle.text = playing.title
+        musicTitle.text = playing.getTitle()
         musicSubTitle.text = playing.subTitle
 
-        val picUri = playing.attach[Music.PIC_URI]
+        val picUri = playing.getAlbum().getCoverImageUrl()
         if (picUri != null) {
             ImageLoader.with(this).load(picUri).into(artWork)
         } else {
@@ -161,48 +190,9 @@ abstract class BaseActivity : AppCompatActivity() {
         super.setContentView(view, params)
     }
 
-    /**
-     * navigation to the fragment, if fragment exist, will not add
-     *
-     * NOTE: fragment' container has been ordered to [R.id.content]
-     */
-    open fun navigationTo(tag: String,
-                          addToBackStack: Boolean = true,
-                          fragment: () -> BaseFragment) {
-        val exist = supportFragmentManager.findFragmentByTag(tag)
-        if (exist != null && exist.isAdded) {
-            supportFragmentManager.beginTransaction()
-                    .show(exist)
-                    .commit()
-        } else {
-            val new = fragment()
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.content, new, tag)
-                    .apply {
-                        if (addToBackStack) {
-                            addToBackStack(tag)
-                        }
-                    }
-                    .commit()
-        }
-
-    }
-
-    /**
-     * open this fragment
-     */
-    open fun open(fragment: BaseFragment,
-                  addToBackStack: Boolean = true,
-                  tag: String? = null) {
-        supportFragmentManager
-                .beginTransaction()
-                .add(R.id.content, fragment, tag)
-                .apply {
-                    if (addToBackStack) {
-                        addToBackStack(tag)
-                    }
-                }
-                .commit()
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
     }
 
     /**
@@ -214,6 +204,17 @@ abstract class BaseActivity : AppCompatActivity() {
      */
     protected inline fun <reified T : ViewModel> lazyViewModel(): Lazy<T> = lazy {
         ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
+    }
+
+
+    /**
+     * @return first : width
+     *         second: height
+     */
+    fun getWindowSize(): Pair<Int, Int> {
+        val point = Point()
+        windowManager.defaultDisplay.getSize(point)
+        return point.x to point.y
     }
 
 

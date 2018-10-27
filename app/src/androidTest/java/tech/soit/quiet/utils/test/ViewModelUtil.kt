@@ -2,11 +2,15 @@ package tech.soit.quiet.utils.test
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import tech.soit.quiet.utils.component.support.QuietViewModelProvider
 
 object ViewModelUtil {
 
     fun <T : ViewModel> createFor(vararg models: T): ViewModelProvider.Factory {
         return object : ViewModelProvider.Factory {
+
+            private val quiet = QuietViewModelProvider()
+
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 models.forEach { model ->
                     if (modelClass.isAssignableFrom(model.javaClass)) {
@@ -14,7 +18,7 @@ object ViewModelUtil {
                         return model as T
                     }
                 }
-                throw IllegalArgumentException("unexpected model class $modelClass")
+                return quiet.create(modelClass)
             }
         }
     }

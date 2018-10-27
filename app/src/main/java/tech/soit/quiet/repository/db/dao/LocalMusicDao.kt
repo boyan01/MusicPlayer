@@ -17,11 +17,11 @@ abstract class LocalMusicDao {
     abstract fun insertMusic(music: LocalMusic): Long
 
 
-    @Query("select * from local_music where artist = :artist")
+    @Query("select * from local_music where artistString = :artist")
     abstract fun getMusicsByArtist(artist: String): LiveData<List<LocalMusic>>
 
 
-    @Query("select * from local_music where album = :album")
+    @Query("select * from local_music where albumString = :album")
     abstract fun getMusicsByAlbum(album: String): LiveData<List<LocalMusic>>
 
 

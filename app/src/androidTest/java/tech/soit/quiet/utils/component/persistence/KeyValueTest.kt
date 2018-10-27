@@ -3,11 +3,13 @@ package tech.soit.quiet.utils.component.persistence
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import tech.soit.quiet.repository.db.QuietDatabase
 import tech.soit.quiet.repository.db.QuietDatabaseTest
+import java.io.Serializable
 
 /**
  * @author : summer
@@ -81,7 +83,28 @@ class KeyValueTest {
     }
 
 
+    @Test
+    fun testObjToString() {
+        val test = TestObject("hello")
+        val string = KeyValue.objectToString(test)
+        assertNotNull("assert test object has been translate as string", string)
+    }
+
+    @Test
+    fun testObjFromString() {
+        val test = TestObject("hello")
+        val string = KeyValue.objectToString(test)!!
+
+        val obj = KeyValue.objectFromString<TestObject>(string)!!
+
+        assertEquals(test.content, obj.content)
+    }
+
+
     inline fun <reified T> KeyValuePersistence.get(key: String): T? {
         return get(key, T::class.java)
     }
+
+    class TestObject(val content: String) : Serializable
+
 }

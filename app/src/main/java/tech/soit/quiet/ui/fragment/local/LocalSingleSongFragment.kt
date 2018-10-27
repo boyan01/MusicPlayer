@@ -49,11 +49,7 @@ class LocalSingleSongFragment : BaseFragment() {
         }
     }
 
-    private val adapter = MultiTypeAdapter()
-            .withEmptyBinder()
-            .withLoadingBinder()
-            .withBinder(MusicItemViewBinder(TOKEN_PLAYLIST,
-                    this::onMusicItemClick, onPlayingItemShowHide))
+    private lateinit var adapter: MultiTypeAdapter
 
     /**
      * boolean that [recyclerView] is scrolling to current playing music item
@@ -74,6 +70,13 @@ class LocalSingleSongFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapter = MultiTypeAdapter()
+                .withEmptyBinder()
+                .withLoadingBinder()
+                .withBinder(MusicItemViewBinder(TOKEN_PLAYLIST,
+                        this::onMusicItemClick, onPlayingItemShowHide))
+
+
         recyclerView.adapter = adapter
         (recyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         floatingButton.setOnClickListener {
@@ -148,18 +151,6 @@ class LocalSingleSongFragment : BaseFragment() {
                 musics == null -> adapter.submit(listOf(Loading))
                 musics.isEmpty() -> adapter.submit(listOf(Empty))
                 else -> adapter.submit(musics)
-            }
-        })
-        //listen music change
-        MusicPlayerManager.playingMusic.observe(this, Observer { playing: Music? ->
-            if (MusicPlayerManager.musicPlayer.playlist.token != TOKEN_PLAYLIST) {
-                return@Observer
-            }
-            if (playing == null) {
-                adapter.notifyDataSetChanged()
-            } else {
-                val index = adapter.items.indexOf(playing)
-                adapter.notifyItemChanged(index)
             }
         })
         MusicPlayerManager.playlist.observe(this, Observer { playlist ->

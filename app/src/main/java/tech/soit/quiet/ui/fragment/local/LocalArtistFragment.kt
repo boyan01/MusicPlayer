@@ -2,6 +2,7 @@ package tech.soit.quiet.ui.fragment.local
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +44,7 @@ class LocalArtistFragment : BaseFragment() {
             when {
                 artists == null -> adapter.submit(listOf(Loading))
                 artists.isEmpty() -> adapter.submit(listOf(Empty))
-                else -> adapter.submit(artists.map { AItem(it.name, "") })
+                else -> adapter.submit(artists.map { AItem(it.getName(), "") })
             }
         })
     }
@@ -68,7 +69,7 @@ class LocalArtistFragment : BaseFragment() {
         val artist = adapter.items[position] as Artist
         val intent = Intent(context, LocalMusicListActivity::class.java)
         intent.putExtra(ARG_TYPE, TYPE_ARTIST)
-        intent.putExtra(ARG_OBJ, artist)
+        intent.putExtra(ARG_OBJ, artist as Parcelable)
         startActivity(intent)
     }
 
