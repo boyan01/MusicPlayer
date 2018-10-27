@@ -122,7 +122,7 @@ class MusicPlayerActivity : BaseActivity() {
         imageArtwork.clipToOutline = true
         albumRotationAnimator = ValueAnimator.ofFloat(0f, 360f)
         with(albumRotationAnimator) {
-            duration = 10000
+            duration = 18000
             repeatCount = android.animation.ValueAnimator.INFINITE
             interpolator = android.view.animation.LinearInterpolator()
             addUpdateListener {
