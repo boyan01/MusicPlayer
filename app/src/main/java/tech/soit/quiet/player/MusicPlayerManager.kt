@@ -127,8 +127,7 @@ class MusicPlayerManagerImpl : IMusicPlayerManager {
 
             if (token != null && musics != null) {
                 val playMode = KeyValue.get<String>(KEY_PLAYLIST_PLAY_MODE)
-                val current: Music? = KeyValue.objectFromString(KeyValue.get(KEY_PLAYLIST_CURRENT)
-                        ?: return@Restore)
+                val current: Music? = KeyValue.objectFromString(KeyValue.get(KEY_PLAYLIST_CURRENT))
 
                 val restore = Playlist(token, musics)
                 restore.current = current
@@ -153,7 +152,7 @@ class MusicPlayerManagerImpl : IMusicPlayerManager {
         playingMusic.observeForever { m ->
             m ?: return@observeForever
             GlobalScope.launch {
-                KeyValue.put(KEY_PLAYLIST_CURRENT, m)
+                KeyValue.put(KEY_PLAYLIST_CURRENT, KeyValue.objectToString(m))
             }
         }
         QuietPlayerService.init(playerState)
