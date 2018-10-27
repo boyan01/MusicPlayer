@@ -1,6 +1,7 @@
 package tech.soit.quiet.ui.activity.base
 
 import android.content.Intent
+import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -203,6 +204,17 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
      */
     protected inline fun <reified T : ViewModel> lazyViewModel(): Lazy<T> = lazy {
         ViewModelProviders.of(this, viewModelFactory).get(T::class.java)
+    }
+
+
+    /**
+     * @return first : width
+     *         second: height
+     */
+    fun getWindowSize(): Pair<Int, Int> {
+        val point = Point()
+        windowManager.defaultDisplay.getSize(point)
+        return point.x to point.y
     }
 
 

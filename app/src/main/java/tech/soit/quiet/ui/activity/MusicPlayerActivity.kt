@@ -1,17 +1,22 @@
 package tech.soit.quiet.ui.activity
 
 import android.animation.ValueAnimator
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.widget.SeekBar
 import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.activity_music_player.*
 import kotlinx.android.synthetic.main.player_content_music_controller.*
+import kotlinx.coroutines.experimental.GlobalScope
+import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.R
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.view.CircleOutlineProvider
 import tech.soit.quiet.utils.annotation.LayoutId
+import tech.soit.quiet.utils.component.ImageLoader
+import tech.soit.quiet.utils.component.blur
 import tech.soit.quiet.utils.subTitle
 
 /**
@@ -46,15 +51,36 @@ class MusicPlayerActivity : BaseActivity() {
             music ?: return@Observer
             textTitle.text = music.getTitle()
             textSubTitle.text = music.subTitle
+            //load music artwork
+            val cover = music.getAlbum().getCoverImageUrl()
+            if (cover != null) {
+
+                GlobalScope.launch TargetLoader@{
+                    val bitmap: Bitmap
+                    try {
+                        val (width, height) = getWindowSize()
+                        val target = ImageLoader.with(this@MusicPlayerActivity).asBitmap().load(cover)
+                                .submit(width, height)
+                        bitmap = target.get()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        return@TargetLoader
+                    }
+                    this@MusicPlayerActivity.launch { imageArtwork.setImageBitmap(bitmap) }
+                    val blur = bitmap.blur(50, false)
+                    this@MusicPlayerActivity.launch { imageBackground.setImageBitmap(blur) }
+                }
+            }
+
         })
         MusicPlayerManager.position.observe(this, Observer { position ->
             val current = position?.current ?: 0
             val max = position?.total ?: 0
+            seekBar.max = max.toInt()
             if (!isUserTracking) {
                 seekBar.progress = current.toInt()
                 textCurrentPosition.text = toMusicTimeStamp(current.toInt())
             }
-            seekBar.max = max.toInt()
             textDuration.text = toMusicTimeStamp(max.toInt())
         })
 
