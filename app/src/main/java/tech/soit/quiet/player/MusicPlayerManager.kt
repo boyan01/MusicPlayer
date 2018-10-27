@@ -1,7 +1,6 @@
 package tech.soit.quiet.player
 
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.model.vo.Music
@@ -76,7 +75,6 @@ class MusicPlayerManagerImpl : IMusicPlayerManager {
         private const val KEY_PLAYLIST_CURRENT = "player_playlist_key_current"
         private const val KEY_PLAYLIST_PLAY_MODE = "play_playlist_key_play_mode"
 
-
     }
 
     /**
@@ -122,16 +120,22 @@ class MusicPlayerManagerImpl : IMusicPlayerManager {
 
     init {
         //restore Playlist for MusicPlayer
-        val token = KeyValue.get<String>(KEY_PLAYLIST_TOKEN)
-        val musics: List<Music>? = KeyValue.get(KEY_PLAYLIST_MUSIC_LIST, object : TypeToken<List<Music>>() {}.type)
-        if (token != null && musics != null) {
-            val playMode = KeyValue.get<String>(KEY_PLAYLIST_PLAY_MODE)
-            val current = KeyValue.get<Music>(KEY_PLAYLIST_CURRENT)
-            val restore = Playlist(token, musics)
-            restore.current = current
-            restore.playMode = PlayMode.from(playMode)
-            musicPlayer.playlist = restore
-            playingMusic.postValue(current)
+        GlobalScope.launch Restore@{
+            val token = KeyValue.get<String>(KEY_PLAYLIST_TOKEN)
+            val musics: List<Music>? = KeyValue.objectFromString(KeyValue.get(KEY_PLAYLIST_MUSIC_LIST)
+                    ?: return@Restore)
+
+            if (token != null && musics != null) {
+                val playMode = KeyValue.get<String>(KEY_PLAYLIST_PLAY_MODE)
+                val current: Music? = KeyValue.objectFromString(KeyValue.get(KEY_PLAYLIST_CURRENT)
+                        ?: return@Restore)
+
+                val restore = Playlist(token, musics)
+                restore.current = current
+                restore.playMode = PlayMode.from(playMode)
+                musicPlayer.playlist = restore
+                playingMusic.postValue(current)
+            }
         }
 
         //persistence playlist
@@ -139,16 +143,18 @@ class MusicPlayerManagerImpl : IMusicPlayerManager {
             pl ?: return@observeForever
             GlobalScope.launch {
                 KeyValue.put(KEY_PLAYLIST_TOKEN, pl.token)
-                KeyValue.put(KEY_PLAYLIST_CURRENT, pl.current)
+                KeyValue.put(KEY_PLAYLIST_CURRENT, KeyValue.objectToString(pl.current))
                 KeyValue.put(KEY_PLAYLIST_PLAY_MODE, pl.playMode)
-                KeyValue.put(KEY_PLAYLIST_MUSIC_LIST, pl.list)
+                KeyValue.put(KEY_PLAYLIST_MUSIC_LIST, KeyValue.objectToString(ArrayList(pl.list)))
             }
         }
 
         //persistence playing music
         playingMusic.observeForever { m ->
             m ?: return@observeForever
-            KeyValue.put(KEY_PLAYLIST_CURRENT, m)
+            GlobalScope.launch {
+                KeyValue.put(KEY_PLAYLIST_CURRENT, m)
+            }
         }
         QuietPlayerService.init(playerState)
     }

@@ -2,6 +2,7 @@ package tech.soit.quiet.ui.fragment.local
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,7 +40,7 @@ class LocalAlbumFragment : BaseFragment() {
     private fun onAlbumClick(position: Int) {
         val intent = Intent(context, LocalMusicListActivity::class.java)
         intent.putExtra(ARG_TYPE, TYPE_ALBUM)
-        intent.putExtra(ARG_OBJ, albums[position])
+        intent.putExtra(ARG_OBJ, albums[position] as Parcelable)
         startActivity(intent)
     }
 

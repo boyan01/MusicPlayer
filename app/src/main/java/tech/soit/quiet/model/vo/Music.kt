@@ -1,8 +1,9 @@
 package tech.soit.quiet.model.vo
 
 import android.os.Parcelable
+import java.io.Serializable
 
-abstract class Music : Parcelable {
+abstract class Music : Parcelable, Serializable {
 
     abstract fun getId(): Long
 

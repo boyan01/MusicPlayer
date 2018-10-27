@@ -10,7 +10,7 @@ class NeteaseMusic(
         private val id: Long,
         private val title: String,
         private val album: NeteaseAlbum,
-        private val artists: List<Artist>
+        private val artists: List<NeteaseArtist>
 ) : Music() {
 
     override fun getId(): Long {
