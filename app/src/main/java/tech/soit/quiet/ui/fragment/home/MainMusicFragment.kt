@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.content_main_music_user_info.*
 import kotlinx.android.synthetic.main.fragment_main_music.*
 import kotlinx.android.synthetic.main.item_main_navigation.view.*
@@ -75,33 +74,11 @@ class MainMusicFragment : BaseFragment() {
 
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 totalY += dy
-                val position = if (totalY in rangeCreated) {
-                    0
-                } else {
-                    1
-                }
-                val offset = totalY.toFloat() / rangeCollection.last
-                log { "offset = $offset" }
-                tabLayoutPlayLists.setScrollPosition(position, offset, true)
+                val offset = totalY.toFloat() / (rangeCollection.last - recyclerView.height)
+                tabLayoutPlayLists.setScrollPosition(0, offset, true)
             }
         })
-        tabLayoutPlayLists.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                if (tab.position == 0) {
-                    recyclerView.smoothScrollToPosition(0)
-                } else {
-                    recyclerView.smoothScrollToPosition(positionCollectionStart)
-                }
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-
-            }
-        })
+        tabLayoutPlayLists.touchables.forEach { it.isClickable = false }
 
         loadData()
     }
