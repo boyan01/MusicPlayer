@@ -20,7 +20,16 @@ abstract class KItemViewBinder<T> : ItemViewBinder<T, KViewHolder>() {
         val layoutRes = this::class.annotations.firstOrNull { it is TypeLayoutRes } as TypeLayoutRes?
                 ?: throw IllegalStateException("must override this function if you do not use Annotation")
 
-        return KViewHolder(inflater.inflate(layoutRes.value, parent, false))
+        val view = inflater.inflate(layoutRes.value, parent, false)
+        onViewCreated(view)
+        return KViewHolder(view)
+    }
+
+    /**
+     * callback when inflate a new item view by annotation
+     */
+    protected open fun onViewCreated(view: View) {
+
     }
 
 }

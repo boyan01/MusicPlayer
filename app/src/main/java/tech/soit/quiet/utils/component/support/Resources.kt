@@ -1,6 +1,7 @@
 package tech.soit.quiet.utils.component.support
 
 import android.content.Context
+import android.content.res.Resources
 import android.util.TypedValue
 import android.view.View
 import androidx.annotation.*
@@ -53,3 +54,9 @@ fun Context.attrValue(@AttrRes id: Int): Int {
 fun View.attrValue(@AttrRes id: Int): Int {
     return context.attrValue(id)
 }
+
+val Int.dp: Int
+    get() = (this / Resources.getSystem().displayMetrics.density).toInt()
+
+val Int.px: Int
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()

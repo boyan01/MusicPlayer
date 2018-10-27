@@ -5,14 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_item_play_list"
     android:background="?selectableItemBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:layout_gravity="center">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/imageCover"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="?colorPrimary" />
@@ -21,34 +23,35 @@
         android:id="@+id/textTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
         android:ellipsize="end"
         android:lines="1"
         android:textColor="?quietTextPrimary"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/textSubTitle"
         app:layout_constraintStart_toEndOf="@+id/imageCover"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="奇幻" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/textSubTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:textColor="?quietTextSecondary"
         android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textTitle"
-        app:layout_constraintStart_toEndOf="@+id/textTitle"
-        app:layout_constraintTop_toTopOf="@+id/textTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textTitle"
+        app:layout_constraintTop_toBottomOf="@+id/textTitle"
         tools:text="12首" />
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_width="0dp"
+        android:layout_height="1px"
         android:background="?quietDivider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="@id/textTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
