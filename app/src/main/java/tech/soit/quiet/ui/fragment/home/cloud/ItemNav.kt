@@ -1,5 +1,6 @@
 package tech.soit.quiet.ui.fragment.home.cloud
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.DrawableRes
@@ -7,6 +8,7 @@ import androidx.annotation.StringRes
 import kotlinx.android.synthetic.main.item_cloud_nav.view.*
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
+import tech.soit.quiet.ui.activity.cloud.CloudDailyRecommendActivity
 import tech.soit.quiet.ui.view.CircleOutlineProvider
 import tech.soit.quiet.utils.KItemViewBinder
 import tech.soit.quiet.utils.KViewHolder
@@ -46,7 +48,7 @@ private class ItemNavBinder : KItemViewBinder<ItemNav>() {
                         log { "to radio" }
                     }
                     R.string.nav_daily_recommend -> {
-                        log { "to daily recommend" }
+                        context.startActivity(Intent(context, CloudDailyRecommendActivity::class.java))
                     }
                     R.string.nav_tends -> {
                         log { "to tends" }

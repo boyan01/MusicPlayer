@@ -167,7 +167,7 @@ class CloudPlayListDetailActivity : BaseActivity() {
 
             //show music list
             val user = viewModel.getLoginUser()
-            val isShowCollectionButton = user == null || user.getId() == detail.getCreator().getId()
+            val isShowCollectionButton = user != null && user.getId() != detail.getCreator().getId()
             val isSubscribed = user != null && user.getId() != detail.getCreator().getId()
                     && detail.isSubscribed()
             adapter.showList(detail.getTracks(), isShowCollectionButton, isSubscribed)

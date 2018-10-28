@@ -56,6 +56,10 @@
             android:name=".ui.activity.cloud.CloudPlayListDetailActivity"
             android:theme="@style/AppTheme.ColoredNavigationBar" />
 
+        <activity
+            android:name=".ui.activity.cloud.CloudDailyRecommendActivity"
+            android:theme="@style/AppTheme.ColoredNavigationBar" />
+
         <service android:name=".ui.service.QuietPlayerService" />
 
         <activity android:name=".ui.service.NotificationRouterActivity" />

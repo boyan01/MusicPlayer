@@ -1,20 +1,20 @@
 package tech.soit.quiet.repository.netease
 
+import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
-import tech.soit.quiet.model.po.NeteasePlayList
-import tech.soit.quiet.model.po.NeteasePlayListDetail
-import tech.soit.quiet.model.po.NeteaseUser
+import tech.soit.quiet.model.po.*
 import tech.soit.quiet.model.vo.PlayList
 import tech.soit.quiet.model.vo.User
 import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.persistence.KeyValue
 import tech.soit.quiet.utils.component.persistence.get
+import tech.soit.quiet.utils.exception.NotLoginException
 import tech.soit.quiet.utils.testing.OpenForTesting
 
 @OpenForTesting
 class NeteaseRepository(
         private val service: CloudMusicService = CloudMusicServiceProvider.provideCloudMusicService()
-) {
+) : ViewModel() {
 
     companion object {
 
@@ -110,11 +110,24 @@ class NeteaseRepository(
         return array.map { NeteasePlayList(it as JsonObject) }
     }
 
-    fun recommendSongs() {
+    suspend fun recommendSongs(): List<NeteaseMusic> {
         val encrypt = Crypto.encrypt("""
             {"offset":0,"total":true,"limit":20,"csrf_token":""}
         """.trimIndent())
-        TODO()
+        val response = service.recommendSongs(encrypt).await()
+        if (response.get("code").asInt == 301) {
+            throw NotLoginException()
+        }
+        if (!response.isSuccess()) {
+            error(response[REMOTE_KEY_MESSAGE])
+        }
+        return response.getAsJsonArray("recommend").map {
+            it as JsonObject
+            log { it }
+            val artists = NeteaseArtist.fromJson(it.getAsJsonArray("artists"))
+            val album = NeteaseAlbum.fromJson(it.getAsJsonObject("album"))
+            NeteaseMusic(it.get("id").asLong, it.get("name").asString, album, artists)
+        }
     }
 
 
