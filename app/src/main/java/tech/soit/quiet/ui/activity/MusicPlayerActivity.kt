@@ -1,14 +1,13 @@
 package tech.soit.quiet.ui.activity
 
 import android.animation.ValueAnimator
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.widget.SeekBar
 import androidx.lifecycle.Observer
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.android.synthetic.main.activity_music_player.*
 import kotlinx.android.synthetic.main.player_content_music_controller.*
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.R
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.core.IMediaPlayer
@@ -16,7 +15,6 @@ import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.view.CircleOutlineProvider
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.ImageLoader
-import tech.soit.quiet.utils.component.blur
 import tech.soit.quiet.utils.subTitle
 
 /**
@@ -54,22 +52,9 @@ class MusicPlayerActivity : BaseActivity() {
             //load music artwork
             val cover = music.getAlbum().getCoverImageUrl()
             if (cover != null) {
-
-                GlobalScope.launch TargetLoader@{
-                    val bitmap: Bitmap
-                    try {
-                        val (width, height) = getWindowSize()
-                        val target = ImageLoader.with(this@MusicPlayerActivity).asBitmap().load(cover)
-                                .submit(width, height)
-                        bitmap = target.get()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        return@TargetLoader
-                    }
-                    this@MusicPlayerActivity.launch { imageArtwork.setImageBitmap(bitmap) }
-                    val blur = bitmap.blur(50, false)
-                    this@MusicPlayerActivity.launch { imageBackground.setImageBitmap(blur) }
-                }
+                ImageLoader.with(this).load(cover).into(imageArtwork)
+                ImageLoader.with(this).load(cover).transform(BlurTransformation(50))
+                        .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageBackground)
             }
 
         })

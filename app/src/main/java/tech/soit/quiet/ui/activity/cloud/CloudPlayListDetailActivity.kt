@@ -1,17 +1,20 @@
 package tech.soit.quiet.ui.activity.cloud
 
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.PorterDuff
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.core.view.updatePadding
-import com.bumptech.glide.load.resource.bitmap.TransformationUtils
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.BitmapImageViewTarget
+import com.bumptech.glide.request.target.CustomViewTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.appbar.AppBarLayout
+import jp.wasabeef.glide.transformations.BlurTransformation
+import jp.wasabeef.glide.transformations.CropTransformation
 import kotlinx.android.synthetic.main.activity_cloud_play_list_detail.*
 import kotlinx.android.synthetic.main.item_cloud_play_list_detail_action.view.*
-import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.PlayListDetail
@@ -21,8 +24,8 @@ import tech.soit.quiet.ui.adapter.MusicListAdapter
 import tech.soit.quiet.ui.view.CircleOutlineProvider
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
+import tech.soit.quiet.utils.component.ColorMaskTransformation
 import tech.soit.quiet.utils.component.ImageLoader
-import tech.soit.quiet.utils.component.blur
 import tech.soit.quiet.utils.component.generatePalette
 import tech.soit.quiet.utils.component.getMuteSwatch
 import tech.soit.quiet.utils.component.support.attrValue
@@ -50,6 +53,8 @@ class CloudPlayListDetailActivity : BaseActivity() {
 
     private lateinit var adapter: MusicListAdapter
 
+    private lateinit var toolbarBackground: ColorDrawable
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         layoutRoot.setOnApplyWindowInsetsListener { _, insets ->
@@ -63,7 +68,8 @@ class CloudPlayListDetailActivity : BaseActivity() {
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
-        toolbar.background = ColorDrawable(attrValue(R.attr.colorPrimary))
+        toolbarBackground = ColorDrawable(attrValue(R.attr.colorPrimary))
+        toolbar.background = toolbarBackground
         toolbar.bringToFront()
 
         appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, offset ->
@@ -76,7 +82,7 @@ class CloudPlayListDetailActivity : BaseActivity() {
             if (toolbar.title != title) {
                 toolbar.title = title
             }
-            toolbar.background.alpha = (alpha * 255).toInt()
+            toolbarBackground.alpha = (alpha * 255).toInt()
         })
         setupActions()
 
@@ -104,33 +110,54 @@ class CloudPlayListDetailActivity : BaseActivity() {
             this@CloudPlayListDetailActivity.detail = detail
             textPlayListTitle.text = detail.getName()
 
-            GlobalScope.launch pictureLoader@{
-                val bitmap: Bitmap
-                try {
-                    val submit = ImageLoader.with(this@CloudPlayListDetailActivity).asBitmap()
-                            .load(detail.getCoverUrl()).submit(appBarLayout.width, appBarLayout.height)
-                    bitmap = submit.get()
-                } catch (e: Exception) {
-                    return@pictureLoader
-                }
+            ImageLoader.with(this@CloudPlayListDetailActivity).asBitmap()
+                    .load(detail.getCoverUrl())
+                    .into(object : BitmapImageViewTarget(imageCover) {
+                        override fun onLoadFailed(errorDrawable: Drawable?) {
 
-                this@CloudPlayListDetailActivity.launch {
-                    imageCover.setImageBitmap(bitmap)
-                    val swatch = bitmap.generatePalette().await().getMuteSwatch()
-                    toolbar.setBackgroundColor(swatch.rgb)
-                    window.navigationBarColor = swatch.rgb
-                    adapter.applyPrimaryColor(swatch.rgb)
-                }
+                        }
 
-                //draw blur bitmap
-                val blur = bitmap.blur(100, false)
-                val crop = TransformationUtils.centerCrop(ImageLoader.get(this@CloudPlayListDetailActivity).bitmapPool,
-                        blur, appBarLayout.width, appBarLayout.height)
-                //draw a dark mask on the blur image, to make appbar layout background fit white action button
-                Canvas(crop).drawColor(color(R.color.color_transparent_dark_secondary), PorterDuff.Mode.SRC_OVER)
-                this@CloudPlayListDetailActivity.launch { appBarLayout.background = BitmapDrawable(resources, crop) }
-            }
-            ImageLoader.with(this@CloudPlayListDetailActivity).load(detail.getCoverUrl()).into(imageCover)
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            super.onResourceReady(resource, transition)
+                            this@CloudPlayListDetailActivity.launch {
+                                val swatch = resource.generatePalette().await().getMuteSwatch()
+                                val alpha = toolbarBackground.alpha
+                                toolbarBackground.color = swatch.rgb
+                                toolbarBackground.alpha = alpha
+                                window.navigationBarColor = swatch.rgb
+                                adapter.applyPrimaryColor(swatch.rgb)
+                            }
+                        }
+                    })
+            ImageLoader.with(this@CloudPlayListDetailActivity).asBitmap().load(detail.getCoverUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .transforms(CropTransformation(appBarLayout.width, appBarLayout.height),
+                            BlurTransformation(100),
+                            ColorMaskTransformation(color(R.color.color_transparent_dark_secondary)))
+                    .into(object : CustomViewTarget<AppBarLayout, Bitmap>(appBarLayout), Transition.ViewAdapter {
+                        override fun getCurrentDrawable(): Drawable? {
+                            return appBarLayout.background
+                        }
+
+                        override fun setDrawable(drawable: Drawable?) {
+                            appBarLayout.background = drawable
+                        }
+
+
+                        override fun onLoadFailed(errorDrawable: Drawable?) {
+
+                        }
+
+                        override fun onResourceCleared(placeholder: Drawable?) {
+
+                        }
+
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            if (transition == null || !transition.transition(resource, this)) {
+                                view.background = BitmapDrawable(resources, resource)
+                            }
+                        }
+                    })
 
             //creator
             ImageLoader.with(this@CloudPlayListDetailActivity).load(detail.getCreator().getAvatarUrl()).into(imageCreatorAvatar)
