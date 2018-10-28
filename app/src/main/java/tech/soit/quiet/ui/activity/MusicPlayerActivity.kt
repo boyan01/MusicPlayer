@@ -14,7 +14,9 @@ import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.view.CircleOutlineProvider
 import tech.soit.quiet.utils.annotation.LayoutId
+import tech.soit.quiet.utils.component.ColorMaskTransformation
 import tech.soit.quiet.utils.component.ImageLoader
+import tech.soit.quiet.utils.component.support.color
 import tech.soit.quiet.utils.subTitle
 
 /**
@@ -53,7 +55,9 @@ class MusicPlayerActivity : BaseActivity() {
             val cover = music.getAlbum().getCoverImageUrl()
             if (cover != null) {
                 ImageLoader.with(this).load(cover).into(imageArtwork)
-                ImageLoader.with(this).load(cover).transform(BlurTransformation(50))
+                ImageLoader.with(this).load(cover)
+                        .transforms(BlurTransformation(100),
+                                ColorMaskTransformation(color(R.color.color_transparent_dark_secondary)))
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE).into(imageBackground)
             }
 
