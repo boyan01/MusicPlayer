@@ -38,11 +38,12 @@
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayoutPlayLists"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/color_transparent"
             app:tabGravity="fill"
             app:tabIndicatorColor="?colorPrimary"
-            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorFullWidth="true"
             app:tabSelectedTextColor="?quietTextPrimary">
 
             <com.google.android.material.tabs.TabItem
