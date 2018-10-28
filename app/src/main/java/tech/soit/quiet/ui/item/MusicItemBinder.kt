@@ -88,19 +88,26 @@ class MusicItemViewBinder(
                 && MusicPlayerManager.musicPlayer.playlist.current == music
     }
 
+    /**
+     * 设置当前播放的音乐
+     */
     fun setCurrentPlaying(music: Music?, recyclerView: RecyclerView) {
         val index = adapter.items.indexOf(music)
         if (index == -1) {
+            //如果当前列表不存在此歌曲，那么置空 playingViewHolder
             playingViewHolder?.setIsPlaying(false)
             playingViewHolder = null
-        }
-        val holder = recyclerView.findViewHolderForAdapterPosition(index) as? MusicViewHolder
-        if (holder == playingViewHolder || holder == null) {
             return
         }
-        playingViewHolder = holder
-        holder.setIsPlaying(true)
+        val holder = recyclerView.findViewHolderForAdapterPosition(index) as? MusicViewHolder
+        if (holder == playingViewHolder) {
+            //不需要再走流程了，因为播放的item没有改变
+            return
+        }
+        playingViewHolder?.setIsPlaying(false)
 
+        playingViewHolder = holder
+        holder?.setIsPlaying(true)
     }
 
     class MusicViewHolder(itemView: View) : KViewHolder(itemView) {

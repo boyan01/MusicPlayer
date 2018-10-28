@@ -49,6 +49,9 @@ class MusicListAdapter(private val token: String) : MultiTypeAdapter() {
     }
 
 
+    /**
+     * 监听音乐改变事件，只有当adapter attach 到 RecyclerView 上时才会进行监听
+     */
     private val playingMusicObserver: Observer<Music?> = Observer {
         val index = items.indexOf(it)
         if (index == -1) {
