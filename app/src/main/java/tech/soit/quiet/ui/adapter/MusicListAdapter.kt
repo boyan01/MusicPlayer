@@ -17,7 +17,7 @@ import tech.soit.quiet.utils.withLoadingBinder
 /**
  * @param token music list token
  */
-class MusicListAdapter(private val token: String) : MultiTypeAdapter() {
+open class MusicListAdapter(private val token: String) : MultiTypeAdapter() {
 
     private var recyclerView: RecyclerView? = null
 
@@ -75,12 +75,21 @@ class MusicListAdapter(private val token: String) : MultiTypeAdapter() {
         this.musics = musics
         isMusicSet = true
 
+        val items = buildShowList(musics, isShowSubscribeButton, isSubscribed)
+        this.items = items
+        notifyDataSetChanged()
+    }
+
+    /**
+     * 构建待显示的list，包括 header + music list
+     */
+    protected open fun buildShowList(musics: List<Music>,
+                                     isShowSubscribeButton: Boolean,
+                                     isSubscribed: Boolean): ArrayList<Any> {
         val items = ArrayList<Any>()
         items.add(ItemMusicListHeader(musics.size, isShowSubscribeButton, isSubscribed))
         items.addAll(musics)
-
-        this.items = items
-        notifyDataSetChanged()
+        return items
     }
 
     /**

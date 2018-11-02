@@ -49,4 +49,5 @@
     <string name="add_to_collection">收藏</string>
     <string name="collected">已收藏</string>
     <string name="title_daily_recommend">每日推荐</string>
+    <string name="tips_daily_recommend_description">专属每日推荐，每天早上6:00自动生成。</string>
 </resources>

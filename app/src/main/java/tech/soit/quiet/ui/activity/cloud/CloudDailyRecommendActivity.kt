@@ -6,6 +6,7 @@ import kotlinx.coroutines.experimental.launch
 import tech.soit.quiet.R
 import tech.soit.quiet.repository.netease.NeteaseRepository
 import tech.soit.quiet.ui.activity.base.BaseActivity
+import tech.soit.quiet.ui.activity.cloud.adapter.DailyRecommendAdapter
 import tech.soit.quiet.ui.adapter.MusicListAdapter
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
@@ -13,7 +14,6 @@ import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.exception.NotLoginException
 import tech.soit.quiet.utils.setEmpty
 import tech.soit.quiet.utils.setLoading
-import java.lang.Exception
 
 /**
  * 每日推荐歌曲activity
@@ -22,10 +22,6 @@ import java.lang.Exception
 @EnableBottomController
 class CloudDailyRecommendActivity : BaseActivity() {
 
-    companion object {
-        private const val TOKEN = "netease_daily_recommend"
-    }
-
     private val neteaseRepository by lazyViewModel<NeteaseRepository>()
 
     private lateinit var adapter: MusicListAdapter
@@ -33,7 +29,7 @@ class CloudDailyRecommendActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        adapter = MusicListAdapter(TOKEN)
+        adapter = DailyRecommendAdapter()
         recyclerView.adapter = adapter
 
         toolbar.setNavigationOnClickListener {
