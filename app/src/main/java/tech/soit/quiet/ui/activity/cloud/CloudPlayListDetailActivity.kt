@@ -15,7 +15,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 import jp.wasabeef.glide.transformations.CropTransformation
 import kotlinx.android.synthetic.main.activity_cloud_play_list_detail.*
 import kotlinx.android.synthetic.main.item_cloud_play_list_detail_action.view.*
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.launch
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.ui.activity.base.BaseActivity

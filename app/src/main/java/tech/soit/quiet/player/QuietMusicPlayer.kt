@@ -1,17 +1,15 @@
 package tech.soit.quiet.player
 
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.player.core.QuietExoPlayer
 import tech.soit.quiet.player.playlist.Playlist
 import tech.soit.quiet.utils.component.LoggerLevel
 import tech.soit.quiet.utils.component.log
-import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
 /**
@@ -117,7 +115,7 @@ class QuietMusicPlayer {
         //maybe have a cleverer way to do that!!
         GlobalScope.launch(Dispatchers.Main) {
             while (true) {
-                delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
+                delay(DURATION_UPDATE_PROGRESS)
                 try {
                     val notify = playlist.current != null
                             && mediaPlayer.getState() == IMediaPlayer.PLAYING

@@ -1,7 +1,7 @@
 package tech.soit.quiet.repository.netease
 
 import com.google.gson.JsonObject
-import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.Deferred
 import retrofit2.http.*
 
 /**

@@ -2,7 +2,7 @@ package tech.soit.quiet.ui.activity.cloud
 
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_cloud_daily_recommend.*
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.launch
 import tech.soit.quiet.R
 import tech.soit.quiet.repository.netease.NeteaseRepository
 import tech.soit.quiet.ui.activity.base.BaseActivity

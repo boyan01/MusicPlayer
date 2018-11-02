@@ -10,8 +10,8 @@ import com.bumptech.glide.annotation.GlideModule
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.module.AppGlideModule
 import jp.wasabeef.glide.transformations.BitmapTransformation
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.async
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import tech.soit.quiet.R
 import tech.soit.quiet.utils.component.support.color
 import java.security.MessageDigest
