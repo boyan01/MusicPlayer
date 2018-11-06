@@ -52,4 +52,9 @@
     <string name="title_daily_recommend">每日推荐</string>
     <string name="tips_daily_recommend_description">专属每日推荐，每天早上6:00自动生成。</string>
     <string name="toast_no_music_to_play">当前没有歌曲可供播放！</string>
+    <string name="action_remove">移除</string>
+    <string name="link_to_music">定位歌曲</string>
+    <string name="playmode_sequence">顺序播放</string>
+    <string name="playmode_shuffle">随机播放</string>
+    <string name="playmode_single">单曲循环</string>
 </resources>

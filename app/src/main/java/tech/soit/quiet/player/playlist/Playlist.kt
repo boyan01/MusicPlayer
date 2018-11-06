@@ -184,4 +184,18 @@ open class Playlist(
         shuffleMusicList.addAll(list)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Playlist) return false
+
+        if (token != other.token) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return token.hashCode()
+    }
+
+
 }

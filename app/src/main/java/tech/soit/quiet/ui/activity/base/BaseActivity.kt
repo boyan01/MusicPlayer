@@ -24,6 +24,7 @@ import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.ui.activity.MusicPlayerActivity
+import tech.soit.quiet.ui.dialog.PlayingPlaylistDialog
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
@@ -121,7 +122,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
             startActivity(Intent(this, MusicPlayerActivity::class.java))
         }
         controllerPlaylist.setOnClickListener {
-            //TODO
+            PlayingPlaylistDialog.getInstance().show(supportFragmentManager, "PlayingPlaylist")
         }
         controllerPauseOrPlay.setOnClickListener {
             controllerViewModel.pauseOrPlay()

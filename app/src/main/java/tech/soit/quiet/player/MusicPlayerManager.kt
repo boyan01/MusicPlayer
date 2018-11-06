@@ -133,7 +133,6 @@ class MusicPlayerManagerImpl : IMusicPlayerManager {
                 restore.current = current
                 restore.playMode = PlayMode.from(playMode)
                 musicPlayer.playlist = restore
-                playingMusic.postValue(current)
             }
         }
 

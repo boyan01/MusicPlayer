@@ -9,9 +9,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.utils.component.network.randomUserAgent
 
@@ -39,10 +36,8 @@ class QuietExoPlayer(
     override fun prepare(uri: String, playWhenReady: Boolean) {
         val source = ExtractorMediaSource.Factory(CacheDataSourceFactory(cache, DefaultDataSourceFactory(AppContext, randomUserAgent())))
                 .createMediaSource(Uri.parse(uri))
-        GlobalScope.launch(Dispatchers.Main) {
-            exoPlayer.prepare(source)
-            exoPlayer.playWhenReady = playWhenReady
-        }
+        exoPlayer.prepare(source)
+        exoPlayer.playWhenReady = playWhenReady
     }
 
     override fun seekTo(position: Long) {
@@ -52,9 +47,7 @@ class QuietExoPlayer(
     override var isPlayWhenReady: Boolean
         get() = exoPlayer.playWhenReady
         set(value) {
-            GlobalScope.launch(Dispatchers.Main) {
-                exoPlayer.playWhenReady = value
-            }
+            exoPlayer.playWhenReady = value
         }
 
     override fun release() {

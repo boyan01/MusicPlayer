@@ -31,7 +31,15 @@ class QuietMusicPlayer {
      */
     var playlist: Playlist by Delegates.observable(Playlist.EMPTY) { _, oldValue, newValue ->
         newValue.playMode = oldValue.playMode//inherit old playlist play mode
+
+        //LiveData change
         MusicPlayerManager.playlist.postValue(newValue)
+        MusicPlayerManager.playingMusic.postValue(playlist.current)
+
+        //stop player
+        if (newValue != oldValue) {
+            quiet()
+        }
     }
 
 
@@ -82,7 +90,7 @@ class QuietMusicPlayer {
     /**
      * play [music] , if music is not in [playlist] , insert ot next
      */
-    fun play(music: Music) {
+    fun play(music: Music, playWhenReady: Boolean = true) {
         if (!playlist.list.contains(music)) {
             playlist.insertToNext(music)
         }
@@ -93,7 +101,7 @@ class QuietMusicPlayer {
         MusicPlayerManager.playingMusic.postValue(music)
 
         val uri = music.getPlayUrl()
-        mediaPlayer.prepare(uri, true)
+        mediaPlayer.prepare(uri, playWhenReady)
     }
 
 
@@ -106,7 +114,7 @@ class QuietMusicPlayer {
 
 
     private fun safeAsync(block: suspend () -> Unit) {
-        GlobalScope.launch { block() }
+        GlobalScope.launch(Dispatchers.Main) { block() }
     }
 
     init {
