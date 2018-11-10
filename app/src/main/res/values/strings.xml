@@ -37,6 +37,7 @@
     <string name="nav_daily_recommend">每日推荐</string>
     <string name="nav_tends">排行榜</string>
     <string name="template_item_play_list_count">共%d首</string>
+    <string name="template_music_list_header_subtitle">(共%d首)</string>
     <string name="login_hint_phone">手机号</string>
     <string name="action_login">登陆</string>
     <string name="user_not_login">未登录</string>
@@ -50,4 +51,5 @@
     <string name="collected">已收藏</string>
     <string name="title_daily_recommend">每日推荐</string>
     <string name="tips_daily_recommend_description">专属每日推荐，每天早上6:00自动生成。</string>
+    <string name="toast_no_music_to_play">当前没有歌曲可供播放！</string>
 </resources>

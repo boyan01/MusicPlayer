@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?><!--notice--><!--参考自https://github.com/hefuyicoder/ListenerMusicPlayer/blob/master/app/src/main/res/layout/item_list_linear_layout_item.xml-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:background="?selectableItemBackground"
+    tools:layout_gravity="center">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textPosition"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:maxLength="5"
+        android:textColor="?quietTextSecondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1" />
+
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iconMore"
+        style="@style/Widget.AppCompat.ActionButton.Overflow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="?actionBarItemBackground"
+        android:tint="?quietIconActive"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnusedAttribute" />
+
+
+    <TextView
+        android:id="@+id/text_item_title"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/iconMore"
+        app:layout_constraintStart_toEndOf="@+id/textPosition"
+        tools:text="缘分一道桥" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_item_subtitle"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:ellipsize="end"
+        android:lines="1"
+        android:maxWidth="180dp"
+        app:layout_constraintStart_toStartOf="@+id/text_item_title"
+        app:layout_constraintTop_toBottomOf="@+id/text_item_title"
+        tools:text="王力宏/谭维维" />
+
+    <View
+        android:id="@+id/divider_subtitle"
+        android:layout_width="1.0dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="6dp"
+        android:background="?colorPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/text_item_subtitle"
+        app:layout_constraintStart_toEndOf="@+id/text_item_subtitle"
+        app:layout_constraintTop_toTopOf="@+id/text_item_subtitle" />
+
+    <TextView
+        android:id="@+id/text_item_subtitle_2"
+        style="@style/TextAppearance.MaterialComponents.Caption"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:ellipsize="end"
+        android:lines="1"
+        app:layout_constraintEnd_toStartOf="@id/iconMore"
+        app:layout_constraintStart_toEndOf="@id/divider_subtitle"
+        app:layout_constraintTop_toTopOf="@+id/text_item_subtitle"
+        tools:text="主题曲" />
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1px"
+        android:background="?quietDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/text_item_title" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
