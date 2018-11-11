@@ -2,6 +2,7 @@ package tech.soit.quiet.ui.activity.cloud
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.widget.EdgeEffect
 import androidx.core.view.updatePadding
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_cloud_play_list_detail.*
@@ -16,7 +17,9 @@ import tech.soit.quiet.ui.activity.cloud.viewmodel.CloudPlayListDetailViewModel
 import tech.soit.quiet.ui.adapter.MusicListAdapter2
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
+import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.attrValue
+import tech.soit.quiet.utils.component.support.dimen
 import tech.soit.quiet.utils.component.support.string
 import tech.soit.quiet.utils.event.PrimaryColorEvent
 import tech.soit.quiet.utils.event.WindowInsetsEvent
@@ -44,6 +47,12 @@ class CloudPlayListDetailActivity : BaseActivity() {
      */
     private lateinit var toolbarBackground: ColorDrawable
 
+    /**
+     * 标题栏高度
+     */
+    private var headerHeight = (dimen(R.dimen.height_playlist_detail_cover) +
+            dimen(R.dimen.height_playlist_detail_nav)).toInt()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         EventBus.getDefault().register(this)
@@ -69,7 +78,14 @@ class CloudPlayListDetailActivity : BaseActivity() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 offset += dy
 
-                val alpha = offset / 300F
+                onHeaderOffset(offset)
+            }
+
+            fun onHeaderOffset(offset: Int) {
+                val alpha = offset / headerHeight.toFloat()
+
+                log { "header alpha : $alpha" }
+
                 val title = if (alpha > 0.5) {
                     detail.getName()
                 } else {
@@ -78,10 +94,9 @@ class CloudPlayListDetailActivity : BaseActivity() {
                 if (toolbar.title != title) {
                     toolbar.title = title
                 }
-                if (alpha in 0.0..1.0) {
-                    toolbarBackground.alpha = (alpha * 255).toInt()
-                }
+                toolbarBackground.alpha = (alpha.coerceIn(0F, 1F) * 255).toInt()
             }
+
         })
 
 
@@ -115,6 +130,17 @@ class CloudPlayListDetailActivity : BaseActivity() {
         toolbarBackground.color = color
         toolbarBackground.alpha = alpha
         window.navigationBarColor = color
+        adapter.applyPrimaryColor(color)
+
+        //设置 recycler view 边界效果的颜色
+        recyclerView.edgeEffectFactory = object : RecyclerView.EdgeEffectFactory() {
+            override fun createEdgeEffect(view: RecyclerView, direction: Int): EdgeEffect {
+                val effect = super.createEdgeEffect(view, direction)
+                effect.color = color
+                return effect
+            }
+        }
+
     }
 
 

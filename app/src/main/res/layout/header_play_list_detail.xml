@@ -10,7 +10,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="@dimen/height_playlist_detail_cover"
         app:layout_scrollFlags="scroll">
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -26,6 +26,7 @@
             tools:src="?quietTextSecondaryInverse" />
 
         <View
+            android:id="@+id/maskImageCover"
             android:layout_width="0dp"
             android:layout_height="20dp"
             android:background="@drawable/mask_play_list_detail_cover"
@@ -91,9 +92,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="@dimen/height_playlist_detail_nav"
         android:baselineAligned="false"
         android:orientation="horizontal"
         app:layout_scrollFlags="scroll">

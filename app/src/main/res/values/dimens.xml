@@ -4,4 +4,6 @@
     <dimen name="notification_image_size">50dp</dimen>
     <dimen name="playlist_detail_header_height">270dp</dimen>
     <dimen name="height_item_play_list">64dp</dimen>
+    <dimen name="height_playlist_detail_cover">120dp</dimen>
+    <dimen name="height_playlist_detail_nav">60dp</dimen>
 </resources>

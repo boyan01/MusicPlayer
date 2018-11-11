@@ -20,11 +20,13 @@ import org.greenrobot.eventbus.EventBus
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.ui.view.CircleOutlineProvider
+import tech.soit.quiet.ui.view.RoundRectOutlineProvider
 import tech.soit.quiet.utils.component.ColorMaskTransformation
 import tech.soit.quiet.utils.component.ImageLoader
 import tech.soit.quiet.utils.component.generatePalette
 import tech.soit.quiet.utils.component.getMuteSwatch
 import tech.soit.quiet.utils.component.support.color
+import tech.soit.quiet.utils.component.support.px
 import tech.soit.quiet.utils.event.PrimaryColorEvent
 
 /**
@@ -96,8 +98,18 @@ class PlayListDetailViewHolder(itemView: View) : BaseViewHolder(itemView) {
     }
 
     init {
-        itemView.imageCreatorAvatar.outlineProvider = CircleOutlineProvider()
-        itemView.imageCreatorAvatar.clipToOutline = true
+
+        itemView.apply {
+            imageCreatorAvatar.outlineProvider = CircleOutlineProvider()
+            imageCreatorAvatar.clipToOutline = true
+
+            val coverOutline = RoundRectOutlineProvider(3.px.toFloat())
+            imageCover.outlineProvider = coverOutline
+            imageCover.clipToOutline = true
+
+            maskImageCover.outlineProvider = coverOutline
+            maskImageCover.clipToOutline = true
+        }
         setupActions()
     }
 
