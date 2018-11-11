@@ -6,7 +6,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
-import tech.soit.quiet.player.core.QuietExoPlayer
+import tech.soit.quiet.player.core.QuietMediaPlayer
 import tech.soit.quiet.player.playlist.Playlist
 import tech.soit.quiet.utils.component.LoggerLevel
 import tech.soit.quiet.utils.component.log
@@ -24,7 +24,7 @@ class QuietMusicPlayer {
     /**
      * @see IMediaPlayer
      */
-    val mediaPlayer: IMediaPlayer = QuietExoPlayer()
+    val mediaPlayer: IMediaPlayer = QuietMediaPlayer()
 
     /**
      * @see Playlist

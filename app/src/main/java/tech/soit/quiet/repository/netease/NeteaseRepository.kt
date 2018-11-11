@@ -3,7 +3,7 @@ package tech.soit.quiet.repository.netease
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonObject
 import tech.soit.quiet.model.po.*
-import tech.soit.quiet.model.vo.PlayList
+import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.model.vo.User
 import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.persistence.KeyValue
@@ -93,7 +93,13 @@ class NeteaseRepository(
     }
 
 
-    suspend fun getUserPlayerList(userId: Long, offset: Int = 0, limit: Int = 1000): List<PlayList> {
+    /**
+     * 根据用户ID获取歌单
+     *
+     * PlayListDetail 中的 tracks 都是空数据
+     *
+     */
+    suspend fun getUserPlayerList(userId: Long, offset: Int = 0, limit: Int = 1000): List<PlayListDetail> {
         val encrypt = Crypto.encrypt("""
             {
                 "offset" : $offset ,
@@ -107,7 +113,7 @@ class NeteaseRepository(
             error(response["msg"])
         }
         val array = response["playlist"].asJsonArray
-        return array.map { NeteasePlayList(it as JsonObject) }
+        return array.map { NeteasePlayListDetail(it as JsonObject) }
     }
 
     suspend fun recommendSongs(): List<NeteaseMusic> {

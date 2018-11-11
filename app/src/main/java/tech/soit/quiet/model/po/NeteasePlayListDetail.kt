@@ -3,29 +3,54 @@ package tech.soit.quiet.model.po
 import com.google.gson.JsonObject
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.model.vo.PlayListDetail
+import tech.soit.quiet.model.vo.User
 import tech.soit.quiet.repository.netease.source.NeteaseGlideUrl
 
-class NeteasePlayListDetail(private val jsonObject: JsonObject) : PlayListDetail() {
+class NeteasePlayListDetail(jsonObject: JsonObject) : PlayListDetail() {
 
-    private val tracks: List<NeteaseMusic> = jsonObject["tracks"].asJsonArray.map { playlistTrack(it as JsonObject) }
+    private val tracks: List<Music>
 
+    private val id: Long = jsonObject["id"].asLong
+
+    private val name: String = jsonObject["name"].asString
+
+    private val coverUrl: String = jsonObject["coverImgUrl"].asString
+
+    private val creator: User
+
+    private val isSubscribed: Boolean = jsonObject["subscribed"].asBoolean
+
+    private val playCount: Int = jsonObject["playCount"].asInt
+
+    private val trackCount: Int = jsonObject["trackCount"].asInt
+
+    init {
+        val trackJson = jsonObject["tracks"]
+        tracks = if (trackJson == null || trackJson.isJsonNull) {
+            NONE_TRACKS
+        } else {
+            trackJson.asJsonArray.map { playlistTrack(it as JsonObject) }
+        }
+
+        val c = jsonObject["creator"].asJsonObject
+        creator = NeteaseUser(c["userId"].asLong, c["nickname"].asString, c["avatarUrl"].asString)
+    }
 
     override fun getId(): Long {
-        return jsonObject["id"].asLong
+        return id
     }
 
     override fun getName(): String {
-        return jsonObject["name"].asString
+        return name
     }
 
     override
     fun getCoverUrl(): Any {
-        return NeteaseGlideUrl(jsonObject["coverImgUrl"].asString)
+        return NeteaseGlideUrl(coverUrl)
     }
 
-    override fun getCreator(): NeteaseUser {
-        val creator = jsonObject["creator"].asJsonObject
-        return NeteaseUser(creator["userId"].asLong, creator["nickname"].asString, creator["avatarUrl"].asString)
+    override fun getCreator(): User {
+        return creator
     }
 
     override fun getTracks(): List<Music> {
@@ -33,11 +58,15 @@ class NeteasePlayListDetail(private val jsonObject: JsonObject) : PlayListDetail
     }
 
     override fun isSubscribed(): Boolean {
-        return jsonObject["subscribed"].asBoolean
+        return isSubscribed
     }
 
     override fun getPlayCount(): Int {
-        return jsonObject["playCount"].asInt
+        return playCount
+    }
+
+    override fun getTrackCount(): Int {
+        return trackCount
     }
 
     /**

@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_main_navigation.view.*
 import kotlinx.coroutines.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
-import tech.soit.quiet.model.vo.PlayList
+import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.model.vo.User
 import tech.soit.quiet.ui.activity.local.LocalMusicActivity
 import tech.soit.quiet.ui.activity.user.LoginActivity
@@ -89,7 +89,7 @@ class MainMusicFragment : BaseFragment() {
             checkUser(user)
             user ?: return@launch
 
-            val playLists: List<PlayList>
+            val playLists: List<PlayListDetail>
             try {
                 playLists = neteaseRepository.getUserPlayerList(user.getId())
                 computePlayListRange(playLists, user.getId())
@@ -101,8 +101,8 @@ class MainMusicFragment : BaseFragment() {
         }
     }
 
-    private fun computePlayListRange(playLists: List<PlayList>, userId: Long) {
-        val createdCount = playLists.count { it.getUserId() == userId }
+    private fun computePlayListRange(playLists: List<PlayListDetail>, userId: Long) {
+        val createdCount = playLists.count { it.getCreator().getId() == userId }
         positionCollectionStart = createdCount //reset started position of collection
         val height = dimen(R.dimen.height_item_play_list).toInt()
         rangeCreated = 0..(createdCount * height)

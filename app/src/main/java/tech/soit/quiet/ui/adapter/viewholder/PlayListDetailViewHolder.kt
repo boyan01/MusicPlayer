@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.view.View
+import androidx.core.view.doOnLayout
 import androidx.core.view.updatePadding
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.BitmapImageViewTarget
@@ -46,6 +47,7 @@ class PlayListDetailViewHolder(itemView: View) : BaseViewHolder(itemView) {
         textPlayListTitle.text = playList.getName()
         ImageLoader.with(this).asBitmap()
                 .load(playList.getCoverUrl())
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(object : BitmapImageViewTarget(imageCover) {
                     override fun onLoadFailed(errorDrawable: Drawable?) {
 
@@ -59,35 +61,39 @@ class PlayListDetailViewHolder(itemView: View) : BaseViewHolder(itemView) {
                         }
                     }
                 })
-        ImageLoader.with(this).asBitmap().load(playList.getCoverUrl())
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .transforms(CropTransformation(itemView.width, itemView.height),
-                        BlurTransformation(100),
-                        ColorMaskTransformation(color(R.color.color_transparent_dark_secondary)))
-                .into(object : CustomViewTarget<View, Bitmap>(itemView), Transition.ViewAdapter {
-                    override fun getCurrentDrawable(): Drawable? {
-                        return itemView.background
-                    }
 
-                    override fun setDrawable(drawable: Drawable?) {
-                        itemView.background = drawable
-                    }
-
-
-                    override fun onLoadFailed(errorDrawable: Drawable?) {
-
-                    }
-
-                    override fun onResourceCleared(placeholder: Drawable?) {
-
-                    }
-
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                        if (transition == null || !transition.transition(resource, this)) {
-                            view.background = BitmapDrawable(resources, resource)
+        doOnLayout {
+            ImageLoader.with(this).asBitmap().load(playList.getCoverUrl())
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                    .transforms(
+                            CropTransformation(itemView.width, itemView.height),
+                            BlurTransformation(100),
+                            ColorMaskTransformation(color(R.color.color_transparent_dark_secondary)))
+                    .into(object : CustomViewTarget<View, Bitmap>(itemView), Transition.ViewAdapter {
+                        override fun getCurrentDrawable(): Drawable? {
+                            return itemView.background
                         }
-                    }
-                })
+
+                        override fun setDrawable(drawable: Drawable?) {
+                            itemView.background = drawable
+                        }
+
+
+                        override fun onLoadFailed(errorDrawable: Drawable?) {
+
+                        }
+
+                        override fun onResourceCleared(placeholder: Drawable?) {
+
+                        }
+
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            if (transition == null || !transition.transition(resource, this)) {
+                                view.background = BitmapDrawable(resources, resource)
+                            }
+                        }
+                    })
+        }
 
         //creator
         ImageLoader.with(this).load(playList.getCreator().getAvatarUrl()).into(imageCreatorAvatar)

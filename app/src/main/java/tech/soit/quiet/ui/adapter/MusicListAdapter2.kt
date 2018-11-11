@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.core.view.children
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -16,12 +17,10 @@ import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.model.vo.User
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.playlist.Playlist
-import tech.soit.quiet.ui.adapter.viewholder.BaseViewHolder
-import tech.soit.quiet.ui.adapter.viewholder.MusicListHeaderViewHolder
-import tech.soit.quiet.ui.adapter.viewholder.MusicViewHolder
-import tech.soit.quiet.ui.adapter.viewholder.PlayListDetailViewHolder
+import tech.soit.quiet.ui.adapter.viewholder.*
 import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.attrValue
+import tech.soit.quiet.utils.component.support.px
 import tech.soit.quiet.utils.component.support.string
 import tech.soit.quiet.utils.event.WindowInsetsEvent
 
@@ -34,6 +33,7 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
         private const val TYPE_MUSIC = 0
         private const val TYPE_HEADER = 2
         private const val TYPE_LIST_DETAIL = 1
+        private const val TYPE_PLACEHOLDER = 3
 
 
         /**
@@ -62,7 +62,19 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
 
     private var playlist: PlayListDetail? = null
 
-    private val token get() = playlist?.getToken() ?: Playlist.TOKEN_EMPTY
+    private var isPreviewMode = false
+
+    /**
+     * 当前正在播放的音乐
+     */
+    private var playingMusic: Music? = null
+
+    /**
+     * 占位view的高度
+     */
+    var placeholderHeight: Int = 300.px
+
+    val token get() = playlist?.getToken() ?: Playlist.TOKEN_EMPTY
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -78,32 +90,44 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
 
     /**
      * 展示音乐列表
-     *
-     * @param isShowSubscribeButton 是否展示收藏按钮
-     * @param isSubscribed 此列表是否已经订阅了
      */
-    private fun showList(musics: List<Music>,
-                         isShowSubscribeButton: Boolean,
-                         isSubscribed: Boolean) {
-        this.isShowSubscribeButton = isShowSubscribeButton
-        this.isSubscribed = isSubscribed
+    private fun showList(musics: List<Music>) {
+        isPreviewMode = false
 
         this.musics.clear()
         this.musics.addAll(musics)
 
-        notifyDataSetChanged()
+        //check current playing music
+        if (token == MusicPlayerManager.musicPlayer.playlist.token) {
+            playingMusic = MusicPlayerManager.musicPlayer.playlist.current
+        }
 
+        notifyDataSetChanged()
+    }
+
+
+    private fun preview() {
+        if (isPreviewMode) {
+            return
+        }
+        isPreviewMode = true
+        notifyDataSetChanged()
     }
 
 
     fun showList(user: User?, playlist: PlayListDetail) {
         this.playlist = playlist
 
-        val isShowCollectionButton = user != null && user.getId() != playlist.getCreator().getId()
-        val isSubscribed = user != null && user.getId() != playlist.getCreator().getId()
+        isShowSubscribeButton = user != null && user.getId() != playlist.getCreator().getId()
+        isSubscribed = user != null && user.getId() != playlist.getCreator().getId()
                 && playlist.isSubscribed()
 
-        showList(playlist.getTracks(), isShowCollectionButton, isSubscribed)
+
+        if (playlist.getTracks() == PlayListDetail.NONE_TRACKS) {
+            preview()
+        } else {
+            showList(playlist.getTracks())
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
@@ -136,12 +160,17 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
                 holder.addPaddingTop(insetsTop)
                 holder
             }
+            TYPE_PLACEHOLDER -> {
+                val holder = PlaceholderViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_placeholder, parent, false))
+                holder.itemView.updateLayoutParams { height = placeholderHeight }
+                holder
+            }
             else -> error("can not create view holder for type $viewType")
         }
     }
 
     override fun getItemCount(): Int {
-        return musics.size + HEADER_COUNT
+        return HEADER_COUNT + if (isPreviewMode) 1 else musics.size
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
@@ -153,6 +182,7 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
                 val data = musics[index]
 
                 holder.bind(data, index + 1)
+                holder.setPlaying(playingMusic == data)
                 holder.setListener(
                         play = {
                             MusicPlayerManager.play(token, data, musics)
@@ -164,13 +194,18 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
             }
             TYPE_HEADER -> {
                 holder as MusicListHeaderViewHolder
-                holder.setHeader(musics.size, isShowSubscribeButton, isSubscribed)
+                holder.setHeader(playlist?.getTrackCount()
+                        ?: 0, isShowSubscribeButton, isSubscribed)
             }
             TYPE_LIST_DETAIL -> {
                 holder as PlayListDetailViewHolder
                 playlist?.let {
                     holder.bind(it)
                 }
+            }
+            TYPE_PLACEHOLDER -> {
+                holder as PlaceholderViewHolder
+                //DO nothing...
             }
         }
     }
@@ -195,6 +230,18 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
         }
     }
 
+    fun changePlayingMusic(music: Music?) {
+        playingMusic = music
+        val index = musics.indexOf(music)
+        val recyclerView = recyclerView ?: return
+        recyclerView.children
+                .mapNotNull { recyclerView.getChildViewHolder(it) }
+                .filterIsInstance(MusicViewHolder::class.java)
+                .forEach {
+                    it.setPlaying((it.adapterPosition - HEADER_COUNT) == index)
+                }
+    }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onWindowInsetsEvent(e: WindowInsetsEvent) {
@@ -216,7 +263,7 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
         return when (position) {
             0 -> TYPE_LIST_DETAIL
             1 -> TYPE_HEADER
-            else -> TYPE_MUSIC
+            else -> if (!isPreviewMode) TYPE_MUSIC else TYPE_PLACEHOLDER
         }
     }
 

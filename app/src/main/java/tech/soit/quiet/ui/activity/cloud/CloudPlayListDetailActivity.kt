@@ -3,7 +3,9 @@ package tech.soit.quiet.ui.activity.cloud
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.widget.EdgeEffect
+import androidx.core.view.doOnLayout
 import androidx.core.view.updatePadding
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_cloud_play_list_detail.*
 import kotlinx.coroutines.launch
@@ -12,6 +14,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.PlayListDetail
+import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.activity.cloud.viewmodel.CloudPlayListDetailViewModel
 import tech.soit.quiet.ui.adapter.MusicListAdapter2
@@ -31,15 +34,15 @@ class CloudPlayListDetailActivity : BaseActivity() {
 
         const val PARAM_ID = "id"
 
+        const val PARAM_PLAY_LIST: String = "play_list"
+
     }
 
     private val viewModel by lazyViewModel<CloudPlayListDetailViewModel>()
 
-    private lateinit var playlistToken: String
-
-    private lateinit var detail: PlayListDetail
-
     private lateinit var adapter: MusicListAdapter2
+
+    private var playListTitle: String = string(R.string.title_play_list)
 
     /**
      * toolbar 背景色，需要随着歌单封面的不同而换成相应的颜色
@@ -84,7 +87,7 @@ class CloudPlayListDetailActivity : BaseActivity() {
                 val alpha = offset / headerHeight.toFloat()
 
                 val title = if (alpha > 0.5) {
-                    detail.getName()
+                    playListTitle
                 } else {
                     string(R.string.title_play_list)
                 }
@@ -96,27 +99,41 @@ class CloudPlayListDetailActivity : BaseActivity() {
 
         })
 
+        adapter = MusicListAdapter2()
+        recyclerView.adapter = adapter
+
+        layoutRoot.doOnLayout {
+            adapter.placeholderHeight = it.height -
+                    /*标题高度*/
+                    (headerHeight + toolbar.height + dimen(R.dimen.height_header_music_list).toInt())
+        }
+
+        //预览
+        val playlist = intent.getSerializableExtra(PARAM_PLAY_LIST) as? PlayListDetail
+        if (playlist != null) {
+            playListTitle = playlist.getName()
+            adapter.showList(viewModel.getLoginUser(), playlist)
+        }
 
         val playlistId = intent.getLongExtra(PARAM_ID, -1)
         if (playlistId == -1L) {
             error("need playlist id")
         }
 
-        playlistToken = "netease_$playlistId"
-
-        adapter = MusicListAdapter2()
-        recyclerView.adapter = adapter
-
         launch {
             val detail = viewModel.loadData(playlistId)
                     ?: //TODO
                     return@launch
-            this@CloudPlayListDetailActivity.detail = detail
-
             //show music list
-            val user = viewModel.getLoginUser()
-            adapter.showList(user, detail)
+            adapter.showList(viewModel.getLoginUser(), detail)
         }
+
+        MusicPlayerManager.playingMusic.observe(this, Observer {
+            val token = MusicPlayerManager.musicPlayer.playlist.token
+            if (token == adapter.token) {
+                adapter.changePlayingMusic(it)
+            }
+        })
     }
 
 

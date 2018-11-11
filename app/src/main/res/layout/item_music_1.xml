@@ -21,7 +21,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="1" />
+        tools:text="1"
+        tools:visibility="invisible" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iconPlaying"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/textPosition"
+        app:layout_constraintEnd_toEndOf="@id/textPosition"
+        app:layout_constraintStart_toStartOf="@id/textPosition"
+        app:layout_constraintTop_toTopOf="@id/textPosition"
+        app:srcCompat="@drawable/ic_volume_up_black_24dp"
+        app:tint="?colorPrimary" />
 
 
     <androidx.appcompat.widget.AppCompatImageView
