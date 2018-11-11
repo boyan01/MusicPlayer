@@ -76,6 +76,7 @@ class PlayingPlaylistDialog : BottomSheetDialogFragment(), CoroutineScope, Lifec
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        applyPrimaryColor((requireActivity() as BaseActivity).colorPrimary)
         super.onViewCreated(view, savedInstanceState)
         recyclerView.adapter = adapter
         containerPlayMode.setOnClickListener {
@@ -90,6 +91,10 @@ class PlayingPlaylistDialog : BottomSheetDialogFragment(), CoroutineScope, Lifec
         //reset recycler view height to 2/3 screen height
         val (_, height) = (requireActivity() as BaseActivity).getWindowSize()
         recyclerView.layoutParams.height = (height * 0.6f).toInt()
+    }
+
+    private fun applyPrimaryColor(colorPrimary: Int) {
+        headerLayout.setBackgroundColor(colorPrimary)
     }
 
     override fun onDestroy() {

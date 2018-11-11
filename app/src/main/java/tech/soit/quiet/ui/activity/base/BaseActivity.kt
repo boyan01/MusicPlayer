@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.content_bottom_controller.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
@@ -57,6 +59,9 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
     var viewModelFactory: ViewModelProvider.Factory = QuietViewModelProvider()
 
     private lateinit var job: Job
+
+    @ColorInt
+    var colorPrimary: Int = AppContext.attrValue(R.attr.colorPrimary)
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
@@ -215,6 +220,11 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
         val point = Point()
         windowManager.defaultDisplay.getSize(point)
         return point.x to point.y
+    }
+
+
+    protected fun setPrimaryColor(@ColorInt color: Int) {
+        this.colorPrimary = color
     }
 
 

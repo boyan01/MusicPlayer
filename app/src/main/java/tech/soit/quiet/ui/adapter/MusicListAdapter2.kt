@@ -1,5 +1,6 @@
 package tech.soit.quiet.ui.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -17,6 +18,7 @@ import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.model.vo.User
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.playlist.Playlist
+import tech.soit.quiet.ui.activity.MusicPlayerActivity
 import tech.soit.quiet.ui.adapter.viewholder.*
 import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.attrValue
@@ -185,7 +187,17 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
                 holder.setPlaying(playingMusic == data)
                 holder.setListener(
                         play = {
-                            MusicPlayerManager.play(token, data, musics)
+                            val pl = MusicPlayerManager.musicPlayer.playlist
+                            if (pl.token == token && pl.current == data) {
+                                val context = holder.itemView.context
+                                val intent = Intent(context, MusicPlayerActivity::class.java)
+                                context.startActivity(intent)
+                                if (!MusicPlayerManager.musicPlayer.mediaPlayer.isPlayWhenReady) {
+                                    MusicPlayerManager.musicPlayer.playPause()
+                                }
+                            } else {
+                                MusicPlayerManager.play(token, data, musics)
+                            }
                         },
                         showOptions = {
                             log { "show options for $data" }
