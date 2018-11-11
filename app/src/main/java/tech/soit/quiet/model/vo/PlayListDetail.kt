@@ -27,5 +27,9 @@ abstract class PlayListDetail {
         return getId().hashCode()
     }
 
+    fun getToken(): String {
+        return javaClass.simpleName + "-" + getId()
+    }
+
 
 }

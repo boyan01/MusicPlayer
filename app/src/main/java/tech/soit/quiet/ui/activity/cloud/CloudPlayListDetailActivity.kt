@@ -17,7 +17,6 @@ import tech.soit.quiet.ui.activity.cloud.viewmodel.CloudPlayListDetailViewModel
 import tech.soit.quiet.ui.adapter.MusicListAdapter2
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
-import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.attrValue
 import tech.soit.quiet.utils.component.support.dimen
 import tech.soit.quiet.utils.component.support.string
@@ -83,8 +82,6 @@ class CloudPlayListDetailActivity : BaseActivity() {
 
             fun onHeaderOffset(offset: Int) {
                 val alpha = offset / headerHeight.toFloat()
-
-                log { "header alpha : $alpha" }
 
                 val title = if (alpha > 0.5) {
                     detail.getName()

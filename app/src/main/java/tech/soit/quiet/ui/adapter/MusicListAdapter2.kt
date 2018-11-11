@@ -62,7 +62,7 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
 
     private var playlist: PlayListDetail? = null
 
-    private var token = Playlist.TOKEN_EMPTY
+    private val token get() = playlist?.getToken() ?: Playlist.TOKEN_EMPTY
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)

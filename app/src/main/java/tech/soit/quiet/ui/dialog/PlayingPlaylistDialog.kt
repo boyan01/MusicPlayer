@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.dialog_playing_playlist.*
@@ -24,14 +25,12 @@ import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.utils.*
 import kotlin.coroutines.CoroutineContext
 
-class PlayingPlaylistDialog : BottomSheetDialogFragment(), CoroutineScope {
+class PlayingPlaylistDialog : BottomSheetDialogFragment(), CoroutineScope, LifecycleOwner {
 
     companion object {
 
-        private val instance = PlayingPlaylistDialog()
-
         fun getInstance(): PlayingPlaylistDialog {
-            return instance
+            return PlayingPlaylistDialog()
         }
 
     }
@@ -42,6 +41,9 @@ class PlayingPlaylistDialog : BottomSheetDialogFragment(), CoroutineScope {
         get() = Dispatchers.Main + job
 
     private var playlist = Playlist.EMPTY
+
+    private var adapter = MultiTypeAdapter()
+            .withBinder(Music2Binder())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +74,6 @@ class PlayingPlaylistDialog : BottomSheetDialogFragment(), CoroutineScope {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.cloneInContext(context).inflate(R.layout.dialog_playing_playlist, container, false)
     }
-
-    private var adapter = MultiTypeAdapter()
-            .withBinder(Music2Binder())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

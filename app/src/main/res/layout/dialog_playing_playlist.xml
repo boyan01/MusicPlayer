@@ -63,6 +63,6 @@
         android:layout_width="match_parent"
         android:layout_height="340dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_music" />
+        tools:listitem="@layout/item_music_2" />
 
 </LinearLayout>
