@@ -8,6 +8,7 @@ import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.player.core.QuietMediaPlayer
 import tech.soit.quiet.player.playlist.Playlist
+import tech.soit.quiet.repository.LatestPlayingRepository
 import tech.soit.quiet.utils.component.LoggerLevel
 import tech.soit.quiet.utils.component.log
 import kotlin.properties.Delegates
@@ -99,6 +100,7 @@ class QuietMusicPlayer {
 
         //live data playing music changed
         MusicPlayerManager.playingMusic.postValue(music)
+        LatestPlayingRepository.getInstance().hit(music)
 
         val uri = music.getPlayUrl()
         mediaPlayer.prepare(uri, playWhenReady)

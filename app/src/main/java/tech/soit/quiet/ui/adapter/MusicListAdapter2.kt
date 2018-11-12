@@ -26,16 +26,14 @@ import tech.soit.quiet.utils.component.support.px
 import tech.soit.quiet.utils.component.support.string
 import tech.soit.quiet.utils.event.WindowInsetsEvent
 
-class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
-
-    private val musics = ArrayList<Music>()
+open class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
 
     companion object {
 
-        private const val TYPE_MUSIC = 0
-        private const val TYPE_HEADER = 2
-        private const val TYPE_LIST_DETAIL = 1
-        private const val TYPE_PLACEHOLDER = 3
+        const val TYPE_MUSIC = 0
+        const val TYPE_HEADER = 2
+        const val TYPE_LIST_DETAIL = 1
+        const val TYPE_PLACEHOLDER = 3
 
 
         /**
@@ -45,7 +43,10 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
 
     }
 
-    private var recyclerView: RecyclerView? = null
+
+    protected val musics = ArrayList<Music>()
+
+    protected var recyclerView: RecyclerView? = null
 
     @ColorInt
     private var colorPrimary: Int = AppContext.attrValue(R.attr.colorPrimary)
@@ -64,7 +65,7 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
 
     private var playlist: PlayListDetail? = null
 
-    private var isPreviewMode = false
+    protected var isPreviewMode = false
 
     /**
      * 当前正在播放的音乐
@@ -76,7 +77,11 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
      */
     var placeholderHeight: Int = 300.px
 
-    val token get() = playlist?.getToken() ?: Playlist.TOKEN_EMPTY
+    open val token get() = playlist?.getToken() ?: Playlist.TOKEN_EMPTY
+
+    open val trackCount get() = playlist?.getTrackCount() ?: 0
+
+    open val musicIndexOffset get() = HEADER_COUNT
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -93,7 +98,7 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
     /**
      * 展示音乐列表
      */
-    private fun showList(musics: List<Music>) {
+    protected open fun showList(musics: List<Music>) {
         isPreviewMode = false
 
         this.musics.clear()
@@ -108,7 +113,7 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
     }
 
 
-    private fun preview() {
+    protected open fun preview() {
         if (isPreviewMode) {
             return
         }
@@ -179,48 +184,60 @@ class MusicListAdapter2 : RecyclerView.Adapter<BaseViewHolder>() {
         holder.applyPrimaryColor(colorPrimary)
         when (holder.itemViewType) {
             TYPE_MUSIC -> {
-                holder as MusicViewHolder
-                val index = position - HEADER_COUNT
-                val data = musics[index]
-
-                holder.bind(data, index + 1)
-                holder.setPlaying(playingMusic == data)
-                holder.setListener(
-                        play = {
-                            val pl = MusicPlayerManager.musicPlayer.playlist
-                            if (pl.token == token && pl.current == data) {
-                                val context = holder.itemView.context
-                                val intent = Intent(context, MusicPlayerActivity::class.java)
-                                context.startActivity(intent)
-                                if (!MusicPlayerManager.musicPlayer.mediaPlayer.isPlayWhenReady) {
-                                    MusicPlayerManager.musicPlayer.playPause()
-                                }
-                            } else {
-                                MusicPlayerManager.play(token, data, musics)
-                            }
-                        },
-                        showOptions = {
-                            log { "show options for $data" }
-                        }
-                )
+                bindMusic(holder as MusicViewHolder, position)
             }
             TYPE_HEADER -> {
-                holder as MusicListHeaderViewHolder
-                holder.setHeader(playlist?.getTrackCount()
-                        ?: 0, isShowSubscribeButton, isSubscribed)
+                bindHeader(holder as MusicListHeaderViewHolder)
             }
             TYPE_LIST_DETAIL -> {
-                holder as PlayListDetailViewHolder
-                playlist?.let {
-                    holder.bind(it)
-                }
+                bindDetail(holder as PlayListDetailViewHolder)
             }
             TYPE_PLACEHOLDER -> {
-                holder as PlaceholderViewHolder
-                //DO nothing...
+                bindPlaceholder(holder as PlaceholderViewHolder)
             }
         }
     }
+
+    protected open fun bindPlaceholder(holder: PlaceholderViewHolder) {
+        //DO nothing...
+    }
+
+    protected open fun bindDetail(holder: PlayListDetailViewHolder) {
+        playlist?.let {
+            holder.bind(it)
+        }
+    }
+
+    protected open fun bindHeader(holder: MusicListHeaderViewHolder) {
+        holder.setHeader(trackCount, isShowSubscribeButton, isSubscribed)
+    }
+
+    protected open fun bindMusic(holder: MusicViewHolder, adapterPosition: Int) {
+        val index = adapterPosition - musicIndexOffset
+        val data = musics[index]
+
+        holder.bind(data, index + 1)
+        holder.setPlaying(playingMusic == data)
+        holder.setListener(
+                play = {
+                    val pl = MusicPlayerManager.musicPlayer.playlist
+                    if (pl.token == token && pl.current == data) {
+                        val context = holder.itemView.context
+                        val intent = Intent(context, MusicPlayerActivity::class.java)
+                        context.startActivity(intent)
+                        if (!MusicPlayerManager.musicPlayer.mediaPlayer.isPlayWhenReady) {
+                            MusicPlayerManager.musicPlayer.playPause()
+                        }
+                    } else {
+                        MusicPlayerManager.play(token, data, musics)
+                    }
+                },
+                showOptions = {
+                    log { "show options for $data" }
+                }
+        )
+    }
+
 
     /**
      * 设置列表主题色

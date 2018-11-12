@@ -15,6 +15,7 @@ import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.model.vo.User
+import tech.soit.quiet.ui.activity.LatestPlayListActivity
 import tech.soit.quiet.ui.activity.local.LocalMusicActivity
 import tech.soit.quiet.ui.activity.user.LoginActivity
 import tech.soit.quiet.ui.fragment.base.BaseFragment
@@ -146,6 +147,9 @@ class MainMusicFragment : BaseFragment() {
         with(navLayoutHistory) {
             imageIcon.setImageResource(R.drawable.ic_history_black_24dp)
             textTitle.setText(R.string.nav_history)
+            setOnClickListener {
+                startActivity(Intent(requireActivity(), LatestPlayListActivity::class.java))
+            }
         }
 
         with(navLayoutDownload) {
