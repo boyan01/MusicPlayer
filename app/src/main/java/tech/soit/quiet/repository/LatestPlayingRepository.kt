@@ -39,7 +39,7 @@ class LatestPlayingRepository(
      * on new music has been played
      */
     fun hit(music: Music) {
-        musics.remove(music)
+        musics.removeAll { it == music }
 
         if (musics.size >= 100) {//确保最多只能有100首音乐
             musics.removeLast()
