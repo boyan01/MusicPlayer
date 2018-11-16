@@ -5,6 +5,7 @@ import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.model.vo.User
 import tech.soit.quiet.repository.netease.source.NeteaseGlideUrl
+import tech.soit.quiet.utils.component.support.value
 
 class NeteasePlayListDetail(jsonObject: JsonObject) : PlayListDetail() {
 
@@ -18,7 +19,7 @@ class NeteasePlayListDetail(jsonObject: JsonObject) : PlayListDetail() {
 
     private val creator: User
 
-    private val isSubscribed: Boolean = jsonObject["subscribed"].asBoolean
+    private val isSubscribed: Boolean = jsonObject["subscribed"].value() ?: false
 
     private val playCount: Int = jsonObject["playCount"].asInt
 
@@ -29,7 +30,11 @@ class NeteasePlayListDetail(jsonObject: JsonObject) : PlayListDetail() {
         tracks = if (trackJson == null || trackJson.isJsonNull) {
             NONE_TRACKS
         } else {
-            trackJson.asJsonArray.map { playlistTrack(it as JsonObject) }
+            try {
+                trackJson.asJsonArray.map { playlistTrack(it as JsonObject) }
+            } catch (e: Exception) {
+                NONE_TRACKS
+            }
         }
 
         val c = jsonObject["creator"].asJsonObject

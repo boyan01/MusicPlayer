@@ -1,6 +1,7 @@
 package tech.soit.quiet.repository.netease
 
 import androidx.lifecycle.ViewModel
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import tech.soit.quiet.model.po.*
 import tech.soit.quiet.model.vo.PlayListDetail
@@ -155,6 +156,21 @@ class NeteaseRepository(
     }
 
 
+    /**
+     * 榜单摘要
+     */
+    suspend fun toplistDetail(): JsonArray {
+        val encrypt = Crypto.encrypt("""
+            {"csrf_token":""}
+        """.trimIndent())
+        val response = service.toplistDetail(encrypt).await()
+        if (!response.isSuccess()) {
+            error(response[REMOTE_KEY_MESSAGE])
+        }
+        return response["list"].asJsonArray
+    }
+
+
     fun personalFm() {
         val params = Crypto.encrypt("""
             {"csrf_token":""}
@@ -177,8 +193,17 @@ class NeteaseRepository(
     }
 
 
+    /**
+     * check netease response json object is succeed
+     *
+     * @throws NotLoginException if code is 301
+     */
     private fun JsonObject.isSuccess(): Boolean {
-        return get("code").asInt == 200
+        val code = get("code").asInt
+        if (code == 301) {
+            throw NotLoginException()
+        }
+        return code == 200
     }
 
 

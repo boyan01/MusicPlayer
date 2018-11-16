@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.item_cloud_nav.view.*
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.activity.cloud.CloudDailyRecommendActivity
+import tech.soit.quiet.ui.activity.cloud.TopDetailActivity
 import tech.soit.quiet.ui.view.CircleOutlineProvider
 import tech.soit.quiet.utils.KItemViewBinder
 import tech.soit.quiet.utils.KViewHolder
@@ -51,7 +52,7 @@ private class ItemNavBinder : KItemViewBinder<ItemNav>() {
                         context.startActivity(Intent(context, CloudDailyRecommendActivity::class.java))
                     }
                     R.string.nav_tends -> {
-                        log { "to tends" }
+                        context.startActivity(Intent(context, TopDetailActivity::class.java))
                     }
                 }
             }

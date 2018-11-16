@@ -57,4 +57,7 @@
     <string name="playmode_sequence">顺序播放</string>
     <string name="playmode_shuffle">随机播放</string>
     <string name="playmode_single">单曲循环</string>
+    <string name="leader_board">排行榜</string>
+    <string name="leader_board_official">官方榜</string>
+    <string name="leader_board_global">全球榜</string>
 </resources>

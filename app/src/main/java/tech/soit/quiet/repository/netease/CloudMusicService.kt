@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package tech.soit.quiet.repository.netease
 
 import com.google.gson.JsonObject
@@ -79,4 +81,20 @@ interface CloudMusicService {
     @FormUrlEncoded
     @POST("/weapi/radio/trash/add?alg=RT&time=25")
     fun fmTrash(@Query("songId") id: Long, @FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+    /**
+     * 获取用户信息 , 歌单，收藏，mv, dj 数量
+     */
+    @FormUrlEncoded
+    @POST("/weapi/subcount")
+    fun subcount(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+
+    /**
+     * 所有榜单内容摘要
+     */
+    @FormUrlEncoded
+    @POST("/weapi/toplist/detail")
+    fun toplistDetail(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
 }

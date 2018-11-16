@@ -7,4 +7,5 @@
     <dimen name="height_playlist_detail_cover">120dp</dimen>
     <dimen name="height_playlist_detail_nav">60dp</dimen>
     <dimen name="height_header_music_list">42dp</dimen>
+    <dimen name="height_item_cloud_top_1">130dp</dimen>
 </resources>

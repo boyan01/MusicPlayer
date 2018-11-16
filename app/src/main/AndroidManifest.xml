@@ -61,6 +61,10 @@
             android:theme="@style/AppTheme.ColoredNavigationBar" />
 
         <activity
+            android:name=".ui.activity.cloud.TopDetailActivity"
+            android:theme="@style/AppTheme.ColoredNavigationBar" />
+
+        <activity
             android:name=".ui.activity.LatestPlayListActivity"
             android:theme="@style/AppTheme.ColoredNavigationBar" />
 
