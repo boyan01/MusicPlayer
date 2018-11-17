@@ -60,4 +60,5 @@
     <string name="leader_board">排行榜</string>
     <string name="leader_board_official">官方榜</string>
     <string name="leader_board_global">全球榜</string>
+    <string name="load_retry">加载失败，点击重试。</string>
 </resources>

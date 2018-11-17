@@ -31,6 +31,7 @@ import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.ImageLoader
+import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.QuietViewModelProvider
 import tech.soit.quiet.utils.component.support.attrValue
 import tech.soit.quiet.utils.component.support.observeNonNull
@@ -73,7 +74,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
 
         //inject layout for annotation
         val isInjectLayout = this::class.findAnnotation<DisableLayoutInject>() == null
-        val layoutId = this::class.findAnnotation<LayoutId>()
+        val layoutId = this::class.java.getAnnotation(LayoutId::class.java)
         if (isInjectLayout && layoutId != null) {
             setContentView(layoutId.value)
         }
@@ -81,6 +82,11 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
         if (enableBottomController()) {
             //make bottom controller interchangeable
             listenBottomControllerEvent()
+        }
+
+        log {
+            "create ${this::class.java.simpleName} " +
+                    "layoutId :${layoutId?.value} , enableBottomController : ${enableBottomController()}"
         }
     }
 
