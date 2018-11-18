@@ -62,4 +62,5 @@
     <string name="leader_board_global">全球榜</string>
     <string name="load_retry">加载失败，点击重试。</string>
     <string name="recommend_playlists">推荐歌单</string>
+    <string name="new_songs">最新音乐</string>
 </resources>

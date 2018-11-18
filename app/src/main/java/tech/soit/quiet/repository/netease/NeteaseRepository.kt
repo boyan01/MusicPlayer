@@ -7,6 +7,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import org.jetbrains.annotations.Contract
 import tech.soit.quiet.model.po.*
+import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.model.vo.User
 import tech.soit.quiet.utils.component.log
@@ -190,6 +191,36 @@ class NeteaseRepository(
         response.isSuccess()
 
         return response["result"].asJsonArray
+    }
+
+
+    /**
+     * 推荐的新歌（10首）
+     */
+    suspend fun personalizedNewSongs(): List<Music> {
+        val encrypt = Crypto.encrypt("""
+            {
+              "type" : "recommend"
+            }
+        """.trimIndent())
+        val response = service.personalizedNewSong(encrypt).await()
+        response.isSuccess()
+
+        return response["result"].asJsonArray
+                .map {
+                    it as JsonObject
+                    val song = it["song"].asJsonObject
+
+                    val album = NeteaseAlbum.fromJson(song["album"].asJsonObject)
+                    val artist = NeteaseArtist.fromJson(song["artists"].asJsonArray)
+
+                    NeteaseMusic(
+                            song["id"].asLong,
+                            song["name"].asString,
+                            album,
+                            artist
+                    )
+                }
     }
 
 

@@ -8,19 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 import me.drakeet.multitype.ItemViewBinder
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
+import tech.soit.quiet.utils.annotation.LayoutId
 
 
 open class KViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
+@Deprecated("use LayoutId")
 annotation class TypeLayoutRes(@LayoutRes val value: Int)
 
 abstract class KItemViewBinder<T> : ItemViewBinder<T, KViewHolder>() {
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): KViewHolder {
-        val layoutRes = this::class.annotations.firstOrNull { it is TypeLayoutRes } as TypeLayoutRes?
+        val layoutRes = (this::class.annotations.firstOrNull { it is TypeLayoutRes } as TypeLayoutRes?)?.value
+                ?: this::class.java.getAnnotation(LayoutId::class.java)?.value
                 ?: throw IllegalStateException("must override this function if you do not use Annotation")
 
-        val view = inflater.inflate(layoutRes.value, parent, false)
+        val view = inflater.inflate(layoutRes, parent, false)
         onViewCreated(view)
         return KViewHolder(view)
     }
@@ -59,7 +62,7 @@ fun MultiTypeAdapter.submit(items: List<Any>) {
  * easy access for loading
  */
 
-@TypeLayoutRes(R.layout.item_loading)
+@LayoutId(R.layout.item_loading)
 class LoadingViewBinder : KItemViewBinder<Loading>() {
 
     override fun onBindViewHolder(holder: KViewHolder, item: Loading) {
@@ -85,7 +88,7 @@ fun MultiTypeAdapter.setLoading() {
     items = listOf(Loading)
 }
 
-@TypeLayoutRes(R.layout.item_empty)
+@LayoutId(R.layout.item_empty)
 class EmptyViewBinder : KItemViewBinder<Empty>() {
     override fun onBindViewHolder(holder: KViewHolder, item: Empty) {
         //do nothing

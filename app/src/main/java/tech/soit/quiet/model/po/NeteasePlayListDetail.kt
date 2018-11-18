@@ -9,6 +9,26 @@ import tech.soit.quiet.utils.component.support.value
 
 class NeteasePlayListDetail(jsonObject: JsonObject) : PlayListDetail() {
 
+    companion object {
+
+        /**
+         * create music from playlist track json
+         */
+        fun playlistTrack(jsonObject: JsonObject): NeteaseMusic {
+
+            val album = NeteaseAlbum.fromJson(jsonObject["al"].asJsonObject)
+            val artist = NeteaseArtist.fromJson(jsonObject["ar"].asJsonArray)
+
+            return NeteaseMusic(
+                    jsonObject["id"].asLong,
+                    jsonObject["name"].asString,
+                    album,
+                    artist
+            )
+        }
+
+    }
+
     private val tracks: List<Music>
 
     private val id: Long = jsonObject["id"].asLong
@@ -72,22 +92,6 @@ class NeteasePlayListDetail(jsonObject: JsonObject) : PlayListDetail() {
 
     override fun getTrackCount(): Int {
         return trackCount
-    }
-
-    /**
-     * create music from playlist track json
-     */
-    private fun playlistTrack(jsonObject: JsonObject): NeteaseMusic {
-
-        val album = NeteaseAlbum.fromJson(jsonObject["al"].asJsonObject)
-        val artist = NeteaseArtist.fromJson(jsonObject["ar"].asJsonArray)
-
-        return NeteaseMusic(
-                jsonObject["id"].asLong,
-                jsonObject["name"].asString,
-                album,
-                artist
-        )
     }
 
 }

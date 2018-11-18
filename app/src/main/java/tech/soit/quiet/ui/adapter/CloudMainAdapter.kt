@@ -9,19 +9,24 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
+import tech.soit.quiet.model.vo.Music
+import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.repository.netease.source.NeteaseGlideUrl
+import tech.soit.quiet.ui.activity.MusicPlayerActivity
 import tech.soit.quiet.ui.activity.cloud.CloudDailyRecommendActivity
 import tech.soit.quiet.ui.activity.cloud.CloudPlayListDetailActivity
 import tech.soit.quiet.ui.activity.cloud.TopDetailActivity
 import tech.soit.quiet.ui.adapter.viewholder.CloudMainNav2ViewHolder
+import tech.soit.quiet.ui.item.MusicItemViewBinder
 import tech.soit.quiet.ui.view.CircleOutlineProvider
 import tech.soit.quiet.utils.KItemViewBinder
 import tech.soit.quiet.utils.KViewHolder
-import tech.soit.quiet.utils.TypeLayoutRes
+import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.value
 import tech.soit.quiet.utils.withBinder
@@ -44,23 +49,55 @@ class CloudMainAdapter : MultiTypeAdapter() {
 
         private val HEADER_RECOMMEND_PLAYLIST = ItemHeader(R.string.recommend_playlists)
 
+        private val HEADER_NEW_SONGS = ItemHeader(R.string.new_songs)
+
+
+        private const val TOKEN_NEW_SONGS = "cloud_new_songs-f"
+
     }
+
+    private var recyclerView: RecyclerView? = null
+
+    private val itemMusicBinder: ItemMusicBinder
 
 
     init {
+
+        itemMusicBinder = ItemMusicBinder(TOKEN_NEW_SONGS, this::onNewSongClicked, null)
+
         withBinder(ItemNavigatorBinder())
         withBinder(ItemHeaderBinder())
         withBinder(ItemPlaylistBinder())
+        withBinder(itemMusicBinder)
     }
 
+    private fun onNewSongClicked(view: View, music: Music) {
+        val pl = MusicPlayerManager.musicPlayer.playlist
+        if (pl.token == TOKEN_NEW_SONGS && pl.current == music) {
+            view.context.startActivity(Intent(view.context, MusicPlayerActivity::class.java))
+        } else {
+            MusicPlayerManager.play(TOKEN_NEW_SONGS, music, newSongs!!/*newSongs can not be null*/)
+        }
+    }
 
     private var playlist: JsonArray? = null
+
+    private var newSongs: List<Music>? = null
 
     /**
      * 推荐歌单
      */
     fun setRecommendPlaylist(playlist: JsonArray) {
         this.playlist = playlist
+        refresh()
+    }
+
+
+    /**
+     * 推荐新歌
+     */
+    fun setRecommendNewSongs(songs: List<Music>) {
+        this.newSongs = songs
         refresh()
     }
 
@@ -79,8 +116,37 @@ class CloudMainAdapter : MultiTypeAdapter() {
             items.addAll(itemPlaylist)
         }
 
+        //新歌
+        newSongs?.let { songs ->
+            items.add(HEADER_NEW_SONGS)
+            items.addAll(songs)
+        }
+
         this.items = items
         notifyDataSetChanged()
+    }
+
+    /**
+     * 当前正在播放音乐改变事件回调
+     */
+    fun onPlayingMusicChanged(music: Music?) {
+        val recyclerView = recyclerView ?: return
+        if (MusicPlayerManager.musicPlayer.playlist.token == TOKEN_NEW_SONGS) {
+            itemMusicBinder.setCurrentPlaying(music, recyclerView)
+        } else {
+            itemMusicBinder.setCurrentPlaying(null, recyclerView)
+        }
+    }
+
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        this.recyclerView = recyclerView
+    }
+
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView)
+        this.recyclerView = null
     }
 
 
@@ -89,7 +155,7 @@ class CloudMainAdapter : MultiTypeAdapter() {
             @DrawableRes val icon: Int
     )
 
-    @TypeLayoutRes(R.layout.item_cloud_nav)
+    @LayoutId(R.layout.item_cloud_nav)
     private class ItemNavigatorBinder : KItemViewBinder<ItemNavigator>() {
 
         private val circleOutlineProvider = CircleOutlineProvider()
@@ -131,7 +197,7 @@ class CloudMainAdapter : MultiTypeAdapter() {
             @StringRes val title: Int
     )
 
-    @TypeLayoutRes(R.layout.header_item_cloud_main)
+    @LayoutId(R.layout.header_item_cloud_main)
     private class ItemHeaderBinder : KItemViewBinder<ItemHeader>() {
 
         override val spanSize: Int
@@ -177,6 +243,17 @@ class CloudMainAdapter : MultiTypeAdapter() {
                 holder.itemView.tooltipText = item.copywriter
             }
         }
+
+    }
+
+
+    private class ItemMusicBinder(token: String,
+                                  onClick: (view: View, music: Music) -> Unit,
+                                  onPlayingItemShowHide: ((show: Boolean) -> Unit)?)
+        : MusicItemViewBinder(token, onClick, onPlayingItemShowHide) {
+
+        override val spanSize: Int
+            get() = SPAN_COUNT
 
     }
 
