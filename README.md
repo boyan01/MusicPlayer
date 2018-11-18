@@ -1,14 +1,14 @@
-# Quiet [![Build Status](https://travis-ci.org/summerlly/MusicPlayer.svg?branch=master)](https://travis-ci.org/summerlly/MusicPlayer) [![Coverage Status](https://coveralls.io/repos/github/summerlly/MusicPlayer/badge.svg?branch=master)](https://coveralls.io/github/summerlly/MusicPlayer?branch=master)
+## Quiet [![Build Status](https://travis-ci.org/boyan01/MusicPlayer.svg?branch=master)](https://travis-ci.org/summerlly/MusicPlayer) 
 
-A simple MusicPlayer for Android.
+一个简单的音乐播放器。
 
-__
-
-Kotlin
+主要使用的 是kotlin 编写，其它框架前往 app/build.gradle 查看。
 
 ## OverView
 
-//TODO
+| 主页面1 | 主页面2 | 播放 | 歌单 |
+| :--: | :--: | :--: | :--: |
+| ![](./images/main.webp) |  ![](./images/main_2.webp)    |                                               ![](./images/playing.webp)                |  ![](./images/playlist_detail.webp)  |
 
 ##  About
 
