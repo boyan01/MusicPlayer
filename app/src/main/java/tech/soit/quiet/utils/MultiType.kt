@@ -32,6 +32,14 @@ abstract class KItemViewBinder<T> : ItemViewBinder<T, KViewHolder>() {
 
     }
 
+    /**
+     * link with [androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup]
+     *
+     * 此 itemView 所占的 span大小
+     *
+     */
+    open val spanSize: Int = 1
+
 }
 
 

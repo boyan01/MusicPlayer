@@ -97,4 +97,36 @@ interface CloudMusicService {
     @POST("/weapi/toplist/detail")
     fun toplistDetail(@FieldMap request: Map<String, String>): Deferred<JsonObject>
 
+    /**
+     * 推荐歌单
+     */
+    @FormUrlEncoded
+    @POST("/weapi/personalized/playlist")
+    fun personalizedPlaylist(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+    /**
+     * 推荐新音乐
+     */
+    @FormUrlEncoded
+    @POST("/weapi/personalized/newsong")
+    fun personalizedNewSong(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+
+    /**
+     * 主播电台
+     */
+    @FormUrlEncoded
+    @POST("/weapi/personalized/djprogram")
+    fun personalizedDj(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+
+    /**
+     * 推荐MV
+     */
+    @FormUrlEncoded
+    @POST("/weapi/personalized/mv")
+    fun personalizedMv(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+
+
 }

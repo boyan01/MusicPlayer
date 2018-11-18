@@ -1,8 +1,11 @@
+@file:Suppress("SpellCheckingInspection")
+
 package tech.soit.quiet.repository.netease
 
 import androidx.lifecycle.ViewModel
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import org.jetbrains.annotations.Contract
 import tech.soit.quiet.model.po.*
 import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.model.vo.User
@@ -171,6 +174,25 @@ class NeteaseRepository(
     }
 
 
+    /**
+     * 推荐歌单
+     */
+    suspend fun personalizedPlaylist(limit: Int = 30, offset: Int = 0): JsonArray {
+        val encrypt = Crypto.encrypt("""
+            {
+               "limit" : $limit,
+               "offset" : $offset,
+               "total" : true,
+               "n" : 1000
+            }
+        """.trimIndent())
+        val response = service.personalizedPlaylist(encrypt).await()
+        response.isSuccess()
+
+        return response["result"].asJsonArray
+    }
+
+
     fun personalFm() {
         val params = Crypto.encrypt("""
             {"csrf_token":""}
@@ -197,13 +219,18 @@ class NeteaseRepository(
      * check netease response json object is succeed
      *
      * @throws NotLoginException if code is 301
+     * @throws IllegalStateException if code is not 200
      */
+    @Contract("_ - true")
     private fun JsonObject.isSuccess(): Boolean {
         val code = get("code").asInt
         if (code == 301) {
             throw NotLoginException()
         }
-        return code == 200
+        if (code != 200) {
+            error(get(REMOTE_KEY_MESSAGE))
+        }
+        return true
     }
 
 

@@ -1,6 +1,7 @@
 package tech.soit.quiet.ui.adapter
 
 import android.content.Intent
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,15 +9,20 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
+import tech.soit.quiet.repository.netease.source.NeteaseGlideUrl
 import tech.soit.quiet.ui.activity.cloud.CloudDailyRecommendActivity
 import tech.soit.quiet.ui.activity.cloud.TopDetailActivity
+import tech.soit.quiet.ui.adapter.viewholder.CloudMainNav2ViewHolder
 import tech.soit.quiet.ui.view.CircleOutlineProvider
 import tech.soit.quiet.utils.KItemViewBinder
 import tech.soit.quiet.utils.KViewHolder
 import tech.soit.quiet.utils.TypeLayoutRes
 import tech.soit.quiet.utils.component.log
+import tech.soit.quiet.utils.component.support.value
 import tech.soit.quiet.utils.withBinder
 
 /**
@@ -26,6 +32,8 @@ class CloudMainAdapter : MultiTypeAdapter() {
 
 
     companion object {
+
+        const val SPAN_COUNT = 3
 
         private val NAVIGATORS = listOf(
                 ItemNavigator(R.string.nav_radio, R.drawable.ic_radio_black_24dp),
@@ -41,6 +49,18 @@ class CloudMainAdapter : MultiTypeAdapter() {
     init {
         withBinder(ItemNavigatorBinder())
         withBinder(ItemHeaderBinder())
+        withBinder(ItemPlaylistBinder())
+    }
+
+
+    private var playlist: JsonArray? = null
+
+    /**
+     * 推荐歌单
+     */
+    fun setRecommendPlaylist(playlist: JsonArray) {
+        this.playlist = playlist
+        refresh()
     }
 
     /**
@@ -51,6 +71,12 @@ class CloudMainAdapter : MultiTypeAdapter() {
 
         items.addAll(NAVIGATORS)//导航
 
+        //推荐歌单
+        playlist?.let { playlist ->
+            val itemPlaylist = playlist.take(6).map { ItemPlaylist(it as JsonObject) }
+            items.add(HEADER_RECOMMEND_PLAYLIST)
+            items.addAll(itemPlaylist)
+        }
 
         this.items = items
         notifyDataSetChanged()
@@ -107,9 +133,46 @@ class CloudMainAdapter : MultiTypeAdapter() {
     @TypeLayoutRes(R.layout.header_item_cloud_main)
     private class ItemHeaderBinder : KItemViewBinder<ItemHeader>() {
 
+        override val spanSize: Int
+            get() = SPAN_COUNT
+
         override fun onBindViewHolder(holder: KViewHolder, item: ItemHeader) = holder.itemView.run {
             findViewById<TextView>(R.id.textTitle).setText(item.title)
         }
     }
+
+    class ItemPlaylist(jsonObject: JsonObject) {
+
+        val id: Long = jsonObject["id"].asLong
+
+        val playCount: Long = jsonObject["playCount"].value() ?: 0L
+
+        val picUrl: NeteaseGlideUrl = NeteaseGlideUrl(jsonObject["picUrl"].asString)
+
+        val name: String = jsonObject["name"].value() ?: ""
+
+        val copywriter: String? = jsonObject["copywriter"].value()
+    }
+
+    private class ItemPlaylistBinder : KItemViewBinder<ItemPlaylist>() {
+
+        override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): KViewHolder {
+            return CloudMainNav2ViewHolder(inflater.inflate(R.layout.item_cloud_nav_2, parent, false))
+        }
+
+        override fun onBindViewHolder(holder: KViewHolder, item: ItemPlaylist) {
+            holder as CloudMainNav2ViewHolder
+            holder.setIsRightTopVisiable(true)
+
+            holder.setPlayCount(item.playCount)
+            holder.set(item.name, item.picUrl)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                holder.itemView.tooltipText = item.copywriter
+            }
+        }
+
+    }
+
 
 }

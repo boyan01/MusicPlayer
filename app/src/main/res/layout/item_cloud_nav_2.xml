@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/height_item_cloud_top_1"
+    android:layout_height="wrap_content"
+    android:background="?selectableItemBackground"
+    android:orientation="vertical"
+    tools:layout_gravity="center">
+
+    <FrameLayout
+        android:layout_width="@dimen/height_item_cloud_top_1"
+        android:layout_height="@dimen/height_item_cloud_top_1"
+        android:padding="4dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/imageCover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:foreground="@drawable/mask_dark_top"
+            app:srcCompat="?colorPrimary" />
+
+        <LinearLayout
+            android:id="@+id/layoutRightTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                app:srcCompat="@drawable/ic_headset_black_24dp"
+                app:tint="?quietTextPrimaryInverse" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/textRightTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textColor="?quietTextPrimaryInverse"
+                tools:text="344万" />
+
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/textTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="4dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+        android:textSize="13sp"
+        tools:text="公告牌音乐排行榜" />
+
+</LinearLayout>

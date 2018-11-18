@@ -5,10 +5,14 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_main_cloud.*
+import kotlinx.coroutines.launch
 import tech.soit.quiet.R
+import tech.soit.quiet.repository.netease.NeteaseRepository
 import tech.soit.quiet.ui.adapter.CloudMainAdapter
 import tech.soit.quiet.ui.fragment.base.BaseFragment
+import tech.soit.quiet.utils.KItemViewBinder
 import tech.soit.quiet.utils.annotation.LayoutId
+import tech.soit.quiet.utils.component.log
 
 @LayoutId(R.layout.fragment_main_cloud)
 class MainCloudFragment : BaseFragment() {
@@ -16,6 +20,7 @@ class MainCloudFragment : BaseFragment() {
 
     private lateinit var adapter: CloudMainAdapter
 
+    private val neteaseRepository by lazyViewModel<NeteaseRepository>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -24,17 +29,21 @@ class MainCloudFragment : BaseFragment() {
         adapter = CloudMainAdapter()
         recyclerView.adapter = adapter
         (recyclerView.layoutManager as GridLayoutManager).apply {
-            spanCount = 3
+            spanCount = CloudMainAdapter.SPAN_COUNT
             spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
-                    return 1
+                    val binder = adapter.typePool.getItemViewBinder(adapter.getItemViewType(position))
+                    binder as KItemViewBinder
+                    return binder.spanSize
                 }
             }
         }
 
         setupFastUpArrow()
-
         adapter.refresh()
+
+        loadData()
+
     }
 
     /**
@@ -56,6 +65,20 @@ class MainCloudFragment : BaseFragment() {
         fabUp.setOnClickListener {
             recyclerView.scrollToPosition(0)
         }
+    }
+
+    private fun loadData() {
+
+        launch {
+
+            try {
+                val playlist = neteaseRepository.personalizedPlaylist(limit = 6)
+                adapter.setRecommendPlaylist(playlist)
+            } catch (e: Exception) {
+                log { e.printStackTrace();"出错" }
+            }
+        }
+
     }
 
 }

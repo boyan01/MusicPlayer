@@ -2,9 +2,9 @@ package tech.soit.quiet.ui.adapter.viewholder
 
 import android.view.View
 import androidx.annotation.ColorInt
-import androidx.recyclerview.widget.RecyclerView
+import tech.soit.quiet.utils.KViewHolder
 
-open class BaseViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+open class BaseViewHolder(itemView: View) : KViewHolder(itemView) {
 
 
     open fun applyPrimaryColor(@ColorInt colorPrimary: Int) {
