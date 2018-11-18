@@ -15,6 +15,7 @@ import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
 import tech.soit.quiet.repository.netease.source.NeteaseGlideUrl
 import tech.soit.quiet.ui.activity.cloud.CloudDailyRecommendActivity
+import tech.soit.quiet.ui.activity.cloud.CloudPlayListDetailActivity
 import tech.soit.quiet.ui.activity.cloud.TopDetailActivity
 import tech.soit.quiet.ui.adapter.viewholder.CloudMainNav2ViewHolder
 import tech.soit.quiet.ui.view.CircleOutlineProvider
@@ -145,7 +146,7 @@ class CloudMainAdapter : MultiTypeAdapter() {
 
         val id: Long = jsonObject["id"].asLong
 
-        val playCount: Long = jsonObject["playCount"].value() ?: 0L
+        val playCount: Long = jsonObject["playCount"].asLong
 
         val picUrl: NeteaseGlideUrl = NeteaseGlideUrl(jsonObject["picUrl"].asString)
 
@@ -162,10 +163,15 @@ class CloudMainAdapter : MultiTypeAdapter() {
 
         override fun onBindViewHolder(holder: KViewHolder, item: ItemPlaylist) {
             holder as CloudMainNav2ViewHolder
-            holder.setIsRightTopVisiable(true)
+            holder.setIsRightTopVisible(true)
 
             holder.setPlayCount(item.playCount)
             holder.set(item.name, item.picUrl)
+            holder.itemView.setOnClickListener {
+                val intent = Intent(it.context, CloudPlayListDetailActivity::class.java)
+                intent.putExtra(CloudPlayListDetailActivity.PARAM_ID, item.id)
+                it.context.startActivity(intent)
+            }
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 holder.itemView.tooltipText = item.copywriter

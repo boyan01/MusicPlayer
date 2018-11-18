@@ -31,11 +31,17 @@ class CloudMainNav2ViewHolder(itemView: View) : BaseViewHolder(itemView) {
     }
 
     fun setPlayCount(playCount: Long) = itemView.run {
-        textRightTop.text = playCount.toString()
+
+        val str: String = if (playCount > 10000) {
+            "%d万".format(playCount / 10000)
+        } else {
+            playCount.toString()
+        }
+        textRightTop.text = str
     }
 
 
-    fun setIsRightTopVisiable(show: Boolean) {
+    fun setIsRightTopVisible(show: Boolean) {
         itemView.layoutRightTop.isVisible = show
     }
 
