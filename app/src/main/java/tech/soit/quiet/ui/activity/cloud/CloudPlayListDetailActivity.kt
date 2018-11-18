@@ -1,35 +1,30 @@
 package tech.soit.quiet.ui.activity.cloud
 
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.PorterDuff
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.widget.EdgeEffect
+import androidx.core.view.doOnLayout
 import androidx.core.view.updatePadding
-import com.bumptech.glide.load.resource.bitmap.TransformationUtils
-import com.google.android.material.appbar.AppBarLayout
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_cloud_play_list_detail.*
-import kotlinx.android.synthetic.main.item_cloud_play_list_detail_action.view.*
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.PlayListDetail
+import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.activity.cloud.viewmodel.CloudPlayListDetailViewModel
-import tech.soit.quiet.ui.adapter.MusicListAdapter
-import tech.soit.quiet.ui.view.CircleOutlineProvider
+import tech.soit.quiet.ui.adapter.MusicListAdapter2
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
-import tech.soit.quiet.utils.component.ImageLoader
-import tech.soit.quiet.utils.component.blur
-import tech.soit.quiet.utils.component.generatePalette
-import tech.soit.quiet.utils.component.getMuteSwatch
 import tech.soit.quiet.utils.component.support.attrValue
-import tech.soit.quiet.utils.component.support.color
+import tech.soit.quiet.utils.component.support.dimen
 import tech.soit.quiet.utils.component.support.string
-import tech.soit.quiet.utils.setEmpty
-import tech.soit.quiet.utils.setLoading
+import tech.soit.quiet.utils.event.PrimaryColorEvent
+import tech.soit.quiet.utils.event.WindowInsetsEvent
 
 @LayoutId(R.layout.activity_cloud_play_list_detail)
 @EnableBottomController
@@ -37,25 +32,36 @@ class CloudPlayListDetailActivity : BaseActivity() {
 
     companion object {
 
-
         const val PARAM_ID = "id"
+
+        const val PARAM_PLAY_LIST: String = "play_list"
 
     }
 
     private val viewModel by lazyViewModel<CloudPlayListDetailViewModel>()
 
-    private lateinit var playlistToken: String
+    private lateinit var adapter: MusicListAdapter2
 
-    private lateinit var detail: PlayListDetail
+    private var playListTitle: String = string(R.string.title_play_list)
 
-    private lateinit var adapter: MusicListAdapter
+    /**
+     * toolbar 背景色，需要随着歌单封面的不同而换成相应的颜色
+     */
+    private lateinit var toolbarBackground: ColorDrawable
+
+    /**
+     * 标题栏高度
+     */
+    private var headerHeight = (dimen(R.dimen.height_playlist_detail_cover) +
+            dimen(R.dimen.height_playlist_detail_nav)).toInt()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        EventBus.getDefault().register(this)
         layoutRoot.setOnApplyWindowInsetsListener { _, insets ->
             if (insets.systemWindowInsetTop != 0) {
-                appBarLayout.updatePadding(top = appBarLayout.paddingTop + insets.systemWindowInsetTop)
                 toolbar.updatePadding(top = insets.systemWindowInsetTop)
+                EventBus.getDefault().post(WindowInsetsEvent(insets))
             }
             return@setOnApplyWindowInsetsListener insets.consumeSystemWindowInsets()
         }
@@ -63,108 +69,98 @@ class CloudPlayListDetailActivity : BaseActivity() {
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
-        toolbar.background = ColorDrawable(attrValue(R.attr.colorPrimary))
+        toolbarBackground = ColorDrawable(attrValue(R.attr.colorPrimary))
+        toolbar.background = toolbarBackground
         toolbar.bringToFront()
 
-        appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { _, offset ->
-            val alpha = -offset.toFloat() / appBarLayout.totalScrollRange
-            val title = if (alpha > 0.5) {
-                textPlayListTitle.text
-            } else {
-                string(R.string.title_play_list)
-            }
-            if (toolbar.title != title) {
-                toolbar.title = title
-            }
-            toolbar.background.alpha = (alpha * 255).toInt()
-        })
-        setupActions()
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
-        imageCreatorAvatar.outlineProvider = CircleOutlineProvider()
-        imageCreatorAvatar.clipToOutline = true
+            private var offset: Int = 0
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                offset += dy
+
+                onHeaderOffset(offset)
+            }
+
+            fun onHeaderOffset(offset: Int) {
+                val alpha = offset / headerHeight.toFloat()
+
+                val title = if (alpha > 0.5) {
+                    playListTitle
+                } else {
+                    string(R.string.title_play_list)
+                }
+                if (toolbar.title != title) {
+                    toolbar.title = title
+                }
+                toolbarBackground.alpha = (alpha.coerceIn(0F, 1F) * 255).toInt()
+            }
+
+        })
+
+        adapter = MusicListAdapter2()
+        recyclerView.adapter = adapter
+
+        layoutRoot.doOnLayout {
+            adapter.placeholderHeight = it.height -
+                    /*标题高度*/
+                    (headerHeight + toolbar.height + dimen(R.dimen.height_header_music_list).toInt())
+        }
+
+        //预览
+        val playlist = intent.getSerializableExtra(PARAM_PLAY_LIST) as? PlayListDetail
+        if (playlist != null) {
+            playListTitle = playlist.getName()
+            adapter.showList(viewModel.getLoginUser(), playlist)
+        }
 
         val playlistId = intent.getLongExtra(PARAM_ID, -1)
         if (playlistId == -1L) {
             error("need playlist id")
         }
 
-        playlistToken = "netease_$playlistId"
-
-
-        adapter = MusicListAdapter(playlistToken)
-        recyclerView.adapter = adapter
-
         launch {
-            adapter.setLoading()
             val detail = viewModel.loadData(playlistId)
-            if (detail == null) {
-                adapter.setEmpty()
-                return@launch
-            }
-            this@CloudPlayListDetailActivity.detail = detail
-            textPlayListTitle.text = detail.getName()
-
-            GlobalScope.launch pictureLoader@{
-                val bitmap: Bitmap
-                try {
-                    val submit = ImageLoader.with(this@CloudPlayListDetailActivity).asBitmap()
-                            .load(detail.getCoverUrl()).submit(appBarLayout.width, appBarLayout.height)
-                    bitmap = submit.get()
-                } catch (e: Exception) {
-                    return@pictureLoader
-                }
-
-                this@CloudPlayListDetailActivity.launch {
-                    imageCover.setImageBitmap(bitmap)
-                    val swatch = bitmap.generatePalette().await().getMuteSwatch()
-                    toolbar.setBackgroundColor(swatch.rgb)
-                    window.navigationBarColor = swatch.rgb
-                    adapter.applyPrimaryColor(swatch.rgb)
-                }
-
-                //draw blur bitmap
-                val blur = bitmap.blur(100, false)
-                val crop = TransformationUtils.centerCrop(ImageLoader.get(this@CloudPlayListDetailActivity).bitmapPool,
-                        blur, appBarLayout.width, appBarLayout.height)
-                //draw a dark mask on the blur image, to make appbar layout background fit white action button
-                Canvas(crop).drawColor(color(R.color.color_transparent_dark_secondary), PorterDuff.Mode.SRC_OVER)
-                this@CloudPlayListDetailActivity.launch { appBarLayout.background = BitmapDrawable(resources, crop) }
-            }
-            ImageLoader.with(this@CloudPlayListDetailActivity).load(detail.getCoverUrl()).into(imageCover)
-
-            //creator
-            ImageLoader.with(this@CloudPlayListDetailActivity).load(detail.getCreator().getAvatarUrl()).into(imageCreatorAvatar)
-            textCreatorNickname.text = "%s>".format(detail.getCreator().getNickName())
-
-            textPlayCount.text = detail.getPlayCount().toString()
-
+                    ?: //TODO
+                    return@launch
             //show music list
-            val user = viewModel.getLoginUser()
-            val isShowCollectionButton = user == null || user.getId() == detail.getCreator().getId()
-            val isSubscribed = user != null && user.getId() != detail.getCreator().getId()
-                    && detail.isSubscribed()
-            adapter.showList(detail.getTracks(), isShowCollectionButton, isSubscribed)
+            adapter.showList(viewModel.getLoginUser(), detail)
         }
+
+        MusicPlayerManager.playingMusic.observe(this, Observer {
+            val token = MusicPlayerManager.musicPlayer.playlist.token
+            if (token == adapter.token) {
+                adapter.changePlayingMusic(it)
+            }
+        })
     }
 
 
-    private fun setupActions() {
-        with(layoutComment) {
-            imageIcon.setImageResource(R.drawable.ic_comment_black_24dp)
-            text.setText(R.string.action_comment)
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onPrimaryColorChanged(e: PrimaryColorEvent) {
+        val color = e.color
+        val alpha = toolbarBackground.alpha
+        toolbarBackground.color = color
+        toolbarBackground.alpha = alpha
+        window.navigationBarColor = color
+        adapter.applyPrimaryColor(color)
+
+        //设置 recycler view 边界效果的颜色
+        recyclerView.edgeEffectFactory = object : RecyclerView.EdgeEffectFactory() {
+            override fun createEdgeEffect(view: RecyclerView, direction: Int): EdgeEffect {
+                val effect = super.createEdgeEffect(view, direction)
+                effect.color = color
+                return effect
+            }
         }
-        with(layoutShare) {
-            imageIcon.setImageResource(R.drawable.ic_share_black_24dp)
-            text.setText(R.string.action_share)
-        }
-        with(layoutDownload) {
-            imageIcon.setImageResource(R.drawable.ic_file_download_black_24dp)
-            text.setText(R.string.action_download)
-        }
-        with(layoutMultiSelect) {
-            imageIcon.setImageResource(R.drawable.ic_select_all_black_24dp)
-            text.setText(R.string.action_multi_select)
-        }
+
+    }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
     }
 
 }

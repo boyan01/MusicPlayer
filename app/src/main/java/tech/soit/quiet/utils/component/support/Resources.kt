@@ -11,7 +11,7 @@ import tech.soit.quiet.AppContext
 /**
  * @see Context.getString
  */
-fun string(@StringRes stringId: Int) = AppContext.getString(stringId)!!
+fun string(@StringRes stringId: Int): String = AppContext.getString(stringId)
 
 /**
  * @see Context.getString
@@ -44,6 +44,7 @@ fun dimen(@DimenRes id: Int) = AppContext.resources.getDimension(id)
 fun Context.attrValue(@AttrRes id: Int): Int {
     val value = TypedValue()
     if (theme.resolveAttribute(id, value, true)) {
+        value.data
         return value.data
     } else {
         error("can not attribute for : $id")
@@ -55,8 +56,14 @@ fun View.attrValue(@AttrRes id: Int): Int {
     return context.attrValue(id)
 }
 
+/**
+ * px to dp
+ */
 val Int.dp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()
 
+/**
+ * dp to px
+ */
 val Int.px: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()

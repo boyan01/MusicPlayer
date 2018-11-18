@@ -1,7 +1,7 @@
 package tech.soit.quiet.player.playlist
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before

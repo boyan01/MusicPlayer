@@ -11,17 +11,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import tech.soit.quiet.R
 import tech.soit.quiet.ui.activity.base.BaseActivity
 import tech.soit.quiet.ui.view.ContentFrameLayout
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.support.QuietViewModelProvider
 import tech.soit.quiet.utils.component.support.attrValue
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.full.findAnnotation
 
 /**

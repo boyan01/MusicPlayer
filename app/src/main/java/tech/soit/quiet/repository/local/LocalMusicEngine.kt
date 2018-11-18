@@ -4,10 +4,10 @@ import android.os.Environment
 import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.MutableLiveData
-import kotlinx.coroutines.experimental.CancellationException
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.isActive
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.repository.db.dao.LocalMusicDao
 import tech.soit.quiet.utils.MusicConverter
@@ -17,7 +17,7 @@ import tech.soit.quiet.utils.component.support.Resource
 import tech.soit.quiet.utils.component.support.Status
 import tech.soit.quiet.utils.getStoragePath
 import java.io.File
-import kotlin.coroutines.experimental.coroutineContext
+import kotlin.coroutines.coroutineContext
 
 /**
  * retrieval local music to database
@@ -55,18 +55,16 @@ class LocalMusicEngine(private val localMusicDao: LocalMusicDao) {
         }
         states.postValue(Status.LOADING)
         //do scan work
-        GlobalScope.launch(
-                onCompletion = {
-                    if (it != null && it !is CancellationException) {
-                        logError(it)
-                        states.postValue(Status.ERROR)
-                    } else {
-                        states.postValue(Status.SUCCESS)
-                    }
-                }
-        ) {
+        GlobalScope.launch {
             disks.forEach {
                 traversalDirectory(File(it))
+            }
+        }.invokeOnCompletion {
+            if (it != null && it !is CancellationException) {
+                logError(it)
+                states.postValue(Status.ERROR)
+            } else {
+                states.postValue(Status.SUCCESS)
             }
         }
         return

@@ -1,6 +1,8 @@
 package tech.soit.quiet.model.vo
 
-abstract class User {
+import java.io.Serializable
+
+abstract class User : Serializable {
 
     abstract fun getId(): Long
 

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -17,25 +18,27 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.transition.TransitionManager
 import kotlinx.android.synthetic.main.base_activity_bottom_controller.*
 import kotlinx.android.synthetic.main.content_bottom_controller.*
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.Job
-import kotlinx.coroutines.experimental.android.Main
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
 import tech.soit.quiet.ui.activity.MusicPlayerActivity
+import tech.soit.quiet.ui.dialog.PlayingPlaylistDialog
 import tech.soit.quiet.utils.annotation.DisableLayoutInject
 import tech.soit.quiet.utils.annotation.EnableBottomController
 import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.ImageLoader
+import tech.soit.quiet.utils.component.log
 import tech.soit.quiet.utils.component.support.QuietViewModelProvider
 import tech.soit.quiet.utils.component.support.attrValue
 import tech.soit.quiet.utils.component.support.observeNonNull
 import tech.soit.quiet.utils.component.support.string
 import tech.soit.quiet.utils.subTitle
 import tech.soit.quiet.viewmodel.MusicControllerViewModel
-import kotlin.coroutines.experimental.CoroutineContext
+import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.full.companionObject
 import kotlin.reflect.full.companionObjectInstance
 import kotlin.reflect.full.declaredFunctions
@@ -58,6 +61,9 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
 
     private lateinit var job: Job
 
+    @ColorInt
+    var colorPrimary: Int = AppContext.attrValue(R.attr.colorPrimary)
+
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main + job
 
@@ -68,7 +74,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
 
         //inject layout for annotation
         val isInjectLayout = this::class.findAnnotation<DisableLayoutInject>() == null
-        val layoutId = this::class.findAnnotation<LayoutId>()
+        val layoutId = this::class.java.getAnnotation(LayoutId::class.java)
         if (isInjectLayout && layoutId != null) {
             setContentView(layoutId.value)
         }
@@ -76,6 +82,11 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
         if (enableBottomController()) {
             //make bottom controller interchangeable
             listenBottomControllerEvent()
+        }
+
+        log {
+            "create ${this::class.java.simpleName} " +
+                    "layoutId :${layoutId?.value} , enableBottomController : ${enableBottomController()}"
         }
     }
 
@@ -122,7 +133,7 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
             startActivity(Intent(this, MusicPlayerActivity::class.java))
         }
         controllerPlaylist.setOnClickListener {
-            //TODO
+            PlayingPlaylistDialog.getInstance().show(supportFragmentManager, "PlayingPlaylist")
         }
         controllerPauseOrPlay.setOnClickListener {
             controllerViewModel.pauseOrPlay()
@@ -215,6 +226,11 @@ abstract class BaseActivity : AppCompatActivity(), CoroutineScope {
         val point = Point()
         windowManager.defaultDisplay.getSize(point)
         return point.x to point.y
+    }
+
+
+    protected fun setPrimaryColor(@ColorInt color: Int) {
+        this.colorPrimary = color
     }
 
 

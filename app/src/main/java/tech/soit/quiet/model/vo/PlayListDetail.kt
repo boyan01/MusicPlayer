@@ -1,6 +1,14 @@
 package tech.soit.quiet.model.vo
 
-abstract class PlayListDetail {
+import java.io.Serializable
+
+abstract class PlayListDetail : Serializable {
+
+    companion object {
+
+        val NONE_TRACKS: List<Music> = ArrayList()
+
+    }
 
     abstract fun getId(): Long
 
@@ -16,6 +24,8 @@ abstract class PlayListDetail {
 
     abstract fun getPlayCount(): Int
 
+    abstract fun getTrackCount(): Int
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -25,6 +35,10 @@ abstract class PlayListDetail {
 
     override fun hashCode(): Int {
         return getId().hashCode()
+    }
+
+    fun getToken(): String {
+        return javaClass.simpleName + "-" + getId()
     }
 
 

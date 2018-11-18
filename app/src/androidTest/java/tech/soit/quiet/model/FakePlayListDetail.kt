@@ -41,4 +41,8 @@ class FakePlayListDetail(
     override fun getPlayCount(): Int {
         return playCount
     }
+
+    override fun getTrackCount(): Int {
+        return tracks.size
+    }
 }

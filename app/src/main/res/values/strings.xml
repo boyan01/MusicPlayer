@@ -37,6 +37,7 @@
     <string name="nav_daily_recommend">每日推荐</string>
     <string name="nav_tends">排行榜</string>
     <string name="template_item_play_list_count">共%d首</string>
+    <string name="template_music_list_header_subtitle">(共%d首)</string>
     <string name="login_hint_phone">手机号</string>
     <string name="action_login">登陆</string>
     <string name="user_not_login">未登录</string>
@@ -48,4 +49,18 @@
     <string name="action_play_all">播放全部</string>
     <string name="add_to_collection">收藏</string>
     <string name="collected">已收藏</string>
+    <string name="title_daily_recommend">每日推荐</string>
+    <string name="tips_daily_recommend_description">专属每日推荐，每天早上6:00自动生成。</string>
+    <string name="toast_no_music_to_play">当前没有歌曲可供播放！</string>
+    <string name="action_remove">移除</string>
+    <string name="link_to_music">定位歌曲</string>
+    <string name="playmode_sequence">顺序播放</string>
+    <string name="playmode_shuffle">随机播放</string>
+    <string name="playmode_single">单曲循环</string>
+    <string name="leader_board">排行榜</string>
+    <string name="leader_board_official">官方榜</string>
+    <string name="leader_board_global">全球榜</string>
+    <string name="load_retry">加载失败，点击重试。</string>
+    <string name="recommend_playlists">推荐歌单</string>
+    <string name="new_songs">最新音乐</string>
 </resources>

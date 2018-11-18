@@ -10,11 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.content_main_music_user_info.*
 import kotlinx.android.synthetic.main.fragment_main_music.*
 import kotlinx.android.synthetic.main.item_main_navigation.view.*
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.launch
 import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
-import tech.soit.quiet.model.vo.PlayList
+import tech.soit.quiet.model.vo.PlayListDetail
 import tech.soit.quiet.model.vo.User
+import tech.soit.quiet.ui.activity.LatestPlayListActivity
 import tech.soit.quiet.ui.activity.local.LocalMusicActivity
 import tech.soit.quiet.ui.activity.user.LoginActivity
 import tech.soit.quiet.ui.fragment.base.BaseFragment
@@ -89,7 +90,7 @@ class MainMusicFragment : BaseFragment() {
             checkUser(user)
             user ?: return@launch
 
-            val playLists: List<PlayList>
+            val playLists: List<PlayListDetail>
             try {
                 playLists = neteaseRepository.getUserPlayerList(user.getId())
                 computePlayListRange(playLists, user.getId())
@@ -101,8 +102,8 @@ class MainMusicFragment : BaseFragment() {
         }
     }
 
-    private fun computePlayListRange(playLists: List<PlayList>, userId: Long) {
-        val createdCount = playLists.count { it.getUserId() == userId }
+    private fun computePlayListRange(playLists: List<PlayListDetail>, userId: Long) {
+        val createdCount = playLists.count { it.getCreator().getId() == userId }
         positionCollectionStart = createdCount //reset started position of collection
         val height = dimen(R.dimen.height_item_play_list).toInt()
         rangeCreated = 0..(createdCount * height)
@@ -146,6 +147,9 @@ class MainMusicFragment : BaseFragment() {
         with(navLayoutHistory) {
             imageIcon.setImageResource(R.drawable.ic_history_black_24dp)
             textTitle.setText(R.string.nav_history)
+            setOnClickListener {
+                startActivity(Intent(requireActivity(), LatestPlayListActivity::class.java))
+            }
         }
 
         with(navLayoutDownload) {

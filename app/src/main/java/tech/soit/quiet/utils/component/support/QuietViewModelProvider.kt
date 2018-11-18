@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.repository.db.QuietDatabase
 import tech.soit.quiet.repository.db.dao.LocalMusicDao
+import tech.soit.quiet.repository.netease.NeteaseRepository
 
 open class QuietViewModelProvider : ViewModelProvider.AndroidViewModelFactory(AppContext) {
 
@@ -30,6 +31,10 @@ open class QuietViewModelProvider : ViewModelProvider.AndroidViewModelFactory(Ap
             return constructor.newInstance(database)
         } catch (e: Exception) {
 
+        }
+        //网易资源实例只有一个
+        if (modelClass.isAssignableFrom(NeteaseRepository::class.java)) {
+            return NeteaseRepository.instance
         }
         return super.create(modelClass)
     }

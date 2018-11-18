@@ -2,6 +2,7 @@ package tech.soit.quiet.utils.annotation
 
 import androidx.annotation.LayoutRes
 import tech.soit.quiet.ui.fragment.base.BaseFragment
+import java.lang.annotation.Inherited
 
 /**
  * bind the fragment's layout id to fragment by annotation
@@ -14,6 +15,7 @@ import tech.soit.quiet.ui.fragment.base.BaseFragment
  *                     if true , do nothing.
  */
 @Target(AnnotationTarget.CLASS)
+@Inherited
 annotation class LayoutId(
         @LayoutRes val value: Int,
         val translucent: Boolean = true

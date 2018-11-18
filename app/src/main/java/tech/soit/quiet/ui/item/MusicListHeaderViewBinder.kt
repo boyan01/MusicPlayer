@@ -24,7 +24,7 @@ class MusicListHeaderViewBinder(
 
     override fun onBindViewHolder(holder: KViewHolder, item: ItemMusicListHeader) {
         with(holder.itemView) {
-            textCollection.isGone = item.isShowSubscribeButton
+            textCollection.isGone = !item.isShowSubscribeButton
             textCollection.setOnClickListenerAsync {
                 onCollectionClicked?.invoke()
             }

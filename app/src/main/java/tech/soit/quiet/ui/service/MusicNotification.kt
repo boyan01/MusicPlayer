@@ -13,9 +13,9 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.palette.graphics.Palette
 import androidx.palette.graphics.Target.MUTED
 import androidx.palette.graphics.Target.VIBRANT
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tech.soit.quiet.AppContext
 import tech.soit.quiet.R
 import tech.soit.quiet.model.vo.Music

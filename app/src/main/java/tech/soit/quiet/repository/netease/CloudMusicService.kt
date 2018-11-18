@@ -1,7 +1,9 @@
+@file:Suppress("SpellCheckingInspection")
+
 package tech.soit.quiet.repository.netease
 
 import com.google.gson.JsonObject
-import kotlinx.coroutines.experimental.Deferred
+import kotlinx.coroutines.Deferred
 import retrofit2.http.*
 
 /**
@@ -79,4 +81,52 @@ interface CloudMusicService {
     @FormUrlEncoded
     @POST("/weapi/radio/trash/add?alg=RT&time=25")
     fun fmTrash(@Query("songId") id: Long, @FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+    /**
+     * 获取用户信息 , 歌单，收藏，mv, dj 数量
+     */
+    @FormUrlEncoded
+    @POST("/weapi/subcount")
+    fun subcount(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+
+    /**
+     * 所有榜单内容摘要
+     */
+    @FormUrlEncoded
+    @POST("/weapi/toplist/detail")
+    fun toplistDetail(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+    /**
+     * 推荐歌单
+     */
+    @FormUrlEncoded
+    @POST("/weapi/personalized/playlist")
+    fun personalizedPlaylist(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+    /**
+     * 推荐新音乐
+     */
+    @FormUrlEncoded
+    @POST("/weapi/personalized/newsong")
+    fun personalizedNewSong(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+
+    /**
+     * 主播电台
+     */
+    @FormUrlEncoded
+    @POST("/weapi/personalized/djprogram")
+    fun personalizedDj(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+
+    /**
+     * 推荐MV
+     */
+    @FormUrlEncoded
+    @POST("/weapi/personalized/mv")
+    fun personalizedMv(@FieldMap request: Map<String, String>): Deferred<JsonObject>
+
+
+
 }

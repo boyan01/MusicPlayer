@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.ColorInt
+import androidx.core.view.children
 import androidx.core.view.isGone
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_music.view.*
@@ -13,7 +14,7 @@ import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.utils.KItemViewBinder
 import tech.soit.quiet.utils.KViewHolder
-import tech.soit.quiet.utils.TypeLayoutRes
+import tech.soit.quiet.utils.annotation.LayoutId
 import tech.soit.quiet.utils.component.ImageLoader
 import tech.soit.quiet.utils.component.support.attrValue
 
@@ -25,17 +26,12 @@ import tech.soit.quiet.utils.component.support.attrValue
  * @param onClick callback of music been clicked
  * @param onPlayingItemShowHide callback of playing music item show/hide
  */
-@TypeLayoutRes(R.layout.item_music)
-class MusicItemViewBinder(
+@LayoutId(R.layout.item_music)
+open class MusicItemViewBinder(
         private val token: String,
         private val onClick: (view: View, music: Music) -> Unit,
         private val onPlayingItemShowHide: ((show: Boolean) -> Unit)? = null
 ) : KItemViewBinder<Music>() {
-
-    /**
-     * save current playing music index
-     */
-    private var playingViewHolder: MusicViewHolder? = null
 
     @ColorInt
     var colorIndicator: Int = AppContext.attrValue(R.attr.colorPrimary)
@@ -48,39 +44,20 @@ class MusicItemViewBinder(
         return MusicViewHolder(inflater.inflate(R.layout.item_music, parent, false))
     }
 
-    override fun onBindViewHolder(holder: KViewHolder, item: Music) = with(holder.itemView) {
+    override fun onBindViewHolder(holder: KViewHolder, item: Music) {
         holder as MusicViewHolder
         if (colorIndicator != 0) {
             holder.setPrimaryColor(colorIndicator)
         }
 
         val isPlaying = isPlaying(item)
-        if (isPlaying) {
-            if (playingViewHolder != holder) {
-                playingViewHolder?.setIsPlaying(false)
-            }
-            playingViewHolder = holder
-            onPlayingItemShowHide?.invoke(true)
-        }
         holder.setIsPlaying(isPlaying)
 
-        ImageLoader.with(this).load(item.getAlbum().getCoverImageUrl()).centerCrop().into(image)
-        setOnClickListener {
+        holder.itemView.setOnClickListener {
             onClick(holder.itemView, item)
         }
-        popup_menu.setOnClickListener {
-            //
-        }
-        text_item_title.text = item.getTitle()
-        text_item_subtitle.text = item.getArtists().joinToString("/") { it.getName() }
-        text_item_subtitle_2.text = item.getAlbum().getName()
-    }
 
-    override fun onViewDetachedFromWindow(holder: KViewHolder) {
-        super.onViewDetachedFromWindow(holder)
-        if (holder == playingViewHolder) {
-            onPlayingItemShowHide?.invoke(false)
-        }
+        holder.bind(item)
     }
 
     private fun isPlaying(music: Music): Boolean {
@@ -88,26 +65,42 @@ class MusicItemViewBinder(
                 && MusicPlayerManager.musicPlayer.playlist.current == music
     }
 
+    /**
+     * 设置当前播放的音乐
+     */
     fun setCurrentPlaying(music: Music?, recyclerView: RecyclerView) {
-        val index = adapter.items.indexOf(music)
-        if (index == -1) {
-            playingViewHolder?.setIsPlaying(false)
-            playingViewHolder = null
-        }
-        val holder = recyclerView.findViewHolderForAdapterPosition(index) as? MusicViewHolder
-        if (holder == playingViewHolder || holder == null) {
-            return
-        }
-        playingViewHolder = holder
-        holder.setIsPlaying(true)
-
+        recyclerView.children
+                .map {
+                    recyclerView.getChildViewHolder(it)
+                }
+                .filterIsInstance<MusicViewHolder>()
+                .forEach {
+                    it.setIsPlaying(it.musicId == music?.getId())
+                }
     }
 
     class MusicViewHolder(itemView: View) : KViewHolder(itemView) {
 
+        var musicId: Long = 0
+
+        fun bind(item: Music) = with(itemView) {
+
+            ImageLoader.with(this).load(item.getAlbum().getCoverImageUrl()).centerCrop().into(image)
+
+            popup_menu.setOnClickListener {
+                //
+            }
+            text_item_title.text = item.getTitle()
+            text_item_subtitle.text = item.getArtists().joinToString("/") { it.getName() }
+            text_item_subtitle_2.text = item.getAlbum().getName()
+
+            musicId = item.getId()
+        }
+
         fun setIsPlaying(isPlaying: Boolean) {
             itemView.indicatorPlaying.isGone = !isPlaying
         }
+
 
         /**
          * reset item view primary color

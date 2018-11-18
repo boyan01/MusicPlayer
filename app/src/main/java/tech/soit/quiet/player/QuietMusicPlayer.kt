@@ -1,17 +1,16 @@
 package tech.soit.quiet.player
 
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.android.Main
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import tech.soit.quiet.model.vo.Music
 import tech.soit.quiet.player.core.IMediaPlayer
-import tech.soit.quiet.player.core.QuietExoPlayer
+import tech.soit.quiet.player.core.QuietMediaPlayer
 import tech.soit.quiet.player.playlist.Playlist
+import tech.soit.quiet.repository.LatestPlayingRepository
 import tech.soit.quiet.utils.component.LoggerLevel
 import tech.soit.quiet.utils.component.log
-import java.util.concurrent.TimeUnit
 import kotlin.properties.Delegates
 
 /**
@@ -26,14 +25,22 @@ class QuietMusicPlayer {
     /**
      * @see IMediaPlayer
      */
-    val mediaPlayer: IMediaPlayer = QuietExoPlayer()
+    val mediaPlayer: IMediaPlayer = QuietMediaPlayer()
 
     /**
      * @see Playlist
      */
     var playlist: Playlist by Delegates.observable(Playlist.EMPTY) { _, oldValue, newValue ->
         newValue.playMode = oldValue.playMode//inherit old playlist play mode
+
+        //LiveData change
         MusicPlayerManager.playlist.postValue(newValue)
+        MusicPlayerManager.playingMusic.postValue(playlist.current)
+
+        //stop player
+        if (newValue != oldValue) {
+            quiet()
+        }
     }
 
 
@@ -84,7 +91,7 @@ class QuietMusicPlayer {
     /**
      * play [music] , if music is not in [playlist] , insert ot next
      */
-    fun play(music: Music) {
+    fun play(music: Music, playWhenReady: Boolean = true) {
         if (!playlist.list.contains(music)) {
             playlist.insertToNext(music)
         }
@@ -93,9 +100,10 @@ class QuietMusicPlayer {
 
         //live data playing music changed
         MusicPlayerManager.playingMusic.postValue(music)
+        LatestPlayingRepository.getInstance().hit(music)
 
         val uri = music.getPlayUrl()
-        mediaPlayer.prepare(uri, true)
+        mediaPlayer.prepare(uri, playWhenReady)
     }
 
 
@@ -108,7 +116,7 @@ class QuietMusicPlayer {
 
 
     private fun safeAsync(block: suspend () -> Unit) {
-        GlobalScope.launch { block() }
+        GlobalScope.launch(Dispatchers.Main) { block() }
     }
 
     init {
@@ -117,7 +125,7 @@ class QuietMusicPlayer {
         //maybe have a cleverer way to do that!!
         GlobalScope.launch(Dispatchers.Main) {
             while (true) {
-                delay(DURATION_UPDATE_PROGRESS, TimeUnit.MILLISECONDS)
+                delay(DURATION_UPDATE_PROGRESS)
                 try {
                     val notify = playlist.current != null
                             && mediaPlayer.getState() == IMediaPlayer.PLAYING
