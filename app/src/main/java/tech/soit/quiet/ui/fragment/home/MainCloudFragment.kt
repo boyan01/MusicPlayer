@@ -5,25 +5,23 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_main_cloud.*
-import me.drakeet.multitype.MultiTypeAdapter
 import tech.soit.quiet.R
+import tech.soit.quiet.ui.adapter.CloudMainAdapter
 import tech.soit.quiet.ui.fragment.base.BaseFragment
-import tech.soit.quiet.ui.fragment.home.cloud.getCloudNavigators
-import tech.soit.quiet.ui.fragment.home.cloud.withCloudNavigators
 import tech.soit.quiet.utils.annotation.LayoutId
 
 @LayoutId(R.layout.fragment_main_cloud)
 class MainCloudFragment : BaseFragment() {
 
 
-    private lateinit var adapter: MultiTypeAdapter
+    private lateinit var adapter: CloudMainAdapter
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //init adapters
-        adapter = MultiTypeAdapter().withCloudNavigators()
+        adapter = CloudMainAdapter()
         recyclerView.adapter = adapter
         (recyclerView.layoutManager as GridLayoutManager).apply {
             spanCount = 3
@@ -36,8 +34,7 @@ class MainCloudFragment : BaseFragment() {
 
         setupFastUpArrow()
 
-        //load data
-        adapter.items = getCloudNavigators()
+        adapter.refresh()
     }
 
     /**
