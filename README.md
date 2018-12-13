@@ -1,4 +1,4 @@
-## Quiet [![Build Status](https://travis-ci.org/boyan01/MusicPlayer.svg?branch=master)](https://travis-ci.org/summerlly/MusicPlayer) 
+## Quiet [![Build Status](https://travis-ci.org/boyan01/MusicPlayer.svg?branch=master)](https://travis-ci.org/boyan01/MusicPlayer) 
 
 一个简单的音乐播放器。
 
