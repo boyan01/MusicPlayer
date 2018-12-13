@@ -1,8 +1,8 @@
 package tech.soit.quiet.utils.component.persistence
 
 import android.preference.PreferenceManager
-import androidx.test.InstrumentationRegistry
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Before
@@ -23,7 +23,7 @@ class PreferenceTest {
     @Before
     fun setUp() {
         //clear default preferences
-        PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getTargetContext()).edit()
+        PreferenceManager.getDefaultSharedPreferences(InstrumentationRegistry.getInstrumentation().targetContext).edit()
                 .clear()
                 .commit()
 

@@ -53,8 +53,6 @@ object Dummy {
     )
 
 
-    @Deprecated("...", ReplaceWith("MUSICS"))
-    val MUSICS_WITH_URI = MUSICS
 
 
     val PLAYLIST = Playlist("test", MUSICS)

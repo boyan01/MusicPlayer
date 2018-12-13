@@ -8,6 +8,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers.eq
 import org.mockito.Mockito
 import tech.soit.quiet.player.MusicPlayerManager
 import tech.soit.quiet.player.core.IMediaPlayer
@@ -29,7 +30,7 @@ class MusicNotificationTest {
 
     private lateinit var onCancel: () -> Unit
 
-    private lateinit var onNotify: (builder: NotificationCompat.Builder, cancelAble: Boolean) -> Unit
+    private lateinit var onNotify: (builder: NotificationCompat.Builder?, cancelAble: Boolean) -> Unit
 
     private lateinit var helper: MusicNotification
 
@@ -59,7 +60,7 @@ class MusicNotificationTest {
 
         helper.checkNotification(onNotify, onCancel)
 
-        Mockito.verify(onNotify(Mockito.any(), false), Mockito.times(1))
+        Mockito.verify(onNotify, Mockito.times(1)).invoke(Mockito.any(), eq(false))
     }
 
 
@@ -75,11 +76,11 @@ class MusicNotificationTest {
         CountDownLatch(1).await(2000, TimeUnit.MILLISECONDS)
 
         if (helper.getPropertyValue("isNotifyCompleted")) {
-            Mockito.verify(onNotify(Mockito.any(), false), Mockito.times(2))
+            Mockito.verify(onNotify, Mockito.times(2)).invoke(Mockito.any(), eq(false))
 
         } else {
             //will not be 2 when device access PIC_URL failed
-            Mockito.verify(onNotify(Mockito.any(), false), Mockito.times(1))
+            Mockito.verify(onNotify, Mockito.times(1)).invoke(Mockito.any(), eq(false))
         }
 
     }

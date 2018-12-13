@@ -70,10 +70,10 @@ class MusicPlayerManagerImpl : IMusicPlayerManager {
          * [KEY_PLAYLIST_PLAY_MODE] : [PlayMode]
          *
          */
-        private const val KEY_PLAYLIST_MUSIC_LIST = "player_playlist_key_music_list"
-        private const val KEY_PLAYLIST_TOKEN = "player_playlist_key_token"
-        private const val KEY_PLAYLIST_CURRENT = "player_playlist_key_current"
-        private const val KEY_PLAYLIST_PLAY_MODE = "play_playlist_key_play_mode"
+        const val KEY_PLAYLIST_MUSIC_LIST = "player_playlist_key_music_list"
+        const val KEY_PLAYLIST_TOKEN = "player_playlist_key_token"
+        const val KEY_PLAYLIST_CURRENT = "player_playlist_key_current"
+        const val KEY_PLAYLIST_PLAY_MODE = "play_playlist_key_play_mode"
 
     }
 

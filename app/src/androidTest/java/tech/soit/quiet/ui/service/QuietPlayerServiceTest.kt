@@ -3,9 +3,9 @@ package tech.soit.quiet.ui.service
 import android.content.Intent
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
-import androidx.test.InstrumentationRegistry
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.rule.ServiceTestRule
-import androidx.test.runner.AndroidJUnit4
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -38,15 +38,15 @@ class QuietPlayerServiceTest {
     val serviceRule = ServiceTestRule()
 
     private fun startServiceWithAction(action: String) {
-        val intent = Intent(InstrumentationRegistry.getTargetContext(), QuietPlayerService::class.java)
+        val intent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, QuietPlayerService::class.java)
         intent.action = action
-        InstrumentationRegistry.getTargetContext().startService(intent)
+        InstrumentationRegistry.getInstrumentation().targetContext.startService(intent)
         val countDownLatch = CountDownLatch(1)
         //wait 3 seconds
         countDownLatch.await(3, TimeUnit.SECONDS)
     }
 
-    private val musics = Dummy.MUSICS_WITH_URI
+    private val musics = Dummy.MUSICS
 
     private lateinit var notificationHelper: MusicNotification
 
@@ -95,7 +95,7 @@ class QuietPlayerServiceTest {
 
     @Test
     fun testNotification() {
-        val iBinder = serviceRule.bindService(Intent(InstrumentationRegistry.getTargetContext(), QuietPlayerService::class.java))
+        val iBinder = serviceRule.bindService(Intent(InstrumentationRegistry.getInstrumentation().targetContext, QuietPlayerService::class.java))
         iBinder as QuietPlayerService.PlayerServiceBinder
 
         playingMusic.postValue(musics[0])
@@ -113,8 +113,8 @@ class QuietPlayerServiceTest {
 
     @After
     fun tearDown() {
-        InstrumentationRegistry.getTargetContext()
-                .stopService(Intent(InstrumentationRegistry.getTargetContext(),
+        InstrumentationRegistry.getInstrumentation().targetContext
+                .stopService(Intent(InstrumentationRegistry.getInstrumentation().targetContext,
                         QuietPlayerService::class.java))
     }
 

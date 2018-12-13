@@ -2,21 +2,24 @@ package tech.soit.quiet.player.core
 
 import android.media.MediaPlayer
 import android.net.Uri
-import androidx.test.InstrumentationRegistry
+import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mockito
 import tech.soit.quiet.utils.mock
 
+@RunWith(AndroidJUnit4::class)
 class QuietMediaPlayerTest {
 
     companion object {
 
         val URI = Uri.parse("android.resource://"
-                + InstrumentationRegistry.getContext().packageName + "/raw/summer").toString()
+                + InstrumentationRegistry.getInstrumentation().context.packageName + "/raw/summer").toString()
 
 
     }

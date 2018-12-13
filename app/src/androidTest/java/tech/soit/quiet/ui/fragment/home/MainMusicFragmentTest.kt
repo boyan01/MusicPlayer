@@ -15,8 +15,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito
 import tech.soit.quiet.R
+import tech.soit.quiet.model.FakeUser
 import tech.soit.quiet.model.po.NeteaseUser
-import tech.soit.quiet.model.vo.PlayList
+import tech.soit.quiet.model.vo.Music
+import tech.soit.quiet.model.vo.PlayListDetail
+import tech.soit.quiet.model.vo.User
 import tech.soit.quiet.repository.netease.NeteaseRepository
 import tech.soit.quiet.ui.activity.user.LoginActivity
 import tech.soit.quiet.ui.fragment.home.viewmodel.MainMusicViewModel
@@ -64,9 +67,10 @@ class MainMusicFragmentTest {
         activityTestRule.activity.setFragment(mainMusicFragment)
 
         onView(withId(R.id.textUserNickname)).check(matches(withText(R.string.user_not_login)))
+        val am = InstrumentationRegistry.getInstrumentation().addMonitor(LoginActivity::class.jvmName, null, false)
 
         onView(withId(R.id.textUserNickname)).perform(click())
-        val am = InstrumentationRegistry.getInstrumentation().addMonitor(LoginActivity::class.jvmName, null, false)
+
         am.waitForActivity()
         Assert.assertEquals("login activity has been opened", 1, am.hits)
     }
@@ -81,14 +85,27 @@ class MainMusicFragmentTest {
     }
 
 
-    class FakePlaylist(private val position: Int) : PlayList() {
-        override fun getDescription(): String {
-            return "description $position"
-        }
-
-        override fun getCoverImageUrl(): Any {
+    class FakePlaylist(private val position: Int) : PlayListDetail() {
+        override fun getCoverUrl(): Any {
             return R.color.color_primary
         }
+
+        override fun getCreator(): User {
+            return FakeUser(0)
+        }
+
+        override fun getTracks(): List<Music> {
+            return emptyList()
+        }
+
+        override fun isSubscribed(): Boolean {
+            return true
+        }
+
+        override fun getPlayCount(): Int {
+            return 0
+        }
+
 
         override fun getTrackCount(): Int {
             return position
@@ -102,13 +119,6 @@ class MainMusicFragmentTest {
             return position.toLong()
         }
 
-        override fun getUserId(): Long {
-            return if (position < 50) {
-                100
-            } else {
-                101
-            }
-        }
 
     }
 

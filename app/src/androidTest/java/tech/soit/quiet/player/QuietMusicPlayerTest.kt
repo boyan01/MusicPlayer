@@ -40,9 +40,10 @@ class QuietMusicPlayerTest {
 
     @Test
     fun playEmpty() = runBlocking {
+        player.playlist = Playlist.EMPTY
 
         val music = Dummy.MUSICS[0].copy(id = 12004)
-        player.play(music)
+        player.play(music, playWhenReady = false)
 
         delay(1000)
 

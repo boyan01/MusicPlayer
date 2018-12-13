@@ -43,18 +43,12 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    
+
 }
 
 
 androidExtensions {
     experimental = true
-}
-
-kotlin {
-    experimental {
-        coroutines 'enable'
-    }
 }
 
 dependencies {
@@ -112,11 +106,19 @@ dependencies {
 
     //test
     testImplementation 'junit:junit:4.12'
-    //noinspection GradleDependency
-    testImplementation "org.mockito:mockito-core:2.18.3"
+
+    testImplementation "org.mockito:mockito-core:2.23.4"
     androidTestImplementation 'com.squareup.retrofit2:retrofit-mock:2.4.0'
-//    noinspection GradleDependency
-    androidTestImplementation "org.mockito:mockito-android:2.18.3"
+
+    androidTestImplementation("org.mockito:mockito-android:2.23.4") {
+        exclude group: 'net.bytebuddy', module: 'byte-buddy'
+        exclude group: 'net.bytebuddy', module: 'byte-buddy-android'
+        exclude group: 'net.bytebuddy', module: 'byte-buddy-agent'
+    }
+    androidTestImplementation 'net.bytebuddy:byte-buddy:1.8.22'
+    androidTestImplementation 'net.bytebuddy:byte-buddy-android:1.8.22'
+    androidTestImplementation 'net.bytebuddy:byte-buddy-agent:1.8.22'
+
     androidTestImplementation "androidx.room:room-testing:$room_version"
     androidTestImplementation "androidx.arch.core:core-testing:$lifecycle_version"
     androidTestImplementation 'androidx.test:runner:1.1.0'

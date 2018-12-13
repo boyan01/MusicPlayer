@@ -54,11 +54,11 @@ class MusicPlayerManagerTest {
     fun testPersistPlaylist() = runBlocking {
         manager.musicPlayer.playlist = playlist
 
-        delay(1000)
-        val token = KeyValue.get<String>("player_playlist_key_token")
-        val musics: List<Music>? = KeyValue.get("player_playlist_key_music_list", object : TypeToken<List<Music>>() {}.type)
-        val playMode = KeyValue.get<String>("play_playlist_key_play_mode")
-        val current = KeyValue.get<Music>("player_playlist_key_current")
+        delay(2000)
+        val token = KeyValue.get<String>(MusicPlayerManagerImpl.KEY_PLAYLIST_TOKEN)
+        val musics: List<Music>? = KeyValue.objectFromString(KeyValue.get(MusicPlayerManagerImpl.KEY_PLAYLIST_MUSIC_LIST))
+        val playMode = KeyValue.get<String>(MusicPlayerManagerImpl.KEY_PLAYLIST_PLAY_MODE)
+        val current = KeyValue.objectFromString<Music>(KeyValue.get(MusicPlayerManagerImpl.KEY_PLAYLIST_CURRENT))
 
         assertEquals(playlist.token, token)
         assertArrayEquals(playlist.list.toTypedArray(), musics!!.toTypedArray())
